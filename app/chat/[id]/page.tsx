@@ -59,13 +59,26 @@ export default function ChatPage() {
   const [fontSize, setFontSize] = useState<"sm"|"md"|"lg">(() => {
     try { return (localStorage.getItem("chat_font_size") as "sm"|"md"|"lg") || "md"; } catch { return "md"; }
   });
+  const [showFontPanel, setShowFontPanel] = useState(false);
 
   const FONT_SIZE_MAP = { sm: 12, md: 14, lg: 17 };
-  function cycleFontSize() {
-    const next = fontSize === "sm" ? "md" : fontSize === "md" ? "lg" : "sm";
-    setFontSize(next);
-    try { localStorage.setItem("chat_font_size", next); } catch {}
+  const FONT_SIZE_LABELS: Record<string, Record<string, string>> = {
+    sm: { ko:"작게", en:"Small",  ja:"小", zh:"小", vi:"Nhỏ",   es:"Peq.", de:"Klein",  fr:"Petit", hi:"छोटा", pt:"Pequeno" },
+    md: { ko:"보통", en:"Normal", ja:"中", zh:"中", vi:"Vừa",   es:"Med.", de:"Mittel", fr:"Moyen", hi:"मध्यम", pt:"Médio" },
+    lg: { ko:"크게", en:"Large",  ja:"大", zh:"大", vi:"Lớn",   es:"Gran.", de:"Groß",  fr:"Grand", hi:"बड़ा",  pt:"Grande" },
+  };
+  function selectFontSize(size: "sm"|"md"|"lg") {
+    setFontSize(size);
+    setShowFontPanel(false);
+    try { localStorage.setItem("chat_font_size", size); } catch {}
   }
+
+  useEffect(() => {
+    if (!showFontPanel) return;
+    const close = () => setShowFontPanel(false);
+    document.addEventListener("click", close, { once: true });
+    return () => document.removeEventListener("click", close);
+  }, [showFontPanel]);
 
   useEffect(() => {
     const char = getCharacters().find((c) => c.id === id);
@@ -140,19 +153,53 @@ export default function ChatPage() {
             ))}
           </div>
         </div>
-        {/* 글자 크기 버튼 */}
-        <button
-          onClick={cycleFontSize}
-          title="글자 크기"
-          style={{
-            background: "#1a1a1a", border: "1px solid #2a2a2a",
-            borderRadius: 20, padding: "4px 10px",
-            color: "#9ca3af", fontSize: 11, fontWeight: 700,
-            cursor: "pointer", flexShrink: 0,
-          }}
-        >
-          {fontSize === "sm" ? "가A" : fontSize === "md" ? "가AA" : "가AAA"}
-        </button>
+        {/* 글자 크기 버튼 + 패널 */}
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          <button
+            onClick={() => setShowFontPanel(v => !v)}
+            style={{
+              background: showFontPanel ? "#534AB7" : "#1a1a1a",
+              border: `1px solid ${showFontPanel ? "#534AB7" : "#2a2a2a"}`,
+              borderRadius: 20, padding: "5px 11px",
+              color: showFontPanel ? "#fff" : "#9ca3af",
+              fontSize: 13, fontWeight: 800,
+              cursor: "pointer", letterSpacing: -0.5,
+            }}
+          >
+            가
+          </button>
+          {showFontPanel && (
+            <div style={{
+              position: "absolute", top: "calc(100% + 8px)", right: 0,
+              background: "#1a1a1a", border: "1px solid #2a2a2a",
+              borderRadius: 14, overflow: "hidden",
+              boxShadow: "0 8px 24px #00000060",
+              zIndex: 200,
+            }}>
+              {(["sm","md","lg"] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => selectFontSize(s)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    width: "100%", padding: "11px 16px",
+                    background: fontSize === s ? "#534AB720" : "none",
+                    border: "none", cursor: "pointer",
+                    borderLeft: fontSize === s ? "3px solid #534AB7" : "3px solid transparent",
+                  }}
+                >
+                  <span style={{ fontSize: FONT_SIZE_MAP[s], color: "#fff", fontWeight: 600, minWidth: 28 }}>
+                    가
+                  </span>
+                  <span style={{ fontSize: 12, color: fontSize === s ? "#a78bfa" : "#9ca3af", whiteSpace: "nowrap" }}>
+                    {FONT_SIZE_LABELS[s][lang] ?? FONT_SIZE_LABELS[s]["en"]}
+                  </span>
+                  {fontSize === s && <span style={{ marginLeft: "auto", color: "#534AB7", fontSize: 14 }}>✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {currentMood && (
           <div style={{
