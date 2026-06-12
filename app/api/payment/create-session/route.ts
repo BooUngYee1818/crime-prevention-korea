@@ -1,9 +1,5 @@
 // @ts-nocheck
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {} as any);
 
 const PLANS = {
   monthly: {
@@ -20,6 +16,14 @@ const PLANS = {
 
 export async function POST(req: NextRequest) {
   try {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) {
+      return NextResponse.json({ error: "결제 기능이 준비 중입니다." }, { status: 503 });
+    }
+
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(key, {} as any);
+
     const { plan, successUrl, cancelUrl } = await req.json();
 
     const planData = PLANS[plan as keyof typeof PLANS];
