@@ -237,19 +237,39 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                   </select>
                 </div>
 
-                <textarea
-                  value={msg}
-                  onChange={e => setMsg(e.target.value)}
-                  placeholder="체험 소감, 예방 다짐 등 자유롭게 남겨주세요 (200자 이내)"
-                  maxLength={200}
-                  rows={3}
-                  style={{
-                    width: "100%", padding: "10px 12px", borderRadius: 10, fontSize: 13,
-                    background: "#1a1a1a", border: "1px solid #2a2a2a", color: "#fff",
-                    outline: "none", resize: "none", lineHeight: 1.6,
-                    fontFamily: "inherit",
-                  }}
-                />
+                <div style={{ position: "relative" }}>
+                  <textarea
+                    id="guestbook-textarea"
+                    value={msg}
+                    onChange={e => setMsg(e.target.value)}
+                    maxLength={200}
+                    rows={3}
+                    style={{
+                      width: "100%", padding: "10px 12px", borderRadius: 10, fontSize: 13,
+                      background: "#1a1a1a", border: "1px solid #2a2a2a", color: "#fff",
+                      outline: "none", resize: "none", lineHeight: 1.6,
+                      fontFamily: "inherit", boxSizing: "border-box",
+                    }}
+                  />
+                  {msg === "" && (
+                    <div
+                      onClick={() => document.getElementById("guestbook-textarea")?.focus()}
+                      style={{
+                        position: "absolute", inset: 0,
+                        padding: "10px 12px",
+                        pointerEvents: "none",
+                        display: "flex", flexDirection: "column", justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ color: "#2e2e2e", fontSize: 13, lineHeight: 1.6 }}>
+                        방명록은 평생 삭제되지 않습니다
+                      </span>
+                      <span style={{ color: "#3a3a3a", fontSize: 11 }}>
+                        체험 소감, 예방 다짐 등 자유롭게 남겨주세요
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ color: "#4a4a4a", fontSize: 11 }}>{msg.length}/200</span>
                   {submitError && <span style={{ color: "#ef4444", fontSize: 11 }}>{submitError}</span>}

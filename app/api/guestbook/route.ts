@@ -63,8 +63,7 @@ export async function POST(req: NextRequest) {
 
     await kv.set(`guestbook:entry:${id}`, entry);
     await kv.lpush("guestbook:ids", id);
-    // 최대 200개 유지
-    await kv.ltrim("guestbook:ids", 0, 199);
+    // 방명록은 영구 보존 — ltrim 없음
 
     return NextResponse.json({ ok: true, entry });
   } catch {

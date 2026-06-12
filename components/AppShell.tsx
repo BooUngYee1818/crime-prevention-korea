@@ -4,6 +4,7 @@ import ProfileModal from "./ProfileModal";
 import StatsModal from "./StatsModal";
 import GratitudeCard from "./GratitudeCard";
 import DonorEventPopup from "./DonorEventPopup";
+import ReviewPopup from "./ReviewPopup";
 import type { UserProfile } from "./ProfileModal";
 
 const KONAMI = [
@@ -57,6 +58,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <GratitudeCard />
       <DonorEventPopup />
+      <ReviewPopup />
 
       {/* 통계 버튼 — 메일 버튼 위에 배치 */}
       <div style={{ position: "fixed", bottom: 136, right: 24, zIndex: 9996 }}>
