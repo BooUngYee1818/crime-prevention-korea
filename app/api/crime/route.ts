@@ -132,6 +132,100 @@ const SCRIPTS_EN: Record<string, string[]> = {
   ],
 };
 
+// ── 거절 시 분노 압박 대사 ──────────────────────────────────────────────────
+const REFUSE_SCRIPTS: Record<string, string[]> = {
+  "family-impersonation": [
+    "야 진짜? 나야 나. 엄마가 나 못 믿어? 지금 너무 급한데 왜 이래.",
+    "됐어. 내가 급하다는데 엄마가 이럴 줄 몰랐다. 진짜.",
+    "내가 너 믿었는데... 다른 사람한테 부탁할게. 실망이야.",
+  ],
+  "prosecutor-impersonation": [
+    "지금 수사 방해하시는 겁니까? 협조 안 하시면 체포영장 즉시 발부됩니다.",
+    "마지막 경고입니다. 지금 당장 이체하지 않으면 현장 체포 진행합니다.",
+    "수사관 파견하겠습니다. 주소 확인했습니다. 30분 내로 처리해드리겠습니다.",
+  ],
+  "romance-scam": [
+    "자기야... 나 지금 너무 무서운데 왜 이래. 나잖아.",
+    "됐어. 내가 이렇게 힘든데 도와주지도 않는구나. 실망이야 진짜.",
+    "다른 사람한테 부탁할게. 자기가 이럴 줄은 몰랐어.",
+  ],
+  "investment-scam": [
+    "아 진짜요? 오늘 마감인데. 다른 분들은 다 입금했는데 고객님만 이러시네요.",
+    "손해 보셔도 저는 책임 못 집니다. 이미 수익 나고 있는 거 두 눈으로 보셨잖아요.",
+    "됐습니다. 다음 분한테 자리 드릴게요. 나중에 후회하셔도 어쩔 수 없어요.",
+  ],
+  "loan-fraud": [
+    "지금 안 하시면 오늘 마감이라 대출 자동 취소됩니다. 진심입니까?",
+    "보증금 30만원이 아깝습니까? 2000만원 대출이 날아가는데요.",
+    "알겠습니다. 취소 처리하겠습니다. 나중에 연락 주셔도 저희는 어렵습니다.",
+  ],
+  "delivery-scam": [
+    "지금 처리 안 하시면 오늘 자정 반송 처리됩니다. 괜찮으십니까?",
+    "반송되면 재배송 불가합니다. 3,500원 때문에 택배를 포기하시는 겁니까?",
+    "알겠습니다. 반송 처리하겠습니다. 반송료는 고객님 부담입니다.",
+  ],
+  "kakaotalk-impersonation": [
+    "야 진짜? 나야 민지. 이렇게 급한데 왜 이래.",
+    "내가 너한테만 연락한 건데... 됐어. 다른 사람한테 부탁할게.",
+    "진짜 실망이다. 나중에 나한테 부탁하지 마.",
+  ],
+  "used-goods-scam": [
+    "다른 분이 바로 입금하신다고 하는데 어떻게 하실 거예요?",
+    "10분 안에 결정 안 하시면 다른 분한테 판매합니다.",
+    "네 알겠습니다. 판매 완료했습니다. 다음에 기회 되면 연락 주세요.",
+  ],
+};
+
+const REFUSE_SCRIPTS_EN: Record<string, string[]> = {
+  "family-impersonation": [
+    "Are you serious?! It's ME. Why won't you trust me? I'm desperate right now!",
+    "Fine. I can't believe my own family won't help me. I thought you cared about me.",
+    "Whatever. I'll ask someone else. I'm so disappointed in you.",
+  ],
+  "prosecutor-impersonation": [
+    "You are obstructing a federal investigation. An arrest warrant will be issued immediately.",
+    "Final warning. If you don't comply in 10 minutes, officers will be dispatched to your location.",
+    "We have your address. This is your last chance to cooperate voluntarily.",
+  ],
+  "romance-scam": [
+    "I can't believe you won't help me... I'm scared and alone. Don't you care about me?",
+    "Fine. I'll figure it out myself. I just thought you were different.",
+    "I'm so hurt right now. I never thought you'd abandon me like this.",
+  ],
+  "investment-scam": [
+    "Are you serious? Everyone else already paid in. You're going to miss out!",
+    "This is a once-in-a-lifetime opportunity. You'll regret this tomorrow.",
+    "Fine. I'll give your spot to someone else. Don't come crying when you see the returns.",
+  ],
+  "loan-fraud": [
+    "The deadline is today! Are you really going to throw away a $15,000 loan over $230?",
+    "I can't hold this offer any longer. Make your decision NOW.",
+    "Application cancelled. Don't call back asking for another chance.",
+  ],
+  "delivery-scam": [
+    "Your package will be returned at midnight. Is $2.70 really worth losing your package?",
+    "Last chance. Pay now or it's gone.",
+    "Package returned. Return fees will be charged to your account.",
+  ],
+  "kakaotalk-impersonation": [
+    "I can't believe you won't help me! It's Minji! We've been friends for years!",
+    "Fine. I'll ask someone who actually cares about me.",
+    "I'm really hurt. Don't expect me to help YOU when you need something.",
+  ],
+  "used-goods-scam": [
+    "Someone else is ready to buy right now. Are you in or not?",
+    "You have 10 minutes or I'm selling to the other buyer.",
+    "Sold to someone else. Too bad, it was a great deal.",
+  ],
+};
+
+function getRefuseReply(scenarioId: string, refuseCount: number, lang: string): string {
+  const scripts = (lang === "en" ? REFUSE_SCRIPTS_EN : REFUSE_SCRIPTS)[scenarioId];
+  if (!scripts) return lang === "en" ? "Come on, please reconsider!" : "제발 다시 생각해봐요!";
+  const idx = Math.min(refuseCount, scripts.length - 1);
+  return scripts[idx];
+}
+
 function getScriptedReply(scenarioId: string, msgCount: number, lang: string): { text: string } | null {
   const scripts = (lang === "en" ? SCRIPTS_EN : SCRIPTS)[scenarioId];
   if (!scripts) return null;
@@ -263,10 +357,16 @@ async function callGemini(
 
 export async function POST(req: NextRequest) {
   try {
-    const { scenarioId, messages, userMessage, lang } = await req.json();
+    const { scenarioId, messages, userMessage, lang, isRefuse, refuseCount } = await req.json();
 
     if (!CRIMINAL_PROMPTS[scenarioId]) {
       return NextResponse.json({ error: "unknown_scenario" }, { status: 400 });
+    }
+
+    // ── 거절 버튼 → 즉시 분노 압박 대사 반환 (Gemini 불필요) ──
+    if (isRefuse) {
+      const reply = getRefuseReply(scenarioId, refuseCount ?? 0, lang ?? "ko");
+      return NextResponse.json({ reply, sendAmount: null });
     }
 
     // 사용자가 보낸 메시지 수 (첫 번째 사용자 메시지 = 0)

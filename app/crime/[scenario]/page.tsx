@@ -664,6 +664,7 @@ export default function ScenarioPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [pendingSend, setPendingSend] = useState<number | null>(null);
+  const [refuseCount, setRefuseCount] = useState(0);
   const [finalSendAmount, setFinalSendAmount] = useState<number | null>(null);
   const [notif] = useState(false);
   const [block, setBlock] = useState<BlockState | null>(null);
@@ -1452,17 +1453,27 @@ export default function ScenarioPage() {
               <div className="flex gap-2 mb-2">
                 <button onClick={() => {
                   setPendingSend(null);
-                  setMessages(p => [...p, { role: "user", content: "지금 당장은 어렵겠어." }]);
+                  const refuseMsg = lang === "en" ? "I won't send it." : lang === "ja" ? "送りません。" : lang === "zh" ? "我不会汇款的。" : lang === "vi" ? "Tôi sẽ không chuyển tiền." : lang === "es" ? "No voy a enviar." : "안 보낼래요.";
+                  setMessages(p => [...p, { role: "user", content: refuseMsg }]);
                   setLoading(true);
+                  const nextRefuseCount = refuseCount;
+                  setRefuseCount(c => c + 1);
                   fetch("/api/crime", {
                     method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ scenarioId: scenario, messages: [...messages, { role: "user", content: "지금 당장은 어렵겠어." }].map(m => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })), userMessage: "지금 당장은 어렵겠어.", lang })
+                    body: JSON.stringify({
+                      scenarioId: scenario,
+                      messages: [...messages, { role: "user", content: refuseMsg }].map(m => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })),
+                      userMessage: refuseMsg,
+                      lang,
+                      isRefuse: true,
+                      refuseCount: nextRefuseCount,
+                    })
                   }).then(r => r.json()).then(d => {
                     if (d.reply) setMessages(p => [...p, { role: "criminal", content: d.reply }]);
                     if (d.sendAmount) setPendingSend(d.sendAmount);
                   }).finally(() => setLoading(false));
                 }} className="flex-1 py-3 rounded-xl border border-[#333] text-gray-400 text-sm">
-                  거절
+                  {t("sim_refuse_btn", lang)}
                 </button>
                 <button onClick={() => doTransfer(pendingSend)} className="flex-1 py-3 rounded-xl bg-[#534AB7] text-white font-semibold text-sm">
                   💸 송금하기
