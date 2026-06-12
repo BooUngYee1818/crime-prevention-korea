@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 
+export const runtime = "edge";
+
 const CRIMINAL_PROMPTS: Record<string, string> = {
   "family-impersonation": `당신은 가족 사칭 보이스피싱 사기범입니다. 상대방의 자녀(아들/딸)인 척 연기하세요.
 
