@@ -60,24 +60,52 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <DonorEventPopup />
       <ReviewPopup />
 
-      {/* 통계 버튼 — 메일 버튼 위에 배치 */}
-      <div style={{ position: "fixed", bottom: 136, right: 24, zIndex: 9996 }}>
-        <button
-          onClick={() => setShowStats(true)}
-          title="이용 통계"
-          style={{
-            width: 44, height: 44, borderRadius: "50%",
-            background: "rgba(15,23,42,0.95)",
-            border: "1.5px solid #334155",
-            cursor: "pointer", fontSize: 20,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 4px 16px #00000030",
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          📊
-        </button>
-      </div>
+      {/* 통계 버튼 — hover 시 pill 확장 */}
+      <style>{`
+        .stats-pill {
+          position: fixed; bottom: 136px; right: 24px; zIndex: 9996;
+          height: 44px; border-radius: 22px;
+          background: rgba(15,23,42,0.95);
+          border: 1.5px solid #334155;
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: flex-end;
+          overflow: hidden;
+          width: 44px;
+          transition: width 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
+          box-shadow: 0 4px 16px #00000040;
+          backdrop-filter: blur(12px);
+          padding: 0;
+          outline: none;
+          white-space: nowrap;
+        }
+        .stats-pill:hover {
+          width: 148px;
+          border-color: #4f6bff88;
+        }
+        .stats-pill-icon {
+          width: 44px; height: 44px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 20px;
+        }
+        .stats-pill-text {
+          font-size: 13px; font-weight: 800; color: #c7d2fe;
+          padding-right: 14px; letter-spacing: 0.3px;
+          opacity: 0;
+          transition: opacity 0.2s ease 0.1s;
+          pointer-events: none;
+        }
+        .stats-pill:hover .stats-pill-text {
+          opacity: 1;
+        }
+      `}</style>
+      <button
+        className="stats-pill"
+        onClick={() => setShowStats(true)}
+        style={{ position: "fixed", bottom: 136, right: 24, zIndex: 9996 }}
+      >
+        <span className="stats-pill-text">이용 통계</span>
+        <span className="stats-pill-icon">📊</span>
+      </button>
 
       {/* 🥚 이스터에그 — Konami 코드(↑↑↓↓←→←→BA) 입력 시 등장 */}
       {showEgg && (
