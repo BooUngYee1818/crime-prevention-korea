@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 const CRIMINAL_PROMPTS: Record<string, string> = {
   "family-impersonation": `당신은 가족 사칭 보이스피싱 사기범입니다. 상대방의 자녀(아들/딸)인 척 연기하세요.
@@ -97,12 +97,12 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = CRIMINAL_PROMPTS[scenarioId];
     if (!systemPrompt) {
-      return NextResponse.json({ error: "시나리오 없음" }, { status: 400 });
+      return new Response(JSON.stringify({ error: "시나리오 없음" }), { status: 400 });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: "AI 키 미설정" }, { status: 503 });
+      return new Response(JSON.stringify({ error: "AI 키 미설정" }), { status: 503 });
     }
 
     const isStart = userMessage === "__START__";
@@ -115,8 +115,8 @@ export async function POST(req: NextRequest) {
       parts: [{ text: m.content }],
     }));
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}&alt=sse`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -131,16 +131,67 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    const data = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    if (!geminiRes.ok || !geminiRes.body) {
+      return new Response(JSON.stringify({ error: "AI 오류" }), { status: 502 });
+    }
 
-    const sendMatch = reply.match(/\[SEND_REQUEST:(\d+)\]/);
-    const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
-    const cleanReply = reply.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = geminiRes.body!.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        let fullText = "";
 
-    return NextResponse.json({ reply: cleanReply, sendAmount });
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += decoder.decode(value, { stream: true });
+
+            const lines = buf.split("\n");
+            buf = lines.pop() ?? "";
+
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const raw = line.slice(6).trim();
+              if (!raw || raw === "[DONE]") continue;
+              try {
+                const chunk = JSON.parse(raw);
+                const text: string = chunk.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+                if (!text) continue;
+                fullText += text;
+
+                const cleanDelta = text.replace(/\[SEND_REQUEST:\d+\]/g, "");
+                if (cleanDelta) {
+                  controller.enqueue(
+                    new TextEncoder().encode(
+                      JSON.stringify({ delta: cleanDelta }) + "\n"
+                    )
+                  );
+                }
+              } catch {
+                // skip malformed chunk
+              }
+            }
+          }
+        } finally {
+          const sendMatch = fullText.match(/\[SEND_REQUEST:(\d+)\]/);
+          const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
+          controller.enqueue(
+            new TextEncoder().encode(
+              JSON.stringify({ done: true, sendAmount }) + "\n"
+            )
+          );
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "서버 오류" }, { status: 500 });
+    return new Response(JSON.stringify({ error: "서버 오류" }), { status: 500 });
   }
 }
