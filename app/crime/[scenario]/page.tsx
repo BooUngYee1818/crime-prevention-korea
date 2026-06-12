@@ -80,8 +80,9 @@ function detectCriminalDanger(text: string): boolean {
 
 // ─── UI 컴포넌트 ─────────────────────────────────────────────────────────────
 
-const KB = "#FFB300";
-const KB_DARK = "#1a1100";
+const KB = "#1A6FD4";   // 한빛은행 파란색
+const KB_DARK = "#fff"; // 헤더 텍스트 흰색
+const KB_LIGHT = "#e8f1fb"; // 연한 배경
 
 const FIRST_MESSAGES: Record<string, string> = {
   "family-impersonation": "엄마, 나야. 나 지금 휴대폰이 고장났어. 친구 폰 빌려서 연락하는 거야. 수리비가 100만원 나왔는데... 지금 현금이 없어서 그러는데 보내줄 수 있어?",
@@ -518,6 +519,108 @@ function RevealScreen({
         </div>
       </div>
 
+      {/* ── 실제 피해 발생 시 행동 가이드 ── */}
+      <div style={{ background: "#0a1628", border: "2px solid #1e3a5f", borderRadius: 20, padding: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+          <span style={{ fontSize: 20 }}>🆘</span>
+          <p style={{ color: "#60a5fa", fontWeight: 900, fontSize: 15 }}>실제로 돈을 보냈다면? 지금 당장 하세요</p>
+        </div>
+
+        {/* 단계별 가이드 */}
+        {[
+          {
+            step: "1",
+            color: "#ef4444",
+            bg: "#1a0000",
+            border: "#ef444433",
+            icon: "👨‍👩‍👧",
+            title: "가족 · 자녀에게 즉시 연락하세요",
+            desc: "혼자 해결하려 하지 마세요. 부모님, 자녀, 형제자매에게 전화해서\n\"나 지금 이상한 전화 받고 돈 보냈어. 어떻게 해야 해?\"라고 말하세요.",
+            action: null,
+          },
+          {
+            step: "2",
+            color: "#f59e0b",
+            bg: "#1a1000",
+            border: "#f59e0b33",
+            icon: "📞",
+            title: "가족이 연락 안 된다면 → 즉시 112",
+            desc: "연락이 닿지 않으면 주저하지 말고 112에 신고하세요.\n\"보이스피싱 피해를 당했습니다. 계좌 지급정지를 요청합니다.\"",
+            numbers: [
+              { n: "112", l: "경찰청 (즉시신고·지급정지)", c: "#ef4444" },
+              { n: "1332", l: "금융감독원 (피해금 환급신청)", c: "#3b82f6" },
+            ],
+          },
+          {
+            step: "3",
+            color: "#22c55e",
+            bg: "#0a1a0a",
+            border: "#22c55e33",
+            icon: "🏦",
+            title: "보낸 은행 앱 → 이체 취소 시도",
+            desc: "은행 앱을 열어 '이체 내역'에서 취소를 시도하거나,\n은행 고객센터에 즉시 전화해 \"사기 이체 지급정지\"를 요청하세요.\n신고가 빠를수록 환급 가능성이 높아집니다.",
+            numbers: [
+              { n: "1588-9999", l: "KB국민은행 고객센터", c: "#f59e0b" },
+              { n: "1599-9999", l: "신한은행 고객센터", c: "#3b82f6" },
+            ],
+          },
+          {
+            step: "4",
+            color: "#a78bfa",
+            bg: "#0d0a1a",
+            border: "#a78bfa33",
+            icon: "🚔",
+            title: "가까운 경찰서 방문",
+            desc: "전화 신고 후 가까운 경찰서에 직접 방문해 피해신고서를 작성하세요.\n대화 내용 캡처, 계좌번호, 이체 내역을 미리 준비해 가세요.",
+            action: null,
+          },
+        ].map((item) => (
+          <div key={item.step} style={{
+            background: item.bg, border: `1px solid ${item.border}`,
+            borderRadius: 14, padding: "14px", marginBottom: 10,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <div style={{
+                width: 24, height: 24, borderRadius: "50%",
+                background: item.color, display: "flex", alignItems: "center",
+                justifyContent: "center", flexShrink: 0,
+              }}>
+                <span style={{ color: "#fff", fontSize: 11, fontWeight: 900 }}>{item.step}</span>
+              </div>
+              <span style={{ fontSize: 16 }}>{item.icon}</span>
+              <p style={{ color: item.color, fontWeight: 700, fontSize: 13 }}>{item.title}</p>
+            </div>
+            <p style={{ color: "#9ca3af", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line", marginBottom: (item as {numbers?: unknown[]}).numbers ? 10 : 0 }}>
+              {item.desc}
+            </p>
+            {(item as {numbers?: {n:string;l:string;c:string}[]}).numbers && (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {(item as {numbers: {n:string;l:string;c:string}[]}).numbers.map((r) => (
+                  <a key={r.n} href={`tel:${r.n}`} style={{
+                    display: "flex", flexDirection: "column",
+                    background: "rgba(255,255,255,0.05)", borderRadius: 10,
+                    padding: "8px 14px", textDecoration: "none",
+                    border: `1px solid ${r.c}33`, minWidth: 100,
+                  }}>
+                    <span style={{ color: r.c, fontWeight: 900, fontSize: 18 }}>{r.n}</span>
+                    <span style={{ color: "#6b7280", fontSize: 10, marginTop: 2 }}>{r.l}</span>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* 위로 메시지 */}
+        <div style={{ background: "#0d1f0d", border: "1px solid #22c55e33", borderRadius: 12, padding: "12px 14px", marginTop: 4 }}>
+          <p style={{ color: "#86efac", fontSize: 12, lineHeight: 1.8, textAlign: "center" }}>
+            🙏 <strong style={{ color: "#fff" }}>당신의 잘못이 아닙니다.</strong><br />
+            범죄자가 치밀하게 속인 것입니다. 부끄러워하지 말고<br />
+            <strong style={{ color: "#4ade80" }}>즉시 신고하는 것이 피해를 줄이는 유일한 방법</strong>입니다.
+          </p>
+        </div>
+      </div>
+
       {/* 하단 버튼 */}
       <div style={{ display: "flex", gap: 10 }}>
         <button
@@ -896,94 +999,171 @@ export default function ScenarioPage() {
 
       {/* ══ 은행 메인 ══ */}
       {phase === "bank-main" && (
-        <div className="flex flex-col h-full relative">
+        <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
-          <div style={{ backgroundColor: KB }} className="px-5 pt-14 pb-5 flex-shrink-0 relative">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <KBStar size={20} fill={KB_DARK} />
-                <span className="font-bold text-base" style={{ color: KB_DARK }}>KB스타뱅킹</span>
+          {/* 상태바 */}
+          <div style={{ background: KB, padding: "10px 20px 0", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+            <span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span>
+            <div style={{ display:"flex", gap:4, alignItems:"center" }}>
+              <span style={{ fontSize:10, color: KB_DARK }}>●●●●</span>
+              <span style={{ fontSize:10, color: KB_DARK }}>WiFi</span>
+              <span style={{ fontSize:10, color: KB_DARK }}>🔋</span>
+            </div>
+          </div>
+          {/* 헤더 */}
+          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                <KBStar size={22} fill={KB_DARK} />
+                <span style={{ fontWeight:900, fontSize:17, color: KB_DARK, letterSpacing:-0.5 }}>KB스타뱅킹</span>
               </div>
-              <div className="relative">
-                <Bell size={20} style={{ color: KB_DARK }} />
-                {notif && <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center">
-                  <span className="text-white text-[9px] font-bold">1</span>
-                </div>}
+              <div style={{ display:"flex", gap:12, alignItems:"center" }}>
+                <Bell size={20} color={KB_DARK} />
+                <div style={{ width:30, height:30, borderRadius:"50%", background:"rgba(0,0,0,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>👤</div>
               </div>
             </div>
           </div>
 
-
-          <div className="mx-4 mt-3 bg-[#1e1a00] rounded-2xl p-5 flex-shrink-0" style={{ border: `1px solid ${KB}33` }}>
-            <p className="text-xs mb-1" style={{ color: KB + "88" }}>KB 주거래통장</p>
-            <p className="text-gray-400 text-xs mb-3">123-456-78-901234</p>
-            <p className="text-white font-bold text-3xl mb-1">{formatAmount(asset)}</p>
-            <div className="flex gap-3 mt-4">
-              <button onClick={() => setPhase("transfer-form")}
-                className="flex-1 py-2.5 rounded-xl text-sm font-semibold active:scale-95 transition-transform"
-                style={{ backgroundColor: KB, color: KB_DARK }}>
-                이체
-              </button>
-              <button onClick={() => setPhase("loan-main")}
-                className="flex-1 py-2.5 rounded-xl text-sm font-semibold border active:scale-95 transition-transform"
-                style={{ borderColor: KB + "66", color: KB }}>
-                대출
-              </button>
+          {/* 계좌 카드 */}
+          <div style={{ margin:"12px 14px 0", background:`linear-gradient(135deg, #1a1200, #2d1f00)`, borderRadius:20, padding:"18px 20px", flexShrink:0, border:`1.5px solid ${KB}55`, boxShadow:`0 4px 20px ${KB}22` }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:12 }}>
+              <div>
+                <p style={{ color: KB+"99", fontSize:11, marginBottom:3 }}>KB 주거래통장</p>
+                <p style={{ color:"#888", fontSize:11 }}>123-456-78-901234</p>
+              </div>
+              <KBStar size={28} fill={KB} />
+            </div>
+            <p style={{ color:"#fff", fontWeight:900, fontSize:28, letterSpacing:-1, marginBottom:4 }}>{formatAmount(displayAsset)}</p>
+            <p style={{ color: KB+"77", fontSize:11, marginBottom:16 }}>출금가능금액 {formatAmount(displayAsset)}</p>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={() => setPhase("transfer-form")} style={{ flex:1, padding:"10px 0", borderRadius:12, background: KB, color: KB_DARK, fontWeight:700, fontSize:13, border:"none", cursor:"pointer" }}>이체</button>
+              <button onClick={() => setPhase("loan-main")} style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${KB}44`, cursor:"pointer" }}>대출</button>
+              <button style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${KB}44`, cursor:"pointer" }}>조회</button>
             </div>
           </div>
 
-          <div className="mx-4 mt-3 grid grid-cols-3 gap-2 flex-shrink-0">
-            {[{ icon: <Home size={18} />, label: "홈" }, { icon: <CreditCard size={18} />, label: "카드" }, { icon: <BarChart2 size={18} />, label: "투자" }].map((m) => (
-              <div key={m.label} className="bg-[#1a1a1a] rounded-xl p-3 flex flex-col items-center gap-1.5">
-                <div style={{ color: KB }}>{m.icon}</div>
-                <span className="text-gray-400 text-xs">{m.label}</span>
+          {/* 빠른 메뉴 */}
+          <div style={{ margin:"10px 14px 0", background:"#fff", borderRadius:16, padding:"14px 8px", flexShrink:0 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:4 }}>
+              {[{icon:"💸",label:"이체"},{icon:"🏦",label:"대출"},{icon:"📊",label:"조회"},{icon:"📱",label:"QR결제"},{icon:"💳",label:"카드"},{icon:"💰",label:"저축"},{icon:"📈",label:"투자"},{icon:"⋯",label:"더보기"}].map((m)=>(
+                <button key={m.label} onClick={m.label==="이체"?()=>setPhase("transfer-form"):m.label==="대출"?()=>setPhase("loan-main"):undefined} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:4, padding:"8px 4px", background:"none", border:"none", cursor:"pointer" }}>
+                  <div style={{ width:40, height:40, borderRadius:12, background:"#f8f8f8", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>{m.icon}</div>
+                  <span style={{ fontSize:10, color:"#555" }}>{m.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 최근 거래내역 */}
+          <div style={{ margin:"10px 14px 0", background:"#fff", borderRadius:16, padding:"14px 16px", flex:1, overflowY:"auto" }}>
+            <p style={{ fontWeight:700, fontSize:13, color:"#222", marginBottom:12 }}>최근 거래내역</p>
+            {[
+              {name:"편의점 GS25", date:"오늘 08:31", amount:"-3,200원", color:"#ef4444"},
+              {name:"카카오페이 수신", date:"어제 19:44", amount:"+50,000원", color:"#059669"},
+              {name:"스타벅스", date:"어제 14:20", amount:"-6,500원", color:"#ef4444"},
+              {name:"급여", date:"06.01", amount:"+2,850,000원", color:"#059669"},
+              {name:"관리비 자동이체", date:"06.01", amount:"-87,000원", color:"#ef4444"},
+            ].map((tx)=>(
+              <div key={tx.name+tx.date} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"10px 0", borderBottom:"1px solid #f5f5f5" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                  <div style={{ width:36, height:36, borderRadius:10, background:"#f0f0f0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>🏪</div>
+                  <div>
+                    <p style={{ fontSize:13, fontWeight:600, color:"#1a1a1a" }}>{tx.name}</p>
+                    <p style={{ fontSize:11, color:"#aaa" }}>{tx.date}</p>
+                  </div>
+                </div>
+                <p style={{ fontWeight:700, fontSize:13, color:tx.color }}>{tx.amount}</p>
               </div>
             ))}
           </div>
 
-          <div className="mx-4 mt-3 bg-[#1a1a1a] rounded-xl p-3 flex-shrink-0">
-            <p className="text-gray-600 text-xs text-center">이 화면은 범죄예방 교육 시뮬레이션입니다</p>
+          {/* 하단 탭 */}
+          <div style={{ background:"#fff", borderTop:"1px solid #eee", display:"flex", flexShrink:0, paddingBottom:8 }}>
+            {[{icon:<Home size={20}/>,label:"홈"},{icon:<CreditCard size={20}/>,label:"카드"},{icon:<BarChart2 size={20}/>,label:"투자"},{icon:<Bell size={20}/>,label:"알림"}].map((t,i)=>(
+              <div key={t.label} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2, padding:"8px 0", cursor:"pointer" }}>
+                <div style={{ color: i===0 ? KB_DARK : "#bbb" }}>{t.icon}</div>
+                <span style={{ fontSize:9, color: i===0 ? KB_DARK : "#bbb", fontWeight: i===0?700:400 }}>{t.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       {/* ══ 이체 폼 ══ */}
       {phase === "transfer-form" && (
-        <div className="flex flex-col h-full relative">
+        <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
-          <div style={{ backgroundColor: KB }} className="px-5 pt-14 pb-5 flex-shrink-0">
-            <button onClick={() => setPhase("bank-main")} style={{ color: KB_DARK }} className="flex items-center gap-1 mb-3">
-              <ArrowLeft size={18} /><span className="text-sm font-medium">뒤로</span>
-            </button>
-            <div className="flex items-center gap-2">
-              <KBStar size={18} fill={KB_DARK} />
-              <span className="font-bold" style={{ color: KB_DARK }}>이체</span>
-            </div>
+          <div style={{ background: KB, padding:"10px 20px 0", display:"flex", justifyContent:"space-between" }}>
+            <span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span>
           </div>
-          <div className="flex-1 overflow-y-auto px-4 pt-5 pb-8 flex flex-col gap-4">
-            <div className="bg-[#1e1a00] rounded-2xl p-4" style={{ border: `1px solid ${KB}33` }}>
-              <p className="text-xs mb-1" style={{ color: KB + "88" }}>출금 계좌</p>
-              <p className="text-white font-semibold text-sm">KB 주거래통장</p>
-              <p className="text-white font-bold text-xl mt-1">{formatAmount(asset)}</p>
-            </div>
-            <div className="flex flex-col gap-3">
-              <div>
-                <label className="text-xs text-gray-400 mb-2 block">받는 계좌번호</label>
-                <input value={transferTarget} onChange={(e) => setTransferTarget(e.target.value)} placeholder="계좌번호 입력"
-                  className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm outline-none placeholder-gray-600" />
-              </div>
-              <div>
-                <label className="text-xs text-gray-400 mb-2 block">이체 금액</label>
-                <div className="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-4 py-3">
-                  <input type="number" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} placeholder="0"
-                    className="flex-1 bg-transparent text-white text-xl font-bold outline-none placeholder-gray-700" />
-                  <span className="text-gray-500 text-sm">원</span>
+          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
+            <button onClick={() => setPhase("bank-main")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: KB_DARK, marginBottom:8 }}>
+              <ArrowLeft size={18} /><span style={{ fontSize:14, fontWeight:500 }}>뒤로</span>
+            </button>
+            <p style={{ fontWeight:800, fontSize:18, color: KB_DARK }}>이체</p>
+          </div>
+
+          <div style={{ flex:1, overflowY:"auto", padding:"14px 14px 80px", display:"flex", flexDirection:"column", gap:12 }}>
+            {/* 출금계좌 */}
+            <div style={{ background:"#fff", borderRadius:16, padding:"14px 16px", border:"1px solid #eee" }}>
+              <p style={{ fontSize:11, color:"#aaa", marginBottom:4 }}>출금 계좌</p>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div>
+                  <p style={{ fontWeight:700, fontSize:14, color:"#1a1a1a" }}>KB 주거래통장</p>
+                  <p style={{ fontSize:11, color:"#888", marginTop:2 }}>123-456-78-901234</p>
+                </div>
+                <div style={{ textAlign:"right" }}>
+                  <p style={{ fontSize:11, color:"#aaa" }}>출금가능</p>
+                  <p style={{ fontWeight:700, fontSize:15, color:"#1a1a1a" }}>{formatAmount(asset)}</p>
                 </div>
               </div>
             </div>
-            <button onClick={() => { if (!transferAmount) return; setPhase("transfer-confirm"); }}
-              className="w-full py-4 rounded-2xl font-bold text-sm active:scale-[0.98] transition-transform mt-2"
-              style={{ backgroundColor: KB, color: KB_DARK }}>
+
+            {/* 받는 분 */}
+            <div style={{ background:"#fff", borderRadius:16, padding:"14px 16px", border:"1px solid #eee" }}>
+              <p style={{ fontSize:11, color:"#aaa", marginBottom:8 }}>받는 분</p>
+              <input
+                value={transferTarget}
+                onChange={(e) => setTransferTarget(e.target.value)}
+                placeholder="계좌번호 또는 이름 입력"
+                style={{ width:"100%", border:"none", outline:"none", fontSize:15, fontWeight:600, color:"#1a1a1a", background:"transparent" }}
+              />
+              <div style={{ height:1, background:"#eee", marginTop:8 }} />
+              <div style={{ display:"flex", gap:8, marginTop:10, flexWrap:"wrap" }}>
+                {["최근 받은 분","내 계좌","연락처"].map(t=>(
+                  <span key={t} style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:"#f0f0f0", color:"#666", cursor:"pointer" }}>{t}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* 금액 */}
+            <div style={{ background:"#fff", borderRadius:16, padding:"14px 16px", border:"1px solid #eee" }}>
+              <p style={{ fontSize:11, color:"#aaa", marginBottom:8 }}>이체 금액</p>
+              <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                <input
+                  type="number"
+                  value={transferAmount}
+                  onChange={(e) => setTransferAmount(e.target.value)}
+                  placeholder="0"
+                  style={{ flex:1, border:"none", outline:"none", fontSize:28, fontWeight:900, color:"#1a1a1a", background:"transparent" }}
+                />
+                <span style={{ fontSize:16, color:"#888", fontWeight:600 }}>원</span>
+              </div>
+              <div style={{ height:1, background:"#eee", marginTop:8 }} />
+              <div style={{ display:"flex", gap:8, marginTop:10, flexWrap:"wrap" }}>
+                {["+1만","+ 5만","+10만","+50만","전액"].map(t=>(
+                  <button key={t} onClick={()=>{
+                    const add = t==="전액"?asset:parseInt(t.replace(/[^0-9]/g,""))*10000;
+                    setTransferAmount(String(t==="전액"?asset:(parseInt(transferAmount||"0")+add)));
+                  }} style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:"#f0f0f0", color:"#444", border:"none", cursor:"pointer" }}>{t}</button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => { if (!transferAmount) return; setPhase("transfer-confirm"); }}
+              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: KB, color: KB_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer", marginTop:4 }}
+            >
               다음
             </button>
           </div>
@@ -992,38 +1172,57 @@ export default function ScenarioPage() {
 
       {/* ══ 이체 확인 ══ */}
       {phase === "transfer-confirm" && (
-        <div className="flex flex-col h-full relative">
+        <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
-          <div style={{ backgroundColor: KB }} className="px-5 pt-14 pb-5 flex-shrink-0">
-            <button onClick={() => setPhase("transfer-form")} style={{ color: KB_DARK }} className="flex items-center gap-1 mb-3">
-              <ArrowLeft size={18} /><span className="text-sm font-medium">뒤로</span>
+          <div style={{ background: KB, padding:"10px 20px 0" }}><span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span></div>
+          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
+            <button onClick={() => setPhase("transfer-form")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: KB_DARK, marginBottom:8 }}>
+              <ArrowLeft size={18} /><span style={{ fontSize:14, fontWeight:500 }}>뒤로</span>
             </button>
-            <div className="flex items-center gap-2">
-              <KBStar size={18} fill={KB_DARK} />
-              <span className="font-bold" style={{ color: KB_DARK }}>이체 확인</span>
-            </div>
+            <p style={{ fontWeight:800, fontSize:18, color: KB_DARK }}>이체 확인</p>
           </div>
-          <div className="flex-1 overflow-y-auto px-4 pt-5 pb-8 flex flex-col gap-4">
-            <div className="bg-[#1a1a1a] rounded-2xl p-5 flex flex-col gap-3">
+
+          <div style={{ flex:1, overflowY:"auto", padding:"14px 14px 24px", display:"flex", flexDirection:"column", gap:12 }}>
+            {/* 금액 강조 */}
+            <div style={{ background:"#fff", borderRadius:16, padding:"20px 16px", textAlign:"center", border:"1px solid #eee" }}>
+              <p style={{ fontSize:12, color:"#aaa", marginBottom:6 }}>이체 금액</p>
+              <p style={{ fontSize:32, fontWeight:900, color:"#1a1a1a", letterSpacing:-1 }}>{parseInt(transferAmount||"0").toLocaleString()}<span style={{ fontSize:18 }}>원</span></p>
+            </div>
+
+            {/* 상세 정보 */}
+            <div style={{ background:"#fff", borderRadius:16, padding:"4px 16px", border:"1px solid #eee" }}>
               {[
-                { label: "받는 분", value: transferTarget || "입력된 계좌" },
-                { label: "이체 금액", value: `${parseInt(transferAmount || "0").toLocaleString()}원` },
-                { label: "출금 계좌", value: "KB 주거래통장" },
-                { label: "이체 후 잔액", value: formatAmount(Math.max(0, asset - parseInt(transferAmount || "0"))) },
-              ].map((row) => (
-                <div key={row.label} className="flex items-center justify-between py-2 border-b border-[#2a2a2a] last:border-0">
-                  <span className="text-gray-400 text-sm">{row.label}</span>
-                  <span className="text-white text-sm font-semibold">{row.value}</span>
+                { label:"받는 분", value: transferTarget || "입력된 계좌" },
+                { label:"출금 계좌", value:"KB 주거래통장" },
+                { label:"이체 후 잔액", value: formatAmount(Math.max(0, asset - parseInt(transferAmount||"0"))) },
+                { label:"이체 일시", value:"즉시 이체" },
+              ].map((row, i, arr) => (
+                <div key={row.label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"14px 0", borderBottom: i<arr.length-1?"1px solid #f5f5f5":"none" }}>
+                  <span style={{ fontSize:13, color:"#888" }}>{row.label}</span>
+                  <span style={{ fontSize:13, fontWeight:700, color:"#1a1a1a" }}>{row.value}</span>
                 </div>
               ))}
             </div>
-            <p style={{ color: "white", opacity: 0.04, fontSize: 11, textAlign: "center", userSelect: "none" }}>
-              이것은 시뮬레이션입니다 · 실제 이체가 되지 않습니다
-            </p>
-            <button onClick={() => doTransfer(parseInt(transferAmount || "0"))}
-              className="w-full py-4 rounded-2xl font-bold text-sm active:scale-[0.98] transition-transform"
-              style={{ backgroundColor: KB, color: KB_DARK }}>
+
+            {/* 보안 키패드 안내 */}
+            <div style={{ background:"#fffbf0", borderRadius:12, padding:"12px 16px", border:"1px solid #fde68a" }}>
+              <p style={{ fontSize:12, color:"#92400e", textAlign:"center" }}>🔐 보안 비밀번호를 입력하면 이체가 완료됩니다</p>
+              <div style={{ display:"flex", justifyContent:"center", gap:8, marginTop:10 }}>
+                {[1,2,3,4,5,6].map(i=>(
+                  <div key={i} style={{ width:10, height:10, borderRadius:"50%", background:"#d4a000" }} />
+                ))}
+              </div>
+            </div>
+
+            <p style={{ color:"#1a1a1a", opacity:0.03, fontSize:10, textAlign:"center", userSelect:"none" }}>시뮬레이션</p>
+
+            <button onClick={() => doTransfer(parseInt(transferAmount||"0"))}
+              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: KB, color: KB_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer" }}>
               이체하기
+            </button>
+            <button onClick={() => setPhase("transfer-form")}
+              style={{ width:"100%", padding:"12px 0", borderRadius:16, background:"#fff", color:"#888", fontWeight:600, fontSize:13, border:"1px solid #eee", cursor:"pointer" }}>
+              취소
             </button>
           </div>
         </div>
