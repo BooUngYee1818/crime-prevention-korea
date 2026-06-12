@@ -6,15 +6,15 @@ import { Character, Message, STYLE_LABELS, STYLE_COLORS } from "@/lib/types";
 import { getCharacters, getChatRoom, addMessage } from "@/lib/store";
 import { useLang } from "@/lib/LanguageContext";
 
-type L = "ko"|"en"|"ja"|"zh"|"vi"|"es";
+type L = "ko"|"en"|"ja"|"zh"|"vi"|"es"|"de"|"fr"|"hi"|"pt";
 
 const MOOD_TR: Record<string, Record<L, string>> = {
-  분노: { ko:"분노", en:"Anger",     ja:"怒り",   zh:"愤怒", vi:"Tức giận",  es:"Ira" },
-  슬픔: { ko:"슬픔", en:"Sadness",   ja:"悲しみ", zh:"悲伤", vi:"Buồn bã",  es:"Tristeza" },
-  설렘: { ko:"설렘", en:"Excitement",ja:"ときめき",zh:"心动", vi:"Hồi hộp",  es:"Emoción" },
-  기쁨: { ko:"기쁨", en:"Joy",       ja:"喜び",   zh:"喜悦", vi:"Vui mừng", es:"Alegría" },
-  심심: { ko:"심심", en:"Bored",     ja:"退屈",   zh:"无聊", vi:"Chán",     es:"Aburrido" },
-  일반: { ko:"일반", en:"Normal",    ja:"普通",   zh:"普通", vi:"Bình thường",es:"Normal" },
+  분노: { ko:"분노", en:"Anger",     ja:"怒り",   zh:"愤怒", vi:"Tức giận",   es:"Ira",       de:"Wut",        fr:"Colère",      hi:"क्रोध",  pt:"Raiva" },
+  슬픔: { ko:"슬픔", en:"Sadness",   ja:"悲しみ", zh:"悲伤", vi:"Buồn bã",   es:"Tristeza",  de:"Traurigkeit",fr:"Tristesse",   hi:"दुख",    pt:"Tristeza" },
+  설렘: { ko:"설렘", en:"Excitement",ja:"ときめき",zh:"心动", vi:"Hồi hộp",   es:"Emoción",   de:"Aufregung",  fr:"Excitation",  hi:"उत्साह", pt:"Animação" },
+  기쁨: { ko:"기쁨", en:"Joy",       ja:"喜び",   zh:"喜悦", vi:"Vui mừng",  es:"Alegría",   de:"Freude",     fr:"Joie",        hi:"खुशी",   pt:"Alegria" },
+  심심: { ko:"심심", en:"Bored",     ja:"退屈",   zh:"无聊", vi:"Chán",      es:"Aburrido",  de:"Gelangweilt",fr:"Ennui",       hi:"उबाऊ",   pt:"Entediado" },
+  일반: { ko:"일반", en:"Normal",    ja:"普通",   zh:"普通", vi:"Bình thường",es:"Normal",    de:"Normal",     fr:"Normal",      hi:"सामान्य",pt:"Normal" },
 };
 
 function tr(map: Record<L, string>, lang: string) {
@@ -24,13 +24,16 @@ function tr(map: Record<L, string>, lang: string) {
 const PLACEHOLDER: Record<L, string> = {
   ko:"메시지 입력...", en:"Type a message...", ja:"メッセージを入力...",
   zh:"输入消息...", vi:"Nhập tin nhắn...", es:"Escribe un mensaje...",
+  de:"Nachricht eingeben...", fr:"Écrire un message...", hi:"संदेश लिखें...", pt:"Digite uma mensagem...",
 };
 const EMPTY_MSG: Record<L, string> = {
   ko:"에게 말을 걸어보세요", en:"Say something to", ja:"に話しかけてみてください",
   zh:"和", vi:"Hãy nói chuyện với", es:"Dile algo a",
+  de:"Sag etwas zu", fr:"Dites quelque chose à", hi:"से बात करें", pt:"Diga algo para",
 };
 const DETECTED: Record<L, string> = {
   ko:"감지", en:"detected", ja:"検知", zh:"检测", vi:"phát hiện", es:"detectado",
+  de:"erkannt", fr:"détecté", hi:"पहचाना", pt:"detectado",
 };
 
 const EMOJIS = ["😂","😍","🥺","😡","😭","🔥","💀","👊","💕","🤣","😘","🫠"];

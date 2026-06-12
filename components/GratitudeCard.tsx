@@ -38,6 +38,30 @@ const MESSAGES = [
     main: "Gracias de corazón por usar este programa.",
     sub: "Si esto te hace dudar un momento, ya es suficiente.",
   },
+  {
+    lang: "Deutsch",
+    flag: "🇩🇪",
+    main: "Herzlichen Dank, dass Sie dieses Programm nutzen.",
+    sub: "Wenn Sie dadurch auch nur einen Moment zögern, war es das wert.",
+  },
+  {
+    lang: "Français",
+    flag: "🇫🇷",
+    main: "Merci sincèrement d'utiliser ce programme.",
+    sub: "Si cela vous fait réfléchir à deux fois, c'est tout ce qu'il faut.",
+  },
+  {
+    lang: "हिन्दी",
+    flag: "🇮🇳",
+    main: "इस प्रोग्राम का उपयोग करने के लिए आपका हार्दिक धन्यवाद।",
+    sub: "यदि यह आपको एक पल के लिए सोचने पर मजबूर करे, तो यही काफी है।",
+  },
+  {
+    lang: "Português",
+    flag: "🇧🇷",
+    main: "Muito obrigado por usar este programa.",
+    sub: "Se isso fizer você hesitar por um momento, já foi o suficiente.",
+  },
 ];
 
 export default function GratitudeCard() {

@@ -5,6 +5,7 @@ import { Shield, Phone, ChevronRight, BookOpen, Users, AlertCircle, ExternalLink
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import HallOfFame from "@/components/HallOfFame";
 
 // ── 무지개 글로우 keyframe ──
 const RAINBOW_STYLE = `
@@ -1052,6 +1053,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── 후원자 명예의 전당 ── */}
+      <HallOfFame />
 
       {/* ── 푸터 ── */}
       <footer style={{

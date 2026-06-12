@@ -1741,7 +1741,7 @@ export default function ScenarioPage() {
 
           window.speechSynthesis.cancel();
           const utter = new SpeechSynthesisUtterance(line.text);
-          const langMap: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", zh: "zh-CN", vi: "vi-VN", es: "es-ES" };
+          const langMap: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", zh: "zh-CN", vi: "vi-VN", es: "es-ES", de: "de-DE", fr: "fr-FR", hi: "hi-IN", pt: "pt-BR" };
           utter.lang = langMap[lang] ?? "ko-KR";
           utter.rate = 0.88;
           utter.pitch = 1.05;
