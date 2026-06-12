@@ -92,7 +92,7 @@ export default function HallOfFame() {
             borderRadius: 20, padding: "5px 16px",
             fontSize: 12, fontWeight: 700, color: "#a07800",
           }}>
-            ✨ 아래는 예시입니다 · 첫 후원자가 등록되면 실제 이름으로 바뀝니다
+            {t("hof_example_badge", lang)}
           </div>
         )}
       </div>
@@ -178,78 +178,54 @@ export default function HallOfFame() {
         </div>
       )}
 
-      {/* ── 최고 명예의 전당 — 유튜버 코너 ── */}
+      {/* ── 최고 명예의 전당 — 유튜버 + 일반 후원자 통합 ── */}
       <div style={{ background: "#0d0d0d", padding: "48px 0 0", marginTop: 8 }}>
         <div style={{ textAlign: "center", paddingBottom: 28 }}>
           <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 6, color: "#ffd70050", textTransform: "uppercase", marginBottom: 10 }}>
-            ✨ Ultimate Hall of Fame
+            Ultimate Hall of Fame
           </p>
           <h2 style={{ fontSize: "clamp(22px, 4vw, 40px)", fontWeight: 900, color: "#FFD700", margin: "0 0 8px" }}>
-            👑 최고 명예의 전당
+            👑 {t("hof_ultimate_label", lang)}
           </h2>
-          <p style={{ fontSize: 13, color: "#888", margin: 0 }}>
-            이 프로그램을 응원해 주시는 크리에이터분들입니다
+          <p style={{ fontSize: 13, color: "#aaa", margin: 0 }}>
+            {t("hof_ultimate_all", lang)}
           </p>
         </div>
 
-        {/* 유튜버 마퀴 — 금색 테마 */}
-        <div style={{ paddingBottom: 48, opacity: 0.4 }}>
-          {ROWS_CFG.map((row, ri) => {
-            const shuffled = [...YOUTUBERS].sort(() => Math.sin(ri * 3.7 + 2) - 0.5);
-            const repeat   = Math.max(2, Math.ceil(15 / YOUTUBERS.length));
-            const unit     = shuffled.map(n =>
-              `<span style="display:inline-block;font-size:${row.sz}px;font-weight:900;color:#FFD700;padding:0 14px;line-height:1.12;white-space:nowrap;text-shadow:0 0 20px #ffd70060,2px 2px 0 #b8860030;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;">${n}<span style="color:#FFD70030;font-size:${Math.round(row.sz * 0.28)}px;margin:0 8px;">★</span></span>`
-            ).join("");
-            const content = unit.repeat(repeat);
-            const dur = Math.max(5, row.spd * 1.3 * (YOUTUBERS.length / 10));
-            return (
-              <div key={ri} style={{
-                overflow: "hidden",
-                transform: `rotate(${row.rot}deg) scaleX(1.1)`,
-                margin: `${ri === 0 ? 4 : -12}px 0`,
-              }}>
-                <div
-                  className="hof-t"
-                  style={{
-                    display: "flex", width: "200%", willChange: "transform",
-                    animation: `${row.dir === 1 ? "scrollL" : "scrollR"} ${dur}s linear infinite`,
-                  }}
-                  dangerouslySetInnerHTML={{ __html: content + content }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 일반 후원자 마퀴 열 — 예시일 때 흐리게 */}
-      <div style={{ paddingBottom: 48, opacity: isExample ? 0.35 : 1, transition: "opacity 0.5s" }}>
-        {ROWS_CFG.map((row, ri) => {
-          const shuffled = [...list].sort(() => Math.sin(ri * 5.1 + 1) - 0.5);
-          const repeat   = Math.max(3, Math.ceil(20 / list.length));
-          const unit     = shuffled.map(n =>
-            `<span style="display:inline-block;font-size:${row.sz}px;font-weight:900;color:#F5C400;padding:0 14px;line-height:1.12;white-space:nowrap;text-shadow:2px 2px 0 #d4a00033;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;">${n}<span style="color:#F5C40028;font-size:${Math.round(row.sz * 0.28)}px;margin:0 8px;">·</span></span>`
-          ).join("");
-          const content = unit.repeat(repeat);
-          const dur = Math.max(4, row.spd * (list.length / 10));
-
+        {/* 통합 마퀴 — 유튜버 + 일반 후원자 혼합, 예시 시 흐리게 */}
+        {(() => {
+          const combined = [...YOUTUBERS, ...list];
+          const opacity = isExample ? 0.35 : 1;
           return (
-            <div key={ri} style={{
-              overflow: "hidden",
-              transform: `rotate(${row.rot}deg) scaleX(1.1)`,
-              margin: `${ri === 0 ? 4 : -12}px 0`,
-            }}>
-              <div
-                className="hof-t"
-                style={{
-                  display: "flex", width: "200%", willChange: "transform",
-                  animation: `${row.dir === 1 ? "scrollL" : "scrollR"} ${dur}s linear infinite`,
-                }}
-                dangerouslySetInnerHTML={{ __html: content + content }}
-              />
+            <div style={{ paddingBottom: 48, opacity, transition: "opacity 0.5s" }}>
+              {ROWS_CFG.map((row, ri) => {
+                const shuffled = [...combined].sort(() => Math.sin(ri * 4.3 + 1.7) - 0.5);
+                const repeat   = Math.max(2, Math.ceil(20 / combined.length));
+                const unit     = shuffled.map(n =>
+                  `<span style="display:inline-block;font-size:${row.sz}px;font-weight:900;color:#FFD700;padding:0 14px;line-height:1.12;white-space:nowrap;text-shadow:0 0 20px #ffd70060,2px 2px 0 #b8860030;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;">${n}<span style="color:#FFD70030;font-size:${Math.round(row.sz * 0.28)}px;margin:0 8px;">★</span></span>`
+                ).join("");
+                const content = unit.repeat(repeat);
+                const dur = Math.max(5, row.spd * 1.2 * (combined.length / 15));
+                return (
+                  <div key={ri} style={{
+                    overflow: "hidden",
+                    transform: `rotate(${row.rot}deg) scaleX(1.1)`,
+                    margin: `${ri === 0 ? 4 : -12}px 0`,
+                  }}>
+                    <div
+                      className="hof-t"
+                      style={{
+                        display: "flex", width: "200%", willChange: "transform",
+                        animation: `${row.dir === 1 ? "scrollL" : "scrollR"} ${dur}s linear infinite`,
+                      }}
+                      dangerouslySetInnerHTML={{ __html: content + content }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           );
-        })}
+        })()}
       </div>
     </section>
   );

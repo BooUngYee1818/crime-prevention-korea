@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { getCountry } from "@/lib/countries";
 
-interface Stats { total: number; gender: Record<string, number>; age: Record<string, number>; }
+interface Stats { total: number; gender: Record<string, number>; age: Record<string, number>; country: Record<string, number>; }
 interface GuestEntry { id: string; message: string; gender: string; ageGroup: string; createdAt: number; }
 
 const AGE_ORDER = ["10대","20대","30대","40대","50대","60대 이상"];
@@ -47,7 +48,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     fetch("/api/stats")
       .then(r => r.json()).then(d => setStats(d))
-      .catch(() => setStats({ total: 0, gender: {}, age: {} }))
+      .catch(() => setStats({ total: 0, gender: {}, age: {}, country: {} }))
       .finally(() => setLoadingStats(false));
     fetch("/api/guestbook")
       .then(r => r.json()).then(d => setEntries(d.entries ?? []))
@@ -55,8 +56,13 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
       .finally(() => setLoadingEntries(false));
   }, []);
 
-  const totalGender = Object.values(stats?.gender ?? {}).reduce((a, b) => a + b, 0) || 1;
-  const totalAge    = Object.values(stats?.age    ?? {}).reduce((a, b) => a + b, 0) || 1;
+  const totalGender  = Object.values(stats?.gender  ?? {}).reduce((a, b) => a + b, 0) || 1;
+  const totalAge     = Object.values(stats?.age     ?? {}).reduce((a, b) => a + b, 0) || 1;
+  const totalCountry = Object.values(stats?.country ?? {}).reduce((a, b) => a + b, 0) || 1;
+  const topCountries = Object.entries(stats?.country ?? {})
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+  const COUNTRY_COLORS = ["#f59e0b","#3b82f6","#22c55e","#ec4899","#8b5cf6","#f97316","#06b6d4","#e11d48","#84cc16","#a78bfa"];
 
   async function handleSubmit() {
     if (!msg.trim() || !gender || !ageGroup) { setSubmitError(t("stats_error", lang)); return; }
@@ -160,6 +166,34 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* 국가별 */}
+              <div style={{ background:"#0d0d0d", border:"1px solid #1e1e1e", borderRadius:20, padding:20 }}>
+                <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>
+                  🌍 {t("stats_country_dist", lang)}
+                </p>
+                {topCountries.length === 0 ? (
+                  <p style={{ color:"#4a4a4a", fontSize:13, textAlign:"center", padding:"16px 0" }}>{t("stats_loading", lang)}</p>
+                ) : (
+                  topCountries.map(([code, count], i) => {
+                    const info = getCountry(code);
+                    const pct = Math.round((count / totalCountry) * 100);
+                    return (
+                      <div key={code} style={{ marginBottom:12 }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:5, alignItems:"center" }}>
+                          <span style={{ color:"#d1d5db", fontSize:13 }}>
+                            {info ? `${info.flag} ${info.name}` : `🌍 ${code}`}
+                          </span>
+                          <span style={{ color:"#9ca3af", fontSize:13 }}>{count.toLocaleString()}{unit} ({pct}%)</span>
+                        </div>
+                        <div style={{ height:8, background:"#1a1a1a", borderRadius:4, overflow:"hidden" }}>
+                          <div style={{ height:"100%", borderRadius:4, width:`${pct}%`, background:COUNTRY_COLORS[i % COUNTRY_COLORS.length], transition:"width 0.6s ease" }} />
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </>
           )}

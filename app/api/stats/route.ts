@@ -13,30 +13,32 @@ async function getKV() {
 export async function GET() {
   try {
     const kv = await getKV();
-    if (!kv) return NextResponse.json({ total: 0, gender: {}, age: {} });
+    if (!kv) return NextResponse.json({ total: 0, gender: {}, age: {}, country: {} });
 
-    const [total, gender, age] = await Promise.all([
+    const [total, gender, age, country] = await Promise.all([
       kv.get<number>("stats:total") ?? 0,
       kv.hgetall<Record<string, number>>("stats:gender") ?? {},
       kv.hgetall<Record<string, number>>("stats:age") ?? {},
+      kv.hgetall<Record<string, number>>("stats:country") ?? {},
     ]);
 
-    return NextResponse.json({ total: total ?? 0, gender: gender ?? {}, age: age ?? {} });
+    return NextResponse.json({ total: total ?? 0, gender: gender ?? {}, age: age ?? {}, country: country ?? {} });
   } catch {
-    return NextResponse.json({ total: 0, gender: {}, age: {} });
+    return NextResponse.json({ total: 0, gender: {}, age: {}, country: {} });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { gender, ageGroup } = await req.json();
+    const { gender, ageGroup, country } = await req.json();
     const kv = await getKV();
     if (!kv) return NextResponse.json({ ok: true });
 
     await Promise.all([
       kv.incr("stats:total"),
-      gender ? kv.hincrby("stats:gender", gender, 1) : Promise.resolve(),
-      ageGroup ? kv.hincrby("stats:age", ageGroup, 1) : Promise.resolve(),
+      gender  ? kv.hincrby("stats:gender",  gender,   1) : Promise.resolve(),
+      ageGroup? kv.hincrby("stats:age",     ageGroup, 1) : Promise.resolve(),
+      country ? kv.hincrby("stats:country", country,  1) : Promise.resolve(),
     ]);
 
     return NextResponse.json({ ok: true });

@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { COUNTRIES } from "@/lib/countries";
 
 export interface UserProfile {
   gender: "남성" | "여성" | "비공개";
   ageGroup: "10대" | "20대" | "30대" | "40대" | "50대" | "60대 이상";
+  country?: string;
 }
 
 interface Props { onComplete: (profile: UserProfile) => void; }
@@ -17,6 +19,7 @@ export default function ProfileModal({ onComplete }: Props) {
   const { lang } = useLang();
   const [gender, setGender]     = useState<UserProfile["gender"] | null>(null);
   const [ageGroup, setAgeGroup] = useState<UserProfile["ageGroup"] | null>(null);
+  const [country, setCountry]   = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
 
   const GENDER_LABEL: Record<UserProfile["gender"], string> = {
@@ -40,11 +43,12 @@ export default function ProfileModal({ onComplete }: Props) {
       await fetch("/api/stats", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gender, ageGroup }),
+        body: JSON.stringify({ gender, ageGroup, country: country || "ETC" }),
       });
     } catch {}
-    localStorage.setItem("user_profile", JSON.stringify({ gender, ageGroup }));
-    onComplete({ gender, ageGroup });
+    const profile: UserProfile = { gender, ageGroup, country: country || "ETC" };
+    localStorage.setItem("user_profile", JSON.stringify(profile));
+    onComplete(profile);
   }
 
   return (
@@ -59,7 +63,7 @@ export default function ProfileModal({ onComplete }: Props) {
         width: "100%", maxWidth: 420,
         background: "#0d0d0d", border: "1px solid #1e1e1e",
         borderRadius: 24, padding: "28px 24px",
-        display: "flex", flexDirection: "column", gap: 24,
+        display: "flex", flexDirection: "column", gap: 22,
       }}>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 10 }}>🛡️</div>
@@ -111,6 +115,29 @@ export default function ProfileModal({ onComplete }: Props) {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* 국가 */}
+        <div>
+          <p style={{ color: "#9ca3af", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 1 }}>
+            {t("profile_country_lbl", lang)}
+          </p>
+          <select
+            value={country}
+            onChange={e => setCountry(e.target.value)}
+            style={{
+              width: "100%", padding: "12px 14px", borderRadius: 14, fontSize: 14,
+              background: "#1a1a1a", border: `1.5px solid ${country ? "#a78bfa" : "#2a2a2a"}`,
+              color: country ? "#fff" : "#6b7280", outline: "none", cursor: "pointer",
+              appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "no-repeat", backgroundPosition: "right 14px center",
+            }}
+          >
+            <option value="" disabled>{t("profile_country_ph", lang)}</option>
+            {COUNTRIES.map(c => (
+              <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+            ))}
+          </select>
         </div>
 
         <button

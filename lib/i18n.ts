@@ -321,6 +321,24 @@ export const T = {
   appshell_stats:     { ko:"이용 통계", en:"Statistics", ja:"利用統計", zh:"使用统计", vi:"Thống kê", es:"Estadísticas", de:"Statistiken", fr:"Statistiques", hi:"आँकड़े", pt:"Estatísticas" },
   appshell_hof:       { ko:"명예의 전당", en:"Hall of Fame", ja:"殿堂", zh:"荣誉殿堂", vi:"Sảnh Danh Vọng", es:"Salón de la Fama", de:"Ruhmeshalle", fr:"Panthéon", hi:"हॉल ऑफ फेम", pt:"Hall da Fama" },
 
+  // ── STATS COUNTRY ────────────────────────────────────────────────
+  stats_country_dist: { ko:"국가별 분포", en:"Country Distribution", ja:"国別分布", zh:"国家分布", vi:"Phân bố quốc gia", es:"Distribución por país", de:"Länderverteilung", fr:"Répartition par pays", hi:"देश वितरण", pt:"Distribuição por país" },
+  profile_country_lbl:{ ko:"거주 국가", en:"Country", ja:"居住国", zh:"所在国家", vi:"Quốc gia", es:"País", de:"Land", fr:"Pays", hi:"देश", pt:"País" },
+  profile_country_ph: { ko:"국가를 선택하세요", en:"Select your country", ja:"国を選択してください", zh:"请选择国家", vi:"Chọn quốc gia", es:"Selecciona tu país", de:"Land auswählen", fr:"Choisissez votre pays", hi:"अपना देश चुनें", pt:"Selecione seu país" },
+
+  // ── BGM VOLUME PANEL ─────────────────────────────────────────────
+  bgm_vol_title: { ko:"음량 조절", en:"Volume", ja:"音量調節", zh:"音量调节", vi:"Âm lượng", es:"Volumen", de:"Lautstärke", fr:"Volume", hi:"वॉल्यूम", pt:"Volume" },
+  bgm_mute:      { ko:"음소거", en:"Mute", ja:"消音", zh:"静音", vi:"Tắt tiếng", es:"Silenciar", de:"Stumm", fr:"Muet", hi:"म्यूट", pt:"Mudo" },
+  bgm_medium:    { ko:"적당히", en:"Medium", ja:"ほどほど", zh:"适中", vi:"Vừa phải", es:"Medio", de:"Mittel", fr:"Moyen", hi:"मध्यम", pt:"Médio" },
+  bgm_max:       { ko:"최대", en:"Max", ja:"最大", zh:"最大", vi:"Tối đa", es:"Máx", de:"Max", fr:"Max", hi:"अधिकतम", pt:"Máx" },
+  bgm_off:       { ko:"음악 끄기", en:"Music Off", ja:"音楽オフ", zh:"关闭音乐", vi:"Tắt nhạc", es:"Apagar música", de:"Musik aus", fr:"Couper la musique", hi:"संगीत बंद", pt:"Desligar música" },
+  bgm_on:        { ko:"음악 켜기", en:"Music On", ja:"音楽オン", zh:"开启音乐", vi:"Bật nhạc", es:"Encender música", de:"Musik an", fr:"Allumer la musique", hi:"संगीत चालू", pt:"Ligar música" },
+
+  // ── HOF ULTIMATE SECTION ─────────────────────────────────────────
+  hof_ultimate_label: { ko:"✨ 최고 명예의 전당", en:"✨ Ultimate Hall of Fame", ja:"✨ 最高名誉の殿堂", zh:"✨ 至尊荣誉殿堂", vi:"✨ Sảnh Danh Vọng Tối Cao", es:"✨ Salón de la Fama Supremo", de:"✨ Höchste Ruhmeshalle", fr:"✨ Panthéon Suprême", hi:"✨ सर्वोच्च सम्मान का हॉल", pt:"✨ Hall da Fama Supremo" },
+  hof_ultimate_all:   { ko:"모두 최고의 명예 후원자입니다", en:"All are our greatest honor supporters", ja:"皆さんは最高の名誉後援者です", zh:"所有人都是最高荣誉支持者", vi:"Tất cả đều là những người ủng hộ danh dự cao nhất", es:"Todos son nuestros mejores patrocinadores de honor", de:"Alle sind unsere größten Ehrenförderer", fr:"Tous sont nos plus grands soutiens d'honneur", hi:"सभी हमारे सर्वोच्च सम्मान के समर्थक हैं", pt:"Todos são nossos maiores apoiadores de honra" },
+  hof_example_badge:  { ko:"✨ 아래는 예시입니다 · 첫 후원자가 등록되면 실제 이름으로 바뀝니다", en:"✨ These are examples · Will be replaced with real names once the first donor registers", ja:"✨ 以下は例示です · 最初の後援者が登録されると実際の名前に変わります", zh:"✨ 以下为示例 · 第一位支持者注册后将显示真实名字", vi:"✨ Đây là ví dụ · Sẽ thay bằng tên thật khi nhà tài trợ đầu tiên đăng ký", es:"✨ Estos son ejemplos · Se reemplazarán con nombres reales cuando el primer donante se registre", de:"✨ Dies sind Beispiele · Werden durch echte Namen ersetzt sobald der erste Spender registriert", fr:"✨ Ce sont des exemples · Remplacés par de vrais noms dès que le premier donateur s'inscrit", hi:"✨ ये उदाहरण हैं · पहले दाता के पंजीकरण पर असली नामों से बदल दिए जाएंगे", pt:"✨ Estes são exemplos · Serão substituídos por nomes reais quando o primeiro doador se registrar" },
+
   // ── CHAT SUBTITLE ────────────────────────────────────────────────
   chat_sub_lang: {
     ko:"ko", en:"English", ja:"日本語", zh:"中文", vi:"Tiếng Việt",

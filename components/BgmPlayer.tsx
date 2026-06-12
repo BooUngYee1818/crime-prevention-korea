@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 function getSrc(pathname: string) {
   if (pathname === "/") return "/music-main.mp3";
@@ -16,6 +18,7 @@ function getBaseVolume(pathname: string) {
 
 export default function BgmPlayer() {
   const pathname     = usePathname();
+  const { lang }     = useLang();
   const audioRef     = useRef<HTMLAudioElement>(null);
   const [playing,  setPlaying]  = useState(false);
   const [muted,    setMuted]    = useState(false);
@@ -163,7 +166,7 @@ export default function BgmPlayer() {
             `}</style>
 
             <p style={{ fontSize: 12, fontWeight: 800, color: "#6b7280", marginBottom: 14, letterSpacing: 1, textAlign: "center" }}>
-              🎵 음량 조절
+              🎵 {t("bgm_vol_title", lang)}
             </p>
 
             {/* 큰 버튼 방식 (어르신용) */}
@@ -192,19 +195,19 @@ export default function BgmPlayer() {
                 onClick={() => handleVolume(0)}
                 style={{ fontSize: 11, color: "#9ca3af", background: "none", border: "none", cursor: "pointer", padding: "4px 8px" }}
               >
-                음소거
+                {t("bgm_mute", lang)}
               </button>
               <button
                 onClick={() => handleVolume(0.2)}
                 style={{ fontSize: 11, color: "#534AB7", background: "none", border: "none", cursor: "pointer", padding: "4px 8px", fontWeight: 700 }}
               >
-                적당히
+                {t("bgm_medium", lang)}
               </button>
               <button
                 onClick={() => handleVolume(0.4)}
                 style={{ fontSize: 11, color: "#9ca3af", background: "none", border: "none", cursor: "pointer", padding: "4px 8px" }}
               >
-                최대
+                {t("bgm_max", lang)}
               </button>
             </div>
           </div>
@@ -215,7 +218,7 @@ export default function BgmPlayer() {
           {/* 볼륨 조절 토글 */}
           <button
             onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
-            title="음량 조절"
+            title={t("bgm_vol_title", lang)}
             style={{
               width: 44, height: 44, borderRadius: "50%",
               background: open ? "#534AB7" : "rgba(255,255,255,0.92)",
@@ -234,7 +237,7 @@ export default function BgmPlayer() {
           {/* 재생/정지 */}
           <button
             onClick={toggle}
-            title={playing ? "음악 끄기" : "음악 켜기"}
+            title={playing ? t("bgm_off", lang) : t("bgm_on", lang)}
             style={{
               width: 44, height: 44, borderRadius: "50%",
               background: "rgba(255,255,255,0.92)",
