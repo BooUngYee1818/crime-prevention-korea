@@ -1,6 +1,4 @@
-import { NextRequest } from "next/server";
-
-export const runtime = "edge";
+import { NextRequest, NextResponse } from "next/server";
 
 // 시나리오별 가짜 계좌번호
 const FAKE_ACCOUNTS: Record<string, string> = {
@@ -145,7 +143,7 @@ export async function POST(req: NextRequest) {
     }));
 
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -160,77 +158,16 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    if (!geminiRes.ok || !geminiRes.body) {
-      return new Response(JSON.stringify({ error: "AI 오류" }), { status: 502 });
-    }
+    const data = await geminiRes.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        const reader = geminiRes.body!.getReader();
-        const decoder = new TextDecoder();
-        let buf = "";
-        let fullText = "";
+    const sendMatch = reply.match(/\[SEND_REQUEST:(\d+)\]/);
+    const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
+    const cleanReply = reply.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
 
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buf += decoder.decode(value, { stream: true });
-
-            // NDJSON: Gemini streams as JSON array chunks — parse complete JSON objects
-            // Each chunk may be a partial array element; find complete {...} objects
-            let start = 0;
-            let depth = 0;
-            let inStr = false;
-            let escape = false;
-
-            for (let i = 0; i < buf.length; i++) {
-              const c = buf[i];
-              if (escape) { escape = false; continue; }
-              if (c === "\\" && inStr) { escape = true; continue; }
-              if (c === '"') { inStr = !inStr; continue; }
-              if (inStr) continue;
-              if (c === "{") { if (depth === 0) start = i; depth++; }
-              else if (c === "}") {
-                depth--;
-                if (depth === 0) {
-                  try {
-                    const chunk = JSON.parse(buf.slice(start, i + 1));
-                    const text: string = chunk.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-                    if (text) {
-                      fullText += text;
-                      const cleanDelta = text.replace(/\[SEND_REQUEST:\d+\]/g, "");
-                      if (cleanDelta) {
-                        controller.enqueue(
-                          new TextEncoder().encode(JSON.stringify({ delta: cleanDelta }) + "\n")
-                        );
-                      }
-                    }
-                  } catch { /* skip */ }
-                  buf = buf.slice(i + 1);
-                  i = -1;
-                }
-              }
-            }
-          }
-        } finally {
-          const sendMatch = fullText.match(/\[SEND_REQUEST:(\d+)\]/);
-          const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
-          controller.enqueue(
-            new TextEncoder().encode(
-              JSON.stringify({ done: true, sendAmount }) + "\n"
-            )
-          );
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
+    return NextResponse.json({ reply: cleanReply, sendAmount });
   } catch (err) {
     console.error(err);
-    return new Response(JSON.stringify({ error: "서버 오류" }), { status: 500 });
+    return NextResponse.json({ error: "서버 오류" }, { status: 500 });
   }
 }

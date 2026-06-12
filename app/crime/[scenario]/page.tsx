@@ -778,59 +778,19 @@ export default function ScenarioPage() {
         }),
       });
 
-      if (!res.ok || !res.body) throw new Error("응답 오류");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = "";
-      let started = false;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += decoder.decode(value, { stream: true });
-
-        const lines = buf.split("\n");
-        buf = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          try {
-            const chunk = JSON.parse(line);
-
-            if (chunk.delta) {
-              if (!started) {
-                setLoading(false);
-                setMessages((prev) => [...prev, { role: "criminal", content: chunk.delta }]);
-                started = true;
-              } else {
-                setMessages((prev) => {
-                  const last = prev[prev.length - 1];
-                  return [...prev.slice(0, -1), { ...last, content: last.content + chunk.delta }];
-                });
-              }
-            }
-
-            if (chunk.done) {
-              if (!started) setLoading(false);
-              if (chunk.sendAmount) setPendingSend(chunk.sendAmount);
-              setMessages((prev) => {
-                const last = prev[prev.length - 1];
-                if (last?.role === "criminal" && detectCriminalDanger(last.content)) {
-                  recordDanger("사기범이 현금 전달·ATM 인출 지시");
-                  setTimeout(() => setBlock({ type: "criminal-location", criminalText: last.content }), 800);
-                }
-                return prev;
-              });
-            }
-          } catch {
-            // skip malformed chunk
-          }
+      const d = await res.json();
+      if (d.reply) {
+        setMessages((prev) => [...prev, { role: "criminal", content: d.reply }]);
+        if (detectCriminalDanger(d.reply)) {
+          recordDanger("사기범이 현금 전달·ATM 인출 지시");
+          setTimeout(() => setBlock({ type: "criminal-location", criminalText: d.reply }), 800);
         }
       }
+      if (d.sendAmount) setPendingSend(d.sendAmount);
     } catch {
-      setLoading(false);
       setMessages((prev) => [...prev, { role: "criminal", content: "..." }]);
+    } finally {
+      setLoading(false);
     }
   }
 
