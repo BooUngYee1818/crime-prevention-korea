@@ -56,6 +56,16 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const [currentMood, setCurrentMood] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<"sm"|"md"|"lg">(() => {
+    try { return (localStorage.getItem("chat_font_size") as "sm"|"md"|"lg") || "md"; } catch { return "md"; }
+  });
+
+  const FONT_SIZE_MAP = { sm: 12, md: 14, lg: 17 };
+  function cycleFontSize() {
+    const next = fontSize === "sm" ? "md" : fontSize === "md" ? "lg" : "sm";
+    setFontSize(next);
+    try { localStorage.setItem("chat_font_size", next); } catch {}
+  }
 
   useEffect(() => {
     const char = getCharacters().find((c) => c.id === id);
@@ -130,6 +140,20 @@ export default function ChatPage() {
             ))}
           </div>
         </div>
+        {/* 글자 크기 버튼 */}
+        <button
+          onClick={cycleFontSize}
+          title="글자 크기"
+          style={{
+            background: "#1a1a1a", border: "1px solid #2a2a2a",
+            borderRadius: 20, padding: "4px 10px",
+            color: "#9ca3af", fontSize: 11, fontWeight: 700,
+            cursor: "pointer", flexShrink: 0,
+          }}
+        >
+          {fontSize === "sm" ? "가A" : fontSize === "md" ? "가AA" : "가AAA"}
+        </button>
+
         {currentMood && (
           <div style={{
             display: "flex", alignItems: "center", gap: 5,
@@ -189,7 +213,7 @@ export default function ChatPage() {
                 </span>
               )}
               <div style={{
-                padding: "10px 14px", fontSize: 14, lineHeight: 1.55, color: "#fff",
+                padding: "10px 14px", fontSize: FONT_SIZE_MAP[fontSize], lineHeight: 1.6, color: "#fff",
                 background: msg.role === "user" ? "#534AB7" : "#1e1e1e",
                 borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
               }}>
@@ -234,29 +258,39 @@ export default function ChatPage() {
       )}
 
       {/* 입력창 */}
-      <div style={{ padding: "8px 16px 32px", background: "#0d0d0d", borderTop: "0.5px solid #1e1e1e", flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#1a1a1a", borderRadius: 24, padding: "6px 8px 6px 14px" }}>
-          <button onClick={() => setShowEmoji((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: showEmoji ? "#534AB7" : "#555", padding: 4 }}>
-            <Smile size={20} />
+      <div style={{
+        padding: "10px 14px 32px", flexShrink: 0,
+        background: "#111",
+        borderTop: "2px solid #2a2a2a",
+        boxShadow: "0 -4px 20px #00000060",
+      }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          background: "#1e1e1e", borderRadius: 26,
+          padding: "8px 10px 8px 16px",
+          border: "1.5px solid #2e2e2e",
+        }}>
+          <button onClick={() => setShowEmoji((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: showEmoji ? "#534AB7" : "#666", padding: 4, flexShrink: 0 }}>
+            <Smile size={22} />
           </button>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
             placeholder={lang === "ko" ? "메시지 입력..." : `메시지 입력... · ${PLACEHOLDER[lang as L]}`}
-            style={{ flex: 1, background: "transparent", border: "none", color: "#fff", fontSize: 14, outline: "none" }}
+            style={{ flex: 1, background: "transparent", border: "none", color: "#fff", fontSize: FONT_SIZE_MAP[fontSize], outline: "none", minWidth: 0 }}
           />
           <button
             onClick={() => sendMessage()}
             disabled={!input.trim() || loading}
             style={{
-              width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer",
+              width: 38, height: 38, borderRadius: "50%", border: "none", cursor: "pointer",
               background: input.trim() && !loading ? "#534AB7" : "#2a2a2a",
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0, transition: "background 0.15s",
             }}
           >
-            <Send size={14} color="#fff" />
+            <Send size={16} color="#fff" />
           </button>
         </div>
       </div>
