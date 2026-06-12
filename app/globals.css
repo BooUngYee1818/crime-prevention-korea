@@ -17,23 +17,70 @@ html, body {
 
 /* ── 모바일 반응형 ── */
 @media (max-width: 768px) {
-  /* 홈 네비 버튼 숨기기 */
+  /* 네비 링크 숨기기 */
   .nav-links { display: none !important; }
+
+  /* 네비 padding 줄이기 */
+  .nav-bar { padding: 0 16px !important; height: 54px !important; }
+
   /* 히어로 2열 → 1열 */
   .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-  /* 통계 2열 유지, 패딩 줄이기 */
+  .hero-section { padding: 40px 20px 48px !important; }
+
+  /* 통계 2열 유지 but 패딩 줄이기 */
   .section-pad { padding: 48px 20px !important; }
+
   /* 시나리오 3열 → 1열 */
   .scenario-grid { grid-template-columns: 1fr !important; }
+
   /* 신고번호 4열 → 2열 */
   .report-grid { grid-template-columns: 1fr 1fr !important; }
+
   /* how-to 3열 → 1열 */
   .how-grid { grid-template-columns: 1fr !important; }
+
   /* 프라이버시 3열 → 1열 */
   .priv-grid { grid-template-columns: 1fr !important; }
+
+  /* why 섹션 2열 → 1열 */
+  .why-grid { grid-template-columns: 1fr !important; }
+
   /* 폰트 크기 */
-  h1 { font-size: 34px !important; }
-  h2 { font-size: 26px !important; }
+  h1 { font-size: 30px !important; }
+  h2 { font-size: 22px !important; }
+
+  /* 팝업 패딩 줄이기 */
+  .popup-card { padding: 24px 20px 20px !important; }
+
+  /* 홈 영웅 버튼 100% */
+  .hero-cta-wrap { flex-direction: column !important; }
+  .hero-cta-wrap a, .hero-cta-wrap button { width: 100% !important; justify-content: center !important; }
+
+  /* 무지개 신고 버튼 - 네비 아래 맞게 */
+  .rainbow-btn { top: 60px !important; right: 12px !important; padding: 8px 12px !important; font-size: 12px !important; }
+
+  /* 모바일 전용 nav 시작 버튼 표시 */
+  .nav-mobile-start { display: flex !important; }
+
+  /* 볼륨 패널 - 오른쪽에서 충분히 */
+  .vol-panel { min-width: 0 !important; width: calc(100vw - 48px) !important; max-width: 260px !important; }
+
+  /* BGM 버튼 그룹 - 더 안쪽으로 */
+  .bgm-wrap { bottom: 16px !important; right: 16px !important; }
+
+  /* 후원 버튼 */
+  .donate-float { bottom: 16px !important; left: 16px !important; }
+
+  /* 신고 버튼 */
+  .contact-float { display: none !important; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 26px !important; }
+  h2 { font-size: 20px !important; }
+  .section-pad { padding: 36px 16px !important; }
+  .hero-section { padding: 28px 16px 36px !important; }
+  .popup-card { padding: 20px 16px 18px !important; }
 }
 
 ::-webkit-scrollbar { width: 4px; }

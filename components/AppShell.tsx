@@ -21,6 +21,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [showStats, setShowStats] = useState(false);
   const [showEgg, setShowEgg] = useState(false);
   const [eggStep, setEggStep] = useState(0);
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [hofOpen, setHofOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("user_profile");
@@ -63,84 +65,74 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <DonorEventPopup />
       <ReviewPopup />
 
-      {/* 통계 버튼 — hover 시 pill 확장 */}
+      {/* 통계/HOF pill — hover(PC) + tap(모바일) 모두 지원 */}
       <style>{`
         .stats-pill {
           position: fixed; bottom: 50%; right: 0; z-index: 9996;
-          height: 34px; border-radius: 8px 0 0 8px;
+          height: 40px; border-radius: 10px 0 0 10px;
           background: rgba(15,23,42,0.90);
-          border: 1px solid #334155;
-          border-right: none;
+          border: 1px solid #334155; border-right: none;
           cursor: pointer;
           display: flex; align-items: center; justify-content: flex-end;
-          overflow: hidden;
-          width: 34px;
+          overflow: hidden; width: 40px;
           transition: width 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
           box-shadow: -2px 2px 10px #00000030;
           backdrop-filter: blur(12px);
-          padding: 0;
-          outline: none;
-          white-space: nowrap;
+          padding: 0; outline: none; white-space: nowrap;
+          -webkit-tap-highlight-color: transparent;
         }
-        .stats-pill:hover {
-          width: 110px;
-          border-color: #4f6bff88;
-        }
+        .stats-pill.open, .stats-pill:hover { width: 120px; border-color: #4f6bff88; }
         .stats-pill-icon {
-          width: 34px; height: 34px; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 15px;
+          width: 40px; height: 40px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center; font-size: 16px;
         }
         .stats-pill-text {
           font-size: 11px; font-weight: 800; color: #c7d2fe;
-          padding-right: 10px; letter-spacing: 0.3px;
-          opacity: 0;
-          transition: opacity 0.2s ease 0.1s;
-          pointer-events: none;
+          padding-right: 12px; letter-spacing: 0.3px;
+          opacity: 0; transition: opacity 0.2s ease 0.1s; pointer-events: none;
         }
-        .stats-pill:hover .stats-pill-text {
-          opacity: 1;
-        }
+        .stats-pill.open .stats-pill-text, .stats-pill:hover .stats-pill-text { opacity: 1; }
+
         .hof-pill {
-          position: fixed; bottom: 50%; left: 0; z-index: 9996;
-          height: 34px; border-radius: 0 8px 8px 0;
+          position: fixed; bottom: calc(50% + 52px); left: 0; z-index: 9996;
+          height: 40px; border-radius: 0 10px 10px 0;
           background: rgba(26,16,0,0.90);
-          border: 1px solid #F5C40055;
-          border-left: none;
+          border: 1px solid #F5C40055; border-left: none;
           cursor: pointer;
           display: flex; align-items: center; justify-content: flex-start;
-          overflow: hidden;
-          width: 34px;
+          overflow: hidden; width: 40px;
           transition: width 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
           box-shadow: 2px 2px 10px #00000030;
           backdrop-filter: blur(12px);
-          padding: 0;
-          outline: none;
-          white-space: nowrap;
+          padding: 0; outline: none; white-space: nowrap;
+          -webkit-tap-highlight-color: transparent;
         }
-        .hof-pill:hover {
-          width: 110px;
-          border-color: #F5C400aa;
-        }
+        .hof-pill.open, .hof-pill:hover { width: 120px; border-color: #F5C400aa; }
         .hof-pill-icon {
-          width: 34px; height: 34px; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 15px;
+          width: 40px; height: 40px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center; font-size: 16px;
         }
         .hof-pill-text {
           font-size: 11px; font-weight: 800; color: #F5C400;
-          padding-left: 2px; padding-right: 10px; letter-spacing: 0.3px;
-          opacity: 0;
-          transition: opacity 0.2s ease 0.1s;
-          pointer-events: none;
+          padding-left: 2px; padding-right: 12px; letter-spacing: 0.3px;
+          opacity: 0; transition: opacity 0.2s ease 0.1s; pointer-events: none;
         }
-        .hof-pill:hover .hof-pill-text {
-          opacity: 1;
+        .hof-pill.open .hof-pill-text, .hof-pill:hover .hof-pill-text { opacity: 1; }
+
+        @media (max-width: 768px) {
+          .stats-pill, .hof-pill { height: 48px; }
+          .stats-pill-icon, .hof-pill-icon { width: 48px; height: 48px; font-size: 20px; }
+          .stats-pill.open, .stats-pill:hover { width: 130px; }
+          .hof-pill.open, .hof-pill:hover { width: 130px; }
         }
       `}</style>
       <button
-        className="stats-pill"
-        onClick={() => setShowStats(true)}
+        className={`stats-pill${statsOpen ? " open" : ""}`}
+        onClick={() => { setShowStats(true); setStatsOpen(false); }}
+        onMouseEnter={() => setStatsOpen(true)}
+        onMouseLeave={() => setStatsOpen(false)}
+        onTouchStart={() => setStatsOpen(true)}
+        onTouchEnd={() => setTimeout(() => setStatsOpen(false), 600)}
       >
         <span className="stats-pill-text">{t("appshell_stats", lang)}</span>
         <span className="stats-pill-icon">📊</span>
@@ -148,8 +140,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* 왕관 버튼 — 명예의 전당으로 스크롤 */}
       <button
-        className="hof-pill"
-        onClick={() => document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" })}
+        className={`hof-pill${hofOpen ? " open" : ""}`}
+        onClick={() => { document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" }); setHofOpen(false); }}
+        onMouseEnter={() => setHofOpen(true)}
+        onMouseLeave={() => setHofOpen(false)}
+        onTouchStart={() => setHofOpen(true)}
+        onTouchEnd={() => setTimeout(() => setHofOpen(false), 600)}
       >
         <span className="hof-pill-icon">👑</span>
         <span className="hof-pill-text">{t("appshell_hof", lang)}</span>

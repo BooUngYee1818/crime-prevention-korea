@@ -175,7 +175,7 @@ export default function HomePage() {
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: "20px",
         }}>
-          <div style={{
+          <div className="popup-card" style={{
             background: "#fff", borderRadius: 24, padding: "36px 36px 32px",
             maxWidth: 520, width: "100%", position: "relative",
             boxShadow: "0 24px 80px #00000030",
@@ -314,6 +314,7 @@ export default function HomePage() {
 
       {/* ── 무지개 고정 버튼 ── */}
       <button
+        className="rainbow-btn"
         onClick={() => router.push("/report")}
         style={{
           position: "fixed", top: 80, right: 24, zIndex: 900,
@@ -330,7 +331,7 @@ export default function HomePage() {
       </button>
 
       {/* ── 네비게이션 바 ── */}
-      <nav style={{
+      <nav className="nav-bar" style={{
         position: "sticky", top: 0, zIndex: 100,
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
@@ -355,7 +356,7 @@ export default function HomePage() {
             }}>{t("nav_edu_badge", lang)}</span>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
           <a href="#how" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_howto", lang)}</a>
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
@@ -394,10 +395,24 @@ export default function HomePage() {
             {t("nav_start", lang)} →
           </button>
         </div>
+        {/* 모바일 전용 시작 버튼 */}
+        <button
+          className="nav-mobile-start"
+          onClick={() => router.push("/crime")}
+          style={{
+            display: "none",
+            padding: "8px 16px", borderRadius: 20,
+            background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+            color: "#fff", border: "none", cursor: "pointer",
+            fontSize: 13, fontWeight: 700,
+          }}
+        >
+          {t("nav_start", lang)} →
+        </button>
       </nav>
 
       {/* ── 히어로 섹션 ── */}
-      <section style={{
+      <section className="hero-section hero-grid" style={{
         maxWidth: 1140, margin: "0 auto", padding: "80px 40px 70px",
         display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center",
       }}>
@@ -425,7 +440,7 @@ export default function HomePage() {
             {t("hero_subtitle", lang)}
           </p>
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div className="hero-cta-wrap" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
               onClick={() => router.push("/crime")}
               style={{

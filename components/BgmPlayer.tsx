@@ -144,11 +144,11 @@ export default function BgmPlayer() {
     <>
       <audio ref={audioRef} src={getSrc(pathname)} data-src={getSrc(pathname)} preload="auto" />
 
-      <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9998, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+      <div className="bgm-wrap" style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9998, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
 
         {/* 볼륨 패널 */}
         {open && (
-          <div style={{
+          <div className="vol-panel" style={{
             background: "rgba(255,255,255,0.97)",
             border: "1.5px solid #e2e8f0",
             borderRadius: 20, padding: "18px 20px",

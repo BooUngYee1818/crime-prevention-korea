@@ -56,14 +56,16 @@ export default function ProfileModal({ onComplete }: Props) {
       position: "fixed", inset: 0, zIndex: 99999,
       background: "rgba(0,0,0,0.95)",
       display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center",
-      padding: "24px 20px",
+      alignItems: "center", justifyContent: "flex-start",
+      padding: "20px 16px",
+      overflowY: "auto",
     }}>
       <div style={{
         width: "100%", maxWidth: 420,
         background: "#0d0d0d", border: "1px solid #1e1e1e",
-        borderRadius: 24, padding: "28px 24px",
-        display: "flex", flexDirection: "column", gap: 22,
+        borderRadius: 24, padding: "24px 20px",
+        display: "flex", flexDirection: "column", gap: 20,
+        marginTop: "auto", marginBottom: "auto",
       }}>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 10 }}>🛡️</div>
