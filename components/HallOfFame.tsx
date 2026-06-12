@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 const FALLBACK = [
   "부엉이 안","양진오","노영국이","김미경","주현옥",
@@ -17,6 +19,7 @@ const ROWS_CFG = [
 ];
 
 export default function HallOfFame() {
+  const { lang } = useLang();
   const [names, setNames]       = useState<string[]>(FALLBACK);
   const [eligible, setEligible] = useState(false);   // 후원 버튼 경유 여부
   const [showForm, setShowForm] = useState(false);
@@ -65,10 +68,10 @@ export default function HallOfFame() {
           Hall of Fame
         </p>
         <h2 style={{ fontSize: "clamp(26px, 4.5vw, 48px)", fontWeight: 900, color: "#1a1a1a", margin: "0 0 10px" }}>
-          💛 후원자 명예의 전당
+          {t("hof_title", lang)}
         </h2>
         <p style={{ fontSize: 14, color: "#999", margin: 0 }}>
-          이 프로그램을 함께 키워주신 분들입니다
+          {t("hof_sub", lang)}
         </p>
       </div>
 
@@ -90,7 +93,7 @@ export default function HallOfFame() {
                 boxShadow: "0 4px 20px #F5C40040",
               }}
             >
-              💛 명예의 전당에 내 이름 올리기
+              {t("hof_btn_register", lang)}
             </button>
           ) : (
             <div style={{
@@ -99,10 +102,11 @@ export default function HallOfFame() {
               borderRadius: 18, padding: "22px 22px 18px",
             }}>
               <p style={{ fontSize: 13, fontWeight: 800, color: "#7a6200", marginBottom: 14 }}>
-                💛 후원해 주셔서 감사합니다!<br/>
+                {t("hof_thanks", lang)}<br/>
                 <span style={{ fontWeight: 500, color: "#a07800", fontSize: 12 }}>
-                  명예의 전당에 올릴 닉네임을 입력해 주세요.<br/>
-                  이름 외 어떤 정보도 수집되지 않습니다.
+                  {t("hof_placeholder_desc", lang).split("\n").map((line, i) => (
+                    <span key={i}>{line}{i === 0 && <br/>}</span>
+                  ))}
                 </span>
               </p>
               <div style={{ display: "flex", gap: 8 }}>
@@ -111,7 +115,7 @@ export default function HallOfFame() {
                   value={nickname}
                   onChange={e => setNickname(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && submitNickname()}
-                  placeholder="닉네임 입력"
+                  placeholder={t("hof_input_ph", lang)}
                   maxLength={20}
                   style={{
                     flex: 1, padding: "11px 14px", borderRadius: 10,
@@ -131,11 +135,11 @@ export default function HallOfFame() {
                     color: "#1a1000",
                   }}
                 >
-                  신청
+                  {t("hof_submit", lang)}
                 </button>
               </div>
               <p style={{ fontSize: 11, color: "#aaa", marginTop: 10, textAlign: "center" }}>
-                운영자 확인 후 명예의 전당에 반영됩니다
+                {t("hof_review_note", lang)}
               </p>
             </div>
           )}
@@ -153,10 +157,10 @@ export default function HallOfFame() {
           }}>
             <p style={{ fontSize: 22, marginBottom: 6 }}>🎉</p>
             <p style={{ fontSize: 14, fontWeight: 800, color: "#166534", margin: 0 }}>
-              신청 완료! 곧 명예의 전당에 등재됩니다.
+              {t("hof_done_title", lang)}
             </p>
             <p style={{ fontSize: 12, color: "#4ade80", marginTop: 6, marginBottom: 0 }}>
-              소중한 후원 감사드립니다 💛
+              {t("hof_done_sub", lang)}
             </p>
           </div>
         </div>
