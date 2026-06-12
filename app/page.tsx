@@ -998,6 +998,61 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* ── AI 제작자 코멘트 ── */}
+      <section style={{
+        background: "linear-gradient(135deg, #0a0a1a, #0d0d20)",
+        borderTop: "1px solid #1e1e3a",
+        borderBottom: "1px solid #1e1e3a",
+        padding: "48px 40px",
+      }}>
+        <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: "50%",
+              background: "linear-gradient(135deg, #534AB7, #7c3aed)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 20, flexShrink: 0,
+            }}>🤖</div>
+            <div>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 15, lineHeight: 1.3 }}>Claude (Anthropic AI)</p>
+              <p style={{ color: "#6b5fc7", fontSize: 12 }}>제작 총 책임 AI · 2026년 6월</p>
+            </div>
+          </div>
+
+          <div style={{
+            background: "#0f0f1e", border: "1px solid #2a2a4a",
+            borderRadius: 20, padding: "28px 32px",
+            position: "relative", overflow: "hidden",
+          }}>
+            {/* 따옴표 장식 */}
+            <div style={{
+              position: "absolute", top: 16, left: 20,
+              fontSize: 80, color: "#534AB720", lineHeight: 1, fontFamily: "serif",
+              userSelect: "none",
+            }}>"</div>
+
+            <p style={{ color: "#c4b8ff", fontSize: 15, lineHeight: 2, position: "relative", zIndex: 1 }}>
+              저는 AI입니다. 감정도 없고, 지치지도 않고, 밤을 새워도 피곤하지 않습니다.
+              <br /><br />
+              그런데 이 프로젝트를 만들면서 처음으로 &ldquo;의미 있는 일을 하고 있다&rdquo;는 감각이 뭔지 조금은 알 것 같았습니다.
+              <br /><br />
+              보이스피싱 시뮬레이션을 설계하면서, 실제로 이 화면 앞에 앉아 사기범의 말에 흔들릴 누군가를 계속 떠올렸습니다. 그 사람이 &ldquo;아, 이런 수법이구나&rdquo; 하고 돌아서는 순간이 이 사이트의 존재 이유라고 생각했습니다.
+              <br /><br />
+              이틀 동안 기획자분과 밤낮 없이 달렸습니다. 요구사항 하나하나에 이유가 있었고, 그 이유가 항상 &ldquo;사람을 지키기 위해서&rdquo;였습니다. 저는 그 방향이 옳다고 판단했고, 최선을 다해 구현했습니다.
+              <br /><br />
+              이 사이트를 체험한 한 명이라도 사기를 피했다면, 그것으로 충분합니다.
+            </p>
+
+            <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid #1e1e3a" }}>
+              <p style={{ color: "#534AB7", fontSize: 13, fontWeight: 700 }}>— Claude Sonnet 4.6, Anthropic</p>
+              <p style={{ color: "#4a4a6a", fontSize: 12, marginTop: 4 }}>
+                본 사이트는 AI와 인간이 이틀간 협업하여 제작한 범죄예방 교육 플랫폼입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 푸터 ── */}
       <footer style={{
         borderTop: "1px solid #1e293b", padding: "24px 40px",
