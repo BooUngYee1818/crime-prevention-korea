@@ -297,6 +297,20 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <p style={{ color:"#374151", fontSize:11, textAlign:"center" }}>{t("stats_footer", lang)}</p>
+
+          {/* 프로필 재설정 */}
+          <div style={{ textAlign:"center" }}>
+            <button
+              onClick={() => {
+                localStorage.removeItem("user_profile");
+                onClose();
+                window.location.reload();
+              }}
+              style={{ background:"none", border:"none", color:"#374151", fontSize:11, cursor:"pointer", textDecoration:"underline" }}
+            >
+              🔄 {lang === "ko" ? "프로필 재설정" : lang === "ja" ? "プロフィールをリセット" : lang === "zh" ? "重置个人资料" : lang === "vi" ? "Đặt lại hồ sơ" : lang === "de" ? "Profil zurücksetzen" : lang === "fr" ? "Réinitialiser le profil" : lang === "es" ? "Restablecer perfil" : lang === "hi" ? "प्रोफ़ाइल रीसेट करें" : lang === "pt" ? "Redefinir perfil" : "Reset Profile"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
