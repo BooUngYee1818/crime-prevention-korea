@@ -661,6 +661,13 @@ export default function ScenarioPage() {
   const [asset, setAsset] = useState(15000000);
   const [displayAsset, setDisplayAsset] = useState(15000000);
   const [loanAmount] = useState(30000000);
+  // fake-bank-app phase states
+  const [smsAlert, setSmsAlert] = useState(false);
+  const [bankConfirmed, setBankConfirmed] = useState(false);
+  // police-call phase states
+  const [policeStep, setPoliceStep] = useState(0);
+  // police-unresolved phase states
+  const [unresolvedVisible, setUnresolvedVisible] = useState(false);
   const [transferTarget, setTransferTarget] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -689,6 +696,58 @@ export default function ScenarioPage() {
       setMessages([{ role: "criminal", content: FIRST_MESSAGES[scenario as string] || "안녕하세요." }]);
     }
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // police-call 대화 라인 (TTS, 타이머 공유)
+  const POLICE_LINES = [
+    { from: "system", text: "📞 112에 신고 중..." },
+    { from: "police", text: "네, 112입니다. 무슨 일이신가요?" },
+    { from: "user",   text: `사기를 당했어요. ${formatAmount(finalSendAmount ?? 0)}을 이체했는데요...` },
+    { from: "police", text: "신고 접수하겠습니다. 어떤 경위로 이체하셨는지 말씀해 주시겠어요?" },
+    { from: "user",   text: "전화로 수사관이라고 해서 안전계좌로 보내달라고 해서..." },
+    { from: "police", text: "확인됐습니다. 즉시 해당 은행에 지급정지를 신청하시고, 금융감독원 1332에도 신고 부탁드립니다." },
+    { from: "user",   text: "그럼 제 돈은 돌려받을 수 있나요?" },
+    { from: "police", text: "죄송합니다. 이미 인출됐을 경우 즉각 회수가 어렵습니다. 피해 회수율은 약 30% 수준입니다." },
+    { from: "user",   text: "...그럼 70%는 그냥 날리는 건가요?" },
+    { from: "police", text: "빠른 신고와 지급정지가 최선입니다. 신고 접수번호는 2024-112-849203입니다. 정말 죄송합니다." },
+  ];
+
+  // police-call: 대화 타이머
+  useEffect(() => {
+    if (phase !== "police-call") return;
+    if (policeStep < POLICE_LINES.length) {
+      const delay = policeStep === 0 ? 800 : policeStep === 1 ? 2000 : 1600;
+      const timer = setTimeout(() => setPoliceStep(s => s + 1), delay);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, policeStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // police-call: TTS
+  useEffect(() => {
+    if (phase !== "police-call" || policeStep === 0) return;
+    const line = POLICE_LINES[policeStep - 1];
+    if (!line || line.from !== "police") return;
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(line.text);
+    const langMap: Record<string, string> = { ko:"ko-KR", en:"en-US", ja:"ja-JP", zh:"zh-CN", vi:"vi-VN", es:"es-ES", de:"de-DE", fr:"fr-FR", hi:"hi-IN", pt:"pt-BR" };
+    utter.lang = langMap[lang] ?? "ko-KR";
+    utter.rate = 0.88; utter.pitch = 1.05; utter.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => v.lang === utter.lang && (v.name.includes("female") || v.name.includes("Female") || v.name.includes("여성") || v.name.includes("Yuna") || v.name.includes("Kyoko") || v.name.includes("Siri") || v.name.includes("Google"))) ?? voices.find(v => v.lang === utter.lang);
+    if (preferred) utter.voice = preferred;
+    window.speechSynthesis.speak(utter);
+    return () => { window.speechSynthesis.cancel(); };
+  }, [phase, policeStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // phase가 police-call로 바뀔 때 step 초기화
+  useEffect(() => {
+    if (phase === "police-call") setPoliceStep(0);
+    if (phase === "police-unresolved") {
+      setUnresolvedVisible(false);
+      setTimeout(() => setUnresolvedVisible(true), 300);
+    }
+    if (phase === "fake-bank-app") { setSmsAlert(false); setBankConfirmed(false); }
+  }, [phase]);
 
   // 페이지 이탈 / 분할화면 / 앱 전환 감지
   useEffect(() => {
@@ -1529,9 +1588,6 @@ export default function ScenarioPage() {
         };
         const acct = acctMap[scenario as string] ?? "BK민국은행 010-0000-0000000";
         const recipient = recipientMap[scenario as string] ?? "수신인";
-        const [smsAlert, setSmsAlert] = useState(false);
-        const [confirmed, setConfirmed] = useState(false);
-
         return (
           <div style={{ flex: 1, overflowY: "auto", background: "#f4f4f4", display: "flex", flexDirection: "column", position: "relative" }}>
 
@@ -1627,17 +1683,17 @@ export default function ScenarioPage() {
             <div style={{ padding: "0 12px 32px" }}>
               <button
                 onClick={() => setSmsAlert(true)}
-                disabled={confirmed}
+                disabled={bankConfirmed}
                 style={{
                   width: "100%", padding: "17px 0", borderRadius: 14,
-                  background: confirmed ? "#ccc" : "#FFCC00",
+                  background: bankConfirmed ? "#ccc" : "#FFCC00",
                   color: "#1a1a1a", fontWeight: 800, fontSize: 16,
-                  border: "none", cursor: confirmed ? "default" : "pointer",
-                  boxShadow: confirmed ? "none" : "0 4px 12px #FFCC0044",
+                  border: "none", cursor: bankConfirmed ? "default" : "pointer",
+                  boxShadow: bankConfirmed ? "none" : "0 4px 12px #FFCC0044",
                   transition: "all 0.2s",
                 }}
               >
-                {confirmed ? "이체 처리 중..." : "이체하기"}
+                {bankConfirmed ? "이체 처리 중..." : "이체하기"}
               </button>
             </div>
 
@@ -1691,7 +1747,7 @@ export default function ScenarioPage() {
                       취소
                     </button>
                     <button
-                      onClick={() => { setConfirmed(true); setSmsAlert(false); executeFinalTransfer(); }}
+                      onClick={() => { setBankConfirmed(true); setSmsAlert(false); executeFinalTransfer(); }}
                       style={{
                         flex: 2, padding: "15px 0", borderRadius: 12,
                         background: "#FFCC00", border: "none", cursor: "pointer",
@@ -1710,58 +1766,8 @@ export default function ScenarioPage() {
 
       {/* ══ 112 신고 화면 ══ */}
       {phase === "police-call" && (() => {
-        const [step, setStep] = useState(0);
-        const lines = [
-          { from: "system", text: "📞 112에 신고 중..." },
-          { from: "police", text: "네, 112입니다. 무슨 일이신가요?" },
-          { from: "user",   text: `사기를 당했어요. ${formatAmount(finalSendAmount ?? 0)}을 이체했는데요...` },
-          { from: "police", text: "신고 접수하겠습니다. 어떤 경위로 이체하셨는지 말씀해 주시겠어요?" },
-          { from: "user",   text: "전화로 수사관이라고 해서 안전계좌로 보내달라고 해서..." },
-          { from: "police", text: "확인됐습니다. 즉시 해당 은행에 지급정지를 신청하시고, 금융감독원 1332에도 신고 부탁드립니다." },
-          { from: "user",   text: "그럼 제 돈은 돌려받을 수 있나요?" },
-          { from: "police", text: "죄송합니다. 이미 인출됐을 경우 즉각 회수가 어렵습니다. 피해 회수율은 약 30% 수준입니다." },
-          { from: "user",   text: "...그럼 70%는 그냥 날리는 건가요?" },
-          { from: "police", text: "빠른 신고와 지급정지가 최선입니다. 신고 접수번호는 2024-112-849203입니다. 정말 죄송합니다." },
-        ];
-
-        useEffect(() => {
-          if (step < lines.length) {
-            const delay = step === 0 ? 800 : step === 1 ? 2000 : 1600;
-            const timer = setTimeout(() => setStep(s => s + 1), delay);
-            return () => clearTimeout(timer);
-          }
-        }, [step]);
-
-        // TTS: 경찰 대사가 나올 때마다 음성 재생
-        useEffect(() => {
-          if (step === 0) return;
-          const line = lines[step - 1];
-          if (line?.from !== "police") return;
-          if (typeof window === "undefined" || !window.speechSynthesis) return;
-
-          window.speechSynthesis.cancel();
-          const utter = new SpeechSynthesisUtterance(line.text);
-          const langMap: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", zh: "zh-CN", vi: "vi-VN", es: "es-ES", de: "de-DE", fr: "fr-FR", hi: "hi-IN", pt: "pt-BR" };
-          utter.lang = langMap[lang] ?? "ko-KR";
-          utter.rate = 0.88;
-          utter.pitch = 1.05;
-          utter.volume = 1;
-
-          // 한국어: 여성 상담원 목소리 우선
-          const voices = window.speechSynthesis.getVoices();
-          const preferred = voices.find(v =>
-            v.lang === utter.lang && (v.name.includes("female") || v.name.includes("Female") || v.name.includes("여성") || v.name.includes("Yuna") || v.name.includes("Kyoko") || v.name.includes("Siri") || v.name.includes("Google"))
-          ) ?? voices.find(v => v.lang === utter.lang);
-          if (preferred) utter.voice = preferred;
-
-          window.speechSynthesis.speak(utter);
-          return () => { window.speechSynthesis.cancel(); };
-        }, [step]);
-
-        // 페이즈 벗어나면 TTS 중단
-        useEffect(() => {
-          return () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); };
-        }, []);
+        const step = policeStep;
+        const lines = POLICE_LINES;
 
         return (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#1a1a1a" }}>
@@ -1835,8 +1841,7 @@ export default function ScenarioPage() {
 
       {/* ══ 경찰도 해결 못 함 ══ */}
       {phase === "police-unresolved" && (() => {
-        const [visible, setVisible] = useState(false);
-        useEffect(() => { setTimeout(() => setVisible(true), 300); }, []);
+        const visible = unresolvedVisible;
 
         return (
           <div style={{
