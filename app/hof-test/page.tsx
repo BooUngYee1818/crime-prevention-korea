@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const ROWS_CFG = [
   { dir:  1, sz: 88,  rot: -2,   spd: 10 },
@@ -56,6 +56,7 @@ export default function HofTestPage() {
   const [keyInput, setKeyInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // 서버에서 현재 이름 목록 로드
   useEffect(() => {
@@ -95,8 +96,9 @@ export default function HofTestPage() {
   async function addName() {
     const v = input.trim();
     if (!v) return;
-    await apiCall("add", v);
     setInput("");
+    await apiCall("add", v);
+    inputRef.current?.focus();
   }
 
   if (!authed) {
@@ -179,6 +181,7 @@ export default function HofTestPage() {
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
           <input
+            ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !loading && addName()}
