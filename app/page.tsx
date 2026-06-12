@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Shield, Phone, ChevronRight, BookOpen, Users, AlertCircle, ExternalLink, X } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 const STATS = [
   { value: "1조원+", label: "2025년 보이스피싱 피해액", icon: "📉", bg: "#fef2f2", color: "#dc2626" },
@@ -148,6 +150,7 @@ const GUIDE_TABS = [
 
 export default function HomePage() {
   const router = useRouter();
+  const { lang } = useLang();
   const [popup1Open, setPopup1Open] = useState(false);
   const [popup2Open, setPopup2Open] = useState(false);
   const [guideTab, setGuideTab] = useState("parents");
@@ -195,17 +198,15 @@ export default function HomePage() {
                 🛡️
               </div>
               <div>
-                <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 18 }}>범죄예방 체험관에 오신 걸 환영합니다</p>
-                <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 600 }}>대한민국 모든 시민을 위한 무료 교육 프로그램</p>
+                <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 18 }}>{t("popup1_title", lang)}</p>
+                <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 600 }}>{t("popup1_sub", lang)}</p>
               </div>
             </div>
 
             <div style={{ background: "#f8fafc", borderRadius: 16, padding: "18px 20px", marginBottom: 20, border: "1px solid #e2e8f0" }}>
               <p style={{ color: "#334155", fontSize: 14, lineHeight: 2 }}>
-                이 프로그램은 <strong style={{ color: "#0f172a" }}>범죄를 미리 예방하고</strong>, 어린이부터 어르신까지
-                누구나 이용 가능한 <strong style={{ color: "#0f172a" }}>범죄 예방 교육 프로그램</strong>입니다.<br /><br />
-                혹시 <strong style={{ color: "#dc2626" }}>이미 피해를 당하셨거나</strong>, 2차 피해가 걱정되어 오셨나요?<br />
-                어디에 신고해야 할지 막막하신 분들은 아래 버튼을 눌러주세요.
+                {t("popup1_body1", lang)}<br /><br />
+                {t("popup1_body2", lang)}
               </p>
             </div>
 
@@ -415,18 +416,17 @@ export default function HomePage() {
           </div>
 
           <h1 style={{ fontSize: 50, fontWeight: 900, lineHeight: 1.15, marginBottom: 20, letterSpacing: -1.5, color: "#0f172a" }}>
-            당신도<br />
+            {t("hero_title1", lang)}<br />
             <span style={{
               background: "linear-gradient(90deg, #2563eb, #7c3aed)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
             }}>
-              속을 수 있습니다
+              {t("hero_title2", lang)}
             </span>
           </h1>
 
           <p style={{ color: "#64748b", fontSize: 17, lineHeight: 1.8, marginBottom: 36, maxWidth: 460 }}>
-            실제로 일어나는 보이스피싱·스미싱·투자사기·불법도박 등<br />
-            <strong style={{ color: "#334155" }}>9가지 범죄 수법을 직접 체험</strong>하고 피해를 예방하세요.
+            {t("hero_subtitle", lang)}
           </p>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -441,7 +441,7 @@ export default function HomePage() {
                 boxShadow: "0 4px 20px #2563eb40",
               }}
             >
-              지금 바로 체험하기 <ChevronRight size={16} />
+              {t("hero_cta", lang)} <ChevronRight size={16} />
             </button>
             <a href="#scenarios" style={{
               display: "flex", alignItems: "center", gap: 8,
@@ -450,15 +450,15 @@ export default function HomePage() {
               border: "1px solid #e2e8f0", cursor: "pointer",
               fontSize: 15, textDecoration: "none", fontWeight: 500,
             }}>
-              시나리오 보기
+              {t("nav_scenarios", lang)}
             </a>
           </div>
 
           <div style={{ display: "flex", gap: 20, marginTop: 24 }}>
-            {["완전 무료", "실제 돈 없음", "교육 전용"].map((t) => (
-              <div key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {(["완전 무료", "실제 돈 없음", "교육 전용"] as const).map((label) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e" }} />
-                <span style={{ color: "#64748b", fontSize: 13 }}>{t}</span>
+                <span style={{ color: "#64748b", fontSize: 13 }}>{label}</span>
               </div>
             ))}
           </div>

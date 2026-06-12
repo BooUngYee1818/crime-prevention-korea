@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import BgmPlayer from "@/components/BgmPlayer";
 import ContactButton from "@/components/ContactButton";
+import DonateFloatButton from "@/components/DonateFloatButton";
 
 export const metadata: Metadata = {
   title: "범죄예방 체험관 | Crime Prevention Korea",
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </LanguageProvider>
         <BgmPlayer />
         <ContactButton />
+        <DonateFloatButton />
         <Analytics />
       </body>
     </html>
