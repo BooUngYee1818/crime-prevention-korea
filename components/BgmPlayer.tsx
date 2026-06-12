@@ -12,19 +12,21 @@ export default function BgmPlayer() {
     audio.volume = 0.15;
     audio.loop = true;
 
-    // 첫 번째 클릭/터치 시 자동 재생 (브라우저 정책)
-    const start = () => {
-      if (!started) {
-        audio.play().then(() => { setPlaying(true); setStarted(true); }).catch(() => {});
-      }
-    };
-    document.addEventListener("click", start, { once: true });
-    document.addEventListener("touchstart", start, { once: true });
-    return () => {
-      document.removeEventListener("click", start);
-      document.removeEventListener("touchstart", start);
-    };
-  }, [started]);
+    // 페이지 로드 즉시 재생 시도
+    audio.play().then(() => {
+      setPlaying(true);
+      setStarted(true);
+    }).catch(() => {
+      // 브라우저가 차단하면 첫 번째 상호작용 시 재생
+      const start = () => {
+        if (!started) {
+          audio.play().then(() => { setPlaying(true); setStarted(true); }).catch(() => {});
+        }
+      };
+      document.addEventListener("click", start, { once: true });
+      document.addEventListener("touchstart", start, { once: true });
+    });
+  }, []);
 
   const toggle = (e: React.MouseEvent) => {
     e.stopPropagation();
