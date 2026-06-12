@@ -4,8 +4,19 @@ import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
 const EXAMPLE = [
-  "홍길동","김철수","이영희","박민준","최수아",
-  "정하늘","윤서준","강지유","조민서","한도윤",
+  "윤서준","박로봇","정혁","김도윤","이경환",
+  "윤광철","공미영","강한별","김민지","김박최수연",
+  "윤승민","땅땅이","김덕배","찌찌","슘댱이",
+  "유수민","새대갈","김현식","주정연","장삐쭈",
+  "짤태식","육천원","빵빵이","옥지","박태준",
+];
+
+const YOUTUBERS = [
+  "김동희 세계관","고순호","끼발산","낭만박상환","슈중위",
+  "캡틴 김상호","효자손","앗싸참수리","웃경호","파크모",
+  "꾸몽","마인애플","에프지 카운터","김무진","김솔",
+  "이석하","키득가득","허팝","잇섭","언더케이지",
+  "서울리안","가전주부","우주하마",
 ];
 
 const ROWS_CFG = [
@@ -167,7 +178,51 @@ export default function HallOfFame() {
         </div>
       )}
 
-      {/* 마퀴 열 — 예시일 때 흐리게 */}
+      {/* ── 최고 명예의 전당 — 유튜버 코너 ── */}
+      <div style={{ background: "#0d0d0d", padding: "48px 0 0", marginTop: 8 }}>
+        <div style={{ textAlign: "center", paddingBottom: 28 }}>
+          <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 6, color: "#ffd70050", textTransform: "uppercase", marginBottom: 10 }}>
+            ✨ Ultimate Hall of Fame
+          </p>
+          <h2 style={{ fontSize: "clamp(22px, 4vw, 40px)", fontWeight: 900, color: "#FFD700", margin: "0 0 8px" }}>
+            👑 최고 명예의 전당
+          </h2>
+          <p style={{ fontSize: 13, color: "#888", margin: 0 }}>
+            이 프로그램을 응원해 주시는 크리에이터분들입니다
+          </p>
+        </div>
+
+        {/* 유튜버 마퀴 — 금색 테마 */}
+        <div style={{ paddingBottom: 48, opacity: 0.4 }}>
+          {ROWS_CFG.map((row, ri) => {
+            const shuffled = [...YOUTUBERS].sort(() => Math.sin(ri * 3.7 + 2) - 0.5);
+            const repeat   = Math.max(2, Math.ceil(15 / YOUTUBERS.length));
+            const unit     = shuffled.map(n =>
+              `<span style="display:inline-block;font-size:${row.sz}px;font-weight:900;color:#FFD700;padding:0 14px;line-height:1.12;white-space:nowrap;text-shadow:0 0 20px #ffd70060,2px 2px 0 #b8860030;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;">${n}<span style="color:#FFD70030;font-size:${Math.round(row.sz * 0.28)}px;margin:0 8px;">★</span></span>`
+            ).join("");
+            const content = unit.repeat(repeat);
+            const dur = Math.max(5, row.spd * 1.3 * (YOUTUBERS.length / 10));
+            return (
+              <div key={ri} style={{
+                overflow: "hidden",
+                transform: `rotate(${row.rot}deg) scaleX(1.1)`,
+                margin: `${ri === 0 ? 4 : -12}px 0`,
+              }}>
+                <div
+                  className="hof-t"
+                  style={{
+                    display: "flex", width: "200%", willChange: "transform",
+                    animation: `${row.dir === 1 ? "scrollL" : "scrollR"} ${dur}s linear infinite`,
+                  }}
+                  dangerouslySetInnerHTML={{ __html: content + content }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 일반 후원자 마퀴 열 — 예시일 때 흐리게 */}
       <div style={{ paddingBottom: 48, opacity: isExample ? 0.35 : 1, transition: "opacity 0.5s" }}>
         {ROWS_CFG.map((row, ri) => {
           const shuffled = [...list].sort(() => Math.sin(ri * 5.1 + 1) - 0.5);
