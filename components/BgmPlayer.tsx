@@ -9,7 +9,7 @@ export default function BgmPlayer() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = 0.5;
+    audio.volume = 0.15;
     audio.loop = true;
 
     // 첫 번째 클릭/터치 시 자동 재생 (브라우저 정책)
