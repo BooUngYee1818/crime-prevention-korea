@@ -64,6 +64,18 @@ export default function DonateFloatButton() {
         </>
       )}
 
+      {!open && (
+        <div style={{
+          position: "absolute", bottom: "calc(100% + 6px)", left: 0,
+          background: "rgba(20,83,45,0.95)", color: "#86efac",
+          fontSize: 11, fontWeight: 600, borderRadius: 10,
+          padding: "5px 10px", whiteSpace: "nowrap",
+          boxShadow: "0 2px 8px #00000030",
+          pointerEvents: "none",
+        }}>
+          후원은 자유입니다 😊
+        </div>
+      )}
       <button onClick={() => setOpen(o => !o)} title="후원하기"
         style={{
           width: 44, height: 44, borderRadius: "50%",
