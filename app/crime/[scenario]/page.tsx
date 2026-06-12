@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Send, AlertTriangle, CheckCircle, ChevronRight, Bell, Home, CreditCard, BarChart2, ShieldAlert, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
+import Certificate from "@/components/Certificate";
 
 type Phase =
   | "ringing"
@@ -671,6 +672,7 @@ export default function ScenarioPage() {
   const [finalSendAmount, setFinalSendAmount] = useState<number | null>(null);
   const [notif] = useState(false);
   const [block, setBlock] = useState<BlockState | null>(null);
+  const [showCertificate, setShowCertificate] = useState(false);
   // 위험 행동 감지 누적
   const [dangerCount, setDangerCount] = useState(0);
   const [dangerReasons, setDangerReasons] = useState<string[]>([]);
@@ -1241,6 +1243,17 @@ export default function ScenarioPage() {
               style={{ width:"100%", padding:"16px 0", borderRadius:16, background: KB, color: KB_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer" }}>
               이체하기
             </button>
+            {/* 사기 거부 버튼 */}
+            <button onClick={() => setShowCertificate(true)}
+              style={{
+                width:"100%", padding:"14px 0", borderRadius:16,
+                background:"linear-gradient(135deg,#14532d,#166534)",
+                color:"#4ade80", fontWeight:900, fontSize:14,
+                border:"1px solid #22c55e66", cursor:"pointer",
+                display:"flex", alignItems:"center", justifyContent:"center", gap:8,
+              }}>
+              🛡️ 돈을 보내지 않겠습니다
+            </button>
             <button onClick={() => setPhase("transfer-form")}
               style={{ width:"100%", padding:"12px 0", borderRadius:16, background:"#fff", color:"#888", fontWeight:600, fontSize:13, border:"1px solid #eee", cursor:"pointer" }}>
               취소
@@ -1516,6 +1529,11 @@ export default function ScenarioPage() {
           }}
           onHome={() => router.push("/")}
         />
+      )}
+
+      {/* 상장 + 후원 오버레이 */}
+      {showCertificate && (
+        <Certificate onClose={() => setShowCertificate(false)} />
       )}
           </div>
         </div>
