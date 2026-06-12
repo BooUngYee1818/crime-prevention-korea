@@ -12,6 +12,28 @@ html, body {
   color: #1e293b;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── 모바일 반응형 ── */
+@media (max-width: 768px) {
+  /* 홈 네비 버튼 숨기기 */
+  .nav-links { display: none !important; }
+  /* 히어로 2열 → 1열 */
+  .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  /* 통계 2열 유지, 패딩 줄이기 */
+  .section-pad { padding: 48px 20px !important; }
+  /* 시나리오 3열 → 1열 */
+  .scenario-grid { grid-template-columns: 1fr !important; }
+  /* 신고번호 4열 → 2열 */
+  .report-grid { grid-template-columns: 1fr 1fr !important; }
+  /* how-to 3열 → 1열 */
+  .how-grid { grid-template-columns: 1fr !important; }
+  /* 프라이버시 3열 → 1열 */
+  .priv-grid { grid-template-columns: 1fr !important; }
+  /* 폰트 크기 */
+  h1 { font-size: 34px !important; }
+  h2 { font-size: 26px !important; }
 }
 
 ::-webkit-scrollbar { width: 4px; }
