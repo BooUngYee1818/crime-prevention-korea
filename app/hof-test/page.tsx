@@ -11,6 +11,8 @@ const ROWS_CFG = [
   { dir:  1, sz: 76,  rot: -2.5, spd:  9 },
 ];
 
+const STORAGE_KEY = "hof_donors_list";
+
 function HallPreview({ names }: { names: string[] }) {
   if (names.length === 0) return (
     <div style={{ textAlign: "center", padding: "80px 0", color: "#ccc", fontSize: 16 }}>
@@ -51,54 +53,52 @@ function HallPreview({ names }: { names: string[] }) {
 export default function HofTestPage() {
   const [names, setNames] = useState<string[]>([]);
   const [input, setInput] = useState("");
-  const [adminKey, setAdminKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [keyInput, setKeyInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 서버에서 현재 이름 목록 로드
+  // 저장된 목록 불러오기
   useEffect(() => {
-    fetch("/api/donors")
-      .then(r => r.json())
-      .then(d => setNames(d.donors ?? []))
-      .catch(() => {});
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try { setNames(JSON.parse(saved)); } catch {}
+    }
   }, []);
 
-  function notify(text: string) {
-    setMsg(text);
-    setTimeout(() => setMsg(""), 2500);
+  function save(list: string[]) {
+    setNames(list);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   }
 
-  async function apiCall(action: string, name?: string) {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/donors", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, name, key: adminKey }),
-      });
-      const data = await res.json();
-      if (data.ok === false || data.error) {
-        notify("❌ " + (data.error ?? "오류"));
-      } else {
-        setNames(data.donors ?? []);
-        notify(action === "add" ? "✅ 추가됨" : action === "remove" ? "🗑 삭제됨" : "🔄 초기화됨");
-      }
-    } catch {
-      notify("❌ 네트워크 오류");
-    } finally {
-      setLoading(false);
-    }
+  function notify(text: string, ok = true) {
+    setMsg({ text, ok });
+    setTimeout(() => setMsg(null), 2000);
   }
 
-  async function addName() {
+  function addName() {
     const v = input.trim();
     if (!v) return;
+    if (names.includes(v)) { notify("이미 있는 이름이에요", false); return; }
+    save([...names, v]);
     setInput("");
-    await apiCall("add", v);
-    inputRef.current?.focus();
+    notify(`✅ ${v} 추가됨`);
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }
+
+  function removeName(i: number) {
+    const updated = names.filter((_, idx) => idx !== i);
+    save(updated);
+    notify("🗑 삭제됨");
+  }
+
+  function copyCode() {
+    const code = `const DONORS = [\n${names.map(n => `  "${n}",`).join("\n")}\n];`;
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   }
 
   if (!authed) {
@@ -119,12 +119,7 @@ export default function HofTestPage() {
             type="password"
             value={keyInput}
             onChange={e => setKeyInput(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                setAdminKey(keyInput);
-                setAuthed(true);
-              }
-            }}
+            onKeyDown={e => e.key === "Enter" && keyInput === "bueong2025" && setAuthed(true)}
             placeholder="관리자 키 입력"
             style={{
               width: "100%", padding: "11px 14px", borderRadius: 10,
@@ -133,7 +128,10 @@ export default function HofTestPage() {
             }}
           />
           <button
-            onClick={() => { setAdminKey(keyInput); setAuthed(true); }}
+            onClick={() => {
+              if (keyInput === "bueong2025") setAuthed(true);
+              else { alert("키가 틀렸습니다"); setKeyInput(""); }
+            }}
             style={{
               width: "100%", padding: "12px 0",
               background: "#F5C400", border: "none", borderRadius: 10,
@@ -152,6 +150,7 @@ export default function HofTestPage() {
       <style>{`
         @keyframes scrollL { from { transform: translateX(0) } to { transform: translateX(-50%) } }
         @keyframes scrollR { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+        @keyframes fadeIn  { from { opacity:0; transform:translateY(-4px) } to { opacity:1; transform:translateY(0) } }
       `}</style>
 
       {/* 헤더 */}
@@ -161,56 +160,55 @@ export default function HofTestPage() {
         display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap",
       }}>
         <div>
-          <p style={{ fontSize: 10, color: "#534AB7", fontWeight: 800, letterSpacing: 2, margin: "0 0 2px" }}>🧪 ADMIN · TEST</p>
+          <p style={{ fontSize: 10, color: "#F5C400", fontWeight: 800, letterSpacing: 2, margin: "0 0 2px" }}>🧪 ADMIN TEST</p>
           <h1 style={{ fontSize: 17, fontWeight: 900, margin: 0 }}>명예의 전당 관리</h1>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {msg && (
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#F5C400", animation: "fadeIn 0.2s" }}>
-              {msg}
+            <span style={{
+              fontSize: 13, fontWeight: 700,
+              color: msg.ok ? "#F5C400" : "#ef4444",
+              animation: "fadeIn 0.2s ease",
+            }}>
+              {msg.text}
             </span>
           )}
-          <span style={{ fontSize: 12, color: "#534AB760" }}>현재 {names.length}명 등재</span>
+          <span style={{ fontSize: 12, color: "#ffffff40" }}>현재 {names.length}명</span>
         </div>
       </div>
 
       {/* 컨트롤 */}
       <div style={{ background: "#fff", borderBottom: "1px solid #eee", padding: "16px 24px" }}>
-        <p style={{ fontSize: 12, color: "#888", marginBottom: 10, fontWeight: 600 }}>
-          이름 추가 → 서버 저장 → 실제 사이트 명예의 전당에 즉시 반영
-        </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
           <input
             ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && !loading && addName()}
+            onKeyDown={e => e.key === "Enter" && addName()}
             placeholder="후원자 닉네임 입력 후 Enter"
             maxLength={20}
-            disabled={loading}
+            autoFocus
             style={{
-              flex: 1, minWidth: 160, padding: "9px 14px",
-              borderRadius: 8, border: "1.5px solid #ddd",
-              fontSize: 14, outline: "none",
-              opacity: loading ? 0.6 : 1,
+              flex: 1, minWidth: 160, padding: "10px 14px",
+              borderRadius: 8, border: "1.5px solid #F5C400",
+              fontSize: 15, outline: "none", fontWeight: 600,
             }}
           />
           <button
             onClick={addName}
-            disabled={loading || !input.trim()}
+            disabled={!input.trim()}
             style={{
-              padding: "9px 18px", background: "#F5C400", border: "none",
-              borderRadius: 8, fontWeight: 800, fontSize: 13, cursor: "pointer", color: "#1a1000",
-              opacity: loading ? 0.6 : 1,
+              padding: "10px 20px", background: "#F5C400", border: "none",
+              borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: "pointer", color: "#1a1000",
+              opacity: input.trim() ? 1 : 0.5,
             }}
           >
-            {loading ? "저장 중..." : "+ 추가"}
+            + 추가
           </button>
           <button
-            onClick={() => { if (confirm("전체 삭제할까요?")) apiCall("reset"); }}
-            disabled={loading}
+            onClick={() => { if (confirm("전체 삭제할까요?")) { save([]); notify("🔄 초기화됨"); } }}
             style={{
-              padding: "9px 14px", background: "#fee2e2", border: "none",
+              padding: "10px 14px", background: "#fee2e2", border: "none",
               borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: "pointer", color: "#991b1b",
             }}
           >
@@ -219,25 +217,51 @@ export default function HofTestPage() {
         </div>
 
         {/* 이름 태그 */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: names.length > 0 ? 14 : 0 }}>
           {names.map((n, i) => (
             <div key={i} style={{
               background: "#FFF9E0", border: "1.5px solid #F5C400",
-              borderRadius: 20, padding: "4px 12px",
-              fontSize: 12, fontWeight: 700, color: "#7a6200",
+              borderRadius: 20, padding: "5px 12px",
+              fontSize: 13, fontWeight: 700, color: "#7a6200",
               display: "flex", alignItems: "center", gap: 6,
             }}>
+              <span style={{ fontSize: 11, color: "#d4a000", marginRight: 2 }}>#{i + 1}</span>
               {n}
               <span
-                onClick={() => !loading && apiCall("remove", n)}
-                style={{ cursor: "pointer", color: "#ccc", fontSize: 15, lineHeight: 1 }}
+                onClick={() => removeName(i)}
+                style={{ cursor: "pointer", color: "#ddd", fontSize: 16, lineHeight: 1, marginLeft: 2 }}
               >×</span>
             </div>
           ))}
           {names.length === 0 && (
-            <span style={{ fontSize: 12, color: "#ccc" }}>등재된 후원자가 없습니다</span>
+            <span style={{ fontSize: 12, color: "#ccc", padding: "4px 0" }}>아직 등재된 후원자가 없습니다</span>
           )}
         </div>
+
+        {/* 코드 복사 버튼 */}
+        {names.length > 0 && (
+          <div style={{
+            background: "#f0f9ff", border: "1px solid #bae6fd", borderRadius: 10,
+            padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+          }}>
+            <div>
+              <p style={{ fontSize: 12, fontWeight: 800, color: "#0369a1", margin: "0 0 2px" }}>✅ 목록 확정 후 코드 복사</p>
+              <p style={{ fontSize: 11, color: "#0284c7", margin: 0 }}>
+                복사 후 Claude에게 붙여넣기하면 사이트에 바로 적용됩니다
+              </p>
+            </div>
+            <button
+              onClick={copyCode}
+              style={{
+                padding: "9px 18px", background: copied ? "#22c55e" : "#0ea5e9",
+                border: "none", borderRadius: 8, color: "#fff",
+                fontWeight: 800, fontSize: 13, cursor: "pointer", whiteSpace: "nowrap",
+              }}
+            >
+              {copied ? "✅ 복사됨!" : "📋 코드 복사"}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 명예의 전당 미리보기 */}
