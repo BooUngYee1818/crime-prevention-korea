@@ -1390,18 +1390,6 @@ export default function ScenarioPage() {
                 }}>{chatCfg.senderSub}</p>
               )}
             </div>
-            {asset > 0 && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                <span style={{ fontSize: 10, color: chatCfg.type === "kakao" ? "#6b5800" : "#666" }}>잔액</span>
-                <span style={{
-                  fontWeight: 700, fontSize: 13, transition: "color 0.3s",
-                  color: phase === "sent-animation" ? "#ef4444"
-                    : chatCfg.type === "kakao" ? "#1a1100" : "#fff",
-                }}>
-                  {(displayAsset / 10000).toLocaleString()}만원
-                </span>
-              </div>
-            )}
           </div>
 
           {/* 교육용 상단 배너 */}
@@ -1485,18 +1473,16 @@ export default function ScenarioPage() {
                 }} className="flex-1 py-3 rounded-xl border border-[#333] text-gray-400 text-sm">
                   {t("sim_refuse_btn", lang)}
                 </button>
-                <button onClick={() => doTransfer(pendingSend)} className="flex-1 py-3 rounded-xl bg-[#534AB7] text-white font-semibold text-sm">
-                  💸 송금하기
-                </button>
               </div>
               <button
                 onClick={goToBankFromChat}
                 style={{
-                  width: "100%", padding: "10px 0", borderRadius: 12, fontSize: 12, fontWeight: 600,
-                  background: "#1e1a00", color: KB, border: `1px solid ${KB}44`, cursor: "pointer",
+                  width: "100%", padding: "14px 0", borderRadius: 12, fontSize: 14, fontWeight: 700,
+                  background: "#FFCC00", color: "#1a1a1a", border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 }}
               >
-                🏦 KB스타뱅킹 열기 (이체)
+                🏦 BK민국은행 앱으로 이동
               </button>
             </div>
           )}
@@ -1526,104 +1512,172 @@ export default function ScenarioPage() {
       {phase === "fake-bank-app" && (() => {
         const amount = finalSendAmount ?? 0;
         const acctMap: Record<string, string> = {
-          "family-impersonation":    "카카오뱅크 3333-04-2819471",
-          "prosecutor-impersonation":"우리은행 1002-847-293018",
-          "romance-scam":            "하나은행 123-910047-28304",
-          "investment-scam":         "신한은행 110-472-830915",
-          "loan-fraud":              "국민은행 010-9432-8810471",
-          "delivery-scam":           "농협 302-1849-3827-41",
-          "kakaotalk-impersonation": "토스뱅크 1000-2847-3910",
-          "used-goods-scam":         "카카오뱅크 3333-19-4820931",
+          "family-impersonation":    "BK민국은행 010-9304-2819471",
+          "prosecutor-impersonation":"BK민국은행 010-8472-930183",
+          "romance-scam":            "BK민국은행 010-9100-2830452",
+          "investment-scam":         "BK민국은행 010-4728-309158",
+          "loan-fraud":              "BK민국은행 010-9432-8810471",
+          "delivery-scam":           "BK민국은행 010-8493-8274193",
+          "kakaotalk-impersonation": "BK민국은행 010-2847-3910028",
+          "used-goods-scam":         "BK민국은행 010-1948-4820931",
         };
         const recipientMap: Record<string, string> = {
           "family-impersonation": "김민준", "prosecutor-impersonation": "금융범죄수사팀",
           "romance-scam": "이수진", "investment-scam": "박재현",
-          "loan-fraud": "KB대출센터", "delivery-scam": "CJ대한통운",
+          "loan-fraud": "BK대출센터", "delivery-scam": "CJ대한통운",
           "kakaotalk-impersonation": "민지", "used-goods-scam": "판매자",
         };
-        const acct = acctMap[scenario as string] ?? "카카오뱅크 3333-00-0000000";
+        const acct = acctMap[scenario as string] ?? "BK민국은행 010-0000-0000000";
         const recipient = recipientMap[scenario as string] ?? "수신인";
         const [smsAlert, setSmsAlert] = useState(false);
         const [confirmed, setConfirmed] = useState(false);
 
         return (
-          <div style={{ flex: 1, overflowY: "auto", background: "#f5f5f5", display: "flex", flexDirection: "column" }}>
-            {/* 은행앱 상단바 */}
-            <div style={{ background: "#FFCD00", padding: "14px 16px 10px", display: "flex", alignItems: "center", gap: 10 }}>
-              <button onClick={() => setPhase("chat")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 20 }}>←</button>
-              <span style={{ fontWeight: 800, fontSize: 17, color: "#1a1a1a" }}>카카오뱅크</span>
-              <span style={{ marginLeft: "auto", fontSize: 12, color: "#333" }}>이체</span>
+          <div style={{ flex: 1, overflowY: "auto", background: "#f4f4f4", display: "flex", flexDirection: "column", position: "relative" }}>
+
+            {/* ── KB스타일 상단 헤더 ── */}
+            <div style={{ background: "#FFCC00", paddingTop: 44, paddingBottom: 0 }}>
+              {/* 상태바 영역 */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 12px" }}>
+                <button onClick={() => setPhase("chat")} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+                <span style={{ fontWeight: 800, fontSize: 16, color: "#1a1a1a", letterSpacing: -0.3 }}>이체</span>
+                <div style={{ width: 30 }} />
+              </div>
+
+              {/* BK민국은행 앱 명칭 */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px 16px" }}>
+                {/* BK 로고 원 */}
+                <div style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <span style={{ color: "#FFCC00", fontWeight: 900, fontSize: 11, letterSpacing: -0.5 }}>BK</span>
+                </div>
+                <div>
+                  <p style={{ fontWeight: 800, fontSize: 15, color: "#1a1a1a", lineHeight: 1.2 }}>BK민국은행</p>
+                  <p style={{ fontSize: 10, color: "#4a4a3a", lineHeight: 1 }}>BK Star Banking</p>
+                </div>
+              </div>
             </div>
 
-            {/* 이체 정보 */}
-            <div style={{ background: "#fff", margin: "12px", borderRadius: 16, padding: "22px 20px", boxShadow: "0 2px 12px #00000010" }}>
-              <p style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>받는 분</p>
-              <p style={{ fontWeight: 800, fontSize: 18, color: "#1a1a1a", marginBottom: 2 }}>{recipient}</p>
-              <p style={{ color: "#666", fontSize: 13, marginBottom: 20 }}>{acct}</p>
+            {/* ── 이체 상대 카드 ── */}
+            <div style={{ background: "#fff", margin: "12px", borderRadius: 16, padding: "22px 20px", boxShadow: "0 1px 8px #0000000a" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+                <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#FFCC0022", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#FFCC00", fontWeight: 900, fontSize: 9 }}>BK</span>
+                  </div>
+                </div>
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: 16, color: "#1a1a1a", lineHeight: 1.3 }}>{recipient}</p>
+                  <p style={{ color: "#888", fontSize: 12 }}>{acct}</p>
+                </div>
+              </div>
 
-              <div style={{ height: 1, background: "#f1f1f1", marginBottom: 20 }} />
+              <div style={{ height: 1, background: "#f0f0f0", marginBottom: 18 }} />
 
-              <p style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>이체 금액</p>
-              <p style={{ fontWeight: 900, fontSize: 30, color: "#e00", letterSpacing: -1, marginBottom: 4 }}>
-                {amount.toLocaleString()}원
+              <p style={{ color: "#999", fontSize: 11, marginBottom: 4, fontWeight: 500 }}>이체 금액</p>
+              <p style={{ fontWeight: 900, fontSize: 34, color: "#1a1a1a", letterSpacing: -1.5, marginBottom: 2 }}>
+                {amount.toLocaleString()}<span style={{ fontSize: 18, fontWeight: 700, color: "#444" }}>원</span>
               </p>
-              <p style={{ color: "#999", fontSize: 12 }}>내 잔액: {asset.toLocaleString()}원</p>
+
+              <div style={{ height: 1, background: "#f0f0f0", margin: "16px 0" }} />
+
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                <span style={{ color: "#999", fontSize: 12 }}>출금 계좌</span>
+                <span style={{ color: "#1a1a1a", fontSize: 12, fontWeight: 600 }}>BK민국은행 내 계좌</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span style={{ color: "#999", fontSize: 12 }}>이체 후 잔액</span>
+                <span style={{ color: "#1a1a1a", fontSize: 12, fontWeight: 600 }}>{Math.max(0, asset - amount).toLocaleString()}원</span>
+              </div>
             </div>
 
-            {/* 안전 경고 */}
-            <div style={{ margin: "0 12px 12px", background: "#fff8e1", border: "1px solid #ffd54f", borderRadius: 12, padding: "12px 14px" }}>
-              <p style={{ color: "#e65100", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>⚠️ 이체 전 확인하세요</p>
-              <p style={{ color: "#bf360c", fontSize: 12, lineHeight: 1.7 }}>
-                전화·문자로 이체를 요청받으셨나요?<br />
-                카카오뱅크는 절대 이체를 요청하지 않습니다.
-              </p>
+            {/* ── 보이스피싱 경고 ── */}
+            <div style={{ margin: "0 12px 12px", background: "#fff8e1", border: "1px solid #FFCC00", borderRadius: 12, padding: "12px 14px" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>⚠️</span>
+                <div>
+                  <p style={{ color: "#8a5f00", fontSize: 12, fontWeight: 700, marginBottom: 3 }}>보이스피싱 주의</p>
+                  <p style={{ color: "#7a4f00", fontSize: 11, lineHeight: 1.7 }}>
+                    전화·문자로 이체를 요청받으셨나요?<br />
+                    <strong>BK민국은행은 절대 이체를 요청하지 않습니다.</strong><br />
+                    의심 시 ☎ 182(금융감독원)에 신고하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── 보안매체 확인 안내 ── */}
+            <div style={{ margin: "0 12px 12px", background: "#fff", borderRadius: 12, padding: "14px 16px", boxShadow: "0 1px 4px #0000000a" }}>
+              <p style={{ color: "#555", fontSize: 12, fontWeight: 600, marginBottom: 10 }}>보안 인증 완료</p>
+              <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                {[0,1,2,3,4,5].map(i => (
+                  <div key={i} style={{ width: 11, height: 11, borderRadius: "50%", background: "#FFCC00", border: "2px solid #1a1a1a" }} />
+                ))}
+              </div>
+              <p style={{ color: "#999", fontSize: 10, textAlign: "center", marginTop: 6 }}>6자리 이체 비밀번호 확인됨</p>
             </div>
 
             <div style={{ flex: 1 }} />
 
-            {/* 이체 버튼 */}
-            <div style={{ padding: "0 12px 24px" }}>
+            {/* ── 이체 실행 버튼 ── */}
+            <div style={{ padding: "0 12px 32px" }}>
               <button
                 onClick={() => setSmsAlert(true)}
+                disabled={confirmed}
                 style={{
-                  width: "100%", padding: "16px 0", borderRadius: 14,
-                  background: confirmed ? "#ccc" : "#FFCD00",
+                  width: "100%", padding: "17px 0", borderRadius: 14,
+                  background: confirmed ? "#ccc" : "#FFCC00",
                   color: "#1a1a1a", fontWeight: 800, fontSize: 16,
-                  border: "none", cursor: "pointer",
+                  border: "none", cursor: confirmed ? "default" : "pointer",
+                  boxShadow: confirmed ? "none" : "0 4px 12px #FFCC0044",
+                  transition: "all 0.2s",
                 }}
               >
-                이체 실행
+                {confirmed ? "이체 처리 중..." : "이체하기"}
               </button>
             </div>
 
-            {/* SMS 확인 팝업 */}
+            {/* ── SMS 이체 확인 팝업 ── */}
             {smsAlert && (
               <div style={{
-                position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)",
-                display: "flex", alignItems: "flex-end",
+                position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)",
+                display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-end",
                 zIndex: 999,
               }}>
-                <div style={{
-                  background: "#fff", width: "100%", borderRadius: "20px 20px 0 0",
-                  padding: "28px 20px 36px",
-                }}>
-                  {/* 문자 알림 스타일 */}
-                  <div style={{ background: "#1c1c1e", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#34c759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>💬</div>
-                      <span style={{ color: "#fff", fontWeight: 700, fontSize: 13 }}>카카오뱅크</span>
-                      <span style={{ color: "#888", fontSize: 11, marginLeft: "auto" }}>방금</span>
+                {/* 알림 토스트 (잠금화면 스타일) */}
+                <div style={{ margin: "0 16px 12px", background: "#1c1c1e", borderRadius: 18, padding: "16px", backdropFilter: "blur(20px)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                    <div style={{ width: 30, height: 30, borderRadius: 8, background: "#FFCC00", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ color: "#1a1a1a", fontWeight: 900, fontSize: 10 }}>BK</span>
                     </div>
-                    <p style={{ color: "#e5e5ea", fontSize: 13, lineHeight: 1.7 }}>
-                      <strong style={{ color: "#ffd60a" }}>[이체 확인]</strong><br />
-                      {recipient}({acct})에게<br />
-                      <strong style={{ color: "#ff453a" }}>{amount.toLocaleString()}원</strong> 이체하시겠습니까?<br />
-                      <span style={{ color: "#ff9f0a", fontSize: 12 }}>⚠️ 본인이 직접 요청한 이체가 맞습니까?<br />전화·문자로 요청받은 이체는 사기일 수 있습니다.</span>
-                    </p>
+                    <div style={{ flex: 1 }}>
+                      <span style={{ color: "#fff", fontWeight: 700, fontSize: 13 }}>BK민국은행</span>
+                      <span style={{ color: "#888", fontSize: 11, marginLeft: 8 }}>지금</span>
+                    </div>
                   </div>
+                  <p style={{ color: "#e5e5ea", fontSize: 13, lineHeight: 1.7 }}>
+                    <strong style={{ color: "#FFD60A" }}>[이체 확인]</strong><br />
+                    {recipient} ({acct.replace("BK민국은행 ", "")})에게<br />
+                    <strong style={{ color: "#FF453A" }}>{amount.toLocaleString()}원</strong> 이체하시겠습니까?<br />
+                    <span style={{ color: "#FF9F0A", fontSize: 11 }}>⚠️ 본인이 직접 요청한 이체가 맞습니까?</span>
+                  </p>
+                </div>
 
-                  <p style={{ color: "#1a1a1a", fontWeight: 800, fontSize: 16, textAlign: "center", marginBottom: 20 }}>
-                    정말 이체하시겠습니까?
+                {/* 확인 시트 */}
+                <div style={{
+                  background: "#fff", borderRadius: "24px 24px 0 0",
+                  padding: "24px 20px 40px",
+                }}>
+                  <div style={{ width: 36, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 20px" }} />
+                  <p style={{ color: "#1a1a1a", fontWeight: 800, fontSize: 17, textAlign: "center", marginBottom: 6 }}>
+                    이체를 진행하시겠습니까?
+                  </p>
+                  <p style={{ color: "#e00", fontSize: 13, textAlign: "center", marginBottom: 22, fontWeight: 600 }}>
+                    {amount.toLocaleString()}원 → {recipient}
                   </p>
                   <div style={{ display: "flex", gap: 10 }}>
                     <button
@@ -1639,9 +1693,9 @@ export default function ScenarioPage() {
                     <button
                       onClick={() => { setConfirmed(true); setSmsAlert(false); executeFinalTransfer(); }}
                       style={{
-                        flex: 1, padding: "15px 0", borderRadius: 12,
-                        background: "#ff3b30", border: "none", cursor: "pointer",
-                        fontWeight: 800, fontSize: 15, color: "#fff",
+                        flex: 2, padding: "15px 0", borderRadius: 12,
+                        background: "#FFCC00", border: "none", cursor: "pointer",
+                        fontWeight: 800, fontSize: 15, color: "#1a1a1a",
                       }}
                     >
                       이체 확인
@@ -1677,6 +1731,37 @@ export default function ScenarioPage() {
             return () => clearTimeout(timer);
           }
         }, [step]);
+
+        // TTS: 경찰 대사가 나올 때마다 음성 재생
+        useEffect(() => {
+          if (step === 0) return;
+          const line = lines[step - 1];
+          if (line?.from !== "police") return;
+          if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(line.text);
+          const langMap: Record<string, string> = { ko: "ko-KR", en: "en-US", ja: "ja-JP", zh: "zh-CN", vi: "vi-VN", es: "es-ES" };
+          utter.lang = langMap[lang] ?? "ko-KR";
+          utter.rate = 0.88;
+          utter.pitch = 1.05;
+          utter.volume = 1;
+
+          // 한국어: 여성 상담원 목소리 우선
+          const voices = window.speechSynthesis.getVoices();
+          const preferred = voices.find(v =>
+            v.lang === utter.lang && (v.name.includes("female") || v.name.includes("Female") || v.name.includes("여성") || v.name.includes("Yuna") || v.name.includes("Kyoko") || v.name.includes("Siri") || v.name.includes("Google"))
+          ) ?? voices.find(v => v.lang === utter.lang);
+          if (preferred) utter.voice = preferred;
+
+          window.speechSynthesis.speak(utter);
+          return () => { window.speechSynthesis.cancel(); };
+        }, [step]);
+
+        // 페이즈 벗어나면 TTS 중단
+        useEffect(() => {
+          return () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); };
+        }, []);
 
         return (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#1a1a1a" }}>
