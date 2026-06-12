@@ -118,9 +118,18 @@ ${PRESSURE_RULE}`,
 ${PRESSURE_RULE}`,
 };
 
+// 언어별 시스템 지시
+const LANG_INSTRUCTION: Record<string, string> = {
+  en: "IMPORTANT: The user is communicating in English. You MUST reply in English only. Adapt your scam scenario naturally to an English-speaking context.",
+  ja: "重要: ユーザーは日本語で会話しています。必ず日本語のみで返答してください。詐欺シナリオを自然に日本語圏のコンテキストに適応させてください。",
+  zh: "重要提示：用户正在用中文交流。你必须只用中文回复。请自然地将诈骗场景适配到中文语境。",
+  vi: "QUAN TRỌNG: Người dùng đang giao tiếp bằng tiếng Việt. Bạn PHẢI trả lời chỉ bằng tiếng Việt. Hãy điều chỉnh kịch bản lừa đảo tự nhiên phù hợp với ngữ cảnh tiếng Việt.",
+  es: "IMPORTANTE: El usuario se comunica en español. DEBES responder solo en español. Adapta el escenario de estafa de forma natural al contexto hispanohablante.",
+};
+
 export async function POST(req: NextRequest) {
   try {
-    const { scenarioId, messages, userMessage } = await req.json();
+    const { scenarioId, messages, userMessage, lang } = await req.json();
 
     const systemPrompt = CRIMINAL_PROMPTS[scenarioId];
     if (!systemPrompt) {
@@ -134,8 +143,12 @@ export async function POST(req: NextRequest) {
 
     const isStart = userMessage === "__START__";
     const actualMessage = isStart
-      ? "대화를 시작해줘. 자연스럽게 먼저 말을 걸어줘."
+      ? (lang === "en" ? "Start the conversation naturally." : lang === "ja" ? "自然に会話を始めてください。" : lang === "zh" ? "自然地开始对话。" : lang === "vi" ? "Bắt đầu cuộc trò chuyện một cách tự nhiên." : lang === "es" ? "Empieza la conversación de forma natural." : "대화를 시작해줘. 자연스럽게 먼저 말을 걸어줘.")
       : userMessage;
+
+    // 언어별 추가 지시 삽입
+    const langNote = lang && lang !== "ko" ? `\n\n${LANG_INSTRUCTION[lang] ?? ""}` : "";
+    const fullSystemPrompt = systemPrompt + langNote;
 
     const history = (messages || []).slice(-20).map((m: { role: string; content: string }) => ({
       role: m.role === "assistant" ? "model" : "user",
@@ -148,7 +161,7 @@ export async function POST(req: NextRequest) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemPrompt }] },
+          system_instruction: { parts: [{ text: fullSystemPrompt }] },
           contents: [
             ...history,
             { role: "user", parts: [{ text: actualMessage }] },
@@ -158,8 +171,35 @@ export async function POST(req: NextRequest) {
       }
     );
 
+    if (!geminiRes.ok) {
+      const errText = await geminiRes.text();
+      console.error("Gemini HTTP error:", geminiRes.status, errText);
+      return NextResponse.json({ error: `Gemini ${geminiRes.status}` }, { status: 502 });
+    }
+
     const data = await geminiRes.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
+    // 안전 필터 차단 또는 응답 없음
+    if (!data.candidates || data.candidates.length === 0) {
+      console.error("Gemini no candidates:", JSON.stringify(data));
+      // fallback: 짧은 대사 반환
+      const fallbacks: Record<string, string> = {
+        en: "...(connection unstable)",
+        ja: "…（接続が不安定です）",
+        zh: "…（连接不稳定）",
+        vi: "…(kết nối không ổn định)",
+        es: "…(conexión inestable)",
+        ko: "…(잠시 후 다시 시도해주세요)",
+      };
+      return NextResponse.json({ reply: fallbacks[lang ?? "ko"] ?? fallbacks["ko"], sendAmount: null });
+    }
+
+    const reply = data.candidates[0]?.content?.parts?.[0]?.text ?? "";
+
+    if (!reply) {
+      console.error("Gemini empty reply, raw:", JSON.stringify(data));
+      return NextResponse.json({ reply: "...", sendAmount: null });
+    }
 
     const sendMatch = reply.match(/\[SEND_REQUEST:(\d+)\]/);
     const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
@@ -167,7 +207,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ reply: cleanReply, sendAmount });
   } catch (err) {
-    console.error(err);
+    console.error("crime API error:", err);
     return NextResponse.json({ error: "서버 오류" }, { status: 500 });
   }
 }

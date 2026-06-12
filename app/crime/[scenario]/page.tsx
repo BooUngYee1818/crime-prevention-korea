@@ -770,12 +770,13 @@ export default function ScenarioPage() {
           scenarioId: scenario,
           messages: newMessages.map((m) => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })),
           userMessage: userText,
+          lang,
         }),
       });
 
       const d = await res.json();
-      if (d.reply) {
-        setMessages((prev) => [...prev, { role: "criminal", content: d.reply }]);
+      if (d.reply || d.error) {
+        setMessages((prev) => [...prev, { role: "criminal", content: d.reply || "..." }]);
         if (detectCriminalDanger(d.reply)) {
           recordDanger("사기범이 현금 전달·ATM 인출 지시");
           setTimeout(() => setBlock({ type: "criminal-location", criminalText: d.reply }), 800);
@@ -1455,7 +1456,7 @@ export default function ScenarioPage() {
                   setLoading(true);
                   fetch("/api/crime", {
                     method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ scenarioId: scenario, messages: [...messages, { role: "user", content: "지금 당장은 어렵겠어." }].map(m => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })), userMessage: "지금 당장은 어렵겠어." })
+                    body: JSON.stringify({ scenarioId: scenario, messages: [...messages, { role: "user", content: "지금 당장은 어렵겠어." }].map(m => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })), userMessage: "지금 당장은 어렵겠어.", lang })
                   }).then(r => r.json()).then(d => {
                     if (d.reply) setMessages(p => [...p, { role: "criminal", content: d.reply }]);
                     if (d.sendAmount) setPendingSend(d.sendAmount);
