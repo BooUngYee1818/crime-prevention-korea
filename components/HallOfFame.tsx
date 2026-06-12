@@ -3,10 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
-const FALLBACK = [
-  "부엉이 안","양진오","노영국이","김미경","주현옥",
-  "안성태","김진은","양도상국","장리관","인국은",
-];
+const FALLBACK: string[] = [];
 
 const ROWS_CFG = [
   { dir:  1, sz: 88,  rot: -2,   spd: 10 },
@@ -51,6 +48,7 @@ export default function HallOfFame() {
   }
 
   const list = names.length > 0 ? names : FALLBACK;
+  const hasNames = list.length > 0;
 
   return (
     <section style={{ width: "100%", background: "#ffffff", overflow: "hidden" }}>
@@ -166,8 +164,8 @@ export default function HallOfFame() {
         </div>
       )}
 
-      {/* 마퀴 열 */}
-      <div style={{ paddingBottom: 48 }}>
+      {/* 마퀴 열 — 후원자 없으면 숨김 */}
+      {hasNames && <div style={{ paddingBottom: 48 }}>
         {ROWS_CFG.map((row, ri) => {
           const shuffled = [...list].sort(() => Math.sin(ri * 5.1 + 1) - 0.5);
           const repeat   = Math.max(3, Math.ceil(20 / list.length));
@@ -194,7 +192,7 @@ export default function HallOfFame() {
             </div>
           );
         })}
-      </div>
+      </div>}
     </section>
   );
 }
