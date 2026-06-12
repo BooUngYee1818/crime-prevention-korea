@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/lib/LanguageContext";
 import BgmPlayer from "@/components/BgmPlayer";
 import ContactButton from "@/components/ContactButton";
 import DonateFloatButton from "@/components/DonateFloatButton";
+import AppShell from "@/components/AppShell";
 
 export const metadata: Metadata = {
   title: "범죄예방 체험관 | Crime Prevention Korea",
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body>
         <LanguageProvider>
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
         </LanguageProvider>
         <BgmPlayer />
         <ContactButton />
