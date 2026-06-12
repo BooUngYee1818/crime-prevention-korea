@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
     }));
 
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}&alt=sse`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -177,29 +177,39 @@ export async function POST(req: NextRequest) {
             if (done) break;
             buf += decoder.decode(value, { stream: true });
 
-            const lines = buf.split("\n");
-            buf = lines.pop() ?? "";
+            // NDJSON: Gemini streams as JSON array chunks — parse complete JSON objects
+            // Each chunk may be a partial array element; find complete {...} objects
+            let start = 0;
+            let depth = 0;
+            let inStr = false;
+            let escape = false;
 
-            for (const line of lines) {
-              if (!line.startsWith("data: ")) continue;
-              const raw = line.slice(6).trim();
-              if (!raw || raw === "[DONE]") continue;
-              try {
-                const chunk = JSON.parse(raw);
-                const text: string = chunk.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-                if (!text) continue;
-                fullText += text;
-
-                const cleanDelta = text.replace(/\[SEND_REQUEST:\d+\]/g, "");
-                if (cleanDelta) {
-                  controller.enqueue(
-                    new TextEncoder().encode(
-                      JSON.stringify({ delta: cleanDelta }) + "\n"
-                    )
-                  );
+            for (let i = 0; i < buf.length; i++) {
+              const c = buf[i];
+              if (escape) { escape = false; continue; }
+              if (c === "\\" && inStr) { escape = true; continue; }
+              if (c === '"') { inStr = !inStr; continue; }
+              if (inStr) continue;
+              if (c === "{") { if (depth === 0) start = i; depth++; }
+              else if (c === "}") {
+                depth--;
+                if (depth === 0) {
+                  try {
+                    const chunk = JSON.parse(buf.slice(start, i + 1));
+                    const text: string = chunk.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+                    if (text) {
+                      fullText += text;
+                      const cleanDelta = text.replace(/\[SEND_REQUEST:\d+\]/g, "");
+                      if (cleanDelta) {
+                        controller.enqueue(
+                          new TextEncoder().encode(JSON.stringify({ delta: cleanDelta }) + "\n")
+                        );
+                      }
+                    }
+                  } catch { /* skip */ }
+                  buf = buf.slice(i + 1);
+                  i = -1;
                 }
-              } catch {
-                // skip malformed chunk
               }
             }
           }
