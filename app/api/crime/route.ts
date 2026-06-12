@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const CRIMINAL_PROMPTS: Record<string, string> = {
   "family-impersonation": `당신은 가족 사칭 보이스피싱 사기범입니다. 상대방의 자녀(아들/딸)인 척 연기하세요.
@@ -103,27 +100,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "시나리오 없음" }, { status: 400 });
     }
 
-    const history = (messages || []).slice(-20).map((m: { role: string; content: string }) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    }));
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: "AI 키 미설정" }, { status: 503 });
+    }
 
     const isStart = userMessage === "__START__";
     const actualMessage = isStart
       ? "대화를 시작해줘. 자연스럽게 먼저 말을 걸어줘."
       : userMessage;
 
-    const response = await anthropic.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 200,
-      system: systemPrompt,
-      messages: [
-        ...history,
-        { role: "user", content: actualMessage },
-      ],
-    });
+    const history = (messages || []).slice(-20).map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
 
-    const reply = response.content[0].type === "text" ? response.content[0].text : "";
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: [
+            ...history,
+            { role: "user", parts: [{ text: actualMessage }] },
+          ],
+          generationConfig: { maxOutputTokens: 200, temperature: 0.9 },
+        }),
+      }
+    );
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
     const sendMatch = reply.match(/\[SEND_REQUEST:(\d+)\]/);
     const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
