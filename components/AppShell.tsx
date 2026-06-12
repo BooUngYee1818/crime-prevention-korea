@@ -98,6 +98,42 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .stats-pill:hover .stats-pill-text {
           opacity: 1;
         }
+        .hof-pill {
+          position: fixed; bottom: 50%; left: 0; z-index: 9996;
+          height: 34px; border-radius: 0 8px 8px 0;
+          background: rgba(26,16,0,0.90);
+          border: 1px solid #F5C40055;
+          border-left: none;
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: flex-start;
+          overflow: hidden;
+          width: 34px;
+          transition: width 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
+          box-shadow: 2px 2px 10px #00000030;
+          backdrop-filter: blur(12px);
+          padding: 0;
+          outline: none;
+          white-space: nowrap;
+        }
+        .hof-pill:hover {
+          width: 110px;
+          border-color: #F5C400aa;
+        }
+        .hof-pill-icon {
+          width: 34px; height: 34px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 15px;
+        }
+        .hof-pill-text {
+          font-size: 11px; font-weight: 800; color: #F5C400;
+          padding-left: 2px; padding-right: 10px; letter-spacing: 0.3px;
+          opacity: 0;
+          transition: opacity 0.2s ease 0.1s;
+          pointer-events: none;
+        }
+        .hof-pill:hover .hof-pill-text {
+          opacity: 1;
+        }
       `}</style>
       <button
         className="stats-pill"
@@ -105,6 +141,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       >
         <span className="stats-pill-text">이용 통계</span>
         <span className="stats-pill-icon">📊</span>
+      </button>
+
+      {/* 왕관 버튼 — 명예의 전당으로 스크롤 */}
+      <button
+        className="hof-pill"
+        onClick={() => document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" })}
+      >
+        <span className="hof-pill-icon">👑</span>
+        <span className="hof-pill-text">명예의 전당</span>
       </button>
 
       {/* 🥚 이스터에그 — Konami 코드(↑↑↓↓←→←→BA) 입력 시 등장 */}

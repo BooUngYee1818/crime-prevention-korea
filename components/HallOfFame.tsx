@@ -3,7 +3,10 @@ import { useEffect, useState, useRef } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
-const FALLBACK: string[] = [];
+const EXAMPLE = [
+  "홍길동","김철수","이영희","박민준","최수아",
+  "정하늘","윤서준","강지유","조민서","한도윤",
+];
 
 const ROWS_CFG = [
   { dir:  1, sz: 88,  rot: -2,   spd: 10 },
@@ -17,15 +20,14 @@ const ROWS_CFG = [
 
 export default function HallOfFame() {
   const { lang } = useLang();
-  const [names, setNames]       = useState<string[]>(FALLBACK);
-  const [eligible, setEligible] = useState(false);   // 후원 버튼 경유 여부
+  const [names, setNames]       = useState<string[]>([]);
+  const [eligible, setEligible] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [nickname, setNickname] = useState("");
   const [sent, setSent]         = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // 후원 플래그 확인 — 클라이언트 전용, 서버 미전송, 개인정보 없음
     try {
       if (localStorage.getItem("hof_donated") === "1") setEligible(true);
     } catch {}
@@ -39,7 +41,6 @@ export default function HallOfFame() {
   function submitNickname() {
     const v = nickname.trim();
     if (!v) return;
-    // 메일로 전달 — 어떠한 서버 저장도 없음
     const subject = encodeURIComponent("명예의 전당 등재 신청");
     const body    = encodeURIComponent(`닉네임: ${v}\n\n(후원 감사합니다 💛)`);
     window.open(`mailto:itnlifecn@gmail.com?subject=${subject}&body=${body}`);
@@ -47,11 +48,11 @@ export default function HallOfFame() {
     try { localStorage.removeItem("hof_donated"); } catch {}
   }
 
-  const list = names.length > 0 ? names : FALLBACK;
-  const hasNames = list.length > 0;
+  const isExample = names.length === 0;
+  const list = isExample ? EXAMPLE : names;
 
   return (
-    <section style={{ width: "100%", background: "#ffffff", overflow: "hidden" }}>
+    <section id="hall-of-fame" style={{ width: "100%", background: "#ffffff", overflow: "hidden" }}>
       <style>{`
         @keyframes scrollL  { from{transform:translateX(0)}   to{transform:translateX(-50%)} }
         @keyframes scrollR  { from{transform:translateX(-50%)}to{transform:translateX(0)}    }
@@ -71,14 +72,23 @@ export default function HallOfFame() {
         <p style={{ fontSize: 14, color: "#999", margin: 0 }}>
           {t("hof_sub", lang)}
         </p>
+
+        {/* 예시 배지 — 실제 후원자 없을 때만 표시 */}
+        {isExample && (
+          <div style={{
+            display: "inline-block", marginTop: 14,
+            background: "#fffbea", border: "1.5px dashed #F5C400",
+            borderRadius: 20, padding: "5px 16px",
+            fontSize: 12, fontWeight: 700, color: "#a07800",
+          }}>
+            ✨ 아래는 예시입니다 · 첫 후원자가 등록되면 실제 이름으로 바뀝니다
+          </div>
+        )}
       </div>
 
-      {/* ── 후원자 전용 등록 폼 ── */}
+      {/* 후원자 전용 등록 폼 */}
       {eligible && !sent && (
-        <div className="hof-form-wrap" style={{
-          maxWidth: 480, margin: "0 auto 40px",
-          padding: "0 20px",
-        }}>
+        <div className="hof-form-wrap" style={{ maxWidth: 480, margin: "0 auto 40px", padding: "0 20px" }}>
           {!showForm ? (
             <button
               onClick={() => { setShowForm(true); setTimeout(() => inputRef.current?.focus(), 80); }}
@@ -87,18 +97,13 @@ export default function HallOfFame() {
                 background: "linear-gradient(135deg, #F5C400, #f0a800)",
                 border: "none", borderRadius: 16,
                 fontSize: 15, fontWeight: 900, color: "#1a1000",
-                cursor: "pointer",
-                boxShadow: "0 4px 20px #F5C40040",
+                cursor: "pointer", boxShadow: "0 4px 20px #F5C40040",
               }}
             >
               {t("hof_btn_register", lang)}
             </button>
           ) : (
-            <div style={{
-              background: "#fffbea",
-              border: "2px solid #F5C400",
-              borderRadius: 18, padding: "22px 22px 18px",
-            }}>
+            <div style={{ background: "#fffbea", border: "2px solid #F5C400", borderRadius: 18, padding: "22px 22px 18px" }}>
               <p style={{ fontSize: 13, fontWeight: 800, color: "#7a6200", marginBottom: 14 }}>
                 {t("hof_thanks", lang)}<br/>
                 <span style={{ fontWeight: 500, color: "#a07800", fontSize: 12 }}>
@@ -118,8 +123,7 @@ export default function HallOfFame() {
                   style={{
                     flex: 1, padding: "11px 14px", borderRadius: 10,
                     border: "1.5px solid #F5C400", fontSize: 14,
-                    outline: "none", fontWeight: 600,
-                    background: "#fff",
+                    outline: "none", fontWeight: 600, background: "#fff",
                   }}
                 />
                 <button
@@ -129,7 +133,8 @@ export default function HallOfFame() {
                     padding: "11px 18px",
                     background: nickname.trim() ? "#F5C400" : "#f0f0f0",
                     border: "none", borderRadius: 10,
-                    fontWeight: 900, fontSize: 13, cursor: nickname.trim() ? "pointer" : "default",
+                    fontWeight: 900, fontSize: 13,
+                    cursor: nickname.trim() ? "pointer" : "default",
                     color: "#1a1000",
                   }}
                 >
@@ -146,9 +151,7 @@ export default function HallOfFame() {
 
       {/* 제출 완료 메시지 */}
       {sent && (
-        <div style={{
-          maxWidth: 480, margin: "0 auto 40px", padding: "0 20px",
-        }}>
+        <div style={{ maxWidth: 480, margin: "0 auto 40px", padding: "0 20px" }}>
           <div style={{
             background: "#f0fdf4", border: "2px solid #86efac",
             borderRadius: 16, padding: "18px 20px", textAlign: "center",
@@ -164,8 +167,8 @@ export default function HallOfFame() {
         </div>
       )}
 
-      {/* 마퀴 열 — 후원자 없으면 숨김 */}
-      {hasNames && <div style={{ paddingBottom: 48 }}>
+      {/* 마퀴 열 — 예시일 때 흐리게 */}
+      <div style={{ paddingBottom: 48, opacity: isExample ? 0.35 : 1, transition: "opacity 0.5s" }}>
         {ROWS_CFG.map((row, ri) => {
           const shuffled = [...list].sort(() => Math.sin(ri * 5.1 + 1) - 0.5);
           const repeat   = Math.max(3, Math.ceil(20 / list.length));
@@ -192,7 +195,7 @@ export default function HallOfFame() {
             </div>
           );
         })}
-      </div>}
+      </div>
     </section>
   );
 }
