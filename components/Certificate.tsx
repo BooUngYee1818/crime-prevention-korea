@@ -6,10 +6,10 @@ interface Props {
 }
 
 const DONATE_AMOUNTS = [
+  { label: "🪙 소액 후원", amount: 1000 },
   { label: "☕ 커피 한 잔", amount: 3000 },
-  { label: "🍱 점심 한 끼", amount: 5000 },
-  { label: "🌟 특별 후원", amount: 10000 },
-  { label: "💛 든든한 후원", amount: 30000 },
+  { label: "🌟 특별 후원", amount: 5000 },
+  { label: "💛 든든한 후원", amount: 10000 },
 ];
 
 export default function Certificate({ onClose }: Props) {
@@ -158,9 +158,10 @@ export default function Certificate({ onClose }: Props) {
         <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 16, marginBottom: 4 }}>
           💚 이 서비스를 후원해주세요
         </p>
-        <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.7, marginBottom: 16 }}>
-          범죄예방 체험관은 광고 없이 무료로 운영됩니다.<br />
-          소액 후원이 서비스 유지와 개선에 큰 힘이 됩니다 🙏
+        <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.8, marginBottom: 16 }}>
+          작은 후원이 제가 범죄 예방을 할 수 있는<br />
+          <strong style={{ color: "#86efac" }}>AI 프로그램 개발에 큰 도움</strong>이 됩니다.<br />
+          강제가 아닌 자유롭게 참여해주세요 🙏
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
@@ -209,7 +210,7 @@ export default function Certificate({ onClose }: Props) {
         </button>
 
         <p style={{ color: "#374151", fontSize: 10, textAlign: "center", marginTop: 8 }}>
-          Stripe 보안 결제 · 카드/카카오페이 지원 · 최소 1,000원
+          🔒 Stripe 보안 결제 · 국내외 Visa·Mastercard·해외카드 모두 가능 · 최소 1,000원
         </p>
       </div>
 

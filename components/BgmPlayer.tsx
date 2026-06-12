@@ -36,6 +36,7 @@ export default function BgmPlayer() {
       audio.pause();
       setPlaying(false);
     } else {
+      audio.currentTime = 0; // 켤 때 처음부터
       audio.play().then(() => setPlaying(true)).catch(() => {});
     }
   };

@@ -17,7 +17,9 @@ export async function POST(req: NextRequest) {
     }
 
     const session = await stripe.checkout.sessions.create({
+      // card = 국내외 Visa·Mastercard·Amex·국내 체크카드(해외겸용) 모두 포함
       payment_method_types: ["card"],
+      billing_address_collection: "auto",
       line_items: [
         {
           price_data: {
