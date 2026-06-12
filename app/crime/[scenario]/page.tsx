@@ -4,6 +4,8 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Send, AlertTriangle, CheckCircle, ChevronRight, Bell, Home, CreditCard, BarChart2, ShieldAlert, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import Certificate from "@/components/Certificate";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 type Phase =
   | "ringing"
@@ -144,10 +146,11 @@ interface BlockState {
   criminalText?: string;
 }
 
-function EmergencyBlock({ block, onClose, onReveal }: {
+function EmergencyBlock({ block, onClose, onReveal, lang }: {
   block: BlockState;
   onClose: () => void;
   onReveal: () => void;
+  lang: import("@/lib/i18n").LangCode;
 }) {
   const isLeave = block.type === "page-leave";
   const isLocation = block.type === "criminal-location";
@@ -162,7 +165,6 @@ function EmergencyBlock({ block, onClose, onReveal }: {
     }}>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}`}</style>
 
-      {/* 경고 아이콘 */}
       <div style={{
         width: 80, height: 80, borderRadius: "50%",
         background: "linear-gradient(135deg, #7f1d1d, #ef4444)",
@@ -173,22 +175,20 @@ function EmergencyBlock({ block, onClose, onReveal }: {
       </div>
 
       <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 22, marginBottom: 8, textAlign: "center" }}>
-        🚨 잠깐, 멈추세요!
+        {t("em_title", lang)}
       </p>
 
       {isLeave && (
         <>
           <p style={{ color: "#fff", fontWeight: 700, fontSize: 16, marginBottom: 12, textAlign: "center" }}>
-            다른 앱이나 은행으로 이동하려 하세요?
+            {t("em_leave_title", lang)}
           </p>
           <div style={{
             background: "#1a0000", border: "1px solid #ef444466", borderRadius: 16,
             padding: "14px 18px", marginBottom: 20, width: "100%",
           }}>
-            <p style={{ color: "#fca5a5", fontSize: 14, lineHeight: 1.7, textAlign: "center" }}>
-              지금 화면은 <strong>범죄 예방 시뮬레이션</strong>입니다.<br />
-              실제 은행 앱이나 송금 앱을 열어서<br />
-              <strong style={{ color: "#ef4444" }}>절대 돈을 보내지 마세요.</strong>
+            <p style={{ color: "#fca5a5", fontSize: 14, lineHeight: 1.7, textAlign: "center", whiteSpace: "pre-line" }}>
+              {t("em_leave_body", lang)}
             </p>
           </div>
         </>
@@ -240,38 +240,31 @@ function EmergencyBlock({ block, onClose, onReveal }: {
         </>
       )}
 
-      {/* 신고 번호 */}
       <div style={{
         background: "#0a1628", border: "1px solid #1e3a5f", borderRadius: 14,
         padding: "12px 20px", marginBottom: 20, width: "100%", textAlign: "center",
       }}>
-        <p style={{ color: "#60a5fa", fontSize: 12, marginBottom: 4 }}>이미 돈을 보냈다면 즉시 신고</p>
+        <p style={{ color: "#60a5fa", fontSize: 12, marginBottom: 4 }}>{t("em_report_182", lang)}</p>
         <p style={{ color: "#fff", fontWeight: 900, fontSize: 24 }}>경찰청 182</p>
         <p style={{ color: "#555", fontSize: 11, marginTop: 2 }}>24시간 운영 · 피해 즉시 신고</p>
       </div>
 
       <div style={{ display: "flex", gap: 10, width: "100%" }}>
         {!isLeave && (
-          <button
-            onClick={onReveal}
-            style={{
-              flex: 1, padding: "14px 0", borderRadius: 16,
-              background: "linear-gradient(135deg, #1d4ed8, #3b82f6)",
-              color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer",
-            }}
-          >
-            교육 결과 보기
+          <button onClick={onReveal} style={{
+            flex: 1, padding: "14px 0", borderRadius: 16,
+            background: "linear-gradient(135deg, #1d4ed8, #3b82f6)",
+            color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer",
+          }}>
+            {t("em_result_btn", lang)}
           </button>
         )}
-        <button
-          onClick={onClose}
-          style={{
-            flex: 1, padding: "14px 0", borderRadius: 16,
-            background: "#1a1a1a", color: "#888",
-            fontWeight: 600, fontSize: 14, border: "1px solid #2a2a2a", cursor: "pointer",
-          }}
-        >
-          {isLeave ? "이 앱에 머물기" : "계속 체험하기"}
+        <button onClick={onClose} style={{
+          flex: 1, padding: "14px 0", borderRadius: 16,
+          background: "#1a1a1a", color: "#888",
+          fontWeight: 600, fontSize: 14, border: "1px solid #2a2a2a", cursor: "pointer",
+        }}>
+          {isLeave ? t("em_stay_btn", lang) : t("em_continue_btn", lang)}
         </button>
       </div>
     </div>
@@ -304,7 +297,7 @@ function saveDangerRecord(scenarioId: string, reasons: string[]) {
 
 function RevealScreen({
   data, finalSendAmount, dangerCount, dangerReasons, scenarioId,
-  numbersSaved, onSaveNumbers, onRetry, onHome,
+  numbersSaved, onSaveNumbers, onRetry, onHome, lang,
 }: {
   data: ReturnType<typeof CRIME_SCENARIOS.find> & object;
   finalSendAmount: number | null;
@@ -315,6 +308,7 @@ function RevealScreen({
   onSaveNumbers: () => void;
   onRetry: () => void;
   onHome: () => void;
+  lang: import("@/lib/i18n").LangCode;
 }) {
   const isDangerous = dangerCount > 0;
   const [copied, setCopied] = useState(false);
@@ -632,7 +626,7 @@ function RevealScreen({
             border: "1px solid #2a2a2a", fontSize: 14, cursor: "pointer",
           }}
         >
-          다시 체험
+          {t("rev_retry", lang)}
         </button>
         <button
           onClick={onHome}
@@ -642,7 +636,7 @@ function RevealScreen({
             border: "none", fontSize: 14, fontWeight: 700, cursor: "pointer",
           }}
         >
-          다른 시나리오
+          {t("rev_other", lang)}
         </button>
       </div>
     </div>
@@ -655,6 +649,7 @@ export default function ScenarioPage() {
   const router = useRouter();
   const { scenario } = useParams<{ scenario: string }>();
   const data = CRIME_SCENARIOS.find((s) => s.id === scenario);
+  const { lang } = useLang();
 
   const chatCfg = CHAT_CONFIG[scenario as string] ?? { type: "kakao" as ChatType, headerTitle: "카카오톡", sender: "알 수 없음" };
   const [phase, setPhase] = useState<Phase>(
@@ -842,12 +837,12 @@ export default function ScenarioPage() {
         background: "#eff6ff", border: "1px solid #bfdbfe",
         borderRadius: 16, padding: "16px 18px",
       }}>
-        <p style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>💡 체험 방법</p>
+        <p style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>💡 {t("sim_guide_title", lang)}</p>
         <ul style={{ color: "#3b82f6", fontSize: 12, lineHeight: 2, paddingLeft: 16 }}>
-          <li>AI가 실제 사기범처럼 대화를 시작합니다</li>
-          <li>자연스럽게 대화에 응해보세요</li>
-          <li>송금 요청이 오면 어떻게 할지 선택하세요</li>
-          <li>체험 후 범죄 수법과 예방법을 확인하세요</li>
+          <li>{t("sim_guide_1", lang)}</li>
+          <li>{t("sim_guide_2", lang)}</li>
+          <li>{t("sim_guide_3", lang)}</li>
+          <li>{t("sim_guide_4", lang)}</li>
         </ul>
       </div>
 
@@ -857,7 +852,7 @@ export default function ScenarioPage() {
         borderRadius: 16, padding: "16px 18px",
         boxShadow: "0 2px 8px #0000000a",
       }}>
-        <p style={{ color: "#94a3b8", fontSize: 10, fontWeight: 700, marginBottom: 8, letterSpacing: 1 }}>실제 피해 통계</p>
+        <p style={{ color: "#94a3b8", fontSize: 10, fontWeight: 700, marginBottom: 8, letterSpacing: 1 }}>{t("sim_stats_label", lang)}</p>
         <p style={{ color: "#dc2626", fontSize: 13, fontWeight: 600, lineHeight: 1.6 }}>{data.reveal.stats}</p>
       </div>
 
@@ -868,10 +863,7 @@ export default function ScenarioPage() {
         display: "flex", alignItems: "flex-start", gap: 10,
       }}>
         <span style={{ fontSize: 16, flexShrink: 0 }}>🛡️</span>
-        <p style={{ color: "#15803d", fontSize: 12, lineHeight: 1.6 }}>
-          실제 돈을 보내거나 외부로 이동하지 마세요.
-          의심스러우면 즉시 <strong>182</strong>로 신고하세요.
-        </p>
+        <p style={{ color: "#15803d", fontSize: 12, lineHeight: 1.6 }}>{t("sim_safety_notice", lang)}</p>
       </div>
 
       {/* 다른 시나리오 */}
@@ -883,7 +875,7 @@ export default function ScenarioPage() {
           border: "1px solid #e2e8f0", cursor: "pointer",
         }}
       >
-        ← 다른 시나리오 선택
+        {t("sim_other_scenarios", lang)}
       </button>
     </div>
   );
@@ -915,7 +907,7 @@ export default function ScenarioPage() {
             borderRadius: 20, padding: "4px 12px",
           }}>
             <AlertTriangle size={12} color="#ef4444" />
-            <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 600 }}>위험 감지 {dangerCount}회</span>
+            <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 600 }}>{t("sim_danger_detected", lang)} {dangerCount}</span>
           </div>
         )}
       </div>
@@ -948,6 +940,7 @@ export default function ScenarioPage() {
                 block={block}
                 onClose={() => setBlock(null)}
                 onReveal={doReveal}
+                lang={lang}
               />
             )}
 
@@ -1252,7 +1245,7 @@ export default function ScenarioPage() {
                 border:"1px solid #22c55e66", cursor:"pointer",
                 display:"flex", alignItems:"center", justifyContent:"center", gap:8,
               }}>
-              🛡️ 돈을 보내지 않겠습니다
+              {t("sim_refuse_btn", lang)}
             </button>
             <button onClick={() => setPhase("transfer-form")}
               style={{ width:"100%", padding:"12px 0", borderRadius:16, background:"#fff", color:"#888", fontWeight:600, fontSize:13, border:"1px solid #eee", cursor:"pointer" }}>
@@ -1493,7 +1486,7 @@ export default function ScenarioPage() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-                  placeholder="답장하기..."
+                  placeholder={t("sim_input_placeholder", lang)}
                   className="flex-1 bg-transparent text-white text-sm placeholder-gray-600 outline-none"
                 />
                 <button onClick={sendMessage} disabled={!input.trim() || loading}
@@ -1528,6 +1521,7 @@ export default function ScenarioPage() {
             setBlock(null); setDangerCount(0); setDangerReasons([]); setNumbersSaved(false);
           }}
           onHome={() => router.push("/")}
+          lang={lang}
         />
       )}
 

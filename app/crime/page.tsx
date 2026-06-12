@@ -2,28 +2,58 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Shield, ChevronRight, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  "family-impersonation": "보이스피싱",
-  "prosecutor-impersonation": "기관 사칭",
-  "romance-scam": "로맨스 스캠",
-  "investment-scam": "투자 사기",
-  "loan-fraud": "대출 사기",
-  "delivery-scam": "스미싱",
-  "kakaotalk-impersonation": "메신저 사기",
-  "used-goods-scam": "중고거래 사기",
-  "illegal-gambling": "불법 도박",
+const SCENARIO_KEYS: Record<string, {
+  title: keyof ReturnType<typeof import("@/lib/i18n")["t"] extends (k: infer K, l: never) => string ? never : never>;
+}> = {};
+
+// 시나리오별 번역 키 매핑
+const SC_TITLE_MAP: Record<string, string> = {
+  "family-impersonation":    "sc_family_title",
+  "prosecutor-impersonation":"sc_prosecutor_title",
+  "romance-scam":            "sc_romance_title",
+  "investment-scam":         "sc_invest_title",
+  "loan-fraud":              "sc_loan_title",
+  "delivery-scam":           "sc_delivery_title",
+  "kakaotalk-impersonation": "sc_kakao_title",
+  "used-goods-scam":         "sc_used_title",
+  "illegal-gambling":        "sc_gambling_title",
+};
+const SC_SUB_MAP: Record<string, string> = {
+  "family-impersonation":    "sc_family_sub",
+  "prosecutor-impersonation":"sc_prosecutor_sub",
+  "romance-scam":            "sc_romance_sub",
+  "investment-scam":         "sc_invest_sub",
+  "loan-fraud":              "sc_loan_sub",
+  "delivery-scam":           "sc_delivery_sub",
+  "kakaotalk-impersonation": "sc_kakao_sub",
+  "used-goods-scam":         "sc_used_sub",
+  "illegal-gambling":        "sc_gambling_sub",
+};
+const CAT_MAP: Record<string, string> = {
+  "family-impersonation":    "cat_voice",
+  "prosecutor-impersonation":"cat_agency",
+  "romance-scam":            "cat_romance",
+  "investment-scam":         "cat_invest",
+  "loan-fraud":              "cat_loan",
+  "delivery-scam":           "cat_smishing",
+  "kakaotalk-impersonation": "cat_messenger",
+  "used-goods-scam":         "cat_used",
+  "illegal-gambling":        "cat_gambling",
 };
 
 const REPORT_NUMBERS = [
-  { label: "경찰청", number: "112", color: "#2563eb" },
-  { label: "금융감독원", number: "1332", color: "#0891b2" },
-  { label: "인터넷진흥원", number: "118", color: "#059669" },
-  { label: "도박중독 상담", number: "1336", color: "#7c3aed" },
+  { labelKey: "report_police",  number: "112",  color: "#2563eb" },
+  { labelKey: "report_fss",     number: "1332", color: "#0891b2" },
+  { labelKey: "report_kisa",    number: "118",  color: "#059669" },
+  { labelKey: "report_gamble",  number: "1336", color: "#7c3aed" },
 ];
 
 export default function CrimeCenterPage() {
   const router = useRouter();
+  const { lang } = useLang();
 
   return (
     <div style={{ minHeight: "100vh", background: "#f0f4ff", color: "#1e293b" }}>
@@ -51,7 +81,7 @@ export default function CrimeCenterPage() {
         }}>
           <Shield size={14} color="#fff" />
         </div>
-        <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>범죄 예방 센터</h1>
+        <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{t("crime_center_title", lang)}</h1>
       </div>
 
       <div style={{ maxWidth: 1140, margin: "0 auto", padding: "40px 40px" }}>
@@ -66,17 +96,16 @@ export default function CrimeCenterPage() {
         }}>
           <div>
             <p style={{ color: "#1d4ed8", fontWeight: 700, fontSize: 15, marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
-              <Shield size={16} color="#2563eb" /> 이 프로그램은 완전 무료입니다
+              <Shield size={16} color="#2563eb" /> {t("crime_free_badge", lang)}
             </p>
             <p style={{ color: "#3b82f6", fontSize: 13, lineHeight: 1.6 }}>
-              실제처럼 체험하고 범죄 수법을 미리 알아두세요.{" "}
-              <strong style={{ color: "#1d4ed8" }}>실제 돈은 절대 나가지 않습니다.</strong>
+              {t("crime_free_desc", lang)}
             </p>
           </div>
           <div style={{ display: "flex", gap: 20 }}>
             {REPORT_NUMBERS.map((r) => (
               <a key={r.number} href={`tel:${r.number}`} style={{ textDecoration: "none", textAlign: "center" }}>
-                <p style={{ color: "#94a3b8", fontSize: 10, marginBottom: 2 }}>{r.label}</p>
+                <p style={{ color: "#94a3b8", fontSize: 10, marginBottom: 2 }}>{t(r.labelKey as Parameters<typeof t>[0], lang)}</p>
                 <p style={{ color: r.color, fontWeight: 900, fontSize: 22 }}>{r.number}</p>
               </a>
             ))}
@@ -85,8 +114,8 @@ export default function CrimeCenterPage() {
 
         {/* 섹션 제목 */}
         <div style={{ marginBottom: 28 }}>
-          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 6 }}>체험할 시나리오를 선택하세요</p>
-          <h2 style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.6, color: "#0f172a" }}>9가지 범죄 시나리오</h2>
+          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 6 }}>{t("crime_select_hint", lang)}</p>
+          <h2 style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.6, color: "#0f172a" }}>{t("crime_select_title", lang)}</h2>
         </div>
 
         {/* 시나리오 그리드 */}
@@ -121,13 +150,15 @@ export default function CrimeCenterPage() {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
-                  <span style={{ color: "#0f172a", fontWeight: 700, fontSize: 15 }}>{scenario.title}</span>
+                  <span style={{ color: "#0f172a", fontWeight: 700, fontSize: 15 }}>
+                    {t((SC_TITLE_MAP[scenario.id] ?? "sc_gambling_title") as Parameters<typeof t>[0], lang)}
+                  </span>
                   <span style={{
                     fontSize: 10, padding: "2px 8px", borderRadius: 20, fontWeight: 700,
                     background: scenario.color + "14", color: scenario.color,
                     border: `1px solid ${scenario.color}28`,
                   }}>
-                    {CATEGORY_LABELS[scenario.id] ?? "불법 도박"}
+                    {t((CAT_MAP[scenario.id] ?? "cat_gambling") as Parameters<typeof t>[0], lang)}
                   </span>
                   {scenario.targetAge === "senior" && (
                     <span style={{
@@ -135,11 +166,13 @@ export default function CrimeCenterPage() {
                       background: "#fff7ed", color: "#c2410c",
                       border: "1px solid #fed7aa", fontWeight: 700,
                     }}>
-                      ⚠️ 어르신 주의
+                      {t("senior_warning", lang)}
                     </span>
                   )}
                 </div>
-                <p style={{ color: "#64748b", fontSize: 13 }}>{scenario.subtitle}</p>
+                <p style={{ color: "#64748b", fontSize: 13 }}>
+                  {t((SC_SUB_MAP[scenario.id] ?? "sc_gambling_sub") as Parameters<typeof t>[0], lang)}
+                </p>
                 <p style={{ color: "#94a3b8", fontSize: 11, marginTop: 3 }}>{scenario.reveal.stats}</p>
               </div>
               <ChevronRight size={16} color="#cbd5e1" style={{ flexShrink: 0 }} />
@@ -155,7 +188,7 @@ export default function CrimeCenterPage() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
             <Phone size={14} color="#dc2626" />
-            <p style={{ color: "#dc2626", fontWeight: 700, fontSize: 13 }}>피해 신고 및 상담</p>
+            <p style={{ color: "#dc2626", fontWeight: 700, fontSize: 13 }}>{t("crime_report_title", lang)}</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
             {REPORT_NUMBERS.map((item) => (
@@ -172,7 +205,7 @@ export default function CrimeCenterPage() {
                 e.currentTarget.style.background = "#f8fafc";
                 e.currentTarget.style.borderColor = "#f1f5f9";
               }}>
-                <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>{item.label}</p>
+                <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>{t(item.labelKey as Parameters<typeof t>[0], lang)}</p>
                 <p style={{ color: item.color, fontWeight: 900, fontSize: 26 }}>{item.number}</p>
               </a>
             ))}
