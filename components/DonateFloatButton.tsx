@@ -24,6 +24,10 @@ export default function DonateFloatButton() {
 
             {/* 카카오페이 QR 후원 */}
             <a href={KAKAOPAY_URL} target="_blank" rel="noopener noreferrer"
+              onClick={() => {
+                /* 클라이언트 전용 플래그 — 서버 전송 없음, 개인정보 수집 없음 */
+                try { localStorage.setItem("hof_donated", "1"); } catch {}
+              }}
               style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 width: "100%", padding: "10px 0", borderRadius: 12, marginBottom: 8,
