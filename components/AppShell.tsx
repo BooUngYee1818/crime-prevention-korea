@@ -6,6 +6,8 @@ import GratitudeCard from "./GratitudeCard";
 import DonorEventPopup from "./DonorEventPopup";
 import ReviewPopup from "./ReviewPopup";
 import type { UserProfile } from "./ProfileModal";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 const KONAMI = [
   "ArrowUp","ArrowUp","ArrowDown","ArrowDown",
@@ -14,6 +16,7 @@ const KONAMI = [
 ];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  const { lang } = useLang();
   const [showProfile, setShowProfile] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showEgg, setShowEgg] = useState(false);
@@ -139,7 +142,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         className="stats-pill"
         onClick={() => setShowStats(true)}
       >
-        <span className="stats-pill-text">이용 통계</span>
+        <span className="stats-pill-text">{t("appshell_stats", lang)}</span>
         <span className="stats-pill-icon">📊</span>
       </button>
 
@@ -149,7 +152,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         onClick={() => document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" })}
       >
         <span className="hof-pill-icon">👑</span>
-        <span className="hof-pill-text">명예의 전당</span>
+        <span className="hof-pill-text">{t("appshell_hof", lang)}</span>
       </button>
 
       {/* 🥚 이스터에그 — Konami 코드(↑↑↓↓←→←→BA) 입력 시 등장 */}

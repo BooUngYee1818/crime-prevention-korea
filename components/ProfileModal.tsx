@@ -1,22 +1,37 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 export interface UserProfile {
   gender: "남성" | "여성" | "비공개";
   ageGroup: "10대" | "20대" | "30대" | "40대" | "50대" | "60대 이상";
 }
 
-interface Props {
-  onComplete: (profile: UserProfile) => void;
-}
+interface Props { onComplete: (profile: UserProfile) => void; }
 
-const AGE_GROUPS = ["10대", "20대", "30대", "40대", "50대", "60대 이상"] as const;
-const GENDERS = ["남성", "여성", "비공개"] as const;
+const GENDERS: UserProfile["gender"][] = ["남성", "여성", "비공개"];
+const AGE_GROUPS: UserProfile["ageGroup"][] = ["10대","20대","30대","40대","50대","60대 이상"];
 
 export default function ProfileModal({ onComplete }: Props) {
-  const [gender, setGender] = useState<UserProfile["gender"] | null>(null);
+  const { lang } = useLang();
+  const [gender, setGender]     = useState<UserProfile["gender"] | null>(null);
   const [ageGroup, setAgeGroup] = useState<UserProfile["ageGroup"] | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const GENDER_LABEL: Record<UserProfile["gender"], string> = {
+    "남성":  t("profile_male",    lang),
+    "여성":  t("profile_female",  lang),
+    "비공개":t("profile_private", lang),
+  };
+  const AGE_LABEL: Record<UserProfile["ageGroup"], string> = {
+    "10대":     t("profile_age_10s",   lang),
+    "20대":     t("profile_age_20s",   lang),
+    "30대":     t("profile_age_30s",   lang),
+    "40대":     t("profile_age_40s",   lang),
+    "50대":     t("profile_age_50s",   lang),
+    "60대 이상":t("profile_age_60plus",lang),
+  };
 
   async function handleStart() {
     if (!gender || !ageGroup || submitting) return;
@@ -27,10 +42,9 @@ export default function ProfileModal({ onComplete }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ gender, ageGroup }),
       });
-    } catch { /* 통계 실패해도 계속 */ }
-    const profile: UserProfile = { gender, ageGroup };
-    localStorage.setItem("user_profile", JSON.stringify(profile));
-    onComplete(profile);
+    } catch {}
+    localStorage.setItem("user_profile", JSON.stringify({ gender, ageGroup }));
+    onComplete({ gender, ageGroup });
   }
 
   return (
@@ -47,33 +61,33 @@ export default function ProfileModal({ onComplete }: Props) {
         borderRadius: 24, padding: "28px 24px",
         display: "flex", flexDirection: "column", gap: 24,
       }}>
-        {/* 헤더 */}
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 10 }}>🛡️</div>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 20, marginBottom: 6 }}>
-            범죄예방 체험관
+            {t("profile_title", lang)}
           </h2>
           <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.6 }}>
-            시작 전에 간단한 정보를 알려주세요.<br />
-            통계 목적으로만 사용됩니다.
+            {t("profile_subtitle", lang).split("\n").map((l, i) => (
+              <span key={i}>{l}{i === 0 && <br/>}</span>
+            ))}
           </p>
         </div>
 
         {/* 성별 */}
         <div>
           <p style={{ color: "#9ca3af", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 1 }}>
-            성별
+            {t("profile_gender_lbl", lang)}
           </p>
           <div style={{ display: "flex", gap: 8 }}>
             {GENDERS.map((g) => (
               <button key={g} onClick={() => setGender(g)} style={{
-                flex: 1, padding: "12px 0", borderRadius: 14, fontSize: 14, fontWeight: 700,
+                flex: 1, padding: "12px 0", borderRadius: 14, fontSize: 13, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.15s",
                 background: gender === g ? "#1d4ed8" : "#1a1a1a",
                 color: gender === g ? "#fff" : "#6b7280",
                 border: `1.5px solid ${gender === g ? "#3b82f6" : "#2a2a2a"}`,
               }}>
-                {g === "남성" ? "👨 남성" : g === "여성" ? "👩 여성" : "🔒 비공개"}
+                {GENDER_LABEL[g]}
               </button>
             ))}
           </div>
@@ -82,24 +96,23 @@ export default function ProfileModal({ onComplete }: Props) {
         {/* 연령대 */}
         <div>
           <p style={{ color: "#9ca3af", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 1 }}>
-            연령대
+            {t("profile_age_lbl", lang)}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
             {AGE_GROUPS.map((ag) => (
               <button key={ag} onClick={() => setAgeGroup(ag)} style={{
-                padding: "12px 0", borderRadius: 14, fontSize: 14, fontWeight: 700,
+                padding: "12px 0", borderRadius: 14, fontSize: 13, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.15s",
                 background: ageGroup === ag ? "#166534" : "#1a1a1a",
                 color: ageGroup === ag ? "#4ade80" : "#6b7280",
                 border: `1.5px solid ${ageGroup === ag ? "#22c55e" : "#2a2a2a"}`,
               }}>
-                {ag}
+                {AGE_LABEL[ag]}
               </button>
             ))}
           </div>
         </div>
 
-        {/* 시작 버튼 */}
         <button
           onClick={handleStart}
           disabled={!gender || !ageGroup || submitting}
@@ -112,11 +125,11 @@ export default function ProfileModal({ onComplete }: Props) {
             transition: "all 0.2s",
           }}
         >
-          {submitting ? "저장 중..." : "🚀 체험 시작하기"}
+          {submitting ? t("profile_saving", lang) : t("profile_start", lang)}
         </button>
 
         <p style={{ color: "#374151", fontSize: 10, textAlign: "center", marginTop: -12 }}>
-          개인정보는 수집하지 않으며, 통계 집계에만 활용됩니다
+          {t("profile_privacy", lang)}
         </p>
       </div>
     </div>

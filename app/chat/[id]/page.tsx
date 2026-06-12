@@ -5,6 +5,7 @@ import { ArrowLeft, Send, Smile } from "lucide-react";
 import { Character, Message, STYLE_LABELS, STYLE_COLORS } from "@/lib/types";
 import { getCharacters, getChatRoom, addMessage } from "@/lib/store";
 import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 type L = "ko"|"en"|"ja"|"zh"|"vi"|"es"|"de"|"fr"|"hi"|"pt";
 
@@ -81,14 +82,19 @@ export default function ChatPage() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ character, messages: updated.messages.slice(-20), userMessage: content }),
+        body: JSON.stringify({ character, messages: updated.messages.slice(-20), userMessage: content, lang }),
       });
       const data = await res.json();
       if (data.mood) setCurrentMood(data.mood);
-      const aiMsg: Message = { id: (Date.now()+1).toString(), role: "assistant", content: data.reply || "...", mood: data.mood, timestamp: Date.now() };
+      const aiMsg: Message = {
+        id: (Date.now()+1).toString(), role: "assistant",
+        content: data.reply || "...", mood: data.mood,
+        subtitle: data.subtitle,
+        timestamp: Date.now(),
+      };
       setMessages([...addMessage(id, aiMsg).messages]);
     } catch {
-      setMessages([...addMessage(id, { id: (Date.now()+1).toString(), role: "assistant", content: "오류가 발생했어요.", timestamp: Date.now() }).messages]);
+      setMessages([...addMessage(id, { id: (Date.now()+1).toString(), role: "assistant", content: t("chat_error", lang), timestamp: Date.now() }).messages]);
     } finally {
       setLoading(false);
     }
@@ -188,6 +194,16 @@ export default function ChatPage() {
                 borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
               }}>
                 {msg.content}
+                {msg.subtitle && (
+                  <p style={{
+                    margin: "6px 0 0", paddingTop: 6,
+                    borderTop: "1px solid #ffffff18",
+                    fontSize: 11, color: "#ffffff80", lineHeight: 1.5,
+                    fontStyle: "italic",
+                  }}>
+                    {msg.subtitle}
+                  </p>
+                )}
               </div>
             </div>
           </div>

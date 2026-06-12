@@ -16,6 +16,7 @@ export interface Message {
   role: "user" | "assistant";
   content: string;
   mood?: string;
+  subtitle?: string;
   isEmoji?: boolean;
   emojiUrl?: string;
   timestamp: number;
