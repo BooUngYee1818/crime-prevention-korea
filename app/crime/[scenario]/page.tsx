@@ -689,9 +689,12 @@ export default function ScenarioPage() {
     }
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 페이지 이탈 감지 (실제 은행 앱·외부 사이트로 나가려 할 때)
+  // 페이지 이탈 / 분할화면 / 앱 전환 감지
   useEffect(() => {
-    if (phase !== "chat") return;
+    const activePhases = ["chat", "bank-main", "transfer-form", "transfer-confirm", "transfer-confirm2", "loan-main", "loan-confirm"];
+    if (!activePhases.includes(phase)) return;
+
+    let blurTimer: ReturnType<typeof setTimeout> | null = null;
 
     function handleVisibilityChange() {
       if (document.hidden) {
@@ -700,17 +703,35 @@ export default function ScenarioPage() {
       }
     }
 
+    // 분할화면·다른 앱 전환 시 window가 포커스를 잃음
+    function handleBlur() {
+      // 300ms 후에도 포커스가 없으면 경고 (단순 클릭 오탐 방지)
+      blurTimer = setTimeout(() => {
+        setBlock({ type: "page-leave" });
+        recordDanger("창 포커스 이탈 (분할화면·앱 전환 의심)");
+      }, 300);
+    }
+
+    function handleFocus() {
+      if (blurTimer) { clearTimeout(blurTimer); blurTimer = null; }
+    }
+
     function handleBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
       e.returnValue = "";
     }
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (blurTimer) clearTimeout(blurTimer);
     };
   }, [phase]);
 
