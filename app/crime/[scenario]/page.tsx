@@ -15,7 +15,10 @@ type Phase =
   | "loan-main"
   | "loan-confirm"
   | "chat"
+  | "fake-bank-app"
   | "sent-animation"
+  | "police-call"
+  | "police-unresolved"
   | "reveal";
 
 // 시나리오별 채팅 스타일 설정
@@ -794,6 +797,12 @@ export default function ScenarioPage() {
   function doTransfer(amount: number) {
     recordDanger(`송금 버튼 실행: ${formatAmount(amount)}`);
     setFinalSendAmount(amount);
+    // 바로 sent-animation 대신 가짜 은행앱으로
+    setPhase("fake-bank-app");
+  }
+
+  function executeFinalTransfer() {
+    const amount = finalSendAmount ?? 0;
     setPhase("sent-animation");
     const start = asset;
     const target = Math.max(0, asset - amount);
@@ -802,7 +811,8 @@ export default function ScenarioPage() {
       const p = Math.min((Date.now() - t0) / 2000, 1);
       setDisplayAsset(Math.round(start - (start - target) * (1 - Math.pow(1 - p, 3))));
       if (p < 1) requestAnimationFrame(tick);
-      else setTimeout(() => setPhase("reveal"), 700);
+      // 완료 후 reveal 대신 police-call로
+      else setTimeout(() => setPhase("police-call"), 700);
     }
     requestAnimationFrame(tick);
   }
@@ -1511,6 +1521,283 @@ export default function ScenarioPage() {
           )}
         </>
       )}
+
+      {/* ══ 가짜 은행 앱 ══ */}
+      {phase === "fake-bank-app" && (() => {
+        const amount = finalSendAmount ?? 0;
+        const acctMap: Record<string, string> = {
+          "family-impersonation":    "카카오뱅크 3333-04-2819471",
+          "prosecutor-impersonation":"우리은행 1002-847-293018",
+          "romance-scam":            "하나은행 123-910047-28304",
+          "investment-scam":         "신한은행 110-472-830915",
+          "loan-fraud":              "국민은행 010-9432-8810471",
+          "delivery-scam":           "농협 302-1849-3827-41",
+          "kakaotalk-impersonation": "토스뱅크 1000-2847-3910",
+          "used-goods-scam":         "카카오뱅크 3333-19-4820931",
+        };
+        const recipientMap: Record<string, string> = {
+          "family-impersonation": "김민준", "prosecutor-impersonation": "금융범죄수사팀",
+          "romance-scam": "이수진", "investment-scam": "박재현",
+          "loan-fraud": "KB대출센터", "delivery-scam": "CJ대한통운",
+          "kakaotalk-impersonation": "민지", "used-goods-scam": "판매자",
+        };
+        const acct = acctMap[scenario as string] ?? "카카오뱅크 3333-00-0000000";
+        const recipient = recipientMap[scenario as string] ?? "수신인";
+        const [smsAlert, setSmsAlert] = useState(false);
+        const [confirmed, setConfirmed] = useState(false);
+
+        return (
+          <div style={{ flex: 1, overflowY: "auto", background: "#f5f5f5", display: "flex", flexDirection: "column" }}>
+            {/* 은행앱 상단바 */}
+            <div style={{ background: "#FFCD00", padding: "14px 16px 10px", display: "flex", alignItems: "center", gap: 10 }}>
+              <button onClick={() => setPhase("chat")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 20 }}>←</button>
+              <span style={{ fontWeight: 800, fontSize: 17, color: "#1a1a1a" }}>카카오뱅크</span>
+              <span style={{ marginLeft: "auto", fontSize: 12, color: "#333" }}>이체</span>
+            </div>
+
+            {/* 이체 정보 */}
+            <div style={{ background: "#fff", margin: "12px", borderRadius: 16, padding: "22px 20px", boxShadow: "0 2px 12px #00000010" }}>
+              <p style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>받는 분</p>
+              <p style={{ fontWeight: 800, fontSize: 18, color: "#1a1a1a", marginBottom: 2 }}>{recipient}</p>
+              <p style={{ color: "#666", fontSize: 13, marginBottom: 20 }}>{acct}</p>
+
+              <div style={{ height: 1, background: "#f1f1f1", marginBottom: 20 }} />
+
+              <p style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>이체 금액</p>
+              <p style={{ fontWeight: 900, fontSize: 30, color: "#e00", letterSpacing: -1, marginBottom: 4 }}>
+                {amount.toLocaleString()}원
+              </p>
+              <p style={{ color: "#999", fontSize: 12 }}>내 잔액: {asset.toLocaleString()}원</p>
+            </div>
+
+            {/* 안전 경고 */}
+            <div style={{ margin: "0 12px 12px", background: "#fff8e1", border: "1px solid #ffd54f", borderRadius: 12, padding: "12px 14px" }}>
+              <p style={{ color: "#e65100", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>⚠️ 이체 전 확인하세요</p>
+              <p style={{ color: "#bf360c", fontSize: 12, lineHeight: 1.7 }}>
+                전화·문자로 이체를 요청받으셨나요?<br />
+                카카오뱅크는 절대 이체를 요청하지 않습니다.
+              </p>
+            </div>
+
+            <div style={{ flex: 1 }} />
+
+            {/* 이체 버튼 */}
+            <div style={{ padding: "0 12px 24px" }}>
+              <button
+                onClick={() => setSmsAlert(true)}
+                style={{
+                  width: "100%", padding: "16px 0", borderRadius: 14,
+                  background: confirmed ? "#ccc" : "#FFCD00",
+                  color: "#1a1a1a", fontWeight: 800, fontSize: 16,
+                  border: "none", cursor: "pointer",
+                }}
+              >
+                이체 실행
+              </button>
+            </div>
+
+            {/* SMS 확인 팝업 */}
+            {smsAlert && (
+              <div style={{
+                position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)",
+                display: "flex", alignItems: "flex-end",
+                zIndex: 999,
+              }}>
+                <div style={{
+                  background: "#fff", width: "100%", borderRadius: "20px 20px 0 0",
+                  padding: "28px 20px 36px",
+                }}>
+                  {/* 문자 알림 스타일 */}
+                  <div style={{ background: "#1c1c1e", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#34c759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>💬</div>
+                      <span style={{ color: "#fff", fontWeight: 700, fontSize: 13 }}>카카오뱅크</span>
+                      <span style={{ color: "#888", fontSize: 11, marginLeft: "auto" }}>방금</span>
+                    </div>
+                    <p style={{ color: "#e5e5ea", fontSize: 13, lineHeight: 1.7 }}>
+                      <strong style={{ color: "#ffd60a" }}>[이체 확인]</strong><br />
+                      {recipient}({acct})에게<br />
+                      <strong style={{ color: "#ff453a" }}>{amount.toLocaleString()}원</strong> 이체하시겠습니까?<br />
+                      <span style={{ color: "#ff9f0a", fontSize: 12 }}>⚠️ 본인이 직접 요청한 이체가 맞습니까?<br />전화·문자로 요청받은 이체는 사기일 수 있습니다.</span>
+                    </p>
+                  </div>
+
+                  <p style={{ color: "#1a1a1a", fontWeight: 800, fontSize: 16, textAlign: "center", marginBottom: 20 }}>
+                    정말 이체하시겠습니까?
+                  </p>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button
+                      onClick={() => { setSmsAlert(false); setPhase("chat"); setPendingSend(amount); }}
+                      style={{
+                        flex: 1, padding: "15px 0", borderRadius: 12,
+                        background: "#f2f2f7", border: "none", cursor: "pointer",
+                        fontWeight: 700, fontSize: 15, color: "#1a1a1a",
+                      }}
+                    >
+                      취소
+                    </button>
+                    <button
+                      onClick={() => { setConfirmed(true); setSmsAlert(false); executeFinalTransfer(); }}
+                      style={{
+                        flex: 1, padding: "15px 0", borderRadius: 12,
+                        background: "#ff3b30", border: "none", cursor: "pointer",
+                        fontWeight: 800, fontSize: 15, color: "#fff",
+                      }}
+                    >
+                      이체 확인
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* ══ 112 신고 화면 ══ */}
+      {phase === "police-call" && (() => {
+        const [step, setStep] = useState(0);
+        const lines = [
+          { from: "system", text: "📞 112에 신고 중..." },
+          { from: "police", text: "네, 112입니다. 무슨 일이신가요?" },
+          { from: "user",   text: `사기를 당했어요. ${formatAmount(finalSendAmount ?? 0)}을 이체했는데요...` },
+          { from: "police", text: "신고 접수하겠습니다. 어떤 경위로 이체하셨는지 말씀해 주시겠어요?" },
+          { from: "user",   text: "전화로 수사관이라고 해서 안전계좌로 보내달라고 해서..." },
+          { from: "police", text: "확인됐습니다. 즉시 해당 은행에 지급정지를 신청하시고, 금융감독원 1332에도 신고 부탁드립니다." },
+          { from: "user",   text: "그럼 제 돈은 돌려받을 수 있나요?" },
+          { from: "police", text: "죄송합니다. 이미 인출됐을 경우 즉각 회수가 어렵습니다. 피해 회수율은 약 30% 수준입니다." },
+          { from: "user",   text: "...그럼 70%는 그냥 날리는 건가요?" },
+          { from: "police", text: "빠른 신고와 지급정지가 최선입니다. 신고 접수번호는 2024-112-849203입니다. 정말 죄송합니다." },
+        ];
+
+        useEffect(() => {
+          if (step < lines.length) {
+            const delay = step === 0 ? 800 : step === 1 ? 2000 : 1600;
+            const timer = setTimeout(() => setStep(s => s + 1), delay);
+            return () => clearTimeout(timer);
+          }
+        }, [step]);
+
+        return (
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#1a1a1a" }}>
+            {/* 통화 헤더 */}
+            <div style={{ background: "#111", padding: "24px 20px 16px", textAlign: "center" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#2563eb", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>
+                🚔
+              </div>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 22 }}>112</p>
+              <p style={{ color: "#86efac", fontSize: 13 }}>
+                {step === 0 ? "연결 중..." : step < 10 ? "통화 중" : "통화 종료"}
+              </p>
+            </div>
+
+            {/* 대화 */}
+            <div style={{ flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 10 }}>
+              {lines.slice(0, step).map((line, i) => (
+                <div key={i} style={{
+                  display: "flex",
+                  justifyContent: line.from === "user" ? "flex-end" : "flex-start",
+                  alignItems: "flex-start", gap: 8,
+                }}>
+                  {line.from === "police" && (
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14 }}>👮</div>
+                  )}
+                  {line.from === "system" && (
+                    <div style={{ width: "100%", textAlign: "center" }}>
+                      <span style={{ background: "#333", color: "#aaa", fontSize: 12, padding: "4px 12px", borderRadius: 20 }}>{line.text}</span>
+                    </div>
+                  )}
+                  {line.from !== "system" && (
+                    <div style={{
+                      maxWidth: "75%", padding: "10px 14px", borderRadius: line.from === "user" ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
+                      background: line.from === "user" ? "#534AB7" : line.text.includes("죄송") || line.text.includes("어렵") ? "#7f1d1d" : "#2a2a2a",
+                      color: "#fff", fontSize: 13, lineHeight: 1.6,
+                    }}>
+                      {line.text}
+                    </div>
+                  )}
+                  {line.from === "user" && (
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#534AB7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14 }}>👤</div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* 전화 끊기 버튼 */}
+            {step >= lines.length && (
+              <div style={{ padding: "16px 20px 32px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ background: "#7f1d1d", border: "1px solid #ef4444", borderRadius: 14, padding: "14px 16px", textAlign: "center" }}>
+                  <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 14 }}>
+                    💸 {formatAmount(finalSendAmount ?? 0)} — 회수 가능성 30%
+                  </p>
+                  <p style={{ color: "#f87171", fontSize: 12, marginTop: 4 }}>이것이 보이스피싱 피해의 현실입니다</p>
+                </div>
+                <button
+                  onClick={() => setPhase("police-unresolved")}
+                  style={{
+                    width: "100%", padding: "15px 0", borderRadius: 14,
+                    background: "#ef4444", color: "#fff", border: "none",
+                    cursor: "pointer", fontWeight: 800, fontSize: 15,
+                  }}
+                >
+                  📵 전화 끊기
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* ══ 경찰도 해결 못 함 ══ */}
+      {phase === "police-unresolved" && (() => {
+        const [visible, setVisible] = useState(false);
+        useEffect(() => { setTimeout(() => setVisible(true), 300); }, []);
+
+        return (
+          <div style={{
+            flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            background: "#0a0a0a", padding: "32px 24px",
+            opacity: visible ? 1 : 0, transition: "opacity 0.6s ease",
+          }}>
+            <div style={{ fontSize: 64, marginBottom: 24 }}>💔</div>
+            <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 28, marginBottom: 16, textAlign: "center", letterSpacing: -0.5 }}>
+              해결되지 않았습니다
+            </p>
+            <div style={{ background: "#1a1a1a", border: "1px solid #ef444444", borderRadius: 20, padding: "24px", marginBottom: 24, width: "100%", maxWidth: 400 }}>
+              {[
+                { icon: "📞", label: "112 신고", result: "접수됨", ok: true },
+                { icon: "🏦", label: "은행 지급정지 요청", result: "이미 출금됨", ok: false },
+                { icon: "💸", label: "피해금 회수", result: "불가 (이미 인출)", ok: false },
+                { icon: "🔍", label: "수사 착수", result: "수개월 소요 예정", ok: false },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: i < 3 ? "1px solid #222" : "none" }}>
+                  <span style={{ fontSize: 20 }}>{item.icon}</span>
+                  <span style={{ color: "#aaa", fontSize: 14, flex: 1 }}>{item.label}</span>
+                  <span style={{ color: item.ok ? "#22c55e" : "#ef4444", fontWeight: 700, fontSize: 13 }}>{item.result}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: "#1a0000", border: "1px solid #7f1d1d", borderRadius: 16, padding: "18px 20px", marginBottom: 28, width: "100%", maxWidth: 400 }}>
+              <p style={{ color: "#fca5a5", fontSize: 14, lineHeight: 1.9, textAlign: "center" }}>
+                보이스피싱 피해금의 <strong style={{ color: "#fff" }}>평균 70%</strong>는<br />
+                영영 돌아오지 않습니다.<br /><br />
+                <strong style={{ color: "#fbbf24" }}>알고 있었다면 막을 수 있었습니다.</strong>
+              </p>
+            </div>
+            <button
+              onClick={() => setPhase("reveal")}
+              style={{
+                width: "100%", maxWidth: 400, padding: "16px 0", borderRadius: 14,
+                background: "linear-gradient(135deg, #534AB7, #7c3aed)",
+                color: "#fff", border: "none", cursor: "pointer",
+                fontWeight: 800, fontSize: 16,
+              }}
+            >
+              결과 확인하기 →
+            </button>
+          </div>
+        );
+      })()}
 
       {/* ══ 결과 공개 ══ */}
       {phase === "reveal" && (
