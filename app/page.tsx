@@ -491,6 +491,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── 홍보 영상 ── */}
+      <section style={{
+        background: "#0a0a0f", borderTop: "1px solid #1e1e2e",
+        padding: "64px 40px",
+      }}>
+        <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
+          <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
+            PROMOTIONAL VIDEO
+          </p>
+          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 26, marginBottom: 6, letterSpacing: -0.5 }}>
+            📺 소개 영상
+          </h2>
+          <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 28 }}>
+            범죄예방 체험관을 영상으로 먼저 확인해보세요
+          </p>
+          <div style={{
+            position: "relative", width: "100%", paddingTop: "56.25%",
+            borderRadius: 20, overflow: "hidden",
+            boxShadow: "0 16px 48px #00000060",
+            border: "1px solid #1e1e2e",
+          }}>
+            <iframe
+              src="https://www.youtube.com/embed/vCDSs2nMy18"
+              title="범죄예방 체험관 홍보영상"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{
+                position: "absolute", top: 0, left: 0,
+                width: "100%", height: "100%", border: "none",
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ── 제작 목적 & 실제 통계 ── */}
       <section id="why" style={{
         background: "#fff", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
