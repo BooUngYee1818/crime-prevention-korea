@@ -1,38 +1,10 @@
 "use client";
 import { useState } from "react";
-import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
-const CLIENT_KEY = "test_ck_ma60RZblrqYP5kbBMkvErwzYWBn1";
 const KAKAOPAY_URL = "https://qr.kakaopay.com/Ej8RbqcQf";
-const AMOUNTS = [1000, 3000, 5000, 10000];
 
 export default function DonateFloatButton() {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  async function donate(amount: number) {
-    if (loading) return;
-    setLoading(true);
-    try {
-      const tossPayments = await loadTossPayments(CLIENT_KEY);
-      const payment = tossPayments.payment({ customerKey: `donor_${Date.now()}` });
-      await payment.requestPayment({
-        method: "CARD",
-        amount: { currency: "KRW", value: amount },
-        orderId: `donate_${Date.now()}`,
-        orderName: "범죄예방 체험관 후원",
-        successUrl: `${window.location.origin}/donate/success`,
-        failUrl: `${window.location.origin}/crime`,
-        card: { useEscrow: false, flowMode: "DEFAULT", useCardPoint: false, useAppCardOnly: false },
-      });
-    } catch (e: unknown) {
-      if (e && typeof e === "object" && "code" in e && (e as { code: string }).code !== "USER_CANCEL") {
-        alert("결제 중 오류가 발생했습니다.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <div style={{ position: "fixed", bottom: 80, left: 24, zIndex: 9997 }}>
@@ -64,21 +36,6 @@ export default function DonateFloatButton() {
               📱 카카오페이 앱으로 연결됩니다<br />금액은 자유롭게 입력하시면 돼요
             </p>
 
-            <div style={{ borderTop: "1px solid #1a2a1a", paddingTop: 8 }}>
-              <p style={{ color: "#4b5563", fontSize: 10, marginBottom: 6, textAlign: "center" }}>💳 카드 결제 (금액 선택)</p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-                {AMOUNTS.map(a => (
-                  <button key={a} onClick={() => donate(a)} disabled={loading}
-                    style={{
-                      padding: "8px 4px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-                      background: "#0a1a0a", color: "#86efac",
-                      border: "1px solid #22c55e44", cursor: "pointer",
-                    }}>
-                    {a.toLocaleString()}원
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </>
       )}
