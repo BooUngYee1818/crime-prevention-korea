@@ -4,6 +4,34 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Send, Smile } from "lucide-react";
 import { Character, Message, STYLE_LABELS, STYLE_COLORS } from "@/lib/types";
 import { getCharacters, getChatRoom, addMessage } from "@/lib/store";
+import { useLang } from "@/lib/LanguageContext";
+
+type L = "ko"|"en"|"ja"|"zh"|"vi"|"es";
+
+const MOOD_TR: Record<string, Record<L, string>> = {
+  분노: { ko:"분노", en:"Anger",     ja:"怒り",   zh:"愤怒", vi:"Tức giận",  es:"Ira" },
+  슬픔: { ko:"슬픔", en:"Sadness",   ja:"悲しみ", zh:"悲伤", vi:"Buồn bã",  es:"Tristeza" },
+  설렘: { ko:"설렘", en:"Excitement",ja:"ときめき",zh:"心动", vi:"Hồi hộp",  es:"Emoción" },
+  기쁨: { ko:"기쁨", en:"Joy",       ja:"喜び",   zh:"喜悦", vi:"Vui mừng", es:"Alegría" },
+  심심: { ko:"심심", en:"Bored",     ja:"退屈",   zh:"无聊", vi:"Chán",     es:"Aburrido" },
+  일반: { ko:"일반", en:"Normal",    ja:"普通",   zh:"普通", vi:"Bình thường",es:"Normal" },
+};
+
+function tr(map: Record<L, string>, lang: string) {
+  return map[lang as L] ?? map["en"];
+}
+
+const PLACEHOLDER: Record<L, string> = {
+  ko:"메시지 입력...", en:"Type a message...", ja:"メッセージを入力...",
+  zh:"输入消息...", vi:"Nhập tin nhắn...", es:"Escribe un mensaje...",
+};
+const EMPTY_MSG: Record<L, string> = {
+  ko:"에게 말을 걸어보세요", en:"Say something to", ja:"に話しかけてみてください",
+  zh:"和", vi:"Hãy nói chuyện với", es:"Dile algo a",
+};
+const DETECTED: Record<L, string> = {
+  ko:"감지", en:"detected", ja:"検知", zh:"检测", vi:"phát hiện", es:"detectado",
+};
 
 const EMOJIS = ["😂","😍","🥺","😡","😭","🔥","💀","👊","💕","🤣","😘","🫠"];
 
@@ -16,6 +44,7 @@ export default function ChatPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { lang } = useLang();
 
   const [character, setCharacter] = useState<Character | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -98,7 +127,14 @@ export default function ChatPage() {
             background: "#1a1a1a", borderRadius: 30, padding: "4px 10px",
           }}>
             <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: MOOD_COLORS[currentMood] || "#6b7280", animation: "pulse 1.5s infinite" }} />
-            <span style={{ fontSize: 11, color: MOOD_COLORS[currentMood] || "#9ca3af" }}>{currentMood}</span>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+              <span style={{ fontSize: 11, color: MOOD_COLORS[currentMood] || "#9ca3af" }}>{currentMood}</span>
+              {lang !== "ko" && (
+                <span style={{ fontSize: 9, color: (MOOD_COLORS[currentMood] || "#9ca3af") + "99" }}>
+                  {MOOD_TR[currentMood]?.[lang as L] ?? ""}
+                </span>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -106,8 +142,15 @@ export default function ChatPage() {
       {/* 메시지 목록 */}
       <div style={{ flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 10 }}>
         {messages.length === 0 && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#444", fontSize: 13 }}>
-            {character.name}에게 말을 걸어보세요
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 4 }}>
+            <span style={{ color: "#444", fontSize: 13 }}>{character.name}에게 말을 걸어보세요</span>
+            {lang !== "ko" && (
+              <span style={{ color: "#333", fontSize: 11 }}>
+                {lang === "zh" || lang === "vi"
+                  ? `${EMPTY_MSG[lang as L]} ${character.name}`
+                  : `${EMPTY_MSG[lang as L]} ${character.name}`}
+              </span>
+            )}
           </div>
         )}
         {messages.map((msg) => (
@@ -126,8 +169,14 @@ export default function ChatPage() {
                   fontSize: 10, padding: "2px 7px", borderRadius: 20, marginLeft: 4,
                   background: (MOOD_COLORS[msg.mood] || "#374151") + "30",
                   color: MOOD_COLORS[msg.mood] || "#9ca3af",
+                  display: "flex", flexDirection: "column", gap: 0,
                 }}>
-                  {msg.mood} 감지
+                  <span>{msg.mood} 감지</span>
+                  {lang !== "ko" && (
+                    <span style={{ fontSize: 9, opacity: 0.7 }}>
+                      {MOOD_TR[msg.mood]?.[lang as L] ?? ""} {DETECTED[lang as L]}
+                    </span>
+                  )}
                 </span>
               )}
               <div style={{
@@ -175,7 +224,7 @@ export default function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-            placeholder="메시지 입력..."
+            placeholder={lang === "ko" ? "메시지 입력..." : `메시지 입력... · ${PLACEHOLDER[lang as L]}`}
             style={{ flex: 1, background: "transparent", border: "none", color: "#fff", fontSize: 14, outline: "none" }}
           />
           <button
