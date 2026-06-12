@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import ProfileModal from "./ProfileModal";
 import StatsModal from "./StatsModal";
+import GratitudeCard from "./GratitudeCard";
 import type { UserProfile } from "./ProfileModal";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -28,6 +29,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {showStats && (
         <StatsModal onClose={() => setShowStats(false)} />
       )}
+
+      <GratitudeCard />
 
       {/* 통계 버튼 — 메일 버튼 위에 배치 */}
       <div style={{ position: "fixed", bottom: 136, right: 24, zIndex: 9996 }}>
