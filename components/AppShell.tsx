@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ProfileModal from "./ProfileModal";
 import StatsModal from "./StatsModal";
 import GratitudeCard from "./GratitudeCard";
@@ -17,12 +18,14 @@ const KONAMI = [
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { lang } = useLang();
+  const router = useRouter();
   const [showProfile, setShowProfile] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showEgg, setShowEgg] = useState(false);
   const [eggStep, setEggStep] = useState(0);
   const [statsOpen, setStatsOpen] = useState(false);
   const [hofOpen, setHofOpen] = useState(false);
+  const [showExpMenu, setShowExpMenu] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("user_profile");
@@ -64,6 +67,82 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <GratitudeCard />
       <DonorEventPopup />
       <ReviewPopup />
+
+      {/* ── 오른쪽 상단 체험 선택 버튼 ── */}
+      <div style={{ position: "fixed", top: 14, right: 14, zIndex: 9997 }}>
+        <button
+          onClick={() => setShowExpMenu(v => !v)}
+          style={{
+            display: "flex", alignItems: "center", gap: 7,
+            background: "rgba(15,23,42,0.92)", backdropFilter: "blur(14px)",
+            border: "1px solid #334155", borderRadius: 20,
+            padding: "8px 16px", cursor: "pointer",
+            boxShadow: "0 2px 16px #00000040",
+            transition: "border-color 0.2s",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = "#6366f1")}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = "#334155")}
+        >
+          <span style={{ fontSize: 16 }}>🎮</span>
+          <span style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 700 }}>체험 선택</span>
+          <span style={{ color: "#6b7280", fontSize: 10, marginLeft: 2 }}>{showExpMenu ? "▲" : "▼"}</span>
+        </button>
+
+        {showExpMenu && (
+          <div style={{
+            position: "absolute", top: "calc(100% + 8px)", right: 0,
+            background: "rgba(10,10,18,0.97)", backdropFilter: "blur(20px)",
+            border: "1px solid #1e293b", borderRadius: 16,
+            overflow: "hidden", minWidth: 190,
+            boxShadow: "0 8px 32px #00000060",
+            animation: "fadeInDown 0.15s ease",
+          }}>
+            <style>{`@keyframes fadeInDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}`}</style>
+            <div style={{ padding: "8px 0" }}>
+              <button
+                onClick={() => { router.push("/crime"); setShowExpMenu(false); }}
+                style={{
+                  width: "100%", padding: "11px 18px", background: "none", border: "none",
+                  display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+                  textAlign: "left", transition: "background 0.15s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#1e293b")}
+                onMouseLeave={e => (e.currentTarget.style.background = "none")}
+              >
+                <span style={{ fontSize: 22 }}>🚨</span>
+                <div>
+                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>사기 범죄 체험</p>
+                  <p style={{ color: "#64748b", fontSize: 11 }}>보이스피싱·스미싱 등 13종</p>
+                </div>
+              </button>
+
+              <div style={{ height: 1, background: "#1e293b", margin: "0 12px" }} />
+
+              <button
+                onClick={() => { router.push("/gambling"); setShowExpMenu(false); }}
+                style={{
+                  width: "100%", padding: "11px 18px", background: "none", border: "none",
+                  display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+                  textAlign: "left", transition: "background 0.15s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#1e293b")}
+                onMouseLeave={e => (e.currentTarget.style.background = "none")}
+              >
+                <span style={{ fontSize: 22 }}>🎰</span>
+                <div>
+                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>불법 도박 체험</p>
+                  <p style={{ color: "#64748b", fontSize: 11 }}>바카라·달팽이·사다리 등</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 체험 메뉴 외부 클릭 시 닫기 */}
+      {showExpMenu && (
+        <div onClick={() => setShowExpMenu(false)} style={{ position: "fixed", inset: 0, zIndex: 9996 }} />
+      )}
 
       {/* 통계/HOF pill — hover(PC) + tap(모바일) 모두 지원 */}
       <style>{`
