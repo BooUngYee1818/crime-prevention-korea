@@ -121,6 +121,33 @@ export default function CrimeCenterPage() {
           <h2 style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.6, color: "#0f172a" }}>{t("crime_select_title", lang)}</h2>
         </div>
 
+        {/* 📞 전화 사기 체험 배너 */}
+        <button
+          onClick={() => router.push("/crime/voice-call")}
+          style={{
+            width: "100%", marginBottom: 20, padding: "20px 22px", borderRadius: 20,
+            background: "linear-gradient(135deg, #0a1628, #1e3a5f)",
+            border: "1px solid #1e3a5f",
+            cursor: "pointer", textAlign: "left",
+            display: "flex", alignItems: "center", gap: 16,
+            boxShadow: "0 4px 20px #0000001a",
+          }}
+        >
+          <div style={{
+            width: 60, height: 60, borderRadius: 18,
+            background: "linear-gradient(135deg, #1d4ed8, #3b82f6)",
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0,
+          }}>📞</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>전화 사기 체험</span>
+              <span style={{ background: "#ef4444", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>NEW</span>
+            </div>
+            <p style={{ color: "#93c5fd", fontSize: 13 }}>삼성·아이폰 실제 통화 화면 + AI 목소리로 체험</p>
+          </div>
+          <ChevronRight size={18} color="#60a5fa" style={{ flexShrink: 0 }} />
+        </button>
+
         {/* 시나리오 그리드 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginBottom: 40 }}>
           {CRIME_SCENARIOS.map((scenario) => (

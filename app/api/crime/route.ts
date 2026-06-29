@@ -365,8 +365,10 @@ export async function POST(req: NextRequest) {
 
     // ── 거절 버튼 → 즉시 분노 압박 대사 반환 (Gemini 불필요) ──
     if (isRefuse) {
-      const reply = getRefuseReply(scenarioId, refuseCount ?? 0, lang ?? "ko");
-      return NextResponse.json({ reply, sendAmount: null });
+      const rc = refuseCount ?? 0;
+      const reply = getRefuseReply(scenarioId, rc, lang ?? "ko");
+      const giveUp = rc >= 2;
+      return NextResponse.json({ reply, sendAmount: null, giveUp });
     }
 
     // 사용자가 보낸 메시지 수 (첫 번째 사용자 메시지 = 0)

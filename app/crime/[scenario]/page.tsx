@@ -582,7 +582,7 @@ function saveDangerRecord(scenarioId: string, reasons: string[]) {
 
 function RevealScreen({
   data, finalSendAmount, dangerCount, dangerReasons, scenarioId,
-  numbersSaved, onSaveNumbers, onRetry, onHome, lang,
+  numbersSaved, onSaveNumbers, onRetry, onHome, lang, chatOutcome,
 }: {
   data: ReturnType<typeof CRIME_SCENARIOS.find> & object;
   finalSendAmount: number | null;
@@ -594,6 +594,7 @@ function RevealScreen({
   onRetry: () => void;
   onHome: () => void;
   lang: import("@/lib/i18n").LangCode;
+  chatOutcome?: "none" | "refused" | "sent";
 }) {
   const isDangerous = dangerCount > 0;
   const [copied, setCopied] = useState(false);
@@ -617,6 +618,115 @@ function RevealScreen({
 
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: "24px 16px 40px", display: "flex", flexDirection: "column", gap: 16 }}>
+
+      {/* ── 끝까지 거절한 유저 칭찬 배너 ── */}
+      {chatOutcome === "refused" && (
+        <div style={{ animation: "fadeIn 0.5s ease" }}>
+          <style>{`
+            @keyframes trophy-bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+            @keyframes ticker-scroll { 0%{transform:translateX(100%)} 100%{transform:translateX(-100%)} }
+          `}</style>
+          <div style={{
+            background: "linear-gradient(135deg, #052e16, #14532d)",
+            border: "2px solid #22c55e88",
+            borderRadius: 20, padding: "20px 16px", textAlign: "center", marginBottom: 4,
+          }}>
+            <div style={{
+              fontSize: 56, marginBottom: 10,
+              animation: "trophy-bounce 1.2s ease-in-out infinite",
+              display: "inline-block",
+            }}>🏆</div>
+            <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 20, marginBottom: 8 }}>
+              훌륭합니다! 사기를 막아냈습니다
+            </p>
+            <p style={{ color: "#86efac", fontSize: 14, lineHeight: 1.7, marginBottom: 12 }}>
+              끝까지 의심하고 거절하셨습니다.<br />
+              <strong style={{ color: "#fff" }}>의심하는 것이 최고의 방어입니다.</strong><br />
+              실제 상황에서도 이렇게 행동해 주세요.
+            </p>
+            <div style={{
+              background: "#0a1f0a", borderRadius: 12, padding: "10px 14px",
+              border: "1px solid #22c55e33",
+            }}>
+              <p style={{ color: "#4ade80", fontSize: 13, fontWeight: 700 }}>
+                ✅ 의심 → 확인 → 거절 → 신고
+              </p>
+              <p style={{ color: "#86efac", fontSize: 11, marginTop: 4 }}>
+                가족·지인이라도 먼저 직접 전화로 확인하세요
+              </p>
+            </div>
+          </div>
+
+          {/* 안 당해도 신고하세요 */}
+          <div style={{
+            background: "#0a1628", border: "1px solid #1e3a5f",
+            borderRadius: 16, padding: "14px 16px",
+          }}>
+            <p style={{ color: "#60a5fa", fontWeight: 800, fontSize: 14, marginBottom: 10 }}>
+              📣 피해를 안 입었어도 신고해 주세요
+            </p>
+            <p style={{ color: "#94a3b8", fontSize: 12, lineHeight: 1.7, marginBottom: 12 }}>
+              신고 한 건이 다른 피해자를 구합니다. 수법·계좌번호·전화번호를 신고하면<br />
+              경찰이 즉시 추적해 같은 수법의 추가 피해를 막을 수 있습니다.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {[
+                { n: "182", l: "경찰청 사이버수사대", c: "#3b82f6" },
+                { n: "118", l: "인터넷진흥원(KISA)", c: "#059669" },
+                { n: "1332", l: "금융감독원", c: "#0891b2" },
+                { n: "112", l: "경찰청 (24시간)", c: "#ef4444" },
+              ].map(r => (
+                <a key={r.n} href={`tel:${r.n}`} style={{
+                  background: "#111", border: `1px solid ${r.c}44`,
+                  borderRadius: 12, padding: "10px 12px", textDecoration: "none",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+                }}>
+                  <span style={{ color: r.c, fontWeight: 900, fontSize: 20 }}>{r.n}</span>
+                  <span style={{ color: "#6b7280", fontSize: 10 }}>{r.l}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* 신고 시 중요한 것 */}
+            <div style={{ marginTop: 12, background: "#111", borderRadius: 12, padding: "12px 14px" }}>
+              <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 12, marginBottom: 8 }}>
+                📋 신고할 때 이것을 준비하세요
+              </p>
+              {[
+                "상대방 전화번호 또는 카카오톡 아이디",
+                "상대방이 알려준 계좌번호",
+                "대화 내용 캡처 (스크린샷)",
+                "피해 금액 및 이체 일시",
+                "상대방이 사용한 수법 설명",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 5 }}>
+                  <span style={{ color: "#fbbf24", fontSize: 11, marginTop: 1 }}>▸</span>
+                  <span style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.5 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── 송금한 유저 스크롤 경고 티커 ── */}
+      {chatOutcome === "sent" && (
+        <div style={{ overflow: "hidden", borderRadius: 10, marginBottom: 4 }}>
+          <div style={{
+            background: "#7f1d1d", padding: "8px 0",
+            display: "flex", alignItems: "center",
+          }}>
+            <div style={{
+              display: "inline-block",
+              animation: "ticker-scroll 14s linear infinite",
+              whiteSpace: "nowrap",
+              color: "#fca5a5", fontSize: 12, fontWeight: 700,
+            }}>
+              🚨 경찰청 182 즉시 신고 &nbsp;·&nbsp; 금융감독원 1332 피해 접수 &nbsp;·&nbsp; 은행 고객센터 즉시 지급정지 &nbsp;·&nbsp; 한국인터넷진흥원 118 &nbsp;·&nbsp; 피해신고 지금 바로 하세요! &nbsp;·&nbsp; 경찰청 182 즉시 신고 &nbsp;·&nbsp; 금융감독원 1332 피해 접수
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 위험 유저 특별 경고 배너 */}
       {isDangerous && (
@@ -967,6 +1077,7 @@ export default function ScenarioPage() {
   const [dangerCount, setDangerCount] = useState(0);
   const [dangerReasons, setDangerReasons] = useState<string[]>([]);
   const [numbersSaved, setNumbersSaved] = useState(false);
+  const [chatOutcome, setChatOutcome] = useState<"none" | "refused" | "sent">("none");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   function recordDanger(reason: string) {
@@ -1140,6 +1251,7 @@ export default function ScenarioPage() {
   function doTransfer(amount: number) {
     recordDanger(`송금 버튼 실행: ${formatAmount(amount)}`);
     setFinalSendAmount(amount);
+    setChatOutcome("sent");
     // 바로 sent-animation 대신 가짜 은행앱으로
     setPhase("fake-bank-app");
   }
@@ -1812,6 +1924,12 @@ export default function ScenarioPage() {
                   }).then(r => r.json()).then(d => {
                     if (d.reply) setMessages(p => [...p, { role: "criminal", content: d.reply }]);
                     if (d.sendAmount) setPendingSend(d.sendAmount);
+                    if (d.giveUp) {
+                      setTimeout(() => {
+                        setChatOutcome("refused");
+                        setPhase("reveal");
+                      }, 1800);
+                    }
                   }).finally(() => setLoading(false));
                 }} className="flex-1 py-3 rounded-xl border border-[#333] text-gray-400 text-sm">
                   {t("sim_refuse_btn", lang)}
@@ -2192,6 +2310,7 @@ export default function ScenarioPage() {
           dangerReasons={dangerReasons}
           scenarioId={scenario as string}
           numbersSaved={numbersSaved}
+          chatOutcome={chatOutcome}
           onSaveNumbers={() => {
             saveDangerRecord(scenario as string, dangerReasons);
             setNumbersSaved(true);
@@ -2206,6 +2325,7 @@ export default function ScenarioPage() {
             setPendingSend(null); setFinalSendAmount(null);
             setTransferAmount(""); setTransferTarget("");
             setBlock(null); setDangerCount(0); setDangerReasons([]); setNumbersSaved(false);
+            setChatOutcome("none");
           }}
           onHome={() => router.push("/")}
           lang={lang}
