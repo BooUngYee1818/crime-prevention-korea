@@ -700,121 +700,295 @@ export default function HomePage() {
       </section>
 
       {/* ── 과거 범죄 아카이브 ── */}
-      <section style={{ maxWidth: 1140, margin: "0 auto", padding: "72px 40px 56px" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <p style={{ color: "#92400e", fontSize: 11, fontWeight: 700, letterSpacing: 3, marginBottom: 8 }}>CRIME ARCHIVE</p>
-          <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.5, color: "#1c1917", marginBottom: 10 }}>
-            옛날엔 이런 사기도 있었다
-          </h2>
-          <p style={{ color: "#78716c", fontSize: 13, lineHeight: 1.7 }}>
-            시대마다 달라진 수법들 — 지금은 사라졌지만, 당시엔 수많은 피해자가 있었습니다.
-          </p>
-        </div>
+      <section style={{ background: "#0a0a0a", padding: "72px 0 64px", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 40px" }}>
+          <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 4, marginBottom: 10, fontFamily: "monospace" }}>[ CRIME ARCHIVE ]</p>
+            <h2 style={{ fontSize: 30, fontWeight: 900, color: "#f5f5f5", marginBottom: 10, letterSpacing: -0.5 }}>
+              옛날엔 이런 사기도 있었다
+            </h2>
+            <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7 }}>
+              수법은 시대마다 달라졌지만, 심리를 이용한다는 본질은 변하지 않았습니다.
+            </p>
+          </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-          {[
-            {
-              era: "1990년대",
-              color: "#92400e",
-              bg: "#fef3c7",
-              border: "#fcd34d",
-              icon: "📠",
-              crimes: [
-                { name: "복권 당첨 사기", desc: "\"당신이 당첨됐습니다\" 팩스 1장으로 수수료 편취. 스팸 팩스가 사기의 주요 수단." },
-                { name: "피라미드 다단계", desc: "원금 보장·고수익 보장. 하위 회원 모집으로만 유지되는 구조. 전국 수십만 명 피해." },
-                { name: "삼각 사기 (선불 사기)", desc: "물건 받기 전에 돈 먼저 내라는 수법. 인터넷 없던 시대의 광고지·전단 사기." },
-              ],
-            },
-            {
-              era: "2000년대",
-              color: "#1e40af",
-              bg: "#eff6ff",
-              border: "#93c5fd",
-              icon: "💾",
-              crimes: [
-                { name: "이메일 스팸 사기", desc: "\"나이지리아 왕자입니다. 재산 이전 도와주시면 수수료 드립니다.\" 국제 사기의 고전." },
-                { name: "문화상품권 사기 1세대", desc: "핀번호 긁어서 보내달라는 최초 형태. 초기엔 상품권이 낯설어서 많이 속음." },
-                { name: "초창기 보이스피싱", desc: "\"금감원입니다. 계좌 동결됩니다.\" 단 한 줄 멘트로 수백만원 편취. 대본이 지금보다 단순했음." },
-              ],
-            },
-            {
-              era: "2010년대 초",
-              color: "#065f46",
-              bg: "#ecfdf5",
-              border: "#6ee7b7",
-              icon: "📱",
-              crimes: [
-                { name: "스미싱 1세대", desc: "\"무료쿠폰 받으세요 http://...\" 클릭하면 소액결제 자동 청구. 당시엔 인식 자체가 없었음." },
-                { name: "카카오 해킹 초기형", desc: "카카오 계정 해킹 후 지인에게 \"나 급해. 50만원만\" — 당시엔 카카오가 낯설어 더 잘 속았음." },
-                { name: "가짜 쇼핑몰 사기", desc: "너무 싼 해외직구몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 방법조차 몰랐던 시대." },
-              ],
-            },
-            {
-              era: "2015~2018년",
-              color: "#6b21a8",
-              bg: "#faf5ff",
-              border: "#c4b5fd",
-              icon: "🎭",
-              crimes: [
-                { name: "SNS 지인 사칭 발전형", desc: "페이스북·인스타 클론 계정. 지인인 척 '급하게 돈 빌려달라'. AI 없던 시대의 수작업 사기." },
-                { name: "가짜 취업 사기", desc: "\"재택근무 월 300만원 보장\" 광고. 교재비·장비비 명목 선납 후 잠적. 청년층 집중 피해." },
-                { name: "메신저 피싱 (스타일)", desc: "카카오·라인·텔레그램 전 채널 동시 공략. 문자→카카오→전화 3단계 접근법 등장." },
-              ],
-            },
-            {
-              era: "2019~2021년",
-              color: "#0e7490",
-              bg: "#ecfeff",
-              border: "#67e8f9",
-              icon: "🦠",
-              crimes: [
-                { name: "코로나 마스크 사기", desc: "마스크 대란 때 \"마스크 재고 있어요\" 선입금 후 잠적. 위기 상황이 사기꾼의 최적 환경임을 보여줌." },
-                { name: "재난지원금 피싱", desc: "\"재난지원금 신청 링크\" 문자. 정부 사칭 스미싱의 정점. 수백만 건 발송." },
-                { name: "코인 초기 투자 사기", desc: "\"비트코인 2배 보장\" 텔레그램 방. 코인 자체가 낯설어 검증 방법을 몰랐던 시기의 피해." },
-              ],
-            },
-            {
-              era: "2022~2023년",
-              color: "#be185d",
-              bg: "#fdf2f8",
-              border: "#f9a8d4",
-              icon: "🤳",
-              crimes: [
-                { name: "딥보이스 보이스피싱 등장", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 못 믿게 됨." },
-                { name: "오픈채팅 투자 사기 전성기", desc: "카카오 오픈채팅 \"주식 고수\" 방. 수익 인증 캡처 도배 후 집단 사기. 피해자 동시 수천명." },
-                { name: "중고거래 사기 급증", desc: "당근·번개장터 폭발적 성장과 함께 사기도 급증. '직거래 문화'가 악용되기 시작한 시기." },
-              ],
-            },
-          ].map((era, i) => (
-            <div key={i} style={{
-              background: era.bg,
-              border: `1px solid ${era.border}`,
-              borderRadius: 16, padding: "20px 20px 18px",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                <span style={{ fontSize: 20 }}>{era.icon}</span>
-                <div>
-                  <p style={{ color: era.color, fontWeight: 900, fontSize: 13 }}>{era.era}</p>
-                </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+
+            {/* ── 1990년대: 팩스 종이 느낌 ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#4b3a1a", opacity: 0.6 }} />
+                <span style={{ color: "#c9a84c", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 1990년대 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#4b3a1a", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {era.crimes.map((c, j) => (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { name: "복권 당첨 사기", tag: "FAX SCAM", desc: "「당신이 당첨됐습니다」 팩스 1장으로 수수료 편취. 스팸 팩스가 유일한 사기 수단이던 시절." },
+                  { name: "피라미드 다단계", tag: "PYRAMID", desc: "원금 보장·고수익 보장. 하위 회원 모집으로만 유지. 전국 수십만 명이 '사업'인 줄 알고 참여." },
+                  { name: "선불 사기 (삼각 사기)", tag: "PREPAY", desc: "광고지·전단지로 물건 홍보, 먼저 돈 받고 잠적. 인터넷이 없어 피해 확인조차 어려웠던 시대." },
+                ].map((c, j) => (
                   <div key={j} style={{
-                    background: "#ffffff88",
-                    borderRadius: 10, padding: "10px 12px",
-                    borderLeft: `3px solid ${era.border}`,
+                    background: "linear-gradient(145deg, #f5efd6, #ede5c4)",
+                    border: "1px solid #c9a84c44",
+                    borderRadius: 4,
+                    padding: "16px 16px 14px",
+                    position: "relative",
+                    boxShadow: "2px 3px 8px #00000060, inset 0 0 0 1px #ffffff20",
+                    fontFamily: "'Courier New', Courier, monospace",
                   }}>
-                    <p style={{ color: "#1c1917", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>{c.name}</p>
-                    <p style={{ color: "#78716c", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                    {/* 팩스 헤더 라인 */}
+                    <div style={{ borderBottom: "1px dashed #8b7355", marginBottom: 10, paddingBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 9, color: "#8b7355", letterSpacing: 1 }}>FAX TRANSMISSION</span>
+                      <span style={{ fontSize: 9, color: "#8b7355" }}>199X.XX.XX</span>
+                    </div>
+                    <div style={{ background: "#8b735533", display: "inline-block", padding: "1px 6px", marginBottom: 6, borderRadius: 2 }}>
+                      <span style={{ fontSize: 9, color: "#6b5a2e", letterSpacing: 1 }}>{c.tag}</span>
+                    </div>
+                    <p style={{ color: "#3d2e00", fontWeight: 700, fontSize: 13, marginBottom: 6, lineHeight: 1.3 }}>{c.name}</p>
+                    <p style={{ color: "#5c4a1e", fontSize: 11, lineHeight: 1.7 }}>{c.desc}</p>
+                    {/* 팩스 노이즈 라인 */}
+                    <div style={{ marginTop: 10, borderTop: "1px dashed #8b735555", paddingTop: 6 }}>
+                      <span style={{ fontSize: 8, color: "#a08858", fontFamily: "monospace" }}>■■■□■□■■□□■■■□ END OF TRANSMISSION</span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
+
+            {/* ── 2000년대: Windows XP 스타일 ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
+                <span style={{ color: "#60a5fa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2000년대 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { name: "나이지리아 왕자 이메일", icon: "📧", desc: "\"저는 나이지리아 왕자입니다. 재산 이전을 도와주시면 수수료를 드립니다.\" 세계 최초 국제 스팸 사기의 고전." },
+                  { name: "문화상품권 사기 1세대", icon: "🎫", desc: "핀번호 긁어서 보내달라는 최초 형태. 당시엔 상품권이 낯설어 '이게 왜 사기야?' 하던 시절." },
+                  { name: "초창기 보이스피싱", icon: "☎️", desc: "\"금감원입니다. 귀하 계좌가 동결됩니다.\" 단 한 줄로 수백만원 편취. 대본이 지금보다 100배 단순." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#d4d0c8",
+                    border: "2px solid",
+                    borderColor: "#ffffff #808080 #808080 #ffffff",
+                    borderRadius: 0,
+                    overflow: "hidden",
+                    boxShadow: "2px 2px 0 #000000aa",
+                    fontFamily: "'Tahoma', 'MS Sans Serif', sans-serif",
+                  }}>
+                    {/* XP 타이틀바 */}
+                    <div style={{
+                      background: "linear-gradient(to bottom, #0a246a, #3a6ea5)",
+                      padding: "3px 6px",
+                      display: "flex", justifyContent: "space-between", alignItems: "center",
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span style={{ fontSize: 11 }}>{c.icon}</span>
+                        <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>경고.exe</span>
+                      </div>
+                      <div style={{ display: "flex", gap: 2 }}>
+                        {["_", "□", "✕"].map((btn, k) => (
+                          <div key={k} style={{
+                            width: 16, height: 14, background: k === 2 ? "#c0392b" : "#d4d0c8",
+                            border: "1px solid #808080", display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 9, color: k === 2 ? "#fff" : "#000", cursor: "default",
+                          }}>{btn}</div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* 콘텐츠 */}
+                    <div style={{ padding: "12px 12px 10px", background: "#d4d0c8" }}>
+                      <div style={{ background: "#fff", border: "2px inset #808080", padding: "8px", marginBottom: 8 }}>
+                        <p style={{ color: "#000080", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                        <p style={{ color: "#1a1a1a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <div style={{
+                          background: "#d4d0c8", border: "2px solid", borderColor: "#ffffff #808080 #808080 #ffffff",
+                          padding: "2px 12px", fontSize: 11, cursor: "default",
+                        }}>확인</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── 2010년대 초: 피처폰/초기 스마트폰 SMS ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#064e3b", opacity: 0.6 }} />
+                <span style={{ color: "#34d399", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2010년대 초 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#064e3b", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { sender: "[Web발신]", preview: "무료쿠폰 발급완료 수령▶ http://bit.ly/xK3m", name: "스미싱 1세대", desc: "클릭 즉시 소액결제 자동 청구. '무료쿠폰'에 의심 없이 눌렀던 시절. 당시엔 스미싱이란 단어조차 없었음." },
+                  { sender: "민지", preview: "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게", name: "카카오 해킹 초기형", desc: "계정 해킹 후 지인에게 문자형 사기. 카카오가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음." },
+                  { sender: "직구몰", preview: "아이폰5 미개봉 정품 29만원! 오늘마감 선착순50명", name: "가짜 직구몰 사기", desc: "너무 싼 해외직구 쇼핑몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 개념 자체가 없던 시대." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#1a1a1a",
+                    border: "1px solid #333",
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    fontFamily: "monospace",
+                  }}>
+                    {/* 피처폰 상단바 */}
+                    <div style={{ background: "#111", padding: "6px 10px", display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ color: "#888", fontSize: 9 }}>📶 SKT  🔋</span>
+                      <span style={{ color: "#888", fontSize: 9 }}>오전 11:23</span>
+                    </div>
+                    {/* SMS 헤더 */}
+                    <div style={{ background: "#2a2a2a", padding: "8px 12px", borderBottom: "1px solid #333" }}>
+                      <p style={{ color: "#aaa", fontSize: 10, marginBottom: 2 }}>보낸 사람</p>
+                      <p style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>{c.sender}</p>
+                    </div>
+                    {/* SMS 말풍선 */}
+                    <div style={{ padding: "12px", background: "#1a1a1a" }}>
+                      <div style={{
+                        background: "#2e7d32", borderRadius: "4px 12px 12px 12px",
+                        padding: "8px 10px", maxWidth: "85%", marginBottom: 12,
+                      }}>
+                        <p style={{ color: "#e8f5e9", fontSize: 11, lineHeight: 1.5 }}>{c.preview}</p>
+                        <p style={{ color: "#a5d6a7", fontSize: 9, textAlign: "right", marginTop: 4 }}>수신 ✓✓</p>
+                      </div>
+                      <div style={{ borderTop: "1px solid #333", paddingTop: 10 }}>
+                        <p style={{ color: "#34d399", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                        <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── 2015~2018: 플랫 디자인/SNS 시대 ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
+                <span style={{ color: "#a78bfa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2015~2018년 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { platform: "Facebook", dot: "#1877f2", name: "SNS 지인 사칭", post: "이거 실화냐 ㅋㅋ 나 어제 이거 당했는데... 갑자기 지인 계정에서 DM 와서 돈 빌려달라고 해서 보냈더니 해킹당한 계정이었음", like: "좋아요 247개", desc: "페이스북·인스타 클론 계정. AI 없던 시대의 수작업 사기. 지인 관계망을 가장 잘 활용한 형태." },
+                  { platform: "취업카페", dot: "#ff6b35", name: "가짜 재택 취업 사기", post: "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!", like: "조회 8,402", desc: "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법." },
+                  { platform: "KakaoTalk", dot: "#ffe100", name: "3단계 메신저 피싱", post: "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게", like: "읽음 1", desc: "문자→카카오→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#18181b",
+                    border: "1px solid #27272a",
+                    borderRadius: 12,
+                    overflow: "hidden",
+                  }}>
+                    {/* SNS 헤더 */}
+                    <div style={{ padding: "10px 12px", borderBottom: "1px solid #27272a", display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: c.dot, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontSize: 12, color: "#fff", fontWeight: 900 }}>{c.platform[0]}</span>
+                      </div>
+                      <div>
+                        <p style={{ color: "#e4e4e7", fontSize: 12, fontWeight: 700 }}>{c.platform}</p>
+                        <p style={{ color: "#71717a", fontSize: 10 }}>201X년경</p>
+                      </div>
+                    </div>
+                    {/* 게시물 */}
+                    <div style={{ padding: "12px", background: "#18181b" }}>
+                      <p style={{ color: "#a1a1aa", fontSize: 11, lineHeight: 1.6, marginBottom: 8, fontStyle: "italic", borderLeft: "2px solid #3f3f46", paddingLeft: 8 }}>{c.post}</p>
+                      <p style={{ color: "#52525b", fontSize: 10, marginBottom: 10 }}>{c.like}</p>
+                      <div style={{ borderTop: "1px solid #27272a", paddingTop: 8 }}>
+                        <p style={{ color: "#a78bfa", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                        <p style={{ color: "#71717a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── 2019~2021: 코로나 시대 (다크 뉴스 피드) ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
+                <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2019~2021년 (코로나 시대) ──</span>
+                <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { breaking: "BREAKING", headline: "마스크 대란 틈타 사기 급증", sub: "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상", name: "코로나 마스크 사기", desc: "위기 상황이 사기꾼의 최적 환경임을 증명. 사람들이 마스크라면 뭐든 믿던 시절." },
+                  { breaking: "속보", headline: "재난지원금 사칭 스미싱 수백만 건", sub: "정부 공식 링크인 척 개인정보 탈취 — '신청하세요'가 함정", name: "재난지원금 피싱", desc: "국가 재난 상황을 악용한 역대 최대 스미싱. '정부니까 믿어야지'라는 심리를 정확히 노림." },
+                  { breaking: "특보", headline: "비트코인 2배 보장 텔레그램 방 주의", sub: "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해", name: "코인 초기 투자 사기", desc: "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#0a0a0a",
+                    border: "1px solid #1f2937",
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    fontFamily: "sans-serif",
+                  }}>
+                    {/* 뉴스 속보 헤더 */}
+                    <div style={{ background: "#dc2626", padding: "4px 10px", display: "flex", alignItems: "center", gap: 6 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "pulse 1s infinite" }} />
+                      <span style={{ color: "#fff", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>{c.breaking}</span>
+                    </div>
+                    <div style={{ padding: "12px" }}>
+                      <p style={{ color: "#f9fafb", fontWeight: 900, fontSize: 13, lineHeight: 1.4, marginBottom: 6 }}>{c.headline}</p>
+                      <p style={{ color: "#9ca3af", fontSize: 10, lineHeight: 1.5, marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid #1f2937" }}>{c.sub}</p>
+                      <p style={{ color: "#22d3ee", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                      <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── 2022~2023: 다크모드/AI 시대 ── */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
+                <span style={{ color: "#f472b6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2022~2023년 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { tag: "AI VOICE", glow: "#f472b6", name: "딥보이스 보이스피싱 등장", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해." },
+                  { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "카카오 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명." },
+                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", waveform: "당근🥕 번개⚡ 중고나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#09090b",
+                    border: `1px solid ${c.glow}33`,
+                    borderRadius: 12,
+                    padding: "16px",
+                    boxShadow: `0 0 20px ${c.glow}11`,
+                    backdropFilter: "blur(8px)",
+                  }}>
+                    <div style={{
+                      display: "inline-block",
+                      background: `${c.glow}22`,
+                      border: `1px solid ${c.glow}55`,
+                      borderRadius: 20, padding: "2px 10px", marginBottom: 10,
+                    }}>
+                      <span style={{ color: c.glow, fontSize: 9, fontWeight: 700, letterSpacing: 2, fontFamily: "monospace" }}>{c.tag}</span>
+                    </div>
+                    <p style={{ color: "#f4f4f5", fontWeight: 700, fontSize: 13, marginBottom: 8, lineHeight: 1.3 }}>{c.name}</p>
+                    <div style={{
+                      background: "#18181b", borderRadius: 6, padding: "6px 10px", marginBottom: 10,
+                      fontFamily: "monospace", fontSize: 11, color: c.glow, letterSpacing: 1,
+                    }}>{c.waveform}</div>
+                    <p style={{ color: "#71717a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          <p style={{ textAlign: "center", color: "#374151", fontSize: 11, marginTop: 40, lineHeight: 1.7, fontFamily: "monospace" }}>
+            ── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──
+          </p>
         </div>
-        <p style={{ textAlign: "center", color: "#a8a29e", fontSize: 11, marginTop: 24, lineHeight: 1.7 }}>
-          수법은 시대마다 달라졌지만, 사람의 심리를 이용한다는 본질은 변하지 않았습니다.
-        </p>
       </section>
 
       {/* ── 제작 목적 & 실제 통계 ── */}
