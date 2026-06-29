@@ -589,9 +589,23 @@ export default function HomePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
                 {
-                  version: "v1.3",
+                  version: "v1.4",
                   date: "2025.06",
                   badge: "최신",
+                  badgeColor: "#f59e0b",
+                  badgeBg: "#1c1002",
+                  items: [
+                    "🍼 감성 동정 사기 시나리오 추가 (임신·아기 사진 베이비 피싱)",
+                    "🏠 전세·부동산 사기 시나리오 추가 (이중계약·갭투기)",
+                    "🤖 AI 딥페이크 협박 사기 시나리오 추가 (신종 사이버 공갈)",
+                    "🔢 시나리오 10개 → 13개로 확대",
+                    "📜 과거 범죄 내역 추억 회상 기능 추가",
+                  ],
+                },
+                {
+                  version: "v1.3",
+                  date: "2025.06",
+                  badge: null,
                   badgeColor: "#4ade80",
                   badgeBg: "#052e16",
                   items: [
@@ -604,10 +618,6 @@ export default function HomePage() {
                     "🎬 업데이트 홍보영상 추가 (2번째 영상)",
                     "✏️ 전체 폰트 Spoqa Han Sans Neo 적용",
                     "📋 업데이트 내역 섹션 추가",
-                    "🍼 감성 동정 사기 시나리오 추가 (임신·아기 사진)",
-                    "🏠 전세·부동산 사기 시나리오 추가",
-                    "🤖 AI 딥페이크 협박 사기 시나리오 추가",
-                    "🔢 시나리오 10개 → 13개로 확대",
                   ],
                 },
                 {
@@ -687,6 +697,124 @@ export default function HomePage() {
           </div>
 
         </div>
+      </section>
+
+      {/* ── 과거 범죄 아카이브 ── */}
+      <section style={{ maxWidth: 1140, margin: "0 auto", padding: "72px 40px 56px" }}>
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <p style={{ color: "#92400e", fontSize: 11, fontWeight: 700, letterSpacing: 3, marginBottom: 8 }}>CRIME ARCHIVE</p>
+          <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.5, color: "#1c1917", marginBottom: 10 }}>
+            옛날엔 이런 사기도 있었다
+          </h2>
+          <p style={{ color: "#78716c", fontSize: 13, lineHeight: 1.7 }}>
+            시대마다 달라진 수법들 — 지금은 사라졌지만, 당시엔 수많은 피해자가 있었습니다.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          {[
+            {
+              era: "1990년대",
+              color: "#92400e",
+              bg: "#fef3c7",
+              border: "#fcd34d",
+              icon: "📠",
+              crimes: [
+                { name: "복권 당첨 사기", desc: "\"당신이 당첨됐습니다\" 팩스 1장으로 수수료 편취. 스팸 팩스가 사기의 주요 수단." },
+                { name: "피라미드 다단계", desc: "원금 보장·고수익 보장. 하위 회원 모집으로만 유지되는 구조. 전국 수십만 명 피해." },
+                { name: "삼각 사기 (선불 사기)", desc: "물건 받기 전에 돈 먼저 내라는 수법. 인터넷 없던 시대의 광고지·전단 사기." },
+              ],
+            },
+            {
+              era: "2000년대",
+              color: "#1e40af",
+              bg: "#eff6ff",
+              border: "#93c5fd",
+              icon: "💾",
+              crimes: [
+                { name: "이메일 스팸 사기", desc: "\"나이지리아 왕자입니다. 재산 이전 도와주시면 수수료 드립니다.\" 국제 사기의 고전." },
+                { name: "문화상품권 사기 1세대", desc: "핀번호 긁어서 보내달라는 최초 형태. 초기엔 상품권이 낯설어서 많이 속음." },
+                { name: "초창기 보이스피싱", desc: "\"금감원입니다. 계좌 동결됩니다.\" 단 한 줄 멘트로 수백만원 편취. 대본이 지금보다 단순했음." },
+              ],
+            },
+            {
+              era: "2010년대 초",
+              color: "#065f46",
+              bg: "#ecfdf5",
+              border: "#6ee7b7",
+              icon: "📱",
+              crimes: [
+                { name: "스미싱 1세대", desc: "\"무료쿠폰 받으세요 http://...\" 클릭하면 소액결제 자동 청구. 당시엔 인식 자체가 없었음." },
+                { name: "카카오 해킹 초기형", desc: "카카오 계정 해킹 후 지인에게 \"나 급해. 50만원만\" — 당시엔 카카오가 낯설어 더 잘 속았음." },
+                { name: "가짜 쇼핑몰 사기", desc: "너무 싼 해외직구몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 방법조차 몰랐던 시대." },
+              ],
+            },
+            {
+              era: "2015~2018년",
+              color: "#6b21a8",
+              bg: "#faf5ff",
+              border: "#c4b5fd",
+              icon: "🎭",
+              crimes: [
+                { name: "SNS 지인 사칭 발전형", desc: "페이스북·인스타 클론 계정. 지인인 척 '급하게 돈 빌려달라'. AI 없던 시대의 수작업 사기." },
+                { name: "가짜 취업 사기", desc: "\"재택근무 월 300만원 보장\" 광고. 교재비·장비비 명목 선납 후 잠적. 청년층 집중 피해." },
+                { name: "메신저 피싱 (스타일)", desc: "카카오·라인·텔레그램 전 채널 동시 공략. 문자→카카오→전화 3단계 접근법 등장." },
+              ],
+            },
+            {
+              era: "2019~2021년",
+              color: "#0e7490",
+              bg: "#ecfeff",
+              border: "#67e8f9",
+              icon: "🦠",
+              crimes: [
+                { name: "코로나 마스크 사기", desc: "마스크 대란 때 \"마스크 재고 있어요\" 선입금 후 잠적. 위기 상황이 사기꾼의 최적 환경임을 보여줌." },
+                { name: "재난지원금 피싱", desc: "\"재난지원금 신청 링크\" 문자. 정부 사칭 스미싱의 정점. 수백만 건 발송." },
+                { name: "코인 초기 투자 사기", desc: "\"비트코인 2배 보장\" 텔레그램 방. 코인 자체가 낯설어 검증 방법을 몰랐던 시기의 피해." },
+              ],
+            },
+            {
+              era: "2022~2023년",
+              color: "#be185d",
+              bg: "#fdf2f8",
+              border: "#f9a8d4",
+              icon: "🤳",
+              crimes: [
+                { name: "딥보이스 보이스피싱 등장", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 못 믿게 됨." },
+                { name: "오픈채팅 투자 사기 전성기", desc: "카카오 오픈채팅 \"주식 고수\" 방. 수익 인증 캡처 도배 후 집단 사기. 피해자 동시 수천명." },
+                { name: "중고거래 사기 급증", desc: "당근·번개장터 폭발적 성장과 함께 사기도 급증. '직거래 문화'가 악용되기 시작한 시기." },
+              ],
+            },
+          ].map((era, i) => (
+            <div key={i} style={{
+              background: era.bg,
+              border: `1px solid ${era.border}`,
+              borderRadius: 16, padding: "20px 20px 18px",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                <span style={{ fontSize: 20 }}>{era.icon}</span>
+                <div>
+                  <p style={{ color: era.color, fontWeight: 900, fontSize: 13 }}>{era.era}</p>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {era.crimes.map((c, j) => (
+                  <div key={j} style={{
+                    background: "#ffffff88",
+                    borderRadius: 10, padding: "10px 12px",
+                    borderLeft: `3px solid ${era.border}`,
+                  }}>
+                    <p style={{ color: "#1c1917", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>{c.name}</p>
+                    <p style={{ color: "#78716c", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ textAlign: "center", color: "#a8a29e", fontSize: 11, marginTop: 24, lineHeight: 1.7 }}>
+          수법은 시대마다 달라졌지만, 사람의 심리를 이용한다는 본질은 변하지 않았습니다.
+        </p>
       </section>
 
       {/* ── 제작 목적 & 실제 통계 ── */}
