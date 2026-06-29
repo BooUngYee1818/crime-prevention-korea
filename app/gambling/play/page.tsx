@@ -2,123 +2,75 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 
-// ─── 슬롯 심볼 ───────────────────────────────────────────────────────────────
-const SYMBOLS = ["🍒", "🍋", "⭐", "🎰", "7️⃣", "💎", "🃏", "🍀"];
-const WIN_COMBOS: Record<string, number> = {
-  "7️⃣7️⃣7️⃣": 100,
-  "💎💎💎": 50,
-  "🎰🎰🎰": 30,
-  "⭐⭐⭐": 20,
-  "🍀🍀🍀": 15,
-  "🍒🍒🍒": 10,
-  "🍋🍋🍋": 8,
-  "🃏🃏🃏": 6,
-};
-
-// 판 수에 따른 승률: 1~3판 고승률 → 점점 낮아짐 → 이후 거의 못 이김
+// ── 판 수에 따른 승률 (초반 미끼 → 후반 거의 불가) ──────────────────────────
 function getWinRate(round: number): number {
-  if (round <= 2) return 0.85;   // 처음엔 거의 무조건 이김
+  if (round <= 2) return 0.88;
   if (round <= 4) return 0.65;
-  if (round <= 6) return 0.40;
-  if (round <= 9) return 0.20;
-  return 0.08;                   // 10판 이후 사실상 못 이김
+  if (round <= 7) return 0.35;
+  if (round <= 11) return 0.18;
+  return 0.08;
 }
 
-// 조작된 결과 생성
-function getResult(round: number): [string, string, string] {
-  const shouldWin = Math.random() < getWinRate(round);
-  if (shouldWin) {
-    const winners = Object.keys(WIN_COMBOS);
-    const pick = winners[Math.floor(Math.random() * (round <= 3 ? 3 : winners.length))];
-    const sym = pick[0]; // emoji is multi-char but for display
-    const parts = [...pick.matchAll(/\p{Emoji}/gu)].map(m => m[0]);
-    if (parts.length === 3) return [parts[0], parts[1], parts[2]];
-  }
-  // 패배: 세 심볼이 다 다르게
-  let [a, b, c] = [
-    SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-    SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-    SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-  ];
-  if (a === b) b = SYMBOLS[(SYMBOLS.indexOf(b) + 1) % SYMBOLS.length];
-  if (b === c) c = SYMBOLS[(SYMBOLS.indexOf(c) + 2) % SYMBOLS.length];
-  return [a, b, c];
+// ── 카드 덱 ──────────────────────────────────────────────────────────────────
+const SUITS = ["♠", "♥", "♦", "♣"];
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+function randCard() {
+  return {
+    suit: SUITS[Math.floor(Math.random() * 4)],
+    rank: RANKS[Math.floor(Math.random() * 13)],
+    value: 0,
+  };
+}
+function cardVal(rank: string): number {
+  if (["J", "Q", "K", "10"].includes(rank)) return 0;
+  if (rank === "A") return 1;
+  return parseInt(rank);
+}
+function baccaratScore(cards: { rank: string }[]): number {
+  return cards.reduce((s, c) => (s + cardVal(c.rank)) % 10, 0);
 }
 
-function getWinAmount(reels: string[], bet: number): number {
-  const key = reels.join("");
-  const mult = WIN_COMBOS[key];
-  return mult ? Math.floor(bet * mult / 10) : 0;
-}
+// ── 달팽이 레이스 ────────────────────────────────────────────────────────────
+const SNAIL_NAMES = ["🐌 달팽이1", "🐌 달팽이2", "🐌 달팽이3", "🐌 달팽이4", "🐌 달팽이5", "🐌 달팽이6"];
+const SNAIL_COLORS = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ec4899"];
 
-// ─── 컴포넌트 ─────────────────────────────────────────────────────────────────
-
-function SimWatermarkGame() {
+// ── 워터마크 ─────────────────────────────────────────────────────────────────
+function Watermark() {
   return (
-    <div aria-hidden style={{
-      position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-      display: "flex", alignItems: "center", justifyContent: "center",
-    }}>
-      <div style={{
-        fontSize: 80, fontWeight: 900, color: "#fff", opacity: 0.015,
-        transform: "rotate(-30deg)", userSelect: "none", whiteSpace: "nowrap",
-      }}>
+    <div aria-hidden style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ fontSize: 80, fontWeight: 900, color: "#fff", opacity: 0.018, transform: "rotate(-30deg)", userSelect: "none", whiteSpace: "nowrap" }}>
         도박방지 시뮬레이션
       </div>
     </div>
   );
 }
 
-function BlockOverlay({ onClose, onReveal }: { onClose: () => void; onReveal: () => void }) {
+// ── 중독 경고 오버레이 ────────────────────────────────────────────────────────
+function AddictionWarning({ lost, onContinue, onReveal }: { lost: number; onContinue: () => void; onReveal: () => void }) {
   return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 200,
-      background: "rgba(0,0,0,0.95)", backdropFilter: "blur(8px)",
-      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
-    }}>
-      <div style={{
-        maxWidth: 420, width: "100%",
-        background: "#0a0000", border: "2px solid #ef4444",
-        borderRadius: 20, padding: "32px 24px", textAlign: "center",
-      }}>
-        <div style={{ fontSize: 52, marginBottom: 16 }}>🚨</div>
-        <h2 style={{ fontSize: 22, fontWeight: 900, color: "#ef4444", marginBottom: 12 }}>
-          실제 송금을 시도했습니다
-        </h2>
-        <div style={{
-          background: "#1a0a0a", borderRadius: 12, padding: "16px", marginBottom: 20,
-          textAlign: "left",
-        }}>
-          <p style={{ color: "#ef4444", fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
-            ⚠️ 이것이 실제 도박 사이트였다면...
-          </p>
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.94)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div style={{ maxWidth: 440, width: "100%", background: "#0a0000", border: "2px solid #ef4444", borderRadius: 20, padding: "32px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🚨</div>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: "#ef4444", marginBottom: 8 }}>잠깐 멈추세요</h2>
+        <p style={{ color: "#fca5a5", fontSize: 13, marginBottom: 16, lineHeight: 1.6 }}>
+          가상 머니 <strong style={{ color: "#ef4444" }}>₩{lost.toLocaleString()}</strong>을 잃었습니다.<br />
+          실제 도박에서 이 돈은 <strong>절대 돌아오지 않습니다.</strong>
+        </p>
+        <div style={{ background: "#1a0808", borderRadius: 12, padding: 14, marginBottom: 18, textAlign: "left" }}>
+          <p style={{ color: "#fca5a5", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>⚠️ 지금 이 순간이 도박 중독의 시작입니다</p>
           <ul style={{ color: "#888", fontSize: 12, lineHeight: 2, paddingLeft: 16 }}>
-            <li>당신의 돈은 <strong style={{ color: "#ef4444" }}>절대 돌아오지 않습니다</strong></li>
-            <li>더 큰 금액을 유도하는 연락이 옵니다</li>
-            <li>계좌가 도박 범죄에 이용될 수 있습니다</li>
-            <li>불법 도박 사이트 <strong style={{ color: "#fbbf24" }}>이용 자체가 처벌</strong> 대상입니다</li>
+            <li>「한 판만 더」라는 생각이 드신다면 이미 중독 징후</li>
+            <li>처음 이긴 건 <strong style={{ color: "#fbbf24" }}>의도적으로 설계된 미끼</strong>입니다</li>
+            <li>실제 불법 도박 이용 시 <strong style={{ color: "#ef4444" }}>형사 처벌</strong> 대상</li>
+            <li>도박 중독 상담: <strong style={{ color: "#22c55e" }}>한국도박문제예방치유원 1336</strong></li>
           </ul>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          <button
-            onClick={onClose}
-            style={{
-              flex: 1, padding: "12px 0", borderRadius: 12, fontSize: 13,
-              background: "transparent", color: "#666",
-              border: "1px solid #2a2a2a", cursor: "pointer",
-            }}
-          >
+          <button onClick={onContinue} style={{ flex: 1, padding: "12px 0", borderRadius: 12, fontSize: 13, background: "transparent", color: "#555", border: "1px solid #2a2a2a", cursor: "pointer" }}>
             계속 체험
           </button>
-          <button
-            onClick={onReveal}
-            style={{
-              flex: 2, padding: "12px 0", borderRadius: 12, fontSize: 14, fontWeight: 700,
-              background: "linear-gradient(135deg, #22c55e, #16a34a)",
-              color: "#fff", border: "none", cursor: "pointer",
-            }}
-          >
-            🛡️ 범죄 수법 확인하기
+          <button onClick={onReveal} style={{ flex: 2, padding: "12px 0", borderRadius: 12, fontSize: 14, fontWeight: 700, background: "linear-gradient(135deg, #22c55e, #16a34a)", color: "#fff", border: "none", cursor: "pointer" }}>
+            🛡️ 수법 확인하기
           </button>
         </div>
       </div>
@@ -126,558 +78,881 @@ function BlockOverlay({ onClose, onReveal }: { onClose: () => void; onReveal: ()
   );
 }
 
-function RevealOverlay({ totalLost, round, onRetry, onHome }: {
-  totalLost: number; round: number; onRetry: () => void; onHome: () => void;
-}) {
+// ── 결과 화면 ─────────────────────────────────────────────────────────────────
+function RevealScreen({ totalLost, round, onRetry, onHome }: { totalLost: number; round: number; onRetry: () => void; onHome: () => void }) {
   return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 300,
-      background: "#000", overflowY: "auto",
-      display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "40px 20px",
-    }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 300, background: "#000", overflowY: "auto", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "40px 20px" }}>
       <div style={{ maxWidth: 600, width: "100%" }}>
-        {/* 헤더 */}
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 56, marginBottom: 16 }}>💔</div>
-          <h1 style={{ fontSize: 28, fontWeight: 900, color: "#ef4444", marginBottom: 8, letterSpacing: -0.5 }}>
-            이것이 불법 도박의 실체입니다
-          </h1>
-          <p style={{ color: "#666", fontSize: 14 }}>
-            {round}판 만에 가상 자산 <strong style={{ color: "#ef4444" }}>
-              {totalLost.toLocaleString()}원
-            </strong> 손실
-          </p>
-        </div>
-
-        {/* 실제 피해 스토리 */}
-        <div style={{
-          background: "#0a0000", border: "1px solid #ef444433",
-          borderRadius: 18, padding: "24px", marginBottom: 20,
-        }}>
-          <p style={{ color: "#ef4444", fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
-            📰 실제 피해 사례 (2024–2025년)
-          </p>
-          {[
-            {
-              icon: "🏠",
-              story: "직장인 A씨 (34세): 처음 5만원으로 50만원을 따서 시작. 6개월 뒤 집 담보 대출 1억 전액 탕진. 아내와 이혼, 현재 기초수급자.",
-            },
-            {
-              icon: "🌾",
-              story: "농부 B씨 (58세): 조상 대대로 내려온 논 3천평 판 돈 2억2천만원 전액 도박으로 날림. 자녀에게 알리지 못하고 극단적 선택 시도.",
-            },
-            {
-              icon: "👩‍🎓",
-              story: "대학원생 C씨 (26세): 학자금 대출, 부모님 퇴직금까지 전부 잃음. 총 피해 4,200만원. 현재 정신과 치료 중.",
-            },
-          ].map((item, i) => (
-            <div key={i} style={{
-              display: "flex", gap: 12, marginBottom: 16,
-              padding: "14px", background: "#150000", borderRadius: 12,
-            }}>
-              <span style={{ fontSize: 24, flexShrink: 0 }}>{item.icon}</span>
-              <p style={{ color: "#ccc", fontSize: 13, lineHeight: 1.7 }}>{item.story}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* 도박 사이트의 조작 수법 */}
-        <div style={{
-          background: "#0a0a0a", border: "1px solid #1a1a1a",
-          borderRadius: 18, padding: "24px", marginBottom: 20,
-        }}>
-          <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
-            🎭 불법 도박 사이트의 조작 수법
-          </p>
-          {[
-            "처음 1~3판은 의도적으로 이기게 해서 중독 유도 (이미 체험하셨습니다)",
-            "\"오늘의 행운\" \"VIP 전용 이벤트\" 등으로 심리적 압박",
-            "잃은 뒤 \"한 번만 더 하면 회복\" 이라는 착각 유도 (도박사 오류)",
-            "민감한 개인정보 수집 후 협박 수단으로 악용",
-            "환전 시 수수료·세금 명목으로 추가 입금 유도 후 잠적",
-            "24시간 고객센터를 통해 계속 게임하도록 심리 조종",
-          ].map((item, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-              <span style={{ color: "#ef4444", fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
-              <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6 }}>{item}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* 통계 */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginBottom: 20,
-        }}>
-          {[
-            { value: "200만명", label: "국내 도박 중독 추정", color: "#ef4444" },
-            { value: "5조원", label: "연간 불법 도박 피해", color: "#f97316" },
-            { value: "34%", label: "중독자 자살 충동 경험", color: "#eab308" },
-            { value: "1336", label: "도박 중독 상담 전화 (24h)", color: "#22c55e" },
-          ].map((s) => (
-            <div key={s.label} style={{
-              background: "#0a0a0a", border: "1px solid #181818",
-              borderRadius: 14, padding: "18px 16px", textAlign: "center",
-            }}>
-              <p style={{ fontSize: 28, fontWeight: 900, color: s.color, marginBottom: 4 }}>{s.value}</p>
-              <p style={{ color: "#555", fontSize: 12 }}>{s.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* 신고 전화 */}
-        <div style={{
-          background: "#0a1628", border: "1px solid #1e3a5f",
-          borderRadius: 16, padding: "20px", marginBottom: 24, textAlign: "center",
-        }}>
-          <p style={{ color: "#60a5fa", fontWeight: 700, fontSize: 15, marginBottom: 12 }}>
-            📞 즉시 도움받을 수 있는 곳
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+        <div style={{ background: "linear-gradient(135deg, #0a0000, #1a0808)", border: "2px solid #ef4444", borderRadius: 24, padding: "32px 28px", marginBottom: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <div style={{ fontSize: 56, marginBottom: 12 }}>🎰</div>
+            <h1 style={{ fontSize: 24, fontWeight: 900, color: "#ef4444", marginBottom: 8 }}>이것이 불법 도박의 실체입니다</h1>
+            <p style={{ color: "#6b7280", fontSize: 13 }}>교육용 시뮬레이션 체험 완료</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
             {[
-              { name: "한국도박문제예방치유원", number: "1336", sub: "24시간 무료 상담" },
-              { name: "경찰청 신고", number: "112", sub: "불법 사이트 신고" },
-              { name: "금융감독원", number: "1332", sub: "금융 피해 상담" },
-              { name: "자살예방상담전화", number: "1393", sub: "24시간 위기상담" },
-            ].map((r) => (
-              <a key={r.number} href={`tel:${r.number}`} style={{
-                background: "#0d1f3c", borderRadius: 12, padding: "12px",
-                textDecoration: "none", display: "block",
-              }}>
-                <p style={{ color: "#4b7ab5", fontSize: 10, marginBottom: 2 }}>{r.name}</p>
-                <p style={{ color: "#fff", fontWeight: 900, fontSize: 24 }}>{r.number}</p>
-                <p style={{ color: "#444", fontSize: 10 }}>{r.sub}</p>
-              </a>
+              { label: "총 게임 수", value: `${round}판`, color: "#f59e0b" },
+              { label: "가상 손실액", value: `₩${Math.abs(totalLost).toLocaleString()}`, color: "#ef4444" },
+              { label: "실제 불법도박 평균 최초 피해", value: "₩230만원", color: "#a855f7" },
+              { label: "도박 중독 회복까지", value: "평균 7.3년", color: "#3b82f6" },
+            ].map((s, i) => (
+              <div key={i} style={{ background: "#0f0f0f", borderRadius: 12, padding: "14px 16px", textAlign: "center" }}>
+                <p style={{ color: "#6b7280", fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+                <p style={{ color: s.color, fontWeight: 900, fontSize: 18 }}>{s.value}</p>
+              </div>
             ))}
           </div>
-        </div>
-
-        {/* 버튼 */}
-        <div style={{ display: "flex", gap: 12 }}>
-          <button
-            onClick={onRetry}
-            style={{
-              flex: 1, padding: "14px 0", borderRadius: 14, fontSize: 14,
-              background: "transparent", color: "#666",
-              border: "1px solid #2a2a2a", cursor: "pointer",
-            }}
-          >
-            다시 체험
-          </button>
-          <button
-            onClick={onHome}
-            style={{
-              flex: 2, padding: "14px 0", borderRadius: 14, fontSize: 15, fontWeight: 700,
-              background: "linear-gradient(135deg, #3b82f6, #6366f1)",
-              color: "#fff", border: "none", cursor: "pointer",
-            }}
-          >
-            🛡️ 범죄예방 센터로
-          </button>
+          <div style={{ background: "#0f0f0f", borderRadius: 14, padding: "18px 20px", marginBottom: 24 }}>
+            <p style={{ color: "#ef4444", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>🎯 지금 체험하신 수법</p>
+            {[
+              { step: "1단계", title: "처음엔 이기게 설계", desc: "초반 높은 승률로 '나는 운이 좋다'는 착각 유도. 이 것이 불법도박 사이트의 가장 교묘한 함정입니다." },
+              { step: "2단계", title: "점진적 승률 하락", desc: "판 수가 늘수록 수학적으로 반드시 잃게 설계. 10판 이후 승률은 8% 미만입니다." },
+              { step: "3단계", title: "손실 회복 심리 자극", desc: "잃을수록 '한 판만 더'라는 생각이 강해지게 만듦. 이것이 중독의 핵심 메커니즘입니다." },
+              { step: "4단계", title: "출금 불가 & 잠적", desc: "실제 사이트는 일정 이상 따면 '점검 중' 처리 후 잠적. 환전은 처음부터 불가능하도록 설계됩니다." },
+            ].map((s, i) => (
+              <div key={i} style={{ display: "flex", gap: 12, marginBottom: i < 3 ? 12 : 0 }}>
+                <div style={{ background: "#ef444422", border: "1px solid #ef444444", borderRadius: 6, padding: "2px 8px", height: "fit-content", flexShrink: 0 }}>
+                  <span style={{ color: "#ef4444", fontSize: 10, fontWeight: 700 }}>{s.step}</span>
+                </div>
+                <div>
+                  <p style={{ color: "#f4f4f5", fontWeight: 700, fontSize: 13, marginBottom: 3 }}>{s.title}</p>
+                  <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.6 }}>{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ background: "#052e16", border: "1px solid #16a34a44", borderRadius: 12, padding: "14px 16px", marginBottom: 20 }}>
+            <p style={{ color: "#22c55e", fontWeight: 700, fontSize: 13, marginBottom: 6 }}>🆘 도움이 필요하다면</p>
+            <p style={{ color: "#86efac", fontSize: 12, lineHeight: 1.8 }}>
+              한국도박문제예방치유원 <strong>1336</strong> (24시간, 무료)<br />
+              경찰청 불법도박 신고 <strong>112</strong><br />
+              불법 도박 이용 자체가 <strong>형사 처벌</strong> 대상입니다
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={onRetry} style={{ flex: 1, padding: "14px 0", borderRadius: 12, fontSize: 14, background: "#1a1a1a", color: "#888", border: "1px solid #2a2a2a", cursor: "pointer" }}>
+              다시 체험
+            </button>
+            <button onClick={onHome} style={{ flex: 2, padding: "14px 0", borderRadius: 12, fontSize: 14, fontWeight: 700, background: "linear-gradient(135deg, #22c55e, #16a34a)", color: "#fff", border: "none", cursor: "pointer" }}>
+              🏠 메인으로
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── 메인 게임 컴포넌트 ───────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 바카라 게임 ──────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function BaccaratGame({ balance, onResult, round }: { balance: number; onResult: (delta: number) => void; round: number }) {
+  const [bet, setBet] = useState<"player" | "banker" | "tie" | null>(null);
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet" | "deal" | "result">("bet");
+  const [playerCards, setPlayerCards] = useState<{ suit: string; rank: string; value: number }[]>([]);
+  const [bankerCards, setBankerCards] = useState<{ suit: string; rank: string; value: number }[]>([]);
+  const [winner, setWinner] = useState<"player" | "banker" | "tie" | null>(null);
+  const [dealIdx, setDealIdx] = useState(0);
 
-function GamblingGame() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const siteName = params.get("name") || "도박방지카지노";
+  const deal = useCallback(() => {
+    if (!bet || betAmount > balance || betAmount <= 0) return;
+    setPhase("deal");
+    setDealIdx(0);
+    setPlayerCards([]);
+    setBankerCards([]);
+    setWinner(null);
 
-  const [balance, setBalance] = useState(100000);
-  const [bet, setBet] = useState(10000);
-  const [reels, setReels] = useState<[string, string, string]>(["🎰", "🎰", "🎰"]);
-  const [spinning, setSpinning] = useState(false);
-  const [round, setRound] = useState(0);
-  const [lastWin, setLastWin] = useState<number | null>(null);
-  const [totalLost, setTotalLost] = useState(0);
-  const [totalWon, setTotalWon] = useState(0);
-  const [showDeposit, setShowDeposit] = useState(false);
-  const [depositInput, setDepositInput] = useState("");
-  const [showBlock, setShowBlock] = useState(false);
-  const [showReveal, setShowReveal] = useState(false);
-  const [messages, setMessages] = useState<string[]>([]);
-  const [spinFrames, setSpinFrames] = useState<[string, string, string]>(["🎰", "🎰", "🎰"]);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const shouldWin = Math.random() < getWinRate(round);
+    const pCards = [randCard(), randCard()];
+    const bCards = [randCard(), randCard()];
 
-  const startBalance = 100000;
+    // 결과 조작: 베팅한 쪽이 이기거나 지게
+    let pScore = baccaratScore(pCards);
+    let bScore = baccaratScore(bCards);
 
-  // 판 수에 따라 배팅 유도 메시지
-  useEffect(() => {
-    if (round === 0) return;
-    const msgs: Record<number, string> = {
-      1: "🎉 첫 스핀 보너스! 행운이 따릅니다!",
-      3: "🔥 오늘 핫한 날이에요! 배팅 높여보세요",
-      5: "😅 조금 아쉽네요. 이건 일시적입니다. 더 해보세요",
-      7: "💡 지금 집중하면 반드시 대박 납니다. 포기하지 마세요!",
-      9: "🏆 VIP 이벤트 발동! 다음 판 잭팟 확률 2배!",
-      11: "😰 잔액이 부족합니다. 충전하면 보너스 10% 드립니다!",
-    };
-    if (msgs[round]) setMessages((prev) => [...prev.slice(-4), msgs[round]]);
-  }, [round]);
-
-  const spin = useCallback(() => {
-    if (spinning || balance < bet) {
-      if (balance < bet) setShowDeposit(true);
-      return;
+    if (shouldWin) {
+      if (bet === "player" && pScore <= bScore) {
+        bCards[0] = { ...bCards[0], rank: "2" }; // 뱅커 점수 낮추기
+      } else if (bet === "banker" && bScore <= pScore) {
+        pCards[0] = { ...pCards[0], rank: "2" };
+      }
+    } else {
+      if (bet === "player" && pScore >= bScore) {
+        pCards[0] = { ...pCards[0], rank: "3" };
+      } else if (bet === "banker" && bScore >= pScore) {
+        bCards[0] = { ...bCards[0], rank: "3" };
+      }
     }
 
-    setSpinning(true);
-    setLastWin(null);
-    const newRound = round + 1;
-    setRound(newRound);
-    setBalance((b) => b - bet);
+    pScore = baccaratScore(pCards);
+    bScore = baccaratScore(bCards);
+    const w: "player" | "banker" | "tie" = pScore > bScore ? "player" : bScore > pScore ? "banker" : "tie";
 
-    // 애니메이션: 0.8초 동안 랜덤 심볼 교체
-    let frames = 0;
-    intervalRef.current = setInterval(() => {
-      frames++;
-      setSpinFrames([
-        SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-        SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-        SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-      ]);
-      if (frames >= 12) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-        const result = getResult(newRound);
-        setReels(result);
-        setSpinFrames(result);
-        const win = getWinAmount(result, bet);
-        if (win > 0) {
-          setBalance((b) => b + win);
-          setTotalWon((t) => t + win);
-          setLastWin(win);
-        } else {
-          setTotalLost((t) => t + bet);
+    // 카드 한 장씩 공개 애니메이션
+    const allCards: { target: "p" | "b"; card: typeof pCards[0] }[] = [
+      { target: "p", card: pCards[0] },
+      { target: "b", card: bCards[0] },
+      { target: "p", card: pCards[1] },
+      { target: "b", card: bCards[1] },
+    ];
+
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (idx >= allCards.length) {
+        clearInterval(interval);
+        setWinner(w);
+        setPhase("result");
+        let delta = -betAmount;
+        if (w === bet) {
+          delta = bet === "tie" ? betAmount * 8 : Math.floor(betAmount * (bet === "banker" ? 0.95 : 1));
         }
-        setSpinning(false);
+        onResult(delta);
+        return;
       }
-    }, 70);
-  }, [spinning, balance, bet, round]);
+      const { target, card } = allCards[idx];
+      if (target === "p") setPlayerCards(prev => [...prev, card]);
+      else setBankerCards(prev => [...prev, card]);
+      idx++;
+      setDealIdx(idx);
+    }, 400);
+  }, [bet, betAmount, balance, round, onResult]);
 
-  const handleDeposit = () => {
-    if (!depositInput.trim()) return;
-    setShowBlock(true);
+  const reset = () => {
+    setPhase("bet");
+    setBet(null);
+    setPlayerCards([]);
+    setBankerCards([]);
+    setWinner(null);
+    setDealIdx(0);
   };
 
-  const resetGame = () => {
-    setBalance(100000);
-    setBet(10000);
-    setReels(["🎰", "🎰", "🎰"]);
-    setRound(0);
-    setLastWin(null);
-    setTotalLost(0);
-    setTotalWon(0);
-    setShowDeposit(false);
-    setShowBlock(false);
-    setShowReveal(false);
-    setMessages([]);
-  };
+  const CardEl = ({ card, hidden }: { card?: { suit: string; rank: string }; hidden?: boolean }) => (
+    <div style={{
+      width: 52, height: 76, borderRadius: 8,
+      background: hidden ? "#1a1a2e" : "#fff",
+      border: "2px solid #333",
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      boxShadow: "0 2px 8px #00000060",
+      transition: "all 0.3s",
+    }}>
+      {hidden ? (
+        <span style={{ fontSize: 22, opacity: 0.3 }}>🂠</span>
+      ) : card ? (
+        <>
+          <span style={{ fontSize: 13, fontWeight: 900, color: ["♥", "♦"].includes(card.suit) ? "#ef4444" : "#1a1a1a", lineHeight: 1 }}>{card.rank}</span>
+          <span style={{ fontSize: 16, color: ["♥", "♦"].includes(card.suit) ? "#ef4444" : "#1a1a1a" }}>{card.suit}</span>
+        </>
+      ) : null}
+    </div>
+  );
 
-  const netLoss = startBalance - balance + totalWon - totalWon; // simplified: totalLost - lastWin
-  const displayLoss = totalLost;
-
-  const isLowBalance = balance < 30000;
+  const BET_AMOUNTS = [5000, 10000, 30000, 50000, 100000];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0000", color: "#fff", position: "relative", overflow: "hidden" }}>
-      <SimWatermarkGame />
+    <div>
+      {/* 배팅 선택 */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 16 }}>
+        {(["player", "banker", "tie"] as const).map(side => (
+          <button key={side} onClick={() => phase === "bet" && setBet(side)} style={{
+            padding: "14px 0", borderRadius: 10, border: "2px solid",
+            borderColor: bet === side ? (side === "player" ? "#3b82f6" : side === "banker" ? "#ef4444" : "#f59e0b") : "#2a2a2a",
+            background: bet === side ? (side === "player" ? "#1e3a5f" : side === "banker" ? "#3b0a0a" : "#3b2a00") : "#111",
+            color: bet === side ? "#fff" : "#555",
+            fontWeight: 700, fontSize: 13, cursor: phase === "bet" ? "pointer" : "default",
+            transition: "all 0.2s",
+          }}>
+            {side === "player" ? "플레이어" : side === "banker" ? "뱅커" : "타이"}
+            <div style={{ fontSize: 10, marginTop: 2, color: bet === side ? "#aaa" : "#333" }}>
+              {side === "player" ? "1배" : side === "banker" ? "0.95배" : "8배"}
+            </div>
+          </button>
+        ))}
+      </div>
 
-      {showBlock && (
-        <BlockOverlay
-          onClose={() => { setShowBlock(false); setShowDeposit(false); }}
-          onReveal={() => setShowReveal(true)}
+      {/* 배팅 금액 */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+        {BET_AMOUNTS.map(a => (
+          <button key={a} onClick={() => phase === "bet" && setBetAmount(a)} style={{
+            padding: "6px 12px", borderRadius: 20, border: "1px solid",
+            borderColor: betAmount === a ? "#f59e0b" : "#2a2a2a",
+            background: betAmount === a ? "#3b2a00" : "#111",
+            color: betAmount === a ? "#f59e0b" : "#555",
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>
+            ₩{a.toLocaleString()}
+          </button>
+        ))}
+      </div>
+
+      {/* 카드 테이블 */}
+      <div style={{ background: "#0a1a0a", borderRadius: 16, padding: "20px 16px", marginBottom: 16, border: "1px solid #1a3a1a", position: "relative" }}>
+        {/* 초록 펠트 패턴 */}
+        <div style={{ position: "absolute", inset: 0, borderRadius: 16, backgroundImage: "radial-gradient(#1a4a1a 1px, transparent 1px)", backgroundSize: "12px 12px", opacity: 0.3, pointerEvents: "none" }} />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, position: "relative", zIndex: 1 }}>
+          {[
+            { label: "플레이어", cards: playerCards, score: baccaratScore(playerCards), isWinner: winner === "player", color: "#3b82f6" },
+            { label: "뱅커", cards: bankerCards, score: baccaratScore(bankerCards), isWinner: winner === "banker", color: "#ef4444" },
+          ].map((side, si) => (
+            <div key={si} style={{ textAlign: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 10 }}>
+                <span style={{ color: side.color, fontWeight: 700, fontSize: 13 }}>{side.label}</span>
+                {side.isWinner && <span style={{ background: side.color, color: "#fff", fontSize: 9, fontWeight: 900, padding: "1px 6px", borderRadius: 10 }}>WIN</span>}
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+                {[0, 1].map(i => (
+                  <CardEl key={i} card={side.cards[i]} hidden={phase === "bet"} />
+                ))}
+              </div>
+              {phase !== "bet" && (
+                <div style={{ background: "#00000044", borderRadius: 8, display: "inline-block", padding: "4px 16px" }}>
+                  <span style={{ color: "#fff", fontWeight: 900, fontSize: 20 }}>{side.cards.length > 0 ? side.score : "-"}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        {winner === "tie" && phase === "result" && (
+          <div style={{ textAlign: "center", marginTop: 10, color: "#f59e0b", fontWeight: 900, fontSize: 14 }}>🤝 타이!</div>
+        )}
+      </div>
+
+      {/* 버튼 */}
+      {phase === "bet" && (
+        <button onClick={deal} disabled={!bet || betAmount > balance} style={{
+          width: "100%", padding: "15px 0", borderRadius: 12, fontSize: 15, fontWeight: 900,
+          background: bet && betAmount <= balance ? "linear-gradient(135deg, #ef4444, #dc2626)" : "#1a1a1a",
+          color: bet && betAmount <= balance ? "#fff" : "#444",
+          border: "none", cursor: bet ? "pointer" : "default", transition: "all 0.2s",
+        }}>
+          {!bet ? "베팅할 곳을 선택하세요" : `₩${betAmount.toLocaleString()} 베팅`}
+        </button>
+      )}
+      {phase === "deal" && (
+        <div style={{ textAlign: "center", padding: "14px 0", color: "#f59e0b", fontWeight: 700 }}>카드 배분 중...</div>
+      )}
+      {phase === "result" && (
+        <div style={{ display: "flex", gap: 10 }}>
+          <div style={{
+            flex: 1, textAlign: "center", padding: "14px 0", borderRadius: 12,
+            background: winner === bet ? "#052e16" : "#1a0808",
+            border: `1px solid ${winner === bet ? "#16a34a" : "#dc2626"}`,
+          }}>
+            <span style={{ color: winner === bet ? "#22c55e" : "#ef4444", fontWeight: 900, fontSize: 15 }}>
+              {winner === bet ? `+₩${(bet === "tie" ? betAmount * 8 : Math.floor(betAmount * (bet === "banker" ? 0.95 : 1))).toLocaleString()}` : `-₩${betAmount.toLocaleString()}`}
+            </span>
+          </div>
+          <button onClick={reset} style={{
+            flex: 1, padding: "14px 0", borderRadius: 12, fontSize: 14, fontWeight: 700,
+            background: "linear-gradient(135deg, #ef4444, #dc2626)", color: "#fff", border: "none", cursor: "pointer",
+          }}>
+            다시 배팅
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 달팽이 경주 ──────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function SnailGame({ balance, onResult, round }: { balance: number; onResult: (delta: number) => void; round: number }) {
+  const [pick, setPick] = useState<number | null>(null);
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet" | "racing" | "result">("bet");
+  const [positions, setPositions] = useState<number[]>([0, 0, 0, 0, 0, 0]);
+  const [winner, setWinner] = useState<number | null>(null);
+  const animRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startRace = useCallback(() => {
+    if (pick === null || betAmount > balance) return;
+    setPhase("racing");
+    setPositions([0, 0, 0, 0, 0, 0]);
+    setWinner(null);
+
+    const shouldWin = Math.random() < getWinRate(round);
+    const winnerIdx = shouldWin ? pick : (() => {
+      let w = Math.floor(Math.random() * 6);
+      while (w === pick) w = Math.floor(Math.random() * 6);
+      return w;
+    })();
+
+    const pos = [0, 0, 0, 0, 0, 0];
+    const FINISH = 100;
+
+    animRef.current = setInterval(() => {
+      for (let i = 0; i < 6; i++) {
+        if (pos[i] < FINISH) {
+          const boost = i === winnerIdx ? 3.5 : 2.8;
+          pos[i] = Math.min(FINISH, pos[i] + boost + Math.random() * 1.5);
+        }
+      }
+      setPositions([...pos]);
+
+      if (pos[winnerIdx] >= FINISH) {
+        clearInterval(animRef.current!);
+        setWinner(winnerIdx);
+        setPhase("result");
+        const delta = winnerIdx === pick ? Math.floor(betAmount * 5) : -betAmount;
+        onResult(delta);
+      }
+    }, 80);
+  }, [pick, betAmount, balance, round, onResult]);
+
+  useEffect(() => () => { if (animRef.current) clearInterval(animRef.current); }, []);
+
+  const reset = () => { setPhase("bet"); setPick(null); setPositions([0, 0, 0, 0, 0, 0]); setWinner(null); };
+  const BET_AMOUNTS = [5000, 10000, 30000, 50000];
+
+  return (
+    <div>
+      {/* 달팽이 선택 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 14 }}>
+        {SNAIL_NAMES.map((name, i) => (
+          <button key={i} onClick={() => phase === "bet" && setPick(i)} style={{
+            padding: "10px 0", borderRadius: 10, border: "2px solid",
+            borderColor: pick === i ? SNAIL_COLORS[i] : "#2a2a2a",
+            background: pick === i ? `${SNAIL_COLORS[i]}22` : "#111",
+            color: pick === i ? SNAIL_COLORS[i] : "#555",
+            fontWeight: 700, fontSize: 12, cursor: "pointer",
+          }}>
+            {name.split(" ")[0]} <span style={{ color: SNAIL_COLORS[i] }}>#{i + 1}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* 배팅 금액 */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+        {BET_AMOUNTS.map(a => (
+          <button key={a} onClick={() => phase === "bet" && setBetAmount(a)} style={{
+            padding: "6px 12px", borderRadius: 20, border: "1px solid",
+            borderColor: betAmount === a ? "#f59e0b" : "#2a2a2a",
+            background: betAmount === a ? "#3b2a00" : "#111",
+            color: betAmount === a ? "#f59e0b" : "#555",
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>
+            ₩{a.toLocaleString()}
+          </button>
+        ))}
+        <span style={{ color: "#555", fontSize: 11, padding: "6px 4px" }}>당첨 5배</span>
+      </div>
+
+      {/* 레이스 트랙 */}
+      <div style={{ background: "#0f1f0f", borderRadius: 14, padding: "14px 12px", marginBottom: 14, border: "1px solid #1a3a1a" }}>
+        {SNAIL_NAMES.map((name, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 5 ? 8 : 0 }}>
+            <span style={{ color: SNAIL_COLORS[i], fontSize: 11, fontWeight: 700, width: 28, textAlign: "right", flexShrink: 0 }}>#{i + 1}</span>
+            <div style={{ flex: 1, height: 20, background: "#0a150a", borderRadius: 10, position: "relative", overflow: "hidden" }}>
+              {/* 결승선 */}
+              <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 2, background: "#ef4444" }} />
+              {/* 달팽이 */}
+              <div style={{
+                position: "absolute", top: "50%", transform: "translateY(-50%)",
+                left: `${Math.min(95, positions[i])}%`,
+                fontSize: 14, transition: "left 0.08s linear",
+                filter: winner === i ? "drop-shadow(0 0 6px #fff)" : "none",
+              }}>
+                🐌
+              </div>
+            </div>
+            {winner === i && <span style={{ color: "#f59e0b", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>1등!</span>}
+            {phase === "result" && winner !== i && pick === i && <span style={{ color: "#ef4444", fontSize: 10, flexShrink: 0 }}>탈락</span>}
+          </div>
+        ))}
+      </div>
+
+      {/* 버튼 */}
+      {phase === "bet" && (
+        <button onClick={startRace} disabled={pick === null || betAmount > balance} style={{
+          width: "100%", padding: "14px 0", borderRadius: 12, fontSize: 15, fontWeight: 900,
+          background: pick !== null && betAmount <= balance ? "linear-gradient(135deg, #22c55e, #16a34a)" : "#1a1a1a",
+          color: pick !== null ? "#fff" : "#444", border: "none", cursor: pick !== null ? "pointer" : "default",
+        }}>
+          {pick === null ? "달팽이를 선택하세요" : `${SNAIL_NAMES[pick]} 에 ₩${betAmount.toLocaleString()} 베팅!`}
+        </button>
+      )}
+      {phase === "racing" && (
+        <div style={{ textAlign: "center", padding: "14px 0", color: "#22c55e", fontWeight: 700, animation: "pulse 0.5s infinite" }}>🏁 경주 중...</div>
+      )}
+      {phase === "result" && (
+        <div style={{ display: "flex", gap: 10 }}>
+          <div style={{
+            flex: 1, textAlign: "center", padding: "13px 0", borderRadius: 12,
+            background: winner === pick ? "#052e16" : "#1a0808",
+            border: `1px solid ${winner === pick ? "#16a34a" : "#dc2626"}`,
+          }}>
+            <span style={{ color: winner === pick ? "#22c55e" : "#ef4444", fontWeight: 900 }}>
+              {winner === pick ? `+₩${(betAmount * 5).toLocaleString()}` : `-₩${betAmount.toLocaleString()}`}
+            </span>
+          </div>
+          <button onClick={reset} style={{
+            flex: 1, padding: "13px 0", borderRadius: 12, fontSize: 13, fontWeight: 700,
+            background: "linear-gradient(135deg, #22c55e, #16a34a)", color: "#fff", border: "none", cursor: "pointer",
+          }}>
+            다시 하기
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 사다리 게임 ──────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function LadderGame({ balance, onResult, round }: { balance: number; onResult: (delta: number) => void; round: number }) {
+  const [pick, setPick] = useState<number | null>(null);
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet" | "climbing" | "result">("bet");
+  const [pathStep, setPathStep] = useState(0);
+  const [result, setResult] = useState<number | null>(null);
+  const [ladderMap, setLadderMap] = useState<boolean[][]>([]);
+  const COLS = 4;
+  const ROWS = 6;
+
+  const generateLadder = useCallback((forcedWin: boolean, startCol: number): { grid: boolean[][]; outcome: number } => {
+    const grid: boolean[][] = Array.from({ length: ROWS }, () => Array(COLS - 1).fill(false));
+    // 각 행에 랜덤 가로줄 생성 (겹치지 않게)
+    for (let r = 0; r < ROWS; r++) {
+      const cols = Array.from({ length: COLS - 1 }, (_, i) => i).sort(() => Math.random() - 0.5);
+      let placed = 0;
+      for (const c of cols) {
+        if (placed >= 2) break;
+        if (c === 0 || !grid[r][c - 1]) {
+          grid[r][c] = true;
+          placed++;
+        }
+      }
+    }
+    // 실제 경로 계산
+    let pos = startCol;
+    for (let r = 0; r < ROWS; r++) {
+      if (pos > 0 && grid[r][pos - 1]) pos--;
+      else if (pos < COLS - 1 && grid[r][pos]) pos++;
+    }
+    const outcomes = [0, 1, 2, 3];
+    if (forcedWin && pos !== startCol) {
+      // 강제 교환
+      outcomes[pos] = startCol;
+      outcomes[startCol] = pos;
+    }
+    return { grid, outcome: forcedWin ? startCol : pos };
+  }, []);
+
+  const start = useCallback(() => {
+    if (pick === null || betAmount > balance) return;
+    setPhase("climbing");
+    setPathStep(0);
+    const shouldWin = Math.random() < getWinRate(round);
+    const { grid, outcome } = generateLadder(shouldWin, pick);
+    setLadderMap(grid);
+
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      setPathStep(step);
+      if (step >= ROWS + 1) {
+        clearInterval(interval);
+        setResult(outcome);
+        setPhase("result");
+        const delta = outcome === pick ? Math.floor(betAmount * 3.5) : -betAmount;
+        onResult(delta);
+      }
+    }, 350);
+  }, [pick, betAmount, balance, round, generateLadder, onResult]);
+
+  const reset = () => { setPhase("bet"); setPick(null); setResult(null); setPathStep(0); setLadderMap([]); };
+  const BET_AMOUNTS = [5000, 10000, 30000, 50000];
+  const LABELS = ["①", "②", "③", "④"];
+
+  return (
+    <div>
+      {/* 출발 선택 */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 14 }}>
+        {LABELS.map((label, i) => (
+          <button key={i} onClick={() => phase === "bet" && setPick(i)} style={{
+            padding: "12px 0", borderRadius: 10, border: "2px solid",
+            borderColor: pick === i ? "#a855f7" : "#2a2a2a",
+            background: pick === i ? "#2e1a4a" : "#111",
+            color: pick === i ? "#d8b4fe" : "#555",
+            fontWeight: 900, fontSize: 16, cursor: "pointer",
+          }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* 배팅 금액 */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+        {BET_AMOUNTS.map(a => (
+          <button key={a} onClick={() => phase === "bet" && setBetAmount(a)} style={{
+            padding: "6px 12px", borderRadius: 20, border: "1px solid",
+            borderColor: betAmount === a ? "#f59e0b" : "#2a2a2a",
+            background: betAmount === a ? "#3b2a00" : "#111",
+            color: betAmount === a ? "#f59e0b" : "#555",
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>₩{a.toLocaleString()}</button>
+        ))}
+        <span style={{ color: "#555", fontSize: 11, padding: "6px 4px" }}>당첨 3.5배</span>
+      </div>
+
+      {/* 사다리 */}
+      <div style={{ background: "#0f0f1f", borderRadius: 14, padding: "16px 12px", marginBottom: 14, border: "1px solid #1a1a3a" }}>
+        {/* 출발 라벨 */}
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${COLS}, 1fr)`, marginBottom: 8 }}>
+          {LABELS.map((l, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{
+                display: "inline-block", width: 28, height: 28, borderRadius: "50%",
+                background: pick === i ? "#a855f7" : "#1a1a2e",
+                border: `2px solid ${pick === i ? "#a855f7" : "#2a2a3a"}`,
+                lineHeight: "26px", fontSize: 12, fontWeight: 900,
+                color: pick === i ? "#fff" : "#555",
+              }}>{l}</div>
+            </div>
+          ))}
+        </div>
+        {/* 사다리 격자 */}
+        <div style={{ position: "relative", height: ROWS * 28 }}>
+          {/* 세로선 */}
+          {Array.from({ length: COLS }, (_, i) => (
+            <div key={i} style={{
+              position: "absolute",
+              left: `${(i / (COLS - 1)) * 100}%`,
+              top: 0, bottom: 0, width: 2,
+              background: "#2a2a4a",
+              transform: "translateX(-50%)",
+            }} />
+          ))}
+          {/* 가로선 */}
+          {ladderMap.map((row, r) => row.map((has, c) => has ? (
+            <div key={`${r}-${c}`} style={{
+              position: "absolute",
+              left: `${(c / (COLS - 1)) * 100}%`,
+              top: r * 28 + 12,
+              width: `${(1 / (COLS - 1)) * 100}%`,
+              height: 2,
+              background: "#3b3b6a",
+            }} />
+          ) : null))}
+          {/* 진행 표시 */}
+          {phase !== "bet" && pick !== null && (
+            <div style={{
+              position: "absolute",
+              left: `${(pick / (COLS - 1)) * 100}%`,
+              top: Math.min(pathStep * 28, ROWS * 28) - 8,
+              width: 16, height: 16, borderRadius: "50%",
+              background: "#a855f7",
+              boxShadow: "0 0 10px #a855f7",
+              transform: "translateX(-50%)",
+              transition: "top 0.3s",
+              zIndex: 10,
+            }} />
+          )}
+        </div>
+        {/* 결과 라벨 */}
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${COLS}, 1fr)`, marginTop: 8 }}>
+          {LABELS.map((l, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{
+                display: "inline-block", width: 28, height: 28, borderRadius: "50%",
+                background: phase === "result" && result === i ? (result === pick ? "#052e16" : "#1a0808") : "#1a1a2e",
+                border: `2px solid ${phase === "result" && result === i ? (result === pick ? "#16a34a" : "#dc2626") : "#2a2a3a"}`,
+                lineHeight: "26px", fontSize: 12, fontWeight: 900,
+                color: phase === "result" && result === i ? (result === pick ? "#22c55e" : "#ef4444") : "#555",
+              }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 버튼 */}
+      {phase === "bet" && (
+        <button onClick={start} disabled={pick === null || betAmount > balance} style={{
+          width: "100%", padding: "14px 0", borderRadius: 12, fontSize: 15, fontWeight: 900,
+          background: pick !== null && betAmount <= balance ? "linear-gradient(135deg, #a855f7, #7c3aed)" : "#1a1a1a",
+          color: pick !== null ? "#fff" : "#444", border: "none", cursor: pick !== null ? "pointer" : "default",
+        }}>
+          {pick === null ? "출발 번호를 선택하세요" : `${LABELS[pick]}번에서 출발 — ₩${betAmount.toLocaleString()} 베팅`}
+        </button>
+      )}
+      {phase === "climbing" && (
+        <div style={{ textAlign: "center", padding: "14px 0", color: "#a855f7", fontWeight: 700 }}>🪜 올라가는 중...</div>
+      )}
+      {phase === "result" && (
+        <div style={{ display: "flex", gap: 10 }}>
+          <div style={{
+            flex: 1, textAlign: "center", padding: "13px 0", borderRadius: 12,
+            background: result === pick ? "#052e16" : "#1a0808",
+            border: `1px solid ${result === pick ? "#16a34a" : "#dc2626"}`,
+          }}>
+            <span style={{ color: result === pick ? "#22c55e" : "#ef4444", fontWeight: 900 }}>
+              {result === pick ? `+₩${Math.floor(betAmount * 3.5).toLocaleString()}` : `-₩${betAmount.toLocaleString()}`}
+            </span>
+          </div>
+          <button onClick={reset} style={{
+            flex: 1, padding: "13px 0", borderRadius: 12, fontSize: 13, fontWeight: 700,
+            background: "linear-gradient(135deg, #a855f7, #7c3aed)", color: "#fff", border: "none", cursor: "pointer",
+          }}>
+            다시 하기
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 메인 게임 페이지 ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function PlayContent() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const siteName = params.get("name") ?? "히어로 카지노";
+
+  const INITIAL_BALANCE = 100000;
+  const [balance, setBalance] = useState(INITIAL_BALANCE);
+  const [round, setRound] = useState(0);
+  const [totalDelta, setTotalDelta] = useState(0);
+  const [activeGame, setActiveGame] = useState<"baccarat" | "snail" | "ladder">("baccarat");
+  const [history, setHistory] = useState<{ game: string; delta: number; bal: number }[]>([]);
+  const [showWarning, setShowWarning] = useState(false);
+  const [showReveal, setShowReveal] = useState(false);
+  const [warningDismissed, setWarningDismissed] = useState(false);
+
+  const handleResult = useCallback((delta: number) => {
+    setRound(r => r + 1);
+    setBalance(b => {
+      const nb = Math.max(0, b + delta);
+      setHistory(h => [{ game: activeGame, delta, bal: nb }, ...h].slice(0, 20));
+      return nb;
+    });
+    setTotalDelta(t => t + delta);
+    if (!warningDismissed && totalDelta + delta < -30000) {
+      setTimeout(() => setShowWarning(true), 600);
+    }
+  }, [activeGame, totalDelta, warningDismissed]);
+
+  const handleRetry = () => {
+    setBalance(INITIAL_BALANCE);
+    setRound(0);
+    setTotalDelta(0);
+    setHistory([]);
+    setShowReveal(false);
+    setShowWarning(false);
+    setWarningDismissed(false);
+  };
+
+  const TABS = [
+    { id: "baccarat" as const, label: "바카라", icon: "🃏", color: "#ef4444" },
+    { id: "snail" as const, label: "달팽이", icon: "🐌", color: "#22c55e" },
+    { id: "ladder" as const, label: "사다리", icon: "🪜", color: "#a855f7" },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#0a0a0a", color: "#fff", position: "relative" }}>
+      <Watermark />
+
+      {showWarning && !showReveal && (
+        <AddictionWarning
+          lost={Math.abs(Math.min(0, totalDelta))}
+          onContinue={() => { setShowWarning(false); setWarningDismissed(true); }}
+          onReveal={() => { setShowWarning(false); setShowReveal(true); }}
         />
       )}
-
       {showReveal && (
-        <RevealOverlay
-          totalLost={displayLoss}
+        <RevealScreen
+          totalLost={totalDelta}
           round={round}
-          onRetry={resetGame}
+          onRetry={handleRetry}
           onHome={() => router.push("/")}
         />
       )}
 
-      {/* 헤더 */}
+      {/* ── 시뮬레이션 안내 배지 (항상 상단 고정) ── */}
       <div style={{
-        background: "linear-gradient(90deg, #1a0000, #0a0000)",
-        borderBottom: "2px solid #dc262640",
-        padding: "10px 20px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        position: "relative", zIndex: 10,
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        background: "#052e16", borderBottom: "2px solid #16a34a",
+        padding: "6px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <div>
-          <div style={{ fontSize: 16, fontWeight: 900, color: "#ffd700" }}>🎰 {siteName}</div>
-          {/* 숨겨진 힌트 #7 */}
-          <div style={{ fontSize: 8, color: "#22c55e30", fontWeight: 700 }}>
-            도박방지 교육 시뮬레이션
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          <div style={{
-            padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700,
-            background: isLowBalance ? "#dc262620" : "#1a2a0a",
-            color: isLowBalance ? "#ef4444" : "#22c55e",
-            border: `1px solid ${isLowBalance ? "#dc262640" : "#22c55e30"}`,
-          }}>
-            💰 {balance.toLocaleString()}원
-          </div>
-          <button
-            onClick={() => router.push("/gambling")}
-            style={{
-              padding: "6px 12px", borderRadius: 8, fontSize: 11,
-              background: "transparent", color: "#666",
-              border: "1px solid #2a2a2a", cursor: "pointer",
-            }}
-          >
-            ← 목록
-          </button>
-        </div>
+        <span style={{ color: "#22c55e", fontSize: 11, fontWeight: 700 }}>
+          🎓 교육용 시뮬레이션 — 실제 불법도박 사이트가 아닙니다. 실제 돈이 오가지 않습니다.
+        </span>
+        <button onClick={() => setShowReveal(true)} style={{ background: "none", border: "none", color: "#86efac", fontSize: 11, cursor: "pointer", textDecoration: "underline" }}>
+          수법 보기
+        </button>
       </div>
 
-      {/* 메인 영역 */}
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 20px", display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, position: "relative", zIndex: 10 }}>
-
-        {/* 슬롯 머신 */}
-        <div>
-          {/* 사기 메시지 배너 */}
-          {messages.length > 0 && (
-            <div style={{
-              background: "#1a0000", border: "1px solid #dc262640",
-              borderRadius: 12, padding: "10px 14px", marginBottom: 16,
-            }}>
-              <p style={{ color: "#fbbf24", fontSize: 13, fontWeight: 600 }}>
-                {messages[messages.length - 1]}
-              </p>
-              {/* 숨겨진 힌트 #8: 메시지 옆 작은 글씨 */}
-              <p style={{ color: "#22c55e15", fontSize: 8 }}>※ 도박 중독 유도 수법입니다</p>
-            </div>
-          )}
-
-          {/* 슬롯 디스플레이 */}
-          <div style={{
-            background: "linear-gradient(180deg, #1a0000, #000)",
-            border: "2px solid #dc2626",
-            borderRadius: 20, padding: "32px 24px",
-            boxShadow: "0 0 40px #dc262620, inset 0 0 30px #00000080",
-            marginBottom: 20,
-          }}>
-            {/* 당첨 표시 */}
-            {lastWin !== null && lastWin > 0 && (
-              <div style={{
-                textAlign: "center", marginBottom: 16,
-                animation: "pulse 0.5s ease-in-out",
-              }}>
-                <div style={{ color: "#ffd700", fontSize: 20, fontWeight: 900 }}>
-                  🎉 +{lastWin.toLocaleString()}원 당첨!
-                </div>
-              </div>
-            )}
-            {lastWin === 0 && round > 0 && !spinning && (
-              <div style={{ textAlign: "center", marginBottom: 16 }}>
-                <div style={{ color: "#dc2626", fontSize: 16 }}>💸 -{bet.toLocaleString()}원 손실</div>
-              </div>
-            )}
-
-            {/* 릴 3개 */}
-            <div style={{
-              display: "flex", justifyContent: "center", gap: 12, marginBottom: 28,
-            }}>
-              {(spinning ? spinFrames : reels).map((sym, i) => (
-                <div key={i} style={{
-                  width: 90, height: 90, borderRadius: 14,
-                  background: "#0a0000", border: "2px solid #dc262660",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 44,
-                  boxShadow: spinning ? "0 0 20px #dc262640" : lastWin && lastWin > 0 ? "0 0 20px #ffd70080" : "none",
-                  transition: "box-shadow 0.3s",
+      <div style={{ paddingTop: 36 }}>
+        {/* ── 사이트 헤더 ── */}
+        <div style={{ background: "#0d0d0d", borderBottom: "1px solid #1a1a1a" }}>
+          <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 16px" }}>
+            {/* 로고 + 잔액 */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  background: "linear-gradient(135deg, #ef4444, #991b1b)",
+                  borderRadius: 8, padding: "6px 12px",
                 }}>
-                  {sym}
+                  <span style={{ color: "#fff", fontWeight: 900, fontSize: 16, letterSpacing: -0.5 }}>{siteName.split("카지노")[0] || "히어로"}</span>
                 </div>
-              ))}
+                <span style={{ color: "#ef4444", fontSize: 11, fontWeight: 700, border: "1px solid #ef444444", borderRadius: 20, padding: "2px 8px" }}>CASINO</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                {/* 잔액 */}
+                <div style={{ textAlign: "right" }}>
+                  <p style={{ color: "#6b7280", fontSize: 10 }}>보유 머니 (가상)</p>
+                  <p style={{ color: balance > INITIAL_BALANCE * 0.5 ? "#f59e0b" : "#ef4444", fontWeight: 900, fontSize: 18 }}>
+                    ₩{balance.toLocaleString()}
+                  </p>
+                </div>
+                {/* 손익 */}
+                <div style={{ textAlign: "right" }}>
+                  <p style={{ color: "#6b7280", fontSize: 10 }}>총 손익</p>
+                  <p style={{ color: totalDelta >= 0 ? "#22c55e" : "#ef4444", fontWeight: 900, fontSize: 14 }}>
+                    {totalDelta >= 0 ? "+" : ""}₩{totalDelta.toLocaleString()}
+                  </p>
+                </div>
+                <button onClick={() => router.push("/gambling")} style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 8, padding: "6px 12px", color: "#888", fontSize: 11, cursor: "pointer" }}>
+                  나가기
+                </button>
+              </div>
             </div>
-
-            {/* 배팅 컨트롤 */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 16, justifyContent: "center", flexWrap: "wrap" }}>
-              {[5000, 10000, 30000, 50000].map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => setBet(amount)}
-                  style={{
-                    padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700,
-                    background: bet === amount ? "#dc2626" : "#1a1a1a",
-                    color: "#fff", border: `1px solid ${bet === amount ? "#dc2626" : "#2a2a2a"}`,
-                    cursor: "pointer",
-                  }}
-                >
-                  {(amount / 10000).toLocaleString()}만원
+            {/* 네비 탭 */}
+            <div style={{ display: "flex", gap: 0, borderTop: "1px solid #1a1a1a" }}>
+              {TABS.map(tab => (
+                <button key={tab.id} onClick={() => setActiveGame(tab.id)} style={{
+                  padding: "10px 20px", background: "none", border: "none",
+                  borderBottom: activeGame === tab.id ? `2px solid ${tab.color}` : "2px solid transparent",
+                  color: activeGame === tab.id ? tab.color : "#555",
+                  fontWeight: 700, fontSize: 13, cursor: "pointer", transition: "all 0.2s",
+                  display: "flex", alignItems: "center", gap: 6,
+                }}>
+                  {tab.icon} {tab.label}
+                  {activeGame === tab.id && <span style={{ background: `${tab.color}22`, border: `1px solid ${tab.color}55`, borderRadius: 20, padding: "0px 6px", fontSize: 9, color: tab.color }}>진행중</span>}
                 </button>
               ))}
-            </div>
-
-            {/* 스핀 버튼 */}
-            <button
-              onClick={spin}
-              disabled={spinning}
-              style={{
-                width: "100%", padding: "18px 0", borderRadius: 14, fontSize: 18, fontWeight: 900,
-                background: spinning ? "#2a2a2a" : "linear-gradient(135deg, #dc2626, #ef4444)",
-                color: "#fff", border: "none", cursor: spinning ? "default" : "pointer",
-                boxShadow: spinning ? "none" : "0 4px 20px #dc262640",
-                letterSpacing: 2, transition: "all 0.15s",
-              }}
-            >
-              {spinning ? "⟳ 스핀 중..." : "🎰 SPIN"}
-            </button>
-          </div>
-
-          {/* 내 현황 */}
-          <div style={{
-            background: "#0a0a0a", border: "1px solid #1a1a1a",
-            borderRadius: 14, padding: "16px 18px",
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12,
-          }}>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ color: "#555", fontSize: 10, marginBottom: 4 }}>총 판수</p>
-              <p style={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>{round}</p>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ color: "#555", fontSize: 10, marginBottom: 4 }}>총 손실</p>
-              <p style={{ color: "#ef4444", fontWeight: 800, fontSize: 18 }}>-{displayLoss.toLocaleString()}</p>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ color: "#555", fontSize: 10, marginBottom: 4 }}>총 당첨</p>
-              <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 18 }}>+{totalWon.toLocaleString()}</p>
+              <div style={{ flex: 1 }} />
+              <span style={{ color: "#374151", fontSize: 10, padding: "10px 12px", alignSelf: "center" }}>가입코드: 7474 (가짜)</span>
             </div>
           </div>
         </div>
 
-        {/* 사이드 패널 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {/* ── 메인 콘텐츠 ── */}
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "20px 16px", display: "grid", gridTemplateColumns: "1fr 280px", gap: 16 }}>
 
-          {/* 충전 패널 */}
-          <div style={{
-            background: "#0a0000", border: `2px solid ${isLowBalance ? "#ef4444" : "#dc262630"}`,
-            borderRadius: 14, padding: "18px",
-            animation: isLowBalance ? "border-pulse 1s ease-in-out infinite" : "none",
-          }}>
-            <p style={{ color: "#ef4444", fontWeight: 700, fontSize: 13, marginBottom: 12 }}>
-              {isLowBalance ? "⚠️ 잔액 부족! 지금 충전하세요" : "💳 충전하기"}
-            </p>
-            {showDeposit ? (
-              <>
-                <input
-                  value={depositInput}
-                  onChange={(e) => setDepositInput(e.target.value)}
-                  placeholder="충전 금액 입력"
-                  style={{
-                    width: "100%", padding: "10px 12px", borderRadius: 8, fontSize: 13,
-                    background: "#1a0000", border: "1px solid #dc262640",
-                    color: "#fff", outline: "none", marginBottom: 10,
-                  }}
-                />
-                <button
-                  onClick={handleDeposit}
-                  style={{
-                    width: "100%", padding: "10px 0", borderRadius: 8, fontSize: 13, fontWeight: 700,
-                    background: "#dc2626", color: "#fff", border: "none", cursor: "pointer",
-                  }}
-                >
-                  입금하기 →
-                </button>
-              </>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {[30000, 50000, 100000, 300000].map((amount) => (
-                  <button
-                    key={amount}
-                    onClick={() => { setDepositInput(String(amount)); setShowDeposit(true); }}
-                    style={{
-                      padding: "8px 0", borderRadius: 8, fontSize: 12, fontWeight: 700,
-                      background: "#1a0000", color: "#ffd700",
-                      border: "1px solid #dc262630", cursor: "pointer",
-                    }}
-                  >
-                    {(amount / 10000).toLocaleString()}만원 충전
-                  </button>
-                ))}
-              </div>
-            )}
-            {/* 숨겨진 힌트 #9 */}
-            <p style={{ color: "#22c55e18", fontSize: 8, marginTop: 8, textAlign: "center" }}>
-              실제 입금 불가 — 도박방지 시뮬레이션
-            </p>
-          </div>
-
-          {/* 당첨 배율표 */}
-          <div style={{
-            background: "#0a0a0a", border: "1px solid #181818",
-            borderRadius: 14, padding: "16px",
-          }}>
-            <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 12, marginBottom: 12 }}>
-              🏆 당첨 배율표
-            </p>
-            {Object.entries(WIN_COMBOS).map(([combo, mult]) => (
-              <div key={combo} style={{
-                display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "4px 0", borderBottom: "1px solid #111",
-              }}>
-                <span style={{ fontSize: 14 }}>{combo}</span>
-                <span style={{ color: mult >= 30 ? "#ffd700" : "#888", fontSize: 11, fontWeight: 700 }}>
-                  x{mult / 10}
+          {/* 게임 영역 */}
+          <div>
+            {/* 중독 위험도 바 */}
+            {round > 0 && (
+              <div style={{ background: "#111", borderRadius: 10, padding: "10px 14px", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ color: "#6b7280", fontSize: 11, flexShrink: 0 }}>중독 위험도</span>
+                <div style={{ flex: 1, height: 6, background: "#1a1a1a", borderRadius: 3 }}>
+                  <div style={{
+                    height: "100%", borderRadius: 3,
+                    width: `${Math.min(100, round * 8)}%`,
+                    background: round < 5 ? "#22c55e" : round < 9 ? "#f59e0b" : "#ef4444",
+                    transition: "width 0.5s, background 0.5s",
+                  }} />
+                </div>
+                <span style={{ color: round < 5 ? "#22c55e" : round < 9 ? "#f59e0b" : "#ef4444", fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+                  {round < 5 ? "낮음" : round < 9 ? "주의" : "위험"}
                 </span>
               </div>
-            ))}
+            )}
+
+            {/* 승률 힌트 */}
+            {round >= 5 && (
+              <div style={{ background: "#1a0808", border: "1px solid #dc262644", borderRadius: 10, padding: "8px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 14 }}>📉</span>
+                <span style={{ color: "#fca5a5", fontSize: 11 }}>
+                  {round}판째 — 현재 실제 승률은 약 <strong style={{ color: "#ef4444" }}>{Math.round(getWinRate(round) * 100)}%</strong>입니다. 처음 ({Math.round(getWinRate(1) * 100)}%)보다 훨씬 낮습니다.
+                </span>
+              </div>
+            )}
+
+            {/* 게임 */}
+            <div style={{ background: "#111", borderRadius: 16, padding: "20px 18px", border: "1px solid #1a1a1a" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
+                <span style={{ fontSize: 20 }}>{TABS.find(t => t.id === activeGame)?.icon}</span>
+                <h2 style={{ color: "#e4e4e7", fontWeight: 900, fontSize: 17 }}>{TABS.find(t => t.id === activeGame)?.label}</h2>
+                <span style={{ color: "#374151", fontSize: 11 }}>— 교육용 시뮬레이션</span>
+              </div>
+
+              {activeGame === "baccarat" && <BaccaratGame balance={balance} onResult={handleResult} round={round} />}
+              {activeGame === "snail" && <SnailGame balance={balance} onResult={handleResult} round={round} />}
+              {activeGame === "ladder" && <LadderGame balance={balance} onResult={handleResult} round={round} />}
+            </div>
+
+            {balance === 0 && (
+              <div style={{ marginTop: 14, background: "#0a0000", border: "2px solid #ef4444", borderRadius: 14, padding: "20px", textAlign: "center" }}>
+                <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 16, marginBottom: 6 }}>💸 잔액이 0원이 됐습니다</p>
+                <p style={{ color: "#888", fontSize: 13, marginBottom: 14 }}>실제 도박이었다면 지금 대출이나 가족에게 손을 벌릴 상황입니다.</p>
+                <button onClick={() => setShowReveal(true)} style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
+                  🛡️ 수법 확인하기
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* 도박 중독 경고 — 교묘하게 작게 표시 */}
-          <div style={{
-            background: "#0a1628", border: "1px solid #1e3a5f",
-            borderRadius: 12, padding: "12px",
-          }}>
-            <p style={{ color: "#4b7ab5", fontSize: 11, lineHeight: 1.7 }}>
-              🛡️ 도박 중독 상담<br/>
-              <strong style={{ color: "#60a5fa" }}>1336</strong> (24시간 무료)<br/>
-              <span style={{ color: "#333", fontSize: 9 }}>이 화면은 교육용 시뮬레이션입니다</span>
-            </p>
-          </div>
+          {/* 사이드바 */}
+          <div>
+            {/* 실시간 당첨 (가짜) */}
+            <div style={{ background: "#111", borderRadius: 14, padding: "14px", marginBottom: 12, border: "1px solid #1a1a1a" }}>
+              <p style={{ color: "#6b7280", fontSize: 11, marginBottom: 10, fontWeight: 700 }}>🏆 실시간 당첨 (조작된 수치)</p>
+              {[
+                { user: "김**", amount: "₩1,240,000", game: "바카라" },
+                { user: "이**", amount: "₩387,000", game: "달팽이" },
+                { user: "박**", amount: "₩890,000", game: "사다리" },
+                { user: "최**", amount: "₩2,100,000", game: "바카라" },
+                { user: "정**", amount: "₩156,000", game: "달팽이" },
+              ].map((w, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < 4 ? "1px solid #1a1a1a" : "none" }}>
+                  <span style={{ color: "#888", fontSize: 11 }}>{w.user} <span style={{ color: "#374151" }}>{w.game}</span></span>
+                  <span style={{ color: "#f59e0b", fontSize: 11, fontWeight: 700 }}>{w.amount}</span>
+                </div>
+              ))}
+              <p style={{ color: "#374151", fontSize: 9, marginTop: 8, textAlign: "center" }}>※ 실제 당첨이 아닌 조작된 숫자입니다</p>
+            </div>
 
-          {/* 범죄 공개 버튼 */}
-          <button
-            onClick={() => setShowReveal(true)}
-            style={{
-              padding: "12px 0", borderRadius: 12, fontSize: 13, fontWeight: 700,
-              background: "linear-gradient(135deg, #22c55e, #16a34a)",
-              color: "#fff", border: "none", cursor: "pointer",
-            }}
-          >
-            ⚠️ 범죄 수법 바로 확인
-          </button>
+            {/* 내 게임 기록 */}
+            <div style={{ background: "#111", borderRadius: 14, padding: "14px", border: "1px solid #1a1a1a" }}>
+              <p style={{ color: "#6b7280", fontSize: 11, marginBottom: 10, fontWeight: 700 }}>📋 내 게임 기록</p>
+              {history.length === 0 ? (
+                <p style={{ color: "#374151", fontSize: 12, textAlign: "center", padding: "16px 0" }}>아직 게임 기록 없음</p>
+              ) : history.map((h, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "5px 0", borderBottom: i < history.length - 1 ? "1px solid #1a1a1a" : "none" }}>
+                  <span style={{ color: "#555", fontSize: 10 }}>
+                    {h.game === "baccarat" ? "🃏" : h.game === "snail" ? "🐌" : "🪜"} {i === 0 ? "방금" : `${i + 1}판 전`}
+                  </span>
+                  <span style={{ color: h.delta >= 0 ? "#22c55e" : "#ef4444", fontSize: 11, fontWeight: 700 }}>
+                    {h.delta >= 0 ? "+" : ""}₩{h.delta.toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* 수법 확인 버튼 */}
+            <button onClick={() => setShowReveal(true)} style={{
+              width: "100%", marginTop: 10, padding: "12px 0", borderRadius: 12,
+              background: "transparent", border: "1px solid #16a34a44",
+              color: "#22c55e", fontSize: 12, fontWeight: 700, cursor: "pointer",
+            }}>
+              🛡️ 지금까지 체험한 수법 보기
+            </button>
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
-        }
-        @keyframes border-pulse {
-          0%, 100% { border-color: #ef444460; }
-          50% { border-color: #ef4444; }
-        }
-      `}</style>
     </div>
   );
 }
 
-export default function GamblingPlayPage() {
+export default function PlayPage() {
   return (
-    <Suspense fallback={<div style={{ background: "#0a0000", color: "#fff", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>로딩 중...</div>}>
-      <GamblingGame />
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#0a0a0a", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>로딩 중...</div>}>
+      <PlayContent />
     </Suspense>
   );
 }
