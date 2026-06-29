@@ -20,6 +20,7 @@ const SC_TITLE_MAP: Record<string, string> = {
   "kakaotalk-impersonation": "sc_kakao_title",
   "used-goods-scam":         "sc_used_title",
   "illegal-gambling":        "sc_gambling_title",
+  "link-download-scam":      "sc_link_title",
 };
 const SC_SUB_MAP: Record<string, string> = {
   "family-impersonation":    "sc_family_sub",
@@ -31,6 +32,7 @@ const SC_SUB_MAP: Record<string, string> = {
   "kakaotalk-impersonation": "sc_kakao_sub",
   "used-goods-scam":         "sc_used_sub",
   "illegal-gambling":        "sc_gambling_sub",
+  "link-download-scam":      "sc_link_sub",
 };
 const CAT_MAP: Record<string, string> = {
   "family-impersonation":    "cat_voice",
@@ -42,6 +44,7 @@ const CAT_MAP: Record<string, string> = {
   "kakaotalk-impersonation": "cat_messenger",
   "used-goods-scam":         "cat_used",
   "illegal-gambling":        "cat_gambling",
+  "link-download-scam":      "cat_smishing",
 };
 
 const REPORT_NUMBERS = [

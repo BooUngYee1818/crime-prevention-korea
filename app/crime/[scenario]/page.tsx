@@ -19,6 +19,8 @@ type Phase =
   | "sent-animation"
   | "police-call"
   | "police-unresolved"
+  | "link-sms"
+  | "link-hacking"
   | "reveal";
 
 // 시나리오별 채팅 스타일 설정
@@ -36,6 +38,8 @@ const CHAT_CONFIG: Record<string, { type: ChatType; headerTitle: string; sender:
 
 // 전화형 시나리오는 ringing 단계부터 시작
 const CALL_SCENARIOS = new Set(["prosecutor-impersonation", "loan-fraud"]);
+// 링크 사기 시나리오
+const LINK_SCENARIOS = new Set(["link-download-scam"]);
 
 interface Message {
   role: "user" | "criminal";
@@ -269,6 +273,284 @@ function EmergencyBlock({ block, onClose, onReveal, lang }: {
         }}>
           {isLeave ? t("em_stay_btn", lang) : t("em_continue_btn", lang)}
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── 링크 사기 컴포넌트 ────────────────────────────────────────────────────────
+
+// 현실감 있는 가짜 개인정보 (시뮬레이션 전용)
+const FAKE_PROFILES = [
+  { name: "김○현", rrn: "850315-1284731", addr: "서울특별시 노원구 중계동 387-12 현대아파트 101동 504호", phone: "010-3847-9012", email: "khyun85@naver.com", bank: "신한은행 110-473-829014", card: "5412 **** **** 8837" },
+  { name: "이○진", rrn: "920724-2893047", addr: "경기도 수원시 영통구 매탄동 1142번지 삼성래미안 203동 1102호", phone: "010-5623-7841", email: "ljin9207@gmail.com", bank: "국민은행 789-24-0193847", card: "4532 **** **** 2291" },
+  { name: "박○수", rrn: "780502-1567234", addr: "부산광역시 해운대구 우동 1477-3 해운대아이파크 508동 2203호", phone: "010-8912-3047", email: "pksoo78@daum.net", bank: "우리은행 1002-847-293041", card: "3782 **** **** 5519" },
+];
+
+function LinkSmsPhase({ onLinkClick }: { onLinkClick: () => void }) {
+  const [clicked, setClicked] = useState(false);
+  return (
+    <div style={{
+      flex: 1, background: "#f0f0f5", display: "flex", flexDirection: "column",
+      height: "100%", overflow: "hidden",
+    }}>
+      <style>{`
+        @keyframes link-pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+        .link-btn-pulse { animation: link-pulse 1.8s ease-in-out infinite; }
+      `}</style>
+
+      {/* SMS 헤더 */}
+      <div style={{
+        background: "#fff", borderBottom: "1px solid #e2e8f0",
+        padding: "12px 16px", display: "flex", alignItems: "center", gap: 10,
+      }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: "50%", background: "#e2e8f0",
+          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
+        }}>📱</div>
+        <div>
+          <p style={{ fontWeight: 700, fontSize: 14, color: "#1e293b" }}>국세청</p>
+          <p style={{ fontSize: 11, color: "#94a3b8" }}>+82-2-0000-0000</p>
+        </div>
+      </div>
+
+      {/* SMS 내용 */}
+      <div style={{ flex: 1, padding: "20px 16px", overflowY: "auto" }}>
+        {/* 날짜 */}
+        <p style={{ textAlign: "center", fontSize: 11, color: "#94a3b8", marginBottom: 14 }}>오늘 오전 10:23</p>
+
+        {/* 메시지 버블 */}
+        <div style={{
+          background: "#fff", borderRadius: "4px 18px 18px 18px",
+          padding: "14px 16px", maxWidth: "88%",
+          boxShadow: "0 1px 4px #0000001a",
+          lineHeight: 1.7,
+        }}>
+          <p style={{ fontSize: 13, color: "#1e293b", marginBottom: 10 }}>
+            [국세청] 고객님의 세금 환급금 <strong style={{ color: "#2563eb" }}>348,000원</strong>이 발생하였습니다.<br />
+            아래 링크를 통해 본인인증 후 즉시 수령 가능합니다.<br />
+            <br />
+            ※ 48시간 내 미수령 시 자동 소멸됩니다.
+          </p>
+
+          {/* 가짜 링크 버튼 */}
+          <button
+            onClick={() => { if (!clicked) { setClicked(true); setTimeout(onLinkClick, 400); } }}
+            className={clicked ? "" : "link-btn-pulse"}
+            style={{
+              display: "block", width: "100%",
+              background: clicked ? "#94a3b8" : "linear-gradient(135deg, #1d4ed8, #2563eb)",
+              color: "#fff", border: "none", borderRadius: 10,
+              padding: "10px 0", fontSize: 13, fontWeight: 700,
+              cursor: clicked ? "default" : "pointer",
+              transition: "background 0.2s",
+            }}
+          >
+            {clicked ? "연결 중..." : "🔗 환급금 수령하기 →"}
+          </button>
+
+          <p style={{ fontSize: 10, color: "#94a3b8", marginTop: 8 }}>
+            nts-refund-kr.secure-verify.net/claim
+          </p>
+        </div>
+
+        {/* 경고 힌트 */}
+        <div style={{
+          marginTop: 20, background: "#fef9c3", border: "1px solid #fde047",
+          borderRadius: 12, padding: "10px 14px",
+        }}>
+          <p style={{ fontSize: 12, color: "#854d0e", lineHeight: 1.6 }}>
+            ⚠️ 이 링크를 클릭하면 어떤 일이 일어날까요?<br />
+            <strong>실제처럼 느껴보세요.</strong> (시뮬레이션입니다)
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LinkHackingPhase({ onReveal }: { onReveal: () => void }) {
+  const [step, setStep] = useState(0);
+  const FAKE_P = FAKE_PROFILES[Math.floor(Math.random() * FAKE_PROFILES.length)];
+
+  useEffect(() => {
+    const delays = [200, 600, 1000, 1400, 1900, 2400, 2900, 3500, 4200, 5000];
+    const timers = delays.map((d, i) =>
+      setTimeout(() => setStep(i + 1), d)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const dataRows = [
+    { label: "주민등록번호", value: FAKE_P.rrn, icon: "🪪", danger: true },
+    { label: "이름", value: FAKE_P.name, icon: "👤", danger: false },
+    { label: "주소", value: FAKE_P.addr, icon: "🏠", danger: true },
+    { label: "전화번호", value: FAKE_P.phone, icon: "📞", danger: true },
+    { label: "이메일", value: FAKE_P.email, icon: "✉️", danger: false },
+    { label: "계좌번호", value: FAKE_P.bank, icon: "🏦", danger: true },
+    { label: "카드번호", value: FAKE_P.card, icon: "💳", danger: true },
+  ];
+
+  return (
+    <div style={{
+      flex: 1, background: "#000", display: "flex", flexDirection: "column",
+      height: "100%", overflow: "hidden", position: "relative",
+    }}>
+      <style>{`
+        @keyframes glitch {
+          0%{transform:translate(0)} 20%{transform:translate(-2px,1px)} 40%{transform:translate(2px,-1px)}
+          60%{transform:translate(-1px,2px)} 80%{transform:translate(1px,-2px)} 100%{transform:translate(0)}
+        }
+        @keyframes scanline {
+          0%{top:-100%} 100%{top:100%}
+        }
+        @keyframes data-appear {
+          from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)}
+        }
+        @keyframes redFlash {
+          0%,100%{background:#000} 50%{background:#1a0000}
+        }
+        @keyframes typewriter {
+          from{width:0} to{width:100%}
+        }
+        .hack-row { animation: data-appear 0.3s ease both; }
+        .hack-flash { animation: redFlash 0.5s ease 3; }
+      `}</style>
+
+      {/* 스캔라인 효과 */}
+      {step >= 1 && (
+        <div style={{
+          position: "absolute", left: 0, right: 0, height: "30%",
+          background: "linear-gradient(transparent, #ff000008, transparent)",
+          animation: "scanline 2s linear infinite",
+          pointerEvents: "none", zIndex: 10,
+        }} />
+      )}
+
+      {/* 경고 헤더 */}
+      <div style={{
+        background: step >= 2 ? "#7f1d1d" : "#111",
+        borderBottom: `1px solid ${step >= 2 ? "#ef4444" : "#222"}`,
+        padding: "10px 14px",
+        transition: "background 0.5s",
+        display: "flex", alignItems: "center", gap: 8,
+      }}>
+        <div style={{
+          fontSize: 18,
+          animation: step >= 3 ? "glitch 0.15s steps(1) infinite" : "none",
+        }}>⚠️</div>
+        <div>
+          <p style={{
+            color: step >= 2 ? "#fca5a5" : "#555",
+            fontWeight: 800, fontSize: 13,
+            fontFamily: "monospace",
+            transition: "color 0.5s",
+          }}>
+            {step === 0 ? "연결 중..." :
+             step === 1 ? "보안 검사 중..." :
+             step >= 2 ? "⛔ 악성코드 감지됨" : ""}
+          </p>
+          {step >= 3 && (
+            <p style={{ color: "#ef4444", fontSize: 10, fontFamily: "monospace" }}>
+              MALWARE.APK › 실행 완료 › 데이터 추출 시작
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* 해킹 콘솔 로그 */}
+      {step >= 2 && (
+        <div style={{
+          padding: "8px 14px",
+          background: "#0a0a0a",
+          borderBottom: "1px solid #1a1a1a",
+          fontFamily: "monospace", fontSize: 10, color: "#22c55e",
+          maxHeight: 80, overflow: "hidden",
+        }}>
+          {step >= 2 && <p style={{ opacity: 0.7 }}>[10:23:41] 링크 클릭 감지 → 세션 하이재킹 시도...</p>}
+          {step >= 3 && <p>[10:23:41] 악성 스크립트 로드 완료 (32KB)</p>}
+          {step >= 4 && <p style={{ color: "#ef4444" }}>[10:23:42] 저장된 자격증명 스캔 중...</p>}
+          {step >= 5 && <p style={{ color: "#f97316" }}>[10:23:42] 개인정보 추출 시작 → 원격 서버 전송</p>}
+        </div>
+      )}
+
+      {/* 개인정보 탈취 표시 */}
+      <div style={{
+        flex: 1, padding: "12px 14px", overflowY: "auto",
+        display: "flex", flexDirection: "column", gap: 8,
+      }}>
+        {step >= 3 && (
+          <p style={{
+            color: "#ef4444", fontFamily: "monospace", fontSize: 11,
+            marginBottom: 4, fontWeight: 700,
+          }}>
+            ▶ 탈취된 개인정보 ({dataRows.filter((_, i) => i < step - 2).length}/{dataRows.length})
+          </p>
+        )}
+
+        {dataRows.map((row, i) =>
+          step >= i + 3 ? (
+            <div
+              key={row.label}
+              className="hack-row"
+              style={{
+                animationDelay: `${i * 0.05}s`,
+                background: row.danger ? "#1a0000" : "#0a0a0a",
+                border: `1px solid ${row.danger ? "#ef444444" : "#1a1a1a"}`,
+                borderRadius: 8, padding: "8px 12px",
+                display: "flex", alignItems: "flex-start", gap: 8,
+              }}
+            >
+              <span style={{ fontSize: 16, marginTop: 1 }}>{row.icon}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ color: "#555", fontSize: 10, fontFamily: "monospace", marginBottom: 2 }}>{row.label}</p>
+                <p style={{
+                  color: row.danger ? "#fca5a5" : "#d1d5db",
+                  fontSize: 13, fontWeight: 700,
+                  fontFamily: "monospace",
+                  wordBreak: "break-all",
+                }}>
+                  {row.value}
+                </p>
+              </div>
+              {row.danger && (
+                <span style={{ color: "#ef4444", fontSize: 10, whiteSpace: "nowrap", marginTop: 2 }}>
+                  ▲ 유출
+                </span>
+              )}
+            </div>
+          ) : null
+        )}
+
+        {/* 전송 완료 메시지 */}
+        {step >= 10 && (
+          <div style={{
+            background: "#450a0a",
+            border: "2px solid #ef4444",
+            borderRadius: 12, padding: "14px",
+            textAlign: "center",
+            animation: "data-appear 0.4s ease",
+          }}>
+            <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 15, marginBottom: 6 }}>
+              🔴 개인정보 탈취 완료
+            </p>
+            <p style={{ color: "#fca5a5", fontSize: 12, lineHeight: 1.6, marginBottom: 14 }}>
+              7건의 개인정보가 해외 서버로 전송되었습니다.<br />
+              주민번호·계좌번호·카드번호가 노출되었습니다.
+            </p>
+            <button
+              onClick={onReveal}
+              style={{
+                background: "linear-gradient(135deg, #dc2626, #ef4444)",
+                color: "#fff", border: "none", borderRadius: 10,
+                padding: "12px 24px", fontWeight: 800, fontSize: 14,
+                cursor: "pointer", width: "100%",
+              }}
+            >
+              결과 확인하기 →
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -656,7 +938,9 @@ export default function ScenarioPage() {
 
   const chatCfg = CHAT_CONFIG[scenario as string] ?? { type: "kakao" as ChatType, headerTitle: "카카오톡", sender: "알 수 없음" };
   const [phase, setPhase] = useState<Phase>(
-    CALL_SCENARIOS.has(scenario as string) ? "ringing" : "chat"
+    CALL_SCENARIOS.has(scenario as string) ? "ringing"
+    : LINK_SCENARIOS.has(scenario as string) ? "link-sms"
+    : "chat"
   );
   const [asset, setAsset] = useState(15000000);
   const [displayAsset, setDisplayAsset] = useState(15000000);
@@ -1889,6 +2173,16 @@ export default function ScenarioPage() {
         );
       })()}
 
+      {/* ══ 링크 사기: 가짜 SMS ══ */}
+      {phase === "link-sms" && (
+        <LinkSmsPhase onLinkClick={() => setPhase("link-hacking")} />
+      )}
+
+      {/* ══ 링크 사기: 해킹 애니메이션 ══ */}
+      {phase === "link-hacking" && (
+        <LinkHackingPhase onReveal={() => { setFinalSendAmount(0); setPhase("reveal"); }} />
+      )}
+
       {/* ══ 결과 공개 ══ */}
       {phase === "reveal" && (
         <RevealScreen
@@ -1903,7 +2197,11 @@ export default function ScenarioPage() {
             setNumbersSaved(true);
           }}
           onRetry={() => {
-            setPhase(CALL_SCENARIOS.has(scenario as string) ? "ringing" : "chat");
+            setPhase(
+              CALL_SCENARIOS.has(scenario as string) ? "ringing"
+              : LINK_SCENARIOS.has(scenario as string) ? "link-sms"
+              : "chat"
+            );
             setMessages([]);
             setPendingSend(null); setFinalSendAmount(null);
             setTransferAmount(""); setTransferTarget("");
