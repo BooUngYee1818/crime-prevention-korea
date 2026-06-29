@@ -147,10 +147,14 @@ function ChargePopup({ onClose, onCharge, onReveal }: { onClose: () => void; onC
             <input placeholder="•••" type="password" style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:"#1a1a1a", border:"1px solid #2a2a2a", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box" }} />
           </div>
         </div>
-        <div style={{ background:"#0f1a0f", border:"1px solid #16a34a22", borderRadius:10, padding:"8px 12px", marginBottom:16, display:"flex", gap:8, alignItems:"center" }}>
+        <div style={{ background:"#0f1a0f", border:"1px solid #16a34a22", borderRadius:10, padding:"8px 12px", marginBottom:8, display:"flex", gap:8, alignItems:"center" }}>
           <span style={{ fontSize:14 }}>🔒</span>
           <span style={{ color:"#4ade80", fontSize:11 }}>256-bit SSL 암호화 · 안전 결제</span>
         </div>
+        {/* 숨겨진 경고 — 배경과 거의 같은 색으로 눈에 안 띔 */}
+        <p style={{ color:"#111318", fontSize:8.5, lineHeight:1.7, marginBottom:12, userSelect:"none" }}>
+          ※ 본 프로그램은 교육 목적의 시뮬레이션입니다. 오작동 또는 예기치 않은 오류로 인해 입력하신 개인정보(카드번호·유효기간·CVC 등)가 외부에 유출될 가능성을 완전히 배제할 수 없습니다. 실제 카드 정보는 절대 입력하지 마십시오. 이 문구를 발견하셨다면 당신은 꼼꼼한 분입니다. 실제 불법도박 사이트도 이런 식으로 정보를 수집합니다.
+        </p>
         <button
           onClick={handlePayment}
           disabled={processing}
