@@ -84,6 +84,197 @@ function WinToast({ msg, onDone }: { msg:{name:string;amount:string;game:string}
   );
 }
 
+// ── 초보자 가이드 컴포넌트 ────────────────────────────────────────────────────
+function BeginnerGuide({ rainbow, rainbow2, rainbow3, rainbow4, rainbow5, rainbow6, onPlay }: {
+  rainbow:string; rainbow2:string; rainbow3:string; rainbow4:string; rainbow5:string; rainbow6:string;
+  onPlay:(game:string)=>void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"baccarat"|"snail"|"ladder">("baccarat");
+
+  const GUIDES = {
+    baccarat: {
+      icon: "🃏", name: "바카라", color: "#ef4444",
+      tagline: "카드 숫자 합이 9에 가까운 쪽이 이기는 게임",
+      steps: [
+        { emoji:"1️⃣", title:"베팅 선택", desc:"플레이어 / 뱅커 / 타이 중 하나를 고릅니다. 처음엔 플레이어나 뱅커만 고르세요." },
+        { emoji:"2️⃣", title:"배팅 금액 선택", desc:"₩5,000 ~ ₩100,000 중 금액을 누릅니다. 처음엔 작은 금액으로 시작하세요." },
+        { emoji:"3️⃣", title:"베팅 버튼 클릭", desc:"'베팅' 버튼을 누르면 카드가 자동으로 한 장씩 공개됩니다." },
+        { emoji:"4️⃣", title:"결과 확인", desc:"카드 숫자 합의 끝자리(1의 자리)가 9에 가까운 쪽이 이깁니다. 내가 베팅한 쪽이 이기면 1배 지급!" },
+      ],
+      tips: [
+        { icon:"💡", text:"A=1점, 2~9=숫자 그대로, 10·J·Q·K=0점" },
+        { icon:"💡", text:"합이 10 이상이면 10을 빼서 계산 (예: 7+8=15 → 5점)" },
+        { icon:"⚠️", text:"타이(무승부)는 8배지만 확률이 매우 낮아요" },
+        { icon:"⚠️", text:"뱅커가 통계적으로 약간 유리하지만 당첨금에서 5% 수수료 차감" },
+      ],
+      example: "예시: 플레이어 카드 Q+7 = 7점 / 뱅커 카드 3+5 = 8점 → 뱅커 승!",
+    },
+    snail: {
+      icon: "🐌", name: "달팽이 경주", color: "#22c55e",
+      tagline: "6마리 달팽이 중 1등을 맞추는 경주 게임",
+      steps: [
+        { emoji:"1️⃣", title:"달팽이 선택", desc:"#1 ~ #6 중 1등으로 들어올 것 같은 달팽이를 고릅니다. 감으로 골라도 돼요!" },
+        { emoji:"2️⃣", title:"배팅 금액 선택", desc:"₩5,000 ~ ₩50,000 중 베팅 금액을 고릅니다." },
+        { emoji:"3️⃣", title:"경주 시작!", desc:"'베팅' 버튼을 누르면 달팽이들이 레이스를 시작합니다. 오른쪽 결승선으로 먼저 가는 쪽이 1등!" },
+        { emoji:"4️⃣", title:"당첨 확인", desc:"내가 고른 달팽이가 1등이면 베팅 금액의 5배를 받습니다!" },
+      ],
+      tips: [
+        { icon:"💡", text:"6마리 중 1마리 맞추기 → 순수 확률은 약 16.7%" },
+        { icon:"💡", text:"당첨 시 5배 지급 — 숫자 전략 없이 직관으로 골라요" },
+        { icon:"⚠️", text:"어떤 달팽이가 잘 이긴다는 건 없어요. 매 게임 완전 무작위입니다" },
+        { icon:"⚠️", text:"'아까 졌으니 이번엔 이길 것 같다'는 도박사의 오류입니다" },
+      ],
+      example: "예시: ₩10,000 베팅 → #3 달팽이 1등 → ₩50,000 당첨! (순이익 ₩40,000)",
+    },
+    ladder: {
+      icon: "🪜", name: "사다리 게임", color: "#a855f7",
+      tagline: "4개 번호 중 하나를 골라 사다리 타고 내려가는 게임",
+      steps: [
+        { emoji:"1️⃣", title:"번호 선택", desc:"① ② ③ ④ 중 출발 번호 하나를 고릅니다. 아무 번호나 골라도 됩니다!" },
+        { emoji:"2️⃣", title:"배팅 금액 선택", desc:"₩5,000 ~ ₩50,000 중 베팅 금액을 선택합니다." },
+        { emoji:"3️⃣", title:"사다리 출발!", desc:"'베팅' 버튼을 누르면 공이 사다리를 타고 내려갑니다. 가로줄을 만나면 방향이 바뀌어요." },
+        { emoji:"4️⃣", title:"도착 확인", desc:"내가 출발한 번호와 도착 번호가 같으면 당첨! 베팅 금액의 3.5배를 받습니다." },
+      ],
+      tips: [
+        { icon:"💡", text:"4개 중 1개 맞추기 → 순수 확률은 25%" },
+        { icon:"💡", text:"당첨 시 3.5배 지급 — 결과는 미리 정해진 것처럼 보이지만 무작위에요" },
+        { icon:"⚠️", text:"특정 번호가 '잘 나온다'는 패턴은 없습니다. 매 판 독립적입니다" },
+        { icon:"⚠️", text:"사다리 모양이 복잡해 보여도 결과는 조작될 수 있습니다 (실제 도박 사이트 수법)" },
+      ],
+      example: "예시: ②번 출발 → 가로줄 3번 이동 → ②번 도착 → ₩10,000 베팅 시 ₩35,000 당첨!",
+    },
+  } as const;
+
+  const g = GUIDES[activeTab];
+
+  return (
+    <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 16px 28px", position:"relative", zIndex:10 }}>
+      {/* 접기/펼치기 헤더 버튼 */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{
+          width:"100%", padding:"16px 22px", borderRadius: open ? "16px 16px 0 0" : 16,
+          background:`linear-gradient(135deg,#0a0a18,#111124)`,
+          border:`1.5px solid ${rainbow}44`,
+          cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between",
+          boxShadow:`0 4px 20px ${rainbow}22`,
+          transition:"border-color 0.3s",
+        }}
+        onMouseEnter={e => e.currentTarget.style.borderColor = rainbow}
+        onMouseLeave={e => e.currentTarget.style.borderColor = `${rainbow}44`}
+      >
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ fontSize:24, animation:"float 2s ease-in-out infinite" }}>📖</div>
+          <div style={{ textAlign:"left" }}>
+            <div style={{ fontWeight:900, fontSize:16,
+              background:`linear-gradient(90deg,${rainbow},${rainbow3},${rainbow5})`,
+              WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+            }}>초보자 게임 가이드 — 처음이세요? 여기서 배우세요!</div>
+            <div style={{ color:"#555", fontSize:12, marginTop:2 }}>바카라 · 달팽이 · 사다리 규칙 및 베팅 방법 한눈에 보기</div>
+          </div>
+        </div>
+        <div style={{ fontSize:20, color:rainbow, transition:"transform 0.3s", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>▼</div>
+      </button>
+
+      {/* 가이드 본문 */}
+      {open && (
+        <div style={{ background:"#0a0a14", border:`1.5px solid ${rainbow}44`, borderTop:"none", borderRadius:"0 0 16px 16px", padding:"24px 22px", animation:"slideUp 0.25s ease" }}>
+
+          {/* 게임 탭 선택 */}
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:24 }}>
+            {(["baccarat","snail","ladder"] as const).map(tab => {
+              const info = GUIDES[tab];
+              return (
+                <button key={tab} onClick={() => setActiveTab(tab)} style={{
+                  padding:"14px 10px", borderRadius:14, border:`2px solid`,
+                  borderColor: activeTab===tab ? info.color : "#2a2a3a",
+                  background: activeTab===tab ? `${info.color}18` : "#111",
+                  cursor:"pointer", textAlign:"center", transition:"all 0.2s",
+                  boxShadow: activeTab===tab ? `0 0 16px ${info.color}44` : "none",
+                }}>
+                  <div style={{ fontSize:24, marginBottom:4 }}>{info.icon}</div>
+                  <div style={{ color: activeTab===tab ? info.color : "#666", fontWeight:800, fontSize:13 }}>{info.name}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 선택된 게임 설명 */}
+          <div style={{ animation:"slideUp 0.2s ease" }} key={activeTab}>
+            {/* 태그라인 */}
+            <div style={{ background:`${g.color}18`, border:`1px solid ${g.color}44`, borderRadius:12, padding:"12px 18px", marginBottom:20, display:"flex", alignItems:"center", gap:10 }}>
+              <span style={{ fontSize:22 }}>{g.icon}</span>
+              <span style={{ color:g.color, fontWeight:700, fontSize:14 }}>{g.tagline}</span>
+            </div>
+
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+              {/* 진행 방법 */}
+              <div>
+                <div style={{ color:"#e4e4e7", fontWeight:800, fontSize:14, marginBottom:14, display:"flex", alignItems:"center", gap:6 }}>
+                  <div style={{ width:3, height:16, background:g.color, borderRadius:2 }} />
+                  게임 진행 방법
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                  {g.steps.map((step, i) => (
+                    <div key={i} style={{ display:"flex", gap:12, alignItems:"flex-start" }}>
+                      <div style={{ background:`${g.color}22`, border:`1px solid ${g.color}44`, borderRadius:10, padding:"6px 10px", flexShrink:0, minWidth:36, textAlign:"center" }}>
+                        <span style={{ fontSize:16 }}>{step.emoji}</span>
+                      </div>
+                      <div>
+                        <div style={{ color:g.color, fontWeight:700, fontSize:13, marginBottom:2 }}>{step.title}</div>
+                        <div style={{ color:"#888", fontSize:12, lineHeight:1.6 }}>{step.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 알아두면 좋은 것 */}
+              <div>
+                <div style={{ color:"#e4e4e7", fontWeight:800, fontSize:14, marginBottom:14, display:"flex", alignItems:"center", gap:6 }}>
+                  <div style={{ width:3, height:16, background:g.color, borderRadius:2 }} />
+                  알아두면 좋은 것
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:16 }}>
+                  {g.tips.map((tip, i) => (
+                    <div key={i} style={{ display:"flex", gap:8, alignItems:"flex-start", background:"#ffffff06", borderRadius:10, padding:"8px 12px" }}>
+                      <span style={{ flexShrink:0, fontSize:14 }}>{tip.icon}</span>
+                      <span style={{ color: tip.icon==="⚠️" ? "#fca5a5" : "#9ca3af", fontSize:12, lineHeight:1.6 }}>{tip.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 예시 */}
+                <div style={{ background:`${g.color}11`, border:`1px solid ${g.color}33`, borderRadius:12, padding:"12px 14px" }}>
+                  <div style={{ color:g.color, fontSize:11, fontWeight:700, marginBottom:4 }}>📝 계산 예시</div>
+                  <div style={{ color:"#aaa", fontSize:12, lineHeight:1.7 }}>{g.example}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 바로 플레이 버튼 */}
+            <button
+              onClick={() => onPlay(activeTab)}
+              style={{
+                width:"100%", marginTop:20, padding:"14px 0", borderRadius:14, fontSize:15, fontWeight:900,
+                background:`linear-gradient(135deg,${g.color},${g.color}aa)`,
+                color:"#fff", border:"none", cursor:"pointer",
+                boxShadow:`0 4px 20px ${g.color}55`,
+                transition:"transform 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform="scale(1.01)"}
+              onMouseLeave={e => e.currentTarget.style.transform="scale(1)"}
+            >
+              {g.icon} {g.name} 바로 체험하기 →
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const SITES = [
   { id:"herocasino", display:"👑 히어로 CASINO", sub:"BACCARAT · SLOT · LIVE", code:"7474", bonus:"첫충 40% + 카지노 1.2%", extra:"슬롯 4% · 매충 15%", glow:"#ff0080", dark:"#1a0010", badge:"🔥 HOT", games:["바카라","달팽이","사다리","슬롯"] },
   { id:"goldcasino", display:"💎 GOLD 888", sub:"PREMIUM · VIP · JACKPOT", code:"8888", bonus:"신규 50% 대박 이벤트", extra:"VIP 전용 · 무제한 환전", glow:"#ffd700", dark:"#1a1400", badge:"👑 VIP", games:["바카라","포커","슬롯","스포츠"] },
@@ -436,6 +627,9 @@ export default function GamblingPortalPage() {
           </div>
         </div>
       </div>
+
+      {/* ── 초보자 가이드 ── */}
+      <BeginnerGuide rainbow={rainbow} rainbow2={rainbow2} rainbow3={rainbow3} rainbow4={rainbow4} rainbow5={rainbow5} rainbow6={rainbow6} onPlay={(game) => router.push(`/gambling/play?game=${game}`)} />
 
       {/* ── 통계 바 ── */}
       <div style={{ background:"#060608", borderTop:`1px solid ${rainbow}22`, padding:"16px 20px", maxWidth:1200, margin:"0 auto", position:"relative", zIndex:10 }}>

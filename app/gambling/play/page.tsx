@@ -21,6 +21,90 @@ function baccaratScore(cards: {rank:string}[]) { return cards.reduce((s,c) => (s
 
 const SNAIL_COLORS = ["#ef4444","#f59e0b","#22c55e","#3b82f6","#a855f7","#ec4899"];
 
+// ── 튜토리얼 팝업 ────────────────────────────────────────────────────────────
+const TUTORIAL_DATA = {
+  baccarat: {
+    icon:"🃏", name:"바카라", color:"#ef4444",
+    summary:"카드 숫자 합이 9에 가까운 쪽이 이기는 게임",
+    steps:[
+      { title:"베팅 선택", desc:"플레이어 / 뱅커 / 타이 버튼 중 하나를 누르세요.\n처음엔 플레이어나 뱅커 중 하나만 고르세요.", icon:"👆" },
+      { title:"금액 선택", desc:"아래 금액 버튼 중 하나를 눌러 베팅 금액을 정합니다.\n처음엔 ₩5,000부터 시작해보세요.", icon:"💰" },
+      { title:"베팅 버튼 클릭", desc:"'₩XX 베팅' 버튼을 누르면 카드가 한 장씩 자동으로 공개됩니다.", icon:"🎯" },
+      { title:"결과 확인", desc:"카드 합 1의 자리가 9에 가까운 쪽이 이깁니다.\n내가 고른 쪽이 이기면 베팅액 × 1배 받습니다.", icon:"🏆" },
+    ],
+    rule:"💡 A=1점 / 2~9=숫자 / 10·J·Q·K=0점\n합이 10 이상이면 10을 빼요 (예: 7+5=12 → 2점)",
+    odds:"플레이어 승리 1배 / 뱅커 0.95배 / 타이 8배",
+  },
+  snail: {
+    icon:"🐌", name:"달팽이 경주", color:"#22c55e",
+    summary:"6마리 중 1등 달팽이를 맞추는 경주 게임",
+    steps:[
+      { title:"달팽이 선택", desc:"#1 ~ #6 중 1등으로 들어올 것 같은 달팽이를 누르세요.\n직감으로 골라도 됩니다!", icon:"👆" },
+      { title:"금액 선택", desc:"베팅할 금액을 선택합니다.", icon:"💰" },
+      { title:"경주 시작", desc:"'베팅' 버튼을 누르면 경주가 시작됩니다.\n오른쪽 빨간 선에 먼저 닿는 달팽이가 1등!", icon:"🏁" },
+      { title:"결과 확인", desc:"내가 고른 달팽이가 1등이면 베팅액의 5배를 받습니다!", icon:"🏆" },
+    ],
+    rule:"💡 6마리 중 1마리 맞추기 → 순수 확률 약 16.7%\n어떤 달팽이가 '잘 이긴다'는 패턴은 없습니다. 매번 새로 결정됩니다.",
+    odds:"1등 맞추면 베팅액의 5배 지급",
+  },
+  ladder: {
+    icon:"🪜", name:"사다리 게임", color:"#a855f7",
+    summary:"번호를 골라 사다리를 타고 내려가는 게임",
+    steps:[
+      { title:"번호 선택", desc:"① ② ③ ④ 중 출발할 번호 하나를 누르세요.\n어떤 번호든 상관없어요!", icon:"👆" },
+      { title:"금액 선택", desc:"베팅할 금액을 선택합니다.", icon:"💰" },
+      { title:"사다리 출발", desc:"'베팅' 버튼을 누르면 보라색 공이 내려갑니다.\n가로줄을 만날 때마다 방향이 바뀝니다.", icon:"🪜" },
+      { title:"결과 확인", desc:"공이 도착한 번호 = 내 출발 번호면 당첨!\n베팅액의 3.5배를 받습니다.", icon:"🏆" },
+    ],
+    rule:"💡 4개 중 1개 맞추기 → 순수 확률 25%\n가로줄 때문에 예측하기 어렵지만 결과는 정해져 있습니다.",
+    odds:"당첨 시 베팅액의 3.5배 지급",
+  },
+} as const;
+
+function TutorialPopup({ game, onClose }: { game:"baccarat"|"snail"|"ladder"; onClose:()=>void }) {
+  const d = TUTORIAL_DATA[game];
+  return (
+    <div style={{ position:"fixed", inset:0, zIndex:400, background:"rgba(0,0,0,0.92)", backdropFilter:"blur(12px)", display:"flex", alignItems:"center", justifyContent:"center", padding:20 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ maxWidth:500, width:"100%", background:"linear-gradient(135deg,#0a0a18,#111124)", border:`2px solid ${d.color}`, borderRadius:22, padding:"28px 24px", maxHeight:"90vh", overflowY:"auto", boxShadow:`0 0 40px ${d.color}33` }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:18 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <div style={{ width:44, height:44, borderRadius:14, background:`${d.color}22`, border:`1px solid ${d.color}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:22 }}>{d.icon}</div>
+            <div>
+              <div style={{ color:"#fff", fontWeight:900, fontSize:17 }}>{d.name} 하는 법</div>
+              <div style={{ color:d.color, fontSize:12 }}>{d.summary}</div>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background:"none", border:"none", color:"#555", fontSize:22, cursor:"pointer" }}>✕</button>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:16 }}>
+          {d.steps.map((step,i) => (
+            <div key={i} style={{ display:"flex", gap:12, background:"#ffffff06", borderRadius:12, padding:"12px 14px", alignItems:"flex-start" }}>
+              <div style={{ width:32, height:32, borderRadius:10, background:`${d.color}22`, border:`1px solid ${d.color}44`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:15, flexShrink:0 }}>{step.icon}</div>
+              <div>
+                <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:4 }}>
+                  <span style={{ background:d.color, color:"#000", fontSize:9, fontWeight:900, padding:"1px 7px", borderRadius:10 }}>STEP {i+1}</span>
+                  <span style={{ color:"#e4e4e7", fontWeight:700, fontSize:13 }}>{step.title}</span>
+                </div>
+                <div style={{ color:"#888", fontSize:12, lineHeight:1.7, whiteSpace:"pre-line" }}>{step.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:`${d.color}11`, border:`1px solid ${d.color}33`, borderRadius:12, padding:"12px 16px", marginBottom:12 }}>
+          <div style={{ color:"#aaa", fontSize:12, lineHeight:1.8, whiteSpace:"pre-line" }}>{d.rule}</div>
+        </div>
+        <div style={{ background:"#ffffff08", borderRadius:12, padding:"10px 16px", marginBottom:18, display:"flex", alignItems:"center", gap:8 }}>
+          <span style={{ fontSize:14 }}>💸</span>
+          <span style={{ color:d.color, fontWeight:700, fontSize:13 }}>{d.odds}</span>
+        </div>
+        <button onClick={onClose} style={{ width:"100%", padding:"13px 0", borderRadius:14, fontSize:15, fontWeight:900, background:`linear-gradient(135deg,${d.color},${d.color}aa)`, color:"#fff", border:"none", cursor:"pointer", boxShadow:`0 4px 16px ${d.color}44` }}>
+          알겠어요! 바로 해볼게요 {d.icon}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── 무료 코인 팝업 ────────────────────────────────────────────────────────────
 function FreeCoinPopup({ siteName, onClaim }: { siteName: string; onClaim: () => void }) {
   const [count, setCount] = useState(3);
@@ -565,6 +649,7 @@ function PlayContent() {
 
   // 오버레이 상태
   const [showFreeCoin, setShowFreeCoin] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [showCharge, setShowCharge] = useState(false);
   const [showAddiction, setShowAddiction] = useState(false);
   const [showReveal, setShowReveal] = useState(false);
@@ -671,6 +756,11 @@ function PlayContent() {
         </div>
       )}
 
+      {/* ── 튜토리얼 팝업 ── */}
+      {showTutorial && (
+        <TutorialPopup game={activeGame} onClose={() => setShowTutorial(false)} />
+      )}
+
       {/* ── 결과 화면 ── */}
       {showReveal && <RevealScreen totalLost={totalDelta} totalCharged={totalCharged} round={round} onRetry={handleRetry} onHome={() => router.push("/")} />}
 
@@ -764,6 +854,9 @@ function PlayContent() {
                 <span style={{ fontSize:20 }}>{TABS.find(t=>t.id===activeGame)?.icon}</span>
                 <h2 style={{ color:"#e4e4e7", fontWeight:900, fontSize:17 }}>{TABS.find(t=>t.id===activeGame)?.label}</h2>
                 <span style={{ color:"#374151", fontSize:11 }}>— 교육용 시뮬레이션</span>
+                <button onClick={() => setShowTutorial(true)} style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:5, padding:"5px 12px", borderRadius:20, background:"#1e1e2e", border:"1px solid #3b82f655", color:"#93c5fd", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+                  ❓ 처음이에요
+                </button>
               </div>
               {activeGame==="baccarat" && <BaccaratGame balance={balance} onResult={handleResult} round={round} />}
               {activeGame==="snail" && <SnailGame balance={balance} onResult={handleResult} round={round} />}
