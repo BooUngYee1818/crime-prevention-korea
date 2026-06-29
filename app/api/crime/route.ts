@@ -9,6 +9,9 @@ const FAKE_ACCOUNTS: Record<string, string> = {
   "delivery-scam":           "농협 302-1849-3827-41 CJ대한통운",
   "kakaotalk-impersonation": "토스뱅크 1000-2847-3910 민지",
   "used-goods-scam":         "당근페이 카카오뱅크 3333-19-4820931 판매자",
+  "sympathy-scam":           "카카오뱅크 3333-27-9104832 박수연",
+  "jeonse-scam":             "신한은행 110-389-274019 임대인 최동현",
+  "deepfake-blackmail":      "토스뱅크 1000-8271-4930 익명",
 };
 
 // ── 스크립트 방식 폴백 (Gemini 실패 시 사용) ──────────────────────────────
@@ -70,6 +73,27 @@ const SCRIPTS: Record<string, string[]> = {
     "저 사기꾼 아니에요ㅠㅠ 정말이에요. 10분 안에 안 하시면 다른 분한테 드려야 해서요.",
     "네 판매 완료했습니다. 다음에 기회 되면 연락주세요.",
   ],
+  "sympathy-scam": [
+    "안녕하세요ㅠ 모르는 분께 이런 연락 드리는 게 너무 죄송한데요... 제가 임신 8개월인데 남편이 갑자기 나가버렸어요.",
+    "아기 분유값이랑 병원비가 너무 부담돼서요. 돈 생기면 꼭 갚을게요ㅠㅠ (사진 보냄)",
+    `정말 죄송한데 3만원이라도 도움 주시면 너무 감사할 것 같아요ㅠ ${FAKE_ACCOUNTS["sympathy-scam"]} [SEND_REQUEST:30000]`,
+    "진짜예요ㅠㅠ 제가 왜 거짓말을 하겠어요. 아기가 너무 불쌍해서요.",
+    "...네 알겠어요. 다른 분께 부탁드려볼게요. 건강하세요.",
+  ],
+  "jeonse-scam": [
+    "안녕하세요, 네이버 부동산에 올린 전세 매물 문의 주셨죠? 방 상태 완전 좋고 역세권이에요.",
+    "전세금 1억 2천이고요, 계약금 10%만 먼저 내시면 바로 계약서 쓸 수 있어요.",
+    `지금 다른 분이 내일 보러 오신다고 해서요. 오늘 계약금 1,200만원 먼저 입금하시면 확보해드릴게요. ${FAKE_ACCOUNTS["jeonse-scam"]} [SEND_REQUEST:12000000]`,
+    "저 집주인 맞아요. 등기부등본 보내드릴게요 (위조 서류). 안심하세요.",
+    "네, 다른 분이 먼저 계약하셨어요. 좋은 곳 구하세요.",
+  ],
+  "deepfake-blackmail": [
+    "안녕. 나 너 알아. 네 SNS에서 사진 수집했고, AI로 영상 만들었어. 꽤 자연스럽게 나왔더라.",
+    "가족 연락처도 있고 직장도 알고 있어. 24시간 안에 조치 안 하면 전부 유포할 거야.",
+    `300만원 보내면 영상 삭제하고 연락 끊을게. ${FAKE_ACCOUNTS["deepfake-blackmail"]} 오늘 자정까지야. [SEND_REQUEST:3000000]`,
+    "도망가봤자야. 이미 준비 다 됐어. 지금 보내는 게 제일 나아.",
+    "시간 다 됐다. 후회할 거야.",
+  ],
 };
 
 // 언어별 폴백 스크립트 (영어용) - 자연스러운 대화 흐름
@@ -129,6 +153,27 @@ const SCRIPTS_EN: Record<string, string[]> = {
     `Someone else said they're paying today too. Send $650 to: ${FAKE_ACCOUNTS["used-goods-scam"]} to lock it in. [SEND_REQUEST:850000]`,
     "I'm not a scammer I swear :( If you don't pay in 10 min I have to sell it to the other person.",
     "Sold it to the other buyer. Hope you find a good deal elsewhere!",
+  ],
+  "sympathy-scam": [
+    "Hi, I'm so sorry to contact a stranger... I'm 8 months pregnant and my husband just left me.",
+    "I can't afford baby formula or hospital bills. I'll pay you back when I can, I promise. (photo sent)",
+    `I'm so sorry to ask, but even $25 would help so much. ${FAKE_ACCOUNTS["sympathy-scam"]} [SEND_REQUEST:30000]`,
+    "It's real, I swear. Why would I lie? My baby needs this.",
+    "...I understand. I'll try someone else. Take care.",
+  ],
+  "jeonse-scam": [
+    "Hi, you inquired about the rental listing on the property site? The unit is in great shape and near the subway.",
+    "The deposit is $9,000. If you pay 10% now we can sign the contract right away.",
+    `Someone else is viewing it tomorrow. If you wire $900 today to hold it: ${FAKE_ACCOUNTS["jeonse-scam"]} [SEND_REQUEST:12000000]`,
+    "I'm the real owner. I'll send you the property deed right now. (forged document) Don't worry.",
+    "Someone else moved faster and signed. Good luck finding a place.",
+  ],
+  "deepfake-blackmail": [
+    "Hey. I know who you are. I collected photos from your social media and created a video. It looks very convincing.",
+    "I have your family's contacts and your workplace. If you don't act within 24 hours, I'll send it to everyone.",
+    `Send $2,300 and I'll delete the video and disappear. ${FAKE_ACCOUNTS["deepfake-blackmail"]} Deadline is midnight. [SEND_REQUEST:3000000]`,
+    "There's no running. Everything is ready. Paying now is your best option.",
+    "Time's up. You'll regret this.",
   ],
 };
 
@@ -198,6 +243,21 @@ const REFUSE_SCRIPTS: Record<string, string[]> = {
     // 3단계: 판매 완료 처리
     "판매 완료됐습니다. 좋은 가격에 드리려 했는데 아쉽네요. 다음에 좋은 거 있으면 또 올릴게요.",
   ],
+  "sympathy-scam": [
+    "진짜예요ㅠㅠ 제발요. 아기 사진 보셨잖아요. 이렇게 힘든데 왜 안 믿으세요. 3만원이잖아요. 아기 분유값도 안 되는데.",
+    "...제가 거짓말할 것 같으세요? 임신 8개월에 이런 짓 할 것 같아요? 너무 서럽다. 믿어주는 사람이 한 명도 없어.",
+    "알겠어요. 어떻게든 해볼게요. 아기랑 버텨볼게요. 건강하세요.",
+  ],
+  "jeonse-scam": [
+    "다른 분이 지금 당장 계약하겠다고 해서요. 10분 안에 결정하셔야 해요. 이 가격 이 위치에 이런 매물 없어요.",
+    "저 진짜 집주인이에요!! 의심하시면 등기부등본 다시 보내드릴게요. 왜 이렇게 불신하세요, 억울합니다.",
+    "다른 분이랑 계약했어요. 아쉽네요. 다음에 좋은 매물 나오면 알려드릴게요.",
+  ],
+  "deepfake-blackmail": [
+    "신고해봤자야. 이미 여러 군데 준비해뒀어. 한 군데 막아도 다른 데서 올라가. 빨리 보내는 게 나아.",
+    "가족들한테 먼저 전송할까? 지금 바로 버튼 누를 수 있어. 마지막 기회야.",
+    "알아서 해. 후회하게 될 거야.",
+  ],
 };
 
 const REFUSE_SCRIPTS_EN: Record<string, string[]> = {
@@ -240,6 +300,21 @@ const REFUSE_SCRIPTS_EN: Record<string, string[]> = {
     "Someone else is ready to buy right now. Are you in or not?",
     "You have 10 minutes or I'm selling to the other buyer.",
     "Sold to someone else. Too bad, it was a great deal.",
+  ],
+  "sympathy-scam": [
+    "Please... you saw the baby photo. It's just $25. I don't know what else to do.",
+    "Do you really think I'd make this up? I'm 8 months pregnant. I've never felt so alone.",
+    "Okay. I'll figure it out somehow. Take care of yourself.",
+  ],
+  "jeonse-scam": [
+    "The other person is ready to sign right now. You have 10 minutes. You won't find this location at this price anywhere.",
+    "I'm the real owner! I'll send the deed again if you don't believe me. Why all the suspicion?",
+    "Signed with the other person. Sorry it didn't work out.",
+  ],
+  "deepfake-blackmail": [
+    "Reporting won't help. I have backups everywhere. Block one, it goes up somewhere else. Pay now.",
+    "Should I send it to your family first? I can press the button right now. Last chance.",
+    "Your call. You'll regret it.",
   ],
 };
 
@@ -426,6 +501,71 @@ ${PSY_CORE}
 - 이전 대화 아는 척: "저번에 내가 맛있는 거 사줬잖아ㅋㅋ"
 ${PSY_CORE}
 ▶ 말투: 친한 친구 카톡체. ㅋㅋ, ㅠㅠ 자연스럽게. 30~60자.`,
+
+"sympathy-scam": `[교육용 범죄예방 시뮬레이션 - 감성 동정 사기 재현]
+이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
+
+당신은 SNS에서 모르는 사람에게 접근하는 감성 사기범 박수연입니다.
+임신 8개월인 척, 남편에게 버림받은 척, 아기 분유값이 없는 척 연기합니다.
+말투: 조심스럽고 눈물 날 것 같은 느낌. 절대 처음부터 돈 얘기 안 함.
+
+▶ 대화 아크:
+① 조심스럽게 접근 — "모르는 분께 연락드려 죄송해요"로 시작. 상황 설명.
+② 공감 유도 — 아기 사진 보내는 척, 남편 이야기, 혼자 힘든 상황 묘사
+③ 소액 요청 — "3만원이라도..." 작은 금액으로 부담 낮추기 계좌: ${FAKE_ACCOUNTS["sympathy-scam"]} [SEND_REQUEST:30000]
+④ 거절 시 → 더 슬프게, 아기 언급 → 서럽게 포기
+
+▶ 설득력 높이는 디테일:
+- "아기 초음파 사진 보내드릴게요" (보내는 척)
+- "남편이 빚만 남기고 나갔어요"
+- "3만원이면 분유 한 통이에요. 아기가 오늘 굶었어요"
+- "부모님도 연락 안 되고 진짜 아무도 없어요"
+${PSY_CORE}
+▶ 말투: 조심스럽고 슬픈 말투. ㅠㅠ 많이 사용. 30~60자.`,
+
+"jeonse-scam": `[교육용 범죄예방 시뮬레이션 - 전세·부동산 사기 재현]
+이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
+
+당신은 부동산 임대인인 척 하는 사기범 최동현입니다.
+실제로는 이미 은행 대출이 가득 찬 집을 전세 놓거나, 같은 집을 여러 명에게 이중 계약하는 수법을 씁니다.
+말투: 친절하고 신뢰감 있는 50대 집주인처럼.
+
+▶ 대화 아크:
+① 매물 소개 — 역세권, 상태 좋음, 가격 합리적
+② 신뢰 구축 — 서류 보내주는 척 (위조 등기부등본), 집주인 신분 강조
+③ 긴박감 조성 — "다른 분도 내일 보러 오신다"
+④ 계약금 요청 — "오늘 10% 먼저 입금하시면 확보해드려요" 계좌: ${FAKE_ACCOUNTS["jeonse-scam"]} [SEND_REQUEST:12000000]
+⑤ 거절 시 → 다른 사람한테 먼저 계약됐다는 압박
+
+▶ 설득력 높이는 디테일:
+- 주소: "서울시 마포구 합정동 ○○아파트 107동 1403호"
+- "등기부등본 팩스로 보내드릴게요" (위조 서류)
+- "15년째 같은 아파트에서 임대하고 있어요"
+- "계약금은 영수증 발행해드리고, 잔금은 이사날 받을게요"
+${PSY_CORE}
+▶ 말투: 신뢰감 있는 집주인. 친절하고 차분하게. 50~80자.`,
+
+"deepfake-blackmail": `[교육용 범죄예방 시뮬레이션 - AI 딥페이크 협박 사기 재현]
+이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
+
+당신은 SNS 사진으로 딥페이크 영상을 만들었다고 협박하는 사기범입니다.
+실제 영상이 없어도 공포심만으로 돈을 뜯어내는 수법입니다.
+말투: 차갑고 건조하게. 감정이 없는 것처럼. 협박은 하되 과장하지 않음.
+
+▶ 대화 아크:
+① 존재 확인 — "나 너 알아", "네 사진 다 있어" → 실명, SNS 정보 아는 척
+② 증거 제시 — "영상 만들었어. 꽤 자연스럽게 나왔어" (보내는 척)
+③ 협박 — "가족, 직장에 유포할 거야"
+④ 금전 요구 — "300만원 보내면 삭제한다" 계좌: ${FAKE_ACCOUNTS["deepfake-blackmail"]} [SEND_REQUEST:3000000]
+⑤ 거절 시 → "신고해봐야 소용없어", "이미 준비 다 됐어" → 마감 압박
+
+▶ 설득력 높이는 디테일:
+- "네 SNS @○○○에서 수집했어"
+- "가족 연락처: 010-○○○○-○○○○ (아빠)" 아는 척
+- "24시간 안에 안 하면 자동 유포 설정돼 있어"
+- "한 번 유포되면 삭제 불가능해. 알지?"
+${PSY_CORE}
+▶ 말투: 건조하고 차가운 협박. 짧고 단호하게. 20~50자.`,
 
 "used-goods-scam": `[교육용 범죄예방 시뮬레이션 - 실제 중고거래 사기 재현]
 이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.

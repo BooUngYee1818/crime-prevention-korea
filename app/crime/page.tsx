@@ -21,6 +21,9 @@ const SC_TITLE_MAP: Record<string, string> = {
   "used-goods-scam":         "sc_used_title",
   "illegal-gambling":        "sc_gambling_title",
   "link-download-scam":      "sc_link_title",
+  "sympathy-scam":           "sc_sympathy_title",
+  "jeonse-scam":             "sc_jeonse_title",
+  "deepfake-blackmail":      "sc_deepfake_title",
 };
 const SC_SUB_MAP: Record<string, string> = {
   "family-impersonation":    "sc_family_sub",
@@ -33,6 +36,9 @@ const SC_SUB_MAP: Record<string, string> = {
   "used-goods-scam":         "sc_used_sub",
   "illegal-gambling":        "sc_gambling_sub",
   "link-download-scam":      "sc_link_sub",
+  "sympathy-scam":           "sc_sympathy_sub",
+  "jeonse-scam":             "sc_jeonse_sub",
+  "deepfake-blackmail":      "sc_deepfake_sub",
 };
 const CAT_MAP: Record<string, string> = {
   "family-impersonation":    "cat_voice",
@@ -45,6 +51,9 @@ const CAT_MAP: Record<string, string> = {
   "used-goods-scam":         "cat_used",
   "illegal-gambling":        "cat_gambling",
   "link-download-scam":      "cat_smishing",
+  "sympathy-scam":           "cat_sympathy",
+  "jeonse-scam":             "cat_realestate",
+  "deepfake-blackmail":      "cat_deepfake",
 };
 
 const REPORT_NUMBERS = [
