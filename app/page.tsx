@@ -625,7 +625,7 @@ export default function HomePage() {
                   items: [
                     "💸 가짜 송금 애니메이션 및 결과 화면 개선",
                     "📱 모바일 최적화",
-                    "🏦 가짜 은행 앱 UI 추가 (KB·카카오·토스)",
+                    "🏦 은행 앱 추가",
                   ],
                 },
                 {
