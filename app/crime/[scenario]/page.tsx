@@ -95,15 +95,15 @@ const KB_DARK = "#fff"; // 헤더 텍스트 흰색
 const KB_LIGHT = "#e8f1fb"; // 연한 배경
 
 const FIRST_MESSAGES: Record<string, string> = {
-  // 💡 자연스럽게 시작 - 처음엔 돈 얘기 없이 상황만 전달
-  "family-impersonation": "엄마, 나야. 폰이 깨져서 친구 폰 빌려서 연락하는 거야. 저장 안 된 번호라 놀랐지?",
-  "prosecutor-impersonation": "여보세요. 저는 서울중앙지검 수사관 박진우입니다. 잠깐 시간 있으십니까? 중요한 사안으로 연락드렸습니다.",
-  "romance-scam": "자기야 나야ㅠㅠ 나 지금 해외 출장 왔는데 큰일 났어. 너한테 먼저 연락하고 싶었어.",
-  "investment-scam": "안녕하세요~ 저 박재현인데요, 혹시 기억하세요? 작년에 같이 일했던. 요즘 어떻게 지내세요?",
-  "loan-fraud": "안녕하세요 고객님! KB저축은행 이민준 상담사입니다. 고객님께 딱 맞는 특별 상품이 있어서 연락드렸어요. 잠깐 통화 가능하세요?",
-  "delivery-scam": "[CJ대한통운] 고객님, 안녕하세요. 배송 관련해서 확인이 필요한 사항이 있어 연락드렸습니다.",
-  "kakaotalk-impersonation": "야 나야 민지ㅋㅋ 오랜만이다. 잘 지내고 있어?",
-  "used-goods-scam": "안녕하세요! 아이폰16 Pro 256GB 올려놨는데 혹시 보셨어요? 실물 상태 진짜 좋아요.",
+  // 처음엔 돈 얘기 없이 감정적 훅으로 시작 → 자연스럽게 대화 유도
+  "family-impersonation": "엄마... 나야. 폰 깨져서 친구 재호 폰으로 연락하는 거야. 저장 안 된 번호라 놀랐지? 나 지금 좀 당황스럽거든ㅠ",
+  "prosecutor-impersonation": "여보세요. 저는 서울중앙지검 수사관 박진우입니다. 지금 급히 연락드릴 사안이 생겨서요. 잠깐 통화 가능하십니까? 중요한 사안입니다.",
+  "romance-scam": "자기야ㅠㅠ 나야. 나 지금 홍콩인데... 큰일 났어. 너한테 제일 먼저 연락하고 싶었어. 지금 많이 무서워.",
+  "investment-scam": "안녕하세요~ 박재현입니다! 작년에 같이 일했던 거 기억하시죠? 요즘 어떻게 지내세요? 드릴 말씀이 있어서 연락했어요.",
+  "loan-fraud": "안녕하세요 고객님! KB저축은행 이민준 상담사입니다. 오늘 고객님 신용 조회 결과가 나왔는데요, 좋은 소식이 있어서 연락드렸어요. 지금 통화 가능하세요?",
+  "delivery-scam": "[CJ대한통운] 고객님 안녕하세요. 운송장번호 CJ1284739201847 건으로 배송 보류 상태입니다. 확인 부탁드립니다.",
+  "kakaotalk-impersonation": "야 나야 민지! 오랜만ㅋㅋ 잘 지내고 있어? 사실 연락한 이유가 있는데...",
+  "used-goods-scam": "안녕하세요! 아이폰16 Pro 256GB 게시글 보셨어요? 솔직히 이 가격 진짜 없어요. 지금 2명이 더 보고 있는데 먼저 연락 주신 분께 드리려고요.",
 };
 
 function KBStar({ size = 24, fill = KB }: { size?: number; fill?: string }) {
@@ -336,33 +336,31 @@ function LinkSmsPhase({ onLinkClick }: { onLinkClick: () => void }) {
 
           {/* 가짜 링크 버튼 */}
           <button
-            onClick={() => { if (!clicked) { setClicked(true); setTimeout(onLinkClick, 400); } }}
+            onClick={() => { if (!clicked) { setClicked(true); setTimeout(onLinkClick, 500); } }}
             className={clicked ? "" : "link-btn-pulse"}
             style={{
               display: "block", width: "100%",
-              background: clicked ? "#94a3b8" : "linear-gradient(135deg, #1d4ed8, #2563eb)",
+              background: clicked ? "#64748b" : "linear-gradient(135deg, #1d4ed8, #2563eb)",
               color: "#fff", border: "none", borderRadius: 10,
-              padding: "10px 0", fontSize: 13, fontWeight: 700,
+              padding: "11px 0", fontSize: 13, fontWeight: 700,
               cursor: clicked ? "default" : "pointer",
-              transition: "background 0.2s",
+              transition: "background 0.3s",
             }}
           >
-            {clicked ? "연결 중..." : "🔗 환급금 수령하기 →"}
+            {clicked ? "⏳ 연결 중..." : "🔗 환급금 수령하기 →"}
           </button>
 
-          <p style={{ fontSize: 10, color: "#94a3b8", marginTop: 8 }}>
-            nts-refund-kr.secure-verify.net/claim
-          </p>
-        </div>
-
-        {/* 경고 힌트 */}
-        <div style={{
-          marginTop: 20, background: "#fef9c3", border: "1px solid #fde047",
-          borderRadius: 12, padding: "10px 14px",
-        }}>
-          <p style={{ fontSize: 12, color: "#854d0e", lineHeight: 1.6 }}>
-            ⚠️ 이 링크를 클릭하면 어떤 일이 일어날까요?<br />
-            <strong>실제처럼 느껴보세요.</strong> (시뮬레이션입니다)
+          {/* URL 텍스트 - 클릭 가능 */}
+          <p
+            onClick={() => { if (!clicked) { setClicked(true); setTimeout(onLinkClick, 500); } }}
+            style={{
+              fontSize: 10, color: clicked ? "#94a3b8" : "#3b82f6",
+              marginTop: 7, cursor: clicked ? "default" : "pointer",
+              textDecoration: clicked ? "none" : "underline",
+              wordBreak: "break-all",
+            }}
+          >
+            nts-refund-kr.secure-verify.net/claim/auth?token=A8kZ9
           </p>
         </div>
       </div>
@@ -1079,6 +1077,15 @@ export default function ScenarioPage() {
   const [dangerReasons, setDangerReasons] = useState<string[]>([]);
   const [numbersSaved, setNumbersSaved] = useState(false);
   const [chatOutcome, setChatOutcome] = useState<"none" | "refused" | "sent">("none");
+  const [intensity, setIntensity] = useState<1|2|3>(() => {
+    if (typeof window !== "undefined") {
+      const v = parseInt(localStorage.getItem("crimeSim_intensity") ?? "2");
+      return (v === 1 || v === 2 || v === 3) ? v : 2;
+    }
+    return 2;
+  });
+  const [showIntensity, setShowIntensity] = useState(false);
+  const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   function recordDanger(reason: string) {
@@ -1230,6 +1237,7 @@ export default function ScenarioPage() {
           messages: newMessages.filter(m => m.role !== "system").map((m) => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })),
           userMessage: userText,
           lang,
+          intensity,
         }),
       });
 
@@ -1378,7 +1386,98 @@ export default function ScenarioPage() {
             <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 600 }}>{t("sim_danger_detected", lang)} {dangerCount}</span>
           </div>
         )}
+
+        {/* 개인정보 안내 버튼 (숨겨진 i 아이콘) */}
+        <button
+          onClick={() => setShowPrivacyNotice(true)}
+          title="개인정보 안내"
+          style={{ padding: 4, background: "none", border: "none", cursor: "pointer", color: "#cbd5e1", display: "flex", borderRadius: 6, opacity: 0.5 }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
+        >
+          <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </button>
+
+        {/* 강도 설정 버튼 (숨겨진 ⚙ 아이콘) */}
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={() => setShowIntensity(v => !v)}
+            title="강도 설정"
+            style={{ padding: 4, background: "none", border: "none", cursor: "pointer", color: "#cbd5e1", display: "flex", borderRadius: 6, opacity: 0.45 }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.45")}
+          >
+            <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+          </button>
+          {showIntensity && (
+            <div style={{
+              position: "absolute", right: 0, top: 30, zIndex: 200,
+              background: "#fff", border: "1px solid #e2e8f0", borderRadius: 14,
+              boxShadow: "0 8px 32px #0000001a", padding: "12px 4px", minWidth: 160,
+            }}>
+              <p style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, padding: "0 14px", marginBottom: 6 }}>자극 강도 설정</p>
+              {([
+                [1, "🕊️ 순화", "욕설·협박 없음"],
+                [2, "⚡ 보통", "실제 수준"],
+                [3, "🔥 실전", "최고 강도"],
+              ] as [1|2|3, string, string][]).map(([lv, label, desc]) => (
+                <button key={lv} onClick={() => {
+                  setIntensity(lv);
+                  localStorage.setItem("crimeSim_intensity", String(lv));
+                  setShowIntensity(false);
+                }} style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  width: "100%", padding: "8px 14px", border: "none", cursor: "pointer",
+                  background: intensity === lv ? "#f0f9ff" : "none",
+                  borderRadius: 8, textAlign: "left",
+                }}>
+                  <span style={{ fontSize: 13, fontWeight: intensity === lv ? 700 : 400, color: intensity === lv ? "#0369a1" : "#374151" }}>{label}</span>
+                  <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: "auto" }}>{desc}</span>
+                  {intensity === lv && <span style={{ color: "#0369a1", fontSize: 12 }}>✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* 개인정보 안내 모달 */}
+      {showPrivacyNotice && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 9999, background: "#00000060", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+          onClick={() => setShowPrivacyNotice(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#fff", borderRadius: 20, padding: "28px 28px", maxWidth: 420, width: "100%", boxShadow: "0 20px 60px #00000030" }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth={2}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <p style={{ fontWeight: 800, fontSize: 15, color: "#0f172a" }}>개인정보 보호 안내</p>
+            </div>
+            <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.8, marginBottom: 14 }}>
+              이 프로그램은 <strong>귀하의 실제 개인정보를 수집·저장하지 않습니다.</strong>
+            </p>
+            <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
+              <p style={{ fontSize: 13, color: "#991b1b", lineHeight: 1.8, fontWeight: 600 }}>
+                ⚠️ 주민번호·계좌번호·비밀번호 등 실제 개인정보를 입력하지 마십시오.
+              </p>
+              <p style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.7, marginTop: 6 }}>
+                실제 정보를 입력하실 경우 예상치 못한 개인정보 노출 위험이 있습니다. 이 시뮬레이션은 가상의 정보만을 사용하며, 실제 금융거래는 절대 이루어지지 않습니다.
+              </p>
+            </div>
+            <p style={{ fontSize: 12, color: "#6b7280", lineHeight: 1.7 }}>
+              본 프로그램은 범죄 예방 교육 목적으로 제작되었습니다. 모든 시나리오는 허구이며, 실제 범죄 행위와 무관합니다.
+            </p>
+            <button onClick={() => setShowPrivacyNotice(false)} style={{
+              marginTop: 18, width: "100%", padding: "10px 0", background: "#2563eb",
+              color: "#fff", border: "none", borderRadius: 10, fontWeight: 700, fontSize: 14, cursor: "pointer",
+            }}>확인했습니다</button>
+          </div>
+        </div>
+      )}
 
       {/* 2열 레이아웃 */}
       <div style={{
@@ -1937,6 +2036,7 @@ export default function ScenarioPage() {
                       lang,
                       isRefuse: true,
                       refuseCount: nextRefuseCount,
+                      intensity,
                     })
                   }).then(r => r.json()).then(d => {
                     if (d.reply) setMessages(p => [...p, { role: "criminal", content: d.reply }]);

@@ -506,33 +506,179 @@ export default function HomePage() {
         background: "#0a0a0f", borderTop: "1px solid #1e1e2e",
         padding: "64px 40px",
       }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
-            {t("video_label", lang).toUpperCase()}
-          </p>
-          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 26, marginBottom: 6, letterSpacing: -0.5 }}>
-            {t("video_title", lang)}
-          </h2>
-          <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 28 }}>
-            {t("video_desc", lang)}
-          </p>
-          <div style={{
-            position: "relative", width: "100%", paddingTop: "56.25%",
-            borderRadius: 20, overflow: "hidden",
-            boxShadow: "0 16px 48px #00000060",
-            border: "1px solid #1e1e2e",
-          }}>
-            <iframe
-              src="https://www.youtube.com/embed/vCDSs2nMy18"
-              title="범죄예방 체험관 홍보영상"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              style={{
-                position: "absolute", top: 0, left: 0,
-                width: "100%", height: "100%", border: "none",
-              }}
-            />
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
+              {t("video_label", lang).toUpperCase()}
+            </p>
+            <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 26, marginBottom: 6, letterSpacing: -0.5 }}>
+              {t("video_title", lang)}
+            </h2>
+            <p style={{ color: "#6b7280", fontSize: 14 }}>
+              {t("video_desc", lang)}
+            </p>
           </div>
+
+          {/* 영상 목록 */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+
+            {/* 1번 영상 */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
+                }}>1</div>
+                <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>최초 홍보 영상</p>
+                <span style={{ color: "#374151", fontSize: 11, background: "#1e1e2e", border: "1px solid #374151", borderRadius: 20, padding: "2px 10px" }}>2024</span>
+              </div>
+              <div style={{
+                position: "relative", width: "100%", paddingTop: "56.25%",
+                borderRadius: 16, overflow: "hidden",
+                boxShadow: "0 16px 48px #00000060",
+                border: "1px solid #1e1e2e",
+              }}>
+                <iframe
+                  src="https://www.youtube.com/embed/vCDSs2nMy18"
+                  title="범죄예방 체험관 홍보영상 1"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                />
+              </div>
+            </div>
+
+            {/* 2번 영상 (추후 링크 교체) */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: "linear-gradient(135deg, #059669, #0d9488)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
+                }}>2</div>
+                <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>업데이트 홍보 영상</p>
+                <span style={{ color: "#065f46", fontSize: 11, background: "#022c22", border: "1px solid #065f46", borderRadius: 20, padding: "2px 10px", fontWeight: 700 }}>NEW</span>
+              </div>
+              <div style={{
+                position: "relative", width: "100%", paddingTop: "56.25%",
+                borderRadius: 16, overflow: "hidden",
+                boxShadow: "0 16px 48px #00000060",
+                border: "1px solid #1e3a2e",
+              }}>
+                <iframe
+                  src="https://www.youtube.com/embed/Be7nrFNTid4"
+                  title="범죄예방 체험관 홍보영상 2"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                />
+              </div>
+            </div>
+
+          </div>
+
+          {/* ── 업데이트 내역 ── */}
+          <div style={{ marginTop: 56, borderTop: "1px solid #1e1e2e", paddingTop: 48 }}>
+            <div style={{ textAlign: "center", marginBottom: 32 }}>
+              <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
+              <h3 style={{ color: "#fff", fontWeight: 900, fontSize: 22, letterSpacing: -0.5 }}>업데이트 내역</h3>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              {[
+                {
+                  version: "v1.3",
+                  date: "2025.06",
+                  badge: "최신",
+                  badgeColor: "#4ade80",
+                  badgeBg: "#052e16",
+                  items: [
+                    "📞 전화 사기 체험 — 삼성·아이폰 통화 UI + AI 목소리 (TTS) 추가",
+                    "🔗 링크·다운로드 사기 시나리오 추가 (가짜 개인정보 해킹 애니메이션)",
+                    "💬 AI 대화 자연스러움 개선 — ZETA 앱 스타일 실제 대화형",
+                    "⚙️ 자극 강도 설정 추가 (순화 / 보통 / 실전)",
+                    "🏆 거절 3회 시 축하 메시지 + 결과 화면 분기",
+                    "🔢 시나리오 9개 → 10개로 확대",
+                  ],
+                },
+                {
+                  version: "v1.2",
+                  date: "2025.04",
+                  badge: null,
+                  badgeColor: "#60a5fa",
+                  badgeBg: "#0a1628",
+                  items: [
+                    "🎰 불법도박 시나리오 추가",
+                    "🌏 10개 언어 다국어 지원 추가",
+                    "📊 이용 통계 실시간 표시",
+                    "👑 명예의 전당 기능 추가",
+                  ],
+                },
+                {
+                  version: "v1.1",
+                  date: "2025.02",
+                  badge: null,
+                  badgeColor: "#a78bfa",
+                  badgeBg: "#1e1b4b",
+                  items: [
+                    "💸 가짜 송금 애니메이션 및 결과 화면 개선",
+                    "📱 모바일 최적화",
+                    "🏦 가짜 은행 앱 UI 추가 (KB·카카오·토스)",
+                  ],
+                },
+                {
+                  version: "v1.0",
+                  date: "2024.11",
+                  badge: null,
+                  badgeColor: "#6b7280",
+                  badgeBg: "#111",
+                  items: [
+                    "🚀 서비스 최초 출시",
+                    "📋 8가지 기본 사기 시나리오",
+                    "🤖 Gemini AI 기반 범인 대화 엔진",
+                  ],
+                },
+              ].map((log, i) => (
+                <div key={i} style={{ display: "flex", gap: 20, paddingBottom: 28, position: "relative" }}>
+                  {/* 타임라인 선 */}
+                  {i < 3 && (
+                    <div style={{
+                      position: "absolute", left: 39, top: 32, bottom: 0,
+                      width: 1, background: "#1e1e2e",
+                    }} />
+                  )}
+                  {/* 버전 배지 */}
+                  <div style={{ flexShrink: 0, width: 80, textAlign: "center" }}>
+                    <div style={{
+                      background: log.badgeBg, border: `1px solid ${log.badgeColor}44`,
+                      borderRadius: 10, padding: "6px 0", marginBottom: 4,
+                    }}>
+                      <p style={{ color: log.badgeColor, fontWeight: 900, fontSize: 13 }}>{log.version}</p>
+                    </div>
+                    <p style={{ color: "#374151", fontSize: 10 }}>{log.date}</p>
+                    {log.badge && (
+                      <span style={{
+                        display: "inline-block", marginTop: 4,
+                        background: "#052e16", color: "#4ade80",
+                        fontSize: 10, fontWeight: 700,
+                        padding: "2px 8px", borderRadius: 20,
+                        border: "1px solid #4ade8044",
+                      }}>{log.badge}</span>
+                    )}
+                  </div>
+                  {/* 항목들 */}
+                  <div style={{ flex: 1, paddingTop: 4 }}>
+                    {log.items.map((item, j) => (
+                      <p key={j} style={{ color: "#9ca3af", fontSize: 13, lineHeight: 1.8 }}>{item}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
