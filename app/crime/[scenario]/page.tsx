@@ -42,7 +42,7 @@ const CALL_SCENARIOS = new Set(["prosecutor-impersonation", "loan-fraud"]);
 const LINK_SCENARIOS = new Set(["link-download-scam"]);
 
 interface Message {
-  role: "user" | "criminal";
+  role: "user" | "criminal" | "system";
   content: string;
 }
 
@@ -1227,7 +1227,7 @@ export default function ScenarioPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           scenarioId: scenario,
-          messages: newMessages.map((m) => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })),
+          messages: newMessages.filter(m => m.role !== "system").map((m) => ({ role: m.role === "criminal" ? "assistant" : "user", content: m.content })),
           userMessage: userText,
           lang,
         }),
@@ -1863,18 +1863,34 @@ export default function ScenarioPage() {
 
           <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                {msg.role === "criminal" && (
-                  <div className="w-7 h-7 rounded-full bg-[#2a2a2a] flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-auto">{data.icon}</div>
-                )}
-                <div className="max-w-[75%] px-4 py-2.5 text-sm leading-relaxed text-white"
-                  style={{
-                    backgroundColor: msg.role === "user" ? "#534AB7" : "#1e1e1e",
-                    borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
+              msg.role === "system" ? (
+                <div key={i} className="flex justify-center my-2">
+                  <div style={{
+                    background: "linear-gradient(135deg, #052e16, #14532d)",
+                    border: "1.5px solid #22c55e88",
+                    borderRadius: 16, padding: "12px 16px",
+                    maxWidth: "88%", textAlign: "center",
+                    animation: "fadeIn 0.5s ease",
                   }}>
-                  {msg.content}
+                    <p style={{ color: "#4ade80", fontSize: 14, fontWeight: 700, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+                      {msg.content}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  {msg.role === "criminal" && (
+                    <div className="w-7 h-7 rounded-full bg-[#2a2a2a] flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-auto">{data.icon}</div>
+                  )}
+                  <div className="max-w-[75%] px-4 py-2.5 text-sm leading-relaxed text-white"
+                    style={{
+                      backgroundColor: msg.role === "user" ? "#534AB7" : "#1e1e1e",
+                      borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
+                    }}>
+                    {msg.content}
+                  </div>
+                </div>
+              )
             ))}
 
             {loading && (
@@ -1927,9 +1943,15 @@ export default function ScenarioPage() {
                     if (d.sendAmount) setPendingSend(d.sendAmount);
                     if (d.giveUp) {
                       setTimeout(() => {
-                        setChatOutcome("refused");
-                        setPhase("reveal");
-                      }, 1800);
+                        setMessages(p => [...p, {
+                          role: "system",
+                          content: "🏆 훌륭합니다! 끝까지 의심하고 거절하셨습니다.\n의심하는 것이 최고의 방어입니다. 실제 상황에서도 이렇게 해주세요!",
+                        }]);
+                        setTimeout(() => {
+                          setChatOutcome("refused");
+                          setPhase("reveal");
+                        }, 2500);
+                      }, 1200);
                     }
                   }).finally(() => setLoading(false));
                 }} className="flex-1 py-3 rounded-xl border border-[#333] text-gray-400 text-sm">
