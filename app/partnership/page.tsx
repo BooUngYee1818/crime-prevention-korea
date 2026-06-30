@@ -228,7 +228,7 @@ export default function PartnershipPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f0f4ff", color: "#1e293b" }}>
+    <div style={{ minHeight: "100vh", background: "#f1f1f3", color: "#1e293b" }}>
 
       {/* Nav */}
       <nav style={{
@@ -255,55 +255,100 @@ export default function PartnershipPage() {
 
       {/* Hero */}
       <section style={{
-        background: "linear-gradient(135deg, #1e3a8a 0%, #1e293b 60%, #0f172a 100%)",
-        padding: "80px 40px",
+        background: "linear-gradient(160deg, #0a1628 0%, #0f2a5c 35%, #1a1040 70%, #0a0f20 100%)",
+        padding: "80px 40px 100px",
         textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
       }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+        {/* 장식 원 */}
+        <div style={{ position:"absolute", top:-80, right:-80, width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle, #2563eb18 0%, transparent 70%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:-60, left:-60, width:300, height:300, borderRadius:"50%", background:"radial-gradient(circle, #7c3aed14 0%, transparent 70%)", pointerEvents:"none" }} />
+        {/* 황금빛 상단 라인 */}
+        <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:"linear-gradient(90deg, transparent, #d4af37, #f5c518, #d4af37, transparent)", pointerEvents:"none" }} />
+
+        <div style={{ maxWidth: 800, margin: "0 auto", position:"relative", zIndex:1 }}>
+          {/* 공식 뱃지 */}
           <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
-            borderRadius: 20, padding: "6px 16px", marginBottom: 28,
+            display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 28,
+            background: "linear-gradient(135deg, rgba(212,175,55,0.15), rgba(245,197,24,0.08))",
+            border: "1px solid rgba(212,175,55,0.4)",
+            borderRadius: 24, padding: "8px 20px",
           }}>
-            <Building2 size={13} color="#93c5fd" />
-            <span style={{ color: "#93c5fd", fontSize: 12, fontWeight: 700 }}>
-              {lang === "ko" ? "공공기관·교육기관·금융기관 전용" : lang === "en" ? "For Public · Educational · Financial Institutions" : lang === "ja" ? "公共機関・教育機関・金融機関専用" : lang === "zh" ? "专为公共·教育·金融机构" : lang === "vi" ? "Dành cho Cơ quan Công · Giáo dục · Tài chính" : "Exclusivo para Instituciones Públicas · Educativas · Financieras"}
+            <span style={{ fontSize: 14 }}>🏛️</span>
+            <span style={{ color: "#f5c518", fontSize: 12, fontWeight: 700, letterSpacing: 1.5 }}>
+              {lang === "ko" ? "공공기관 · 교육기관 · 복지관 · 경로당 공식 도입 가능" : lang === "en" ? "Official Adoption for Public · Educational · Welfare Institutions" : lang === "ja" ? "公共機関・教育機関・福祉館・老人会 公式導入可能" : lang === "zh" ? "公共机构·教育机构·福利中心·老年之家 正式引入" : lang === "vi" ? "Dành cho Cơ quan Công · Giáo dục · Phúc lợi · Câu lạc bộ Người cao tuổi" : "Adopción Oficial para Instituciones Públicas · Educativas · Bienestar"}
             </span>
           </div>
-          <h1 style={{ fontSize: 44, fontWeight: 900, color: "#fff", letterSpacing: -1.2, lineHeight: 1.2, marginBottom: 20 }}>
-            {lang === "ko" ? "범죄예방 교육을" : lang === "en" ? "Bring Crime Prevention" : lang === "ja" ? "犯罪予防教育を" : lang === "zh" ? "将犯罪预防教育" : lang === "vi" ? "Đưa Giáo dục" : "Lleve la Educación"}<br />
-            <span style={{ background: "linear-gradient(90deg, #60a5fa, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              {lang === "ko" ? "기관에 도입하세요" : lang === "en" ? "Education to Your Institution" : lang === "ja" ? "機関に導入しましょう" : lang === "zh" ? "引入到您的机构" : lang === "vi" ? "Phòng chống Tội phạm vào Tổ chức" : "de Prevención del Crimen a su Institución"}
-            </span>
+
+          <h1 style={{ fontSize: 48, fontWeight: 900, color: "#fff", letterSpacing: -1.5, lineHeight: 1.2, marginBottom: 16 }}>
+            {lang === "ko" ? "우리 기관에\n범죄예방 교육을" : lang === "en" ? "Bring Crime Prevention\nEducation to Your Institution" : lang === "ja" ? "私たちの機関に\n犯罪予防教育を" : lang === "zh" ? "为我们的机构\n引入犯罪预防教育" : lang === "vi" ? "Đưa Giáo dục\nPhòng chống Tội phạm vào Tổ chức" : "Lleve la Educación de\nPrevención del Crimen a su Institución"}
           </h1>
-          <p style={{ color: "#94a3b8", fontSize: 16, lineHeight: 1.9, marginBottom: 40 }}>
-            {lang === "ko" ? "연간 1조 2천억원 규모의 보이스피싱·사기 피해," : lang === "en" ? "With over $1 billion in voice phishing and fraud losses each year," : lang === "ja" ? "年間1兆2千億ウォン規模のボイスフィッシング・詐欺被害," : lang === "zh" ? "每年1.2万亿韩元规模的语音钓鱼·诈骗损失," : lang === "vi" ? "Thiệt hại do lừa đảo qua điện thoại và gian lận lên đến 1,2 nghìn tỷ won mỗi năm," : "Con pérdidas anuales de más de 1 billón de wones en phishing y fraude,"}<br />
-            {lang === "ko" ? "200만명 도박 중독자. 이 숫자를 줄일 수 있는 가장 효과적인 방법은" : lang === "en" ? "and 2 million gambling addicts, the most effective solution is" : lang === "ja" ? "200万人のギャンブル依存症者。この数字を減らす最も効果的な方法は" : lang === "zh" ? "200万赌博成瘾者。减少这些数字最有效的方法是" : lang === "vi" ? "và 2 triệu người nghiện cờ bạc. Cách hiệu quả nhất để giảm những con số này là" : "y 2 millones de adictos al juego, la solución más efectiva es"}<br />
+          <div style={{
+            display: "inline-block", marginBottom: 20,
+            background: "linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            fontSize: 48, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.2,
+          }}>
+            {lang === "ko" ? "지금 바로 도입하세요" : lang === "en" ? "Start Today" : lang === "ja" ? "今すぐ導入しましょう" : lang === "zh" ? "立即引入" : lang === "vi" ? "Bắt đầu ngay hôm nay" : "Comience Hoy"}
+          </div>
+
+          <p style={{ color: "#94a3b8", fontSize: 15, lineHeight: 2.0, marginBottom: 44, marginTop: 8 }}>
+            {lang === "ko" ? "연간 1조 2천억원 규모의 보이스피싱 피해, 200만명 도박 중독자." : lang === "en" ? "₩1.2 trillion in annual phishing losses, 2 million gambling addicts." : lang === "ja" ? "年間1兆2千億ウォンのボイスフィッシング被害、200万人のギャンブル依存症。" : lang === "zh" ? "每年1.2万亿韩元的网络钓鱼损失，200万赌博成瘾者。" : lang === "vi" ? "Thiệt hại 1.200 tỷ won mỗi năm do lừa đảo, 2 triệu người nghiện cờ bạc." : "₩1.2 billones en pérdidas anuales por phishing, 2 millones de adictos al juego."}<br />
             <strong style={{ color: "#e2e8f0" }}>
-              {lang === "ko" ? "직접 체험하는 예방 교육" : lang === "en" ? "hands-on experiential prevention education" : lang === "ja" ? "直接体験する予防教育" : lang === "zh" ? "亲身体验的预防教育" : lang === "vi" ? "giáo dục phòng ngừa trải nghiệm trực tiếp" : "la educación preventiva experiencial directa"}
+              {lang === "ko" ? "직접 체험하는 AI 예방 교육이 가장 효과적입니다." : lang === "en" ? "Hands-on AI prevention education is the most effective solution." : lang === "ja" ? "直接体験するAI予防教育が最も効果的です。" : lang === "zh" ? "亲身体验的AI预防教育是最有效的方案。" : lang === "vi" ? "Giáo dục phòng ngừa AI trải nghiệm trực tiếp là hiệu quả nhất." : "La educación preventiva con IA es la solución más efectiva."}
             </strong>
-            {lang === "ko" ? "입니다." : lang === "en" ? "." : lang === "ja" ? "です。" : lang === "zh" ? "。" : lang === "vi" ? "." : "."}
           </p>
+
+          {/* 신뢰 지표 3개 */}
+          <div style={{ display:"flex", gap:24, justifyContent:"center", flexWrap:"wrap", marginBottom:44 }}>
+            {[
+              { icon:"🏆", num: lang==="ko"?"무료 제공":"Free", sub: lang==="ko"?"비영리·공익 기관":"For nonprofits" },
+              { icon:"⚡", num: lang==="ko"?"24시간":"24h", sub: lang==="ko"?"문의 답변":"Response" },
+              { icon:"🛡️", num: lang==="ko"?"100% 안전":"100% Safe", sub: lang==="ko"?"개인정보 무수집":"No data collected" },
+            ].map((item, i) => (
+              <div key={i} style={{
+                background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.12)",
+                borderRadius:16, padding:"16px 28px", textAlign:"center", minWidth:120,
+              }}>
+                <div style={{ fontSize:22, marginBottom:6 }}>{item.icon}</div>
+                <div style={{ color:"#fff", fontWeight:900, fontSize:18 }}>{item.num}</div>
+                <div style={{ color:"#64748b", fontSize:11, marginTop:2 }}>{item.sub}</div>
+              </div>
+            ))}
+          </div>
+
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#inquiry" style={{
-              padding: "14px 32px", borderRadius: 14,
-              background: "linear-gradient(135deg, #2563eb, #4f46e5)",
-              color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: 15,
-              boxShadow: "0 4px 20px #2563eb50",
+              padding: "16px 36px", borderRadius: 14,
+              background: "linear-gradient(135deg, #1d4ed8, #7c3aed)",
+              color: "#fff", textDecoration: "none", fontWeight: 800, fontSize: 16,
+              boxShadow: "0 4px 28px #2563eb60",
               display: "flex", alignItems: "center", gap: 8,
+              border: "1px solid rgba(255,255,255,0.15)",
             }}>
-              {lang === "ko" ? "도입 문의하기" : lang === "en" ? "Inquire Now" : lang === "ja" ? "導入問い合わせ" : lang === "zh" ? "立即咨询" : lang === "vi" ? "Yêu cầu ngay" : "Consultar Ahora"} <ChevronRight size={16} />
+              {lang === "ko" ? "🏛️  무료 도입 문의하기" : lang === "en" ? "🏛️  Inquire for Free" : lang === "ja" ? "🏛️  無料で導入問い合わせ" : lang === "zh" ? "🏛️  免费咨询引入" : lang === "vi" ? "🏛️  Hỏi miễn phí" : "🏛️  Consultar Gratis"} <ChevronRight size={16} />
             </a>
             <a href="#packages" style={{
-              padding: "14px 24px", borderRadius: 14,
+              padding: "16px 28px", borderRadius: 14,
               background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)",
-              color: "#e2e8f0", textDecoration: "none", fontWeight: 500, fontSize: 15,
+              color: "#e2e8f0", textDecoration: "none", fontWeight: 600, fontSize: 15,
             }}>
-              {lang === "ko" ? "패키지 보기" : lang === "en" ? "View Packages" : lang === "ja" ? "パッケージを見る" : lang === "zh" ? "查看套餐" : lang === "vi" ? "Xem gói" : "Ver Paquetes"}
+              {lang === "ko" ? "패키지 보기 →" : lang === "en" ? "View Packages →" : lang === "ja" ? "パッケージを見る →" : lang === "zh" ? "查看套餐 →" : lang === "vi" ? "Xem gói →" : "Ver Paquetes →"}
             </a>
           </div>
         </div>
       </section>
+
+      {/* 기관 신뢰 배너 */}
+      <div style={{ background:"#fff", borderBottom:"1px solid #e8e8ea", padding:"20px 40px" }}>
+        <div style={{ maxWidth:1140, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"center", gap:40, flexWrap:"wrap" }}>
+          <span style={{ color:"#94a3b8", fontSize:12, fontWeight:600, letterSpacing:1 }}>도입 적합 기관</span>
+          {["🚔 경찰청 / 사이버수사대","🎓 시·도 교육청","🏦 금융감독원","🏘️ 지자체 / 복지관","👴 경로당 / 노인회","🏫 중·고등학교"].map((item, i) => (
+            <span key={i} style={{ color:"#334155", fontSize:13, fontWeight:600, whiteSpace:"nowrap" }}>{item}</span>
+          ))}
+        </div>
+      </div>
 
       <div style={{ maxWidth: 1140, margin: "0 auto", padding: "72px 40px" }}>
 
@@ -322,7 +367,7 @@ export default function PartnershipPage() {
           {whyItems.map((item) => (
             <div key={item.title} style={{
               background: "#fff", borderRadius: 20, padding: "26px 24px",
-              border: "1px solid #f1f5f9", boxShadow: "0 2px 12px #0000000a",
+              border: "1px solid #e8e8ea", boxShadow: "0 2px 16px #00000008",
             }}>
               <div style={{
                 width: 48, height: 48, borderRadius: 14,
@@ -349,7 +394,7 @@ export default function PartnershipPage() {
             {TARGETS.map((t) => (
               <div key={t.name} style={{
                 background: "#fff", borderRadius: 16, padding: "20px 22px",
-                border: "1px solid #f1f5f9", boxShadow: "0 2px 8px #0000000a",
+                border: "1px solid #e8e8ea", boxShadow: "0 2px 12px #00000008",
                 display: "flex", alignItems: "center", gap: 16,
               }}>
                 <span style={{ fontSize: 28, flexShrink: 0 }}>{t.icon}</span>
@@ -375,7 +420,7 @@ export default function PartnershipPage() {
               <div key={s.step} style={{ position: "relative" }}>
                 <div style={{
                   background: "#fff", borderRadius: 20, padding: "26px 22px",
-                  border: "1px solid #f1f5f9", boxShadow: "0 2px 12px #0000000a",
+                  border: "1px solid #e8e8ea", boxShadow: "0 2px 16px #00000008",
                   height: "100%",
                 }}>
                   <div style={{
@@ -475,8 +520,11 @@ export default function PartnershipPage() {
         {/* Inquiry Form */}
         <div id="inquiry" style={{
           background: "#fff", borderRadius: 24, padding: "48px 44px",
-          border: "1px solid #e2e8f0", boxShadow: "0 4px 32px #0000000f",
+          border: "1px solid #e8e8ea", boxShadow: "0 4px 40px #00000010",
+          position: "relative", overflow: "hidden",
         }}>
+          {/* 황금 상단 강조 라인 */}
+          <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:"linear-gradient(90deg, #2563eb, #7c3aed, #f472b6)", borderRadius:"24px 24px 0 0" }} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "start" }}>
 
             {/* Left: Info */}
