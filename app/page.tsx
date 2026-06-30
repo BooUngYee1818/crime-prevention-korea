@@ -56,6 +56,33 @@ export default function HomePage() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const instCardRef = useRef<HTMLDivElement>(null);
 
+  // 통계 카운터
+  const statsRef = useRef<HTMLDivElement>(null);
+  const [statsCounted, setStatsCounted] = useState(false);
+  const [counters, setCounters] = useState([0, 0, 0, 0]);
+
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !statsCounted) {
+        setStatsCounted(true);
+        const targets = [1, 7.8, 5290, 200];
+        const duration = 1800;
+        const steps = 60;
+        let step = 0;
+        const timer = setInterval(() => {
+          step++;
+          const progress = 1 - Math.pow(1 - step / steps, 3); // ease-out cubic
+          setCounters(targets.map(t => parseFloat((t * progress).toFixed(t < 10 ? 1 : 0))));
+          if (step >= steps) clearInterval(timer);
+        }, duration / steps);
+      }
+    }, { threshold: 0.4 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [statsCounted]);
+
   const CHANGELOGS = [
     { version: "v1.0", badgeColor: "#6b7280", items: ["🚀 서비스 최초 출시", "📋 8가지 기본 사기 시나리오", "🤖 AI 기반 범인 대화 엔진"] },
     { version: "v1.0.1", badgeColor: "#6b7280", items: ["🐛 초기 배포 후 긴급 버그 수정", "⚡ 로딩 속도 개선"] },
@@ -133,10 +160,30 @@ export default function HomePage() {
 
   // 번역에 의존하는 배열들 — 컴포넌트 내부에서 정의
   const STATS = [
-    { value: lang === "ko" ? "1조원+" : lang === "ja" ? "1兆ウォン+" : lang === "zh" ? "1万亿韩元+" : "₩1T+",    label: t("stat1_lbl", lang), icon: "📉", bg: "#fef2f2", color: "#dc2626" },
-    { value: lang === "ko" ? "7.8만건" : lang === "ja" ? "7.8万件" : lang === "zh" ? "7.8万件" : "78,000+",   label: t("stat2_lbl", lang), icon: "📋", bg: "#fff7ed", color: "#ea580c" },
-    { value: lang === "ko" ? "5,290만원" : lang === "ja" ? "5,290万ウォン" : lang === "zh" ? "5,290万韩元" : "₩52.9M", label: t("stat3_lbl", lang), icon: "💸", bg: "#fefce8", color: "#ca8a04" },
-    { value: lang === "ko" ? "200만명" : lang === "ja" ? "200万人" : lang === "zh" ? "200万人" : "2M+",   label: t("stat4_lbl", lang), icon: "⚠️", bg: "#fdf4ff", color: "#9333ea" },
+    {
+      value: statsCounted
+        ? (lang === "ko" ? `${counters[0].toFixed(0)}조원+` : lang === "ja" ? `${counters[0].toFixed(0)}兆ウォン+` : lang === "zh" ? `${counters[0].toFixed(0)}万亿韩元+` : `₩${counters[0].toFixed(0)}T+`)
+        : (lang === "ko" ? "1조원+" : lang === "ja" ? "1兆ウォン+" : lang === "zh" ? "1万亿韩元+" : "₩1T+"),
+      label: t("stat1_lbl", lang), icon: "📉", bg: "#fef2f2", color: "#dc2626",
+    },
+    {
+      value: statsCounted
+        ? (lang === "ko" ? `${counters[1].toFixed(1)}만건` : lang === "ja" ? `${counters[1].toFixed(1)}万件` : lang === "zh" ? `${counters[1].toFixed(1)}万件` : `${Math.round(counters[1] * 10000).toLocaleString()}+`)
+        : (lang === "ko" ? "7.8만건" : lang === "ja" ? "7.8万件" : lang === "zh" ? "7.8万件" : "78,000+"),
+      label: t("stat2_lbl", lang), icon: "📋", bg: "#fff7ed", color: "#ea580c",
+    },
+    {
+      value: statsCounted
+        ? (lang === "ko" ? `${counters[2].toLocaleString()}만원` : lang === "ja" ? `${counters[2].toLocaleString()}万ウォン` : lang === "zh" ? `${counters[2].toLocaleString()}万韩元` : `₩${(counters[2] / 100).toFixed(1)}M`)
+        : (lang === "ko" ? "5,290만원" : lang === "ja" ? "5,290万ウォン" : lang === "zh" ? "5,290万韩元" : "₩52.9M"),
+      label: t("stat3_lbl", lang), icon: "💸", bg: "#fefce8", color: "#ca8a04",
+    },
+    {
+      value: statsCounted
+        ? (lang === "ko" ? `${counters[3].toFixed(0)}만명` : lang === "ja" ? `${counters[3].toFixed(0)}万人` : lang === "zh" ? `${counters[3].toFixed(0)}万人` : `${counters[3].toFixed(0)}M+`)
+        : (lang === "ko" ? "200만명" : lang === "ja" ? "200万人" : lang === "zh" ? "200万人" : "2M+"),
+      label: t("stat4_lbl", lang), icon: "⚠️", bg: "#fdf4ff", color: "#9333ea",
+    },
   ];
 
   const REPORT_NUMBERS = [
@@ -614,14 +661,19 @@ export default function HomePage() {
         </div>
 
         {/* 통계 카드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div ref={statsRef} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           {STATS.map((s) => (
             <div key={s.label} style={{
               background: s.bg, borderRadius: 18, padding: "24px 20px",
               border: `1px solid ${s.color}20`,
+              transition: "transform 0.3s ease",
             }}>
               <div style={{ fontSize: 28, marginBottom: 10 }}>{s.icon}</div>
-              <p style={{ fontSize: 30, fontWeight: 900, color: s.color, marginBottom: 6, letterSpacing: -1 }}>{s.value}</p>
+              <p style={{
+                fontSize: 30, fontWeight: 900, color: s.color, marginBottom: 6, letterSpacing: -1,
+                transition: "all 0.05s ease",
+                fontVariantNumeric: "tabular-nums",
+              }}>{s.value}</p>
               <p style={{ color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>{s.label}</p>
             </div>
           ))}
