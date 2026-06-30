@@ -2295,51 +2295,35 @@ export default function HomePage() {
               cursor: "default",
             }}
           >
-            {/* ── 은은한 홀로그램 은박 필름 오버레이 ── */}
-            {/* 은박 광택 — 마우스 위치따라 은은하게 반짝 */}
+            {/* 은박 홀로그램 — 마우스 위치/방향 따라 은은하게 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 3,
-              background: `radial-gradient(ellipse 70% 80% at ${holoPos.x}% ${holoPos.y}%,
-                rgba(220, 210, 255, 0.13) 0%,
-                rgba(200, 240, 255, 0.08) 30%,
-                rgba(255, 220, 240, 0.06) 55%,
-                transparent 75%
+              background: `radial-gradient(ellipse 60% 70% at ${holoPos.x}% ${holoPos.y}%,
+                rgba(255,255,255,0.10) 0%,
+                rgba(200,180,255,0.06) 35%,
+                rgba(180,240,255,0.04) 55%,
+                transparent 72%
               )`,
               mixBlendMode: "screen",
-              transition: "background 0.04s linear",
+              transition: "background 0.05s linear",
             }} />
-            {/* 무지개 필름 — 마우스 방향으로 각도, 아주 은은하게 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 3,
               background: `linear-gradient(${mouseDir + 90}deg,
-                hsla(0,   90%, 70%, 0.09),
-                hsla(35,  95%, 68%, 0.09),
-                hsla(60,  90%, 68%, 0.08),
-                hsla(120, 80%, 65%, 0.08),
-                hsla(180, 88%, 65%, 0.08),
-                hsla(220, 90%, 68%, 0.09),
-                hsla(270, 85%, 68%, 0.09),
-                hsla(310, 88%, 68%, 0.09),
-                hsla(0,   90%, 70%, 0.09)
+                hsla(0,   85%, 72%, 0.07),
+                hsla(40,  90%, 70%, 0.07),
+                hsla(65,  88%, 68%, 0.06),
+                hsla(120, 75%, 65%, 0.06),
+                hsla(180, 82%, 65%, 0.06),
+                hsla(220, 88%, 70%, 0.07),
+                hsla(270, 82%, 70%, 0.07),
+                hsla(310, 85%, 70%, 0.07),
+                hsla(0,   85%, 72%, 0.07)
               )`,
               mixBlendMode: "screen",
-              transition: "background 0.08s linear",
-            }} />
-            {/* 미세 은박 결 */}
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: 24,
-              pointerEvents: "none", zIndex: 3,
-              backgroundImage: `repeating-linear-gradient(
-                ${mouseDir + 90}deg,
-                rgba(255,255,255,0)    0px,
-                rgba(255,255,255,0)    8px,
-                rgba(255,255,255,0.04) 8.5px,
-                rgba(255,255,255,0)    9px
-              )`,
-              mixBlendMode: "screen",
-              transition: "background-image 0.08s linear",
+              transition: "background 0.10s linear",
             }} />
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
