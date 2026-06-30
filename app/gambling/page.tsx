@@ -168,8 +168,8 @@ function BeginnerGuide({ rainbow, rainbow2, rainbow3, rainbow4, rainbow5, rainbo
           <div style={{ fontSize:24, animation:"float 2s ease-in-out infinite" }}>📖</div>
           <div style={{ textAlign:"left" }}>
             <div style={{ fontWeight:900, fontSize:16,
-              background:`linear-gradient(90deg,${rainbow},${rainbow3},${rainbow5})`,
-              WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+              color: rainbow,
+              textShadow:`0 0 8px ${rainbow}, 0 0 16px ${rainbow3}`,
             }}>초보자 게임 가이드 — 처음이세요? 여기서 배우세요!</div>
             <div style={{ color:"#555", fontSize:12, marginTop:2 }}>바카라 · 달팽이 · 사다리 규칙 및 베팅 방법 한눈에 보기</div>
           </div>
@@ -393,10 +393,9 @@ export default function GamblingPortalPage() {
         <div style={{ position:"absolute", inset:0, background:`radial-gradient(ellipse at 50% 0%, ${rainbow}18 0%, transparent 70%)`, pointerEvents:"none" }} />
         <div style={{ color:"#888", fontSize:11, fontWeight:700, marginBottom:2, letterSpacing:2 }}>💰 누적 잭팟 풀</div>
         <div style={{ fontSize:38, fontWeight:900, letterSpacing:2, fontVariantNumeric:"tabular-nums",
-          background:`linear-gradient(90deg,${rainbow},${rainbow2},${rainbow3},${rainbow4},${rainbow5},${rainbow6},${rainbow})`,
-          backgroundSize:"300% auto", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-          filter:`drop-shadow(0 0 16px ${rainbow}88)`,
-          animation:"shimmer 1.2s linear infinite",
+          color: rainbow,
+          textShadow:`0 0 16px ${rainbow}, 0 0 32px ${rainbow2}, 0 0 64px ${rainbow3}`,
+          animation:"neonFlicker 3s ease-in-out infinite",
         }}>
           ₩{jackpot.toLocaleString()}
         </div>
@@ -408,9 +407,9 @@ export default function GamblingPortalPage() {
       <header style={{ background:"linear-gradient(180deg,#0a0010,#050508)", borderBottom:`1px solid ${rainbow}33`, padding:"12px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", position:"relative", zIndex:10 }}>
         <div>
           <div style={{ fontSize:22, fontWeight:900, letterSpacing:-0.5,
-            background:`linear-gradient(90deg,${rainbow},${rainbow2},${rainbow3},${rainbow4},${rainbow5},${rainbow6})`,
-            backgroundSize:"300% auto", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-            animation:"shimmer 1.5s linear infinite", filter:`drop-shadow(0 0 10px ${rainbow}88)`,
+            color: rainbow,
+            textShadow:`0 0 10px ${rainbow}, 0 0 20px ${rainbow2}, 0 0 40px ${rainbow3}`,
+            animation:"neonFlicker 2.5s ease-in-out infinite",
           }}>
             🎰 먹튀검증 카지노 포털
           </div>
@@ -444,17 +443,16 @@ export default function GamblingPortalPage() {
           <div key={i} style={{ position:"absolute", top:0, left:`${10+i*20}%`, width:1, height:"100%", background:`linear-gradient(180deg,${SPARK_COLORS[i*2]}44,transparent)`, pointerEvents:"none", animation:`blink ${1.5+i*0.4}s ease-in-out infinite` }} />
         ))}
         <div style={{ fontSize:11, fontWeight:800, letterSpacing:3, marginBottom:10,
-          background:`linear-gradient(90deg,${rainbow},${rainbow3},${rainbow5},${rainbow})`,
-          backgroundSize:"300% auto", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-          animation:"shimmer 1s linear infinite",
+          color: rainbow,
+          textShadow:`0 0 8px ${rainbow}, 0 0 16px ${rainbow3}`,
+          animation:"neonFlicker 2s ease-in-out infinite",
         }}>
           ★ 국내 최고 먹튀없는 TOP 인증 카지노 ★
         </div>
         <h1 style={{ fontSize:clamp(28,4.5), fontWeight:900, letterSpacing:-1, marginBottom:8,
-          background:`linear-gradient(90deg,${rainbow},${rainbow2},${rainbow3},${rainbow4},${rainbow5},${rainbow6},${rainbow})`,
-          backgroundSize:"300% auto", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-          animation:"shimmer 1.2s linear infinite",
-          textShadow:"none", filter:`drop-shadow(0 0 20px ${rainbow}66)`,
+          color: rainbow2,
+          textShadow:`0 0 20px ${rainbow}, 0 0 40px ${rainbow2}, 0 0 80px ${rainbow3}`,
+          animation:"neonFlicker 3s ease-in-out infinite",
         }}>
           모든베팅가능 · 무제재 · 환전무제한
         </h1>
@@ -527,20 +525,17 @@ export default function GamblingPortalPage() {
 
                 {/* 사이트명 */}
                 <div style={{ fontSize:17, fontWeight:900, marginBottom:4, marginTop:4,
-                  background: isHovered ? `linear-gradient(90deg,${siteRainbow},${siteRainbow2},${siteRainbow})` : "#ffffff",
-                  backgroundSize:"200% auto",
-                  WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-                  animation: isHovered ? "shimmer 0.8s linear infinite" : "none",
-                  filter: isHovered ? `drop-shadow(0 0 8px ${siteRainbow})` : "none",
-                  transition:"filter 0.2s",
+                  color: isHovered ? siteRainbow : "#fff",
+                  textShadow: isHovered ? `0 0 10px ${siteRainbow}, 0 0 20px ${siteRainbow}, 0 0 40px ${siteRainbow2}` : `0 0 4px #ffffff44`,
+                  transition:"color 0.2s, text-shadow 0.2s",
                 }}>{site.display}</div>
                 <div style={{ fontSize:9, color:siteRainbow, fontWeight:700, letterSpacing:1.5, opacity:0.8, marginBottom:12 }}>{site.sub}</div>
 
                 {/* 보너스 */}
                 <div style={{ background:"#ffffff08", borderRadius:10, padding:"10px 12px", marginBottom:10, border:`1px solid ${siteRainbow}22` }}>
                   <div style={{ fontWeight:800, fontSize:13, marginBottom:2,
-                    background:`linear-gradient(90deg,${siteRainbow},${siteRainbow2})`,
-                    WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+                    color: siteRainbow,
+                    textShadow:`0 0 6px ${siteRainbow}88`,
                   }}>🎁 {site.bonus}</div>
                   <div style={{ color:"#777", fontSize:11 }}>{site.extra}</div>
                 </div>
@@ -557,8 +552,8 @@ export default function GamblingPortalPage() {
                   <div>
                     <div style={{ color:"#444", fontSize:9, marginBottom:2 }}>가입코드</div>
                     <div style={{ fontWeight:900, fontSize:15, letterSpacing:3,
-                      background:`linear-gradient(90deg,${siteRainbow},${siteRainbow2})`,
-                      WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+                      color: siteRainbow,
+                      textShadow:`0 0 8px ${siteRainbow}, 0 0 16px ${siteRainbow2}`,
                     }}>{site.code}</div>
                   </div>
                   <div style={{
@@ -611,10 +606,10 @@ export default function GamblingPortalPage() {
                   <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${gRainbow},${gRainbow2})`, backgroundSize:"200% auto", animation:"shimmer 1.5s linear infinite" }} />
                   <div style={{ fontSize:32, marginBottom:8, animation:`float ${1.5+i*0.3}s ease-in-out infinite` }}>{g.icon}</div>
                   <div style={{ fontWeight:900, fontSize:14, marginBottom:3,
-                    background:`linear-gradient(90deg,${gRainbow},${gRainbow2})`,
-                    WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
+                    color: gRainbow,
+                    textShadow:`0 0 8px ${gRainbow}, 0 0 16px ${gRainbow}88`,
                   }}>{g.name}</div>
-                  <div style={{ color:"#555", fontSize:10, marginBottom:8 }}>{g.sub}</div>
+                  <div style={{ color:"#aaa", fontSize:10, marginBottom:8 }}>{g.sub}</div>
                   <div style={{
                     display:"inline-block", padding:"5px 14px", borderRadius:20, fontSize:11, fontWeight:900,
                     background:`linear-gradient(135deg,${gRainbow},${gRainbow2})`,
@@ -643,7 +638,7 @@ export default function GamblingPortalPage() {
             const sc = `hsl(${(rainbowAngle+s.hue)%360},100%,55%)`;
             return (
               <div key={i} style={{ background:"#0f0f0f", borderRadius:12, padding:14, textAlign:"center", border:`1px solid ${sc}33`, boxShadow:`0 0 10px ${sc}22`, position:"relative" }}>
-                <div style={{ fontWeight:900, fontSize:22, background:`linear-gradient(90deg,${sc},hsl(${(rainbowAngle+s.hue+60)%360},100%,55%))`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>{s.value}</div>
+                <div style={{ fontWeight:900, fontSize:22, color:sc, textShadow:`0 0 8px ${sc}, 0 0 16px ${sc}88` }}>{s.value}</div>
                 <div style={{ color:"#555", fontSize:11, marginTop:2 }}>{s.label}</div>
                 <div style={{ color:"#111", fontSize:8, marginTop:3 }}>{s.note}</div>
               </div>
@@ -662,9 +657,14 @@ export default function GamblingPortalPage() {
 
       <style>{`
         @keyframes shimmer { 0%{background-position:0% center} 100%{background-position:200% center} }
+        @keyframes neonFlicker {
+          0%,19%,21%,23%,25%,54%,56%,100% { opacity:1; }
+          20%,24%,55% { opacity:0.85; }
+        }
         * { -webkit-tap-highlight-color: transparent !important; }
-        button { -webkit-tap-highlight-color: transparent !important; outline: none; }
+        button { -webkit-tap-highlight-color: transparent !important; outline: none; color: inherit; }
         button:focus { outline: none; }
+        div, span, p, h1, h2 { color: inherit; }
       `}</style>
     </div>
   );

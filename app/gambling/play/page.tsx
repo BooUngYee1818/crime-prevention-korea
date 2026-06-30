@@ -1301,7 +1301,7 @@ function PlayContent() {
             {/* 탭 */}
             <div style={{ display:"flex", gap:0, borderTop:"1px solid #1a1a1a" }}>
               {TABS.map(tab => (
-                <button key={tab.id} onClick={() => setActiveGame(tab.id)} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom: activeGame===tab.id?`2px solid ${tab.color}`:"2px solid transparent", color: activeGame===tab.id?tab.color:"#555", fontWeight:700, fontSize:13, cursor:"pointer", transition:"all 0.2s", display:"flex", alignItems:"center", gap:6 }}>
+                <button key={tab.id} onClick={() => setActiveGame(tab.id)} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom: activeGame===tab.id?`2px solid ${tab.color}`:"2px solid transparent", color: activeGame===tab.id?tab.color:"#aaa", fontWeight:700, fontSize:13, cursor:"pointer", transition:"all 0.2s", display:"flex", alignItems:"center", gap:6, textShadow: activeGame===tab.id?`0 0 8px ${tab.color}88`:"none" }}>
                   {tab.icon} {tab.label}
                 </button>
               ))}
