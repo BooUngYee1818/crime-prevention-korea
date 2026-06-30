@@ -589,9 +589,24 @@ export default function HomePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
                 {
-                  version: "v1.5",
+                  version: "v1.6",
                   date: "2025.06",
                   badge: "최신",
+                  badgeColor: "#22c55e",
+                  badgeBg: "#052e16",
+                  items: [
+                    "🕵️ 사기 판별 퀴즈 추가 — 진짜/가짜 문자 10문제 + 취약점 분석",
+                    "🥕 중고거래 사기 체험 — 당근마켓 UI 재현, 가짜 안전결제 링크 → 해킹 화면 연출",
+                    "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일, 코인 투자 유도 전 과정",
+                    "🚫 도박 과몰입 자동 폐쇄 시스템 추가 (8분/2회 충전/25판 기준)",
+                    "🎯 초반 당첨 확률 강화 → 이후 급락 (미끼 체험 강화)",
+                    "💡 네온 사인 UI 적용 + 모바일 글씨 가시성 전면 수정",
+                  ],
+                },
+                {
+                  version: "v1.5",
+                  date: "2025.06",
+                  badge: null,
                   badgeColor: "#f59e0b",
                   badgeBg: "#1c1002",
                   items: [

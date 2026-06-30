@@ -184,6 +184,24 @@ export default function CrimeCenterPage() {
           <ChevronRight size={18} color="#a78bfa" style={{ flexShrink: 0 }} />
         </button>
 
+        {/* 새 체험 3종 그리드 */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 20 }}>
+          {[
+            { path: "/crime/quiz", icon: "🕵️", label: "사기 판별 퀴즈", sub: "진짜 vs 가짜 맞추기", bg: "linear-gradient(135deg,#1e3a5f,#1d4ed8)", border: "#1d4ed8" },
+            { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "당근마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
+            { path: "/crime/sns-invest", icon: "📸", label: "SNS 투자 사기", sub: "인스타 DM 사기 체험", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
+          ].map((item) => (
+            <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 16, padding: "16px 12px", cursor: "pointer", textAlign: "center", transition: "transform 0.15s", position: "relative" }}
+              onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}
+              onMouseLeave={e => e.currentTarget.style.transform="translateY(0)"}>
+              <div style={{ fontSize: 28, marginBottom: 6 }}>{item.icon}</div>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 12, marginBottom: 3 }}>{item.label}</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 10 }}>{item.sub}</p>
+              <span style={{ position: "absolute", top: 8, right: 8, background: "#ef4444", color: "#fff", fontSize: 8, fontWeight: 700, padding: "2px 6px", borderRadius: 10 }}>NEW</span>
+            </button>
+          ))}
+        </div>
+
         {/* 시나리오 그리드 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginBottom: 40 }}>
           {CRIME_SCENARIOS.map((scenario) => (
