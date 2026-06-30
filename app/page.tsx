@@ -738,11 +738,11 @@ export default function HomePage() {
         `}</style>
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 40px" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 4, marginBottom: 10, fontFamily: "monospace" }}>[ CRIME ARCHIVE ]</p>
+            <p style={{ color: "#9ca3af", fontSize: 11, fontWeight: 700, letterSpacing: 4, marginBottom: 10, fontFamily: "monospace" }}>[ CRIME ARCHIVE ]</p>
             <h2 style={{ fontSize: 30, fontWeight: 900, color: "#f5f5f5", marginBottom: 10, letterSpacing: -0.5 }}>
               옛날엔 이런 사기도 있었다
             </h2>
-            <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7 }}>
+            <p style={{ color: "#9ca3af", fontSize: 13, lineHeight: 1.7 }}>
               수법은 시대마다 달라졌지만, 심리를 이용한다는 본질은 변하지 않았습니다.
             </p>
             {/* 관련 사이트 */}
@@ -1167,6 +1167,8 @@ export default function HomePage() {
                 background: "linear-gradient(0deg, rgba(120,0,120,0.18) 0%, transparent 100%)",
                 borderRadius: "0 0 24px 24px", pointerEvents: "none",
               }} />
+              {/* 레트로 필터 오버레이 */}
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "linear-gradient(180deg, rgba(139,92,246,0.08) 0%, rgba(236,72,153,0.05) 100%)", borderRadius: 24 }} />
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
@@ -1201,15 +1203,18 @@ export default function HomePage() {
                   { platform: "취업카페", dot: "#ff6b35", name: "가짜 재택 취업 사기", post: "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!", like: "조회 8,402", desc: "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법." },
                   { platform: "KakaoTalk", dot: "#ffe100", name: "3단계 메신저 피싱", post: "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게", like: "읽음 1", desc: "문자→카카오→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도." },
                 ].map((c, j) => (
-                  <div key={j} style={{
-                    background: "#18181b",
-                    border: "1px solid #27272a",
-                    borderRadius: 12,
+                  <div key={j} style={{ background: "linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6)", padding: "1px", borderRadius: 12 }}>
+                  <div style={{
+                    background: "#0d0014",
+                    borderRadius: 11,
                     overflow: "hidden",
+                    position: "relative",
                   }}>
+                    {/* 배지 */}
+                    <div style={{ position: "absolute", top: 8, right: 8, background: "rgba(236,72,153,0.2)", border: "1px solid #ec4899", borderRadius: 20, padding: "2px 8px", fontSize: 9, color: "#f9a8d4", fontWeight: 700, zIndex: 2 }}>📱 SNS 사기 수법</div>
                     {/* SNS 헤더 */}
                     <div style={{ padding: "10px 12px", borderBottom: "1px solid #27272a", display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: c.dot, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: j===0?"linear-gradient(135deg,#1877f2,#0d5cbf)":j===1?"linear-gradient(135deg,#ff6b35,#e55b25)":"linear-gradient(135deg,#ffe100,#f0cc00)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <span style={{ fontSize: 12, color: "#fff", fontWeight: 900 }}>{c.platform[0]}</span>
                       </div>
                       <div>
@@ -1218,14 +1223,15 @@ export default function HomePage() {
                       </div>
                     </div>
                     {/* 게시물 */}
-                    <div style={{ padding: "12px", background: "#18181b" }}>
-                      <p style={{ color: "#a1a1aa", fontSize: 11, lineHeight: 1.6, marginBottom: 8, fontStyle: "italic", borderLeft: "2px solid #3f3f46", paddingLeft: 8 }}>{c.post}</p>
-                      <p style={{ color: "#52525b", fontSize: 10, marginBottom: 10 }}>{c.like}</p>
+                    <div style={{ padding: "12px", background: "#0d0014" }}>
+                      <p style={{ color: "#d1d5db", fontSize: 11, lineHeight: 1.6, marginBottom: 8, fontStyle: "italic", borderLeft: "2px solid #3f3f46", paddingLeft: 8 }}>{c.post}</p>
+                      <p style={{ color: "#6b7280", fontSize: 10, marginBottom: 10 }}>{"❤️ " + c.like}</p>
                       <div style={{ borderTop: "1px solid #27272a", paddingTop: 8 }}>
-                        <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
-                        <p style={{ color: "#71717a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                        <p style={{ color: "#e879f9", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                        <p style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
                       </div>
                     </div>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -1282,6 +1288,8 @@ export default function HomePage() {
                   pointerEvents: "none",
                 }} />
               ))}
+              {/* TV 스태틱 오버레이 */}
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px)", borderRadius: 24 }} />
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
@@ -1316,22 +1324,26 @@ export default function HomePage() {
                   { breaking: "특보", headline: "비트코인 2배 보장 텔레그램 방 주의", sub: "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해", name: "코인 초기 투자 사기", desc: "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." },
                 ].map((c, j) => (
                   <div key={j} style={{
-                    background: "#130c1c",
+                    background: "linear-gradient(135deg, #0a0e18, #0d1520)",
                     border: "1px solid #1f2937",
+                    borderLeft: "3px solid #dc2626",
                     borderRadius: 8,
                     overflow: "hidden",
                     fontFamily: "sans-serif",
+                    position: "relative",
                   }}>
+                    {/* LIVE 배지 */}
+                    <div style={{ position: "absolute", top: 8, right: 8, background: "rgba(220,38,38,0.8)", borderRadius: 4, padding: "2px 6px", fontSize: 9, color: "#fff", fontWeight: 900 }}>📡 LIVE</div>
                     {/* 뉴스 속보 헤더 */}
-                    <div style={{ background: "#dc2626", padding: "4px 10px", display: "flex", alignItems: "center", gap: 6 }}>
+                    <div style={{ background: "linear-gradient(90deg, #dc2626, #991b1b)", padding: "4px 10px", display: "flex", alignItems: "center", gap: 6 }}>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#fdf8ff", animation: "pulse 1s infinite" }} />
-                      <span style={{ color: "#fff", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>{c.breaking}</span>
+                      <span style={{ color: "#fff", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>{"🔴 " + c.breaking}</span>
                     </div>
                     <div style={{ padding: "12px" }}>
-                      <p style={{ color: "#f9fafb", fontWeight: 900, fontSize: 13, lineHeight: 1.4, marginBottom: 6 }}>{c.headline}</p>
+                      <p style={{ color: "#ffffff", fontWeight: 900, fontSize: 13, lineHeight: 1.4, marginBottom: 6, textShadow: "0 0 8px rgba(255,255,255,0.3)" }}>{c.headline}</p>
                       <p style={{ color: "#9ca3af", fontSize: 10, lineHeight: 1.5, marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid #1f2937" }}>{c.sub}</p>
                       <p style={{ color: "#22d3ee", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
-                      <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                      <p style={{ color: "#94a3b8", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
                     </div>
                   </div>
                 ))}
