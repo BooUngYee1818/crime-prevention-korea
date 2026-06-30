@@ -387,229 +387,485 @@ function CallScreen({
   refuseCountdown: number | null;
 }) {
   const isSamsung = device === "samsung";
-  const accentColor = isSamsung ? "#22c55e" : "#30d158";
-  const rejectColor = isSamsung ? "#ef4444" : "#ff453a";
-  const bg = isSamsung
-    ? "linear-gradient(180deg, #1a1a2e 0%, #111 100%)"
-    : "linear-gradient(180deg, #2d2d30 0%, #1c1c1e 50%, #111 100%)";
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
 
-  return (
-    <div style={{ flex: 1, background: bg, display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
-      <style>{`
-        @keyframes ring-ripple { 0%{transform:scale(1);opacity:0.6} 70%{transform:scale(2.0);opacity:0} 100%{transform:scale(2.0);opacity:0} }
-        @keyframes samsung-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-        @keyframes iphone-ring { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
-        @keyframes slide-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes dot-bounce { 0%,80%,100%{transform:scale(0);opacity:0.3} 40%{transform:scale(1);opacity:1} }
-        @keyframes choice-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes countdown-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-      `}</style>
+  // ── Samsung One UI 8.5 ──────────────────────────────────────────────────────
+  if (isSamsung) {
+    return (
+      <div style={{
+        flex: 1, display: "flex", flexDirection: "column", height: "100%", overflow: "hidden",
+        background: "linear-gradient(180deg, #0d1117 0%, #0a1628 40%, #090e1a 100%)",
+        position: "relative",
+      }}>
+        <style>{`
+          @keyframes ou-ripple { 0%{transform:scale(1);opacity:0.5} 100%{transform:scale(2.6);opacity:0} }
+          @keyframes ou-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+          @keyframes slide-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+          @keyframes dot-bounce { 0%,80%,100%{transform:scale(0);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+          @keyframes choice-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+          @keyframes countdown-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+          @keyframes ou-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        `}</style>
 
-      {/* 상단 정보 */}
-      <div style={{ padding: "40px 20px 12px", textAlign: "center", flexShrink: 0 }}>
-        <p style={{
-          color: callPhase === "ringing" ? accentColor : "#ffffffc0",
-          fontSize: 13, marginBottom: 12, fontWeight: 500,
-          animation: callPhase === "ringing" ? "samsung-pulse 1.5s ease infinite" : "none",
+        {/* 배경 블러 원형 장식 */}
+        <div style={{
+          position: "absolute", top: -60, left: -60,
+          width: 260, height: 260, borderRadius: "50%",
+          background: "radial-gradient(circle, #1a4a2e44 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
+        {/* 상단 상태바 */}
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "10px 16px 0",
         }}>
-          {callPhase === "ringing" ? "수신 전화" : `통화 중 · ${timer}`}
-        </p>
-
-        <div style={{ position: "relative", display: "inline-block", marginBottom: 14 }}>
-          {callPhase === "ringing" && [1, 1.5, 2].map((_, i) => (
-            <div key={i} style={{
-              position: "absolute", inset: 0, borderRadius: "50%",
-              border: `2px solid ${accentColor}40`,
-              animation: `ring-ripple 2s ease-out ${i * 0.55}s infinite`,
-            }} />
-          ))}
-          <div style={{
-            width: isSamsung ? 80 : 70, height: isSamsung ? 80 : 70,
-            borderRadius: isSamsung ? "50%" : 18,
-            background: isSamsung
-              ? "linear-gradient(135deg, #2d6a4f, #40916c)"
-              : "linear-gradient(135deg, #48484a, #636366)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 36, position: "relative", zIndex: 1,
-            animation: callPhase === "ringing" && !isSamsung ? "iphone-ring 0.5s ease infinite" : "none",
-          }}>👤</div>
+          <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>{timeStr}</span>
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            {/* 신호 바 */}
+            <div style={{ display: "flex", gap: 2, alignItems: "flex-end" }}>
+              {[4, 7, 10, 13].map((h, i) => (
+                <div key={i} style={{ width: 3, height: h, borderRadius: 1.5, background: i < 3 ? "#fff" : "#ffffff40" }} />
+              ))}
+            </div>
+            <span style={{ color: "#fff", fontSize: 10, marginLeft: 2 }}>LTE</span>
+            {/* 배터리 */}
+            <div style={{ display: "flex", alignItems: "center", gap: 2, marginLeft: 4 }}>
+              <div style={{ width: 22, height: 11, borderRadius: 3, border: "1.5px solid #ffffff80", position: "relative", display: "flex", alignItems: "center", padding: "1px 2px" }}>
+                <div style={{ width: "70%", height: "100%", background: "#4ade80", borderRadius: 1.5 }} />
+                <div style={{ position: "absolute", right: -4, top: "50%", transform: "translateY(-50%)", width: 3, height: 6, background: "#ffffff80", borderRadius: "0 2px 2px 0" }} />
+              </div>
+              <span style={{ color: "#fff", fontSize: 10 }}>72%</span>
+            </div>
+          </div>
         </div>
 
-        <p style={{ color: "#fff", fontSize: isSamsung ? 24 : 28, fontWeight: isSamsung ? 700 : 300, marginBottom: 3 }}>{caller}</p>
-        <p style={{ color: "#ffffff70", fontSize: 11 }}>{callerSub}</p>
+        {/* 수신 라벨 */}
+        <div style={{ textAlign: "center", padding: "16px 20px 0" }}>
+          {callPhase === "ringing" ? (
+            <p style={{
+              color: "#4ade80", fontSize: 13, fontWeight: 600,
+              animation: "ou-pulse 1.5s ease infinite",
+            }}>수신 전화</p>
+          ) : (
+            <p style={{ color: "#ffffffa0", fontSize: 13, fontWeight: 500 }}>통화 중 · {timer}</p>
+          )}
+        </div>
+
+        {/* 아바타 */}
+        <div style={{ textAlign: "center", padding: "18px 20px 10px", position: "relative" }}>
+          <div style={{ display: "inline-block", position: "relative" }}>
+            {callPhase === "ringing" && [0, 0.5, 1].map((delay, i) => (
+              <div key={i} style={{
+                position: "absolute",
+                top: "50%", left: "50%",
+                transform: "translate(-50%,-50%)",
+                width: 80, height: 80,
+                borderRadius: "50%",
+                border: "2px solid #4ade8066",
+                animation: `ou-ripple 2.4s ease-out ${delay}s infinite`,
+              }} />
+            ))}
+            <div style={{
+              width: 82, height: 82, borderRadius: "50%",
+              background: "linear-gradient(135deg, #1e5c3a, #22c55e)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 38, position: "relative", zIndex: 1,
+              boxShadow: "0 0 0 3px #0d1117, 0 0 0 5px #22c55e44",
+            }}>👤</div>
+          </div>
+        </div>
+
+        {/* 이름 */}
+        <div style={{ textAlign: "center", padding: "0 20px 4px" }}>
+          <p style={{ color: "#fff", fontSize: 26, fontWeight: 700, letterSpacing: -0.5 }}>{caller}</p>
+          <p style={{ color: "#ffffff60", fontSize: 12, marginTop: 3 }}>{callerSub}</p>
+        </div>
 
         {/* 거절 카운트다운 */}
         {refuseCountdown !== null && refuseCountdown > 0 && (
-          <div style={{
-            marginTop: 8,
-            background: "#052e16cc",
-            border: "1px solid #22c55e44",
-            borderRadius: 20, padding: "4px 14px",
-            display: "inline-block",
-            animation: "countdown-pulse 1s ease infinite",
-          }}>
-            <span style={{ color: "#4ade80", fontSize: 11, fontWeight: 700 }}>
-              🏆 {refuseCountdown}초 버티면 성공!
-            </span>
+          <div style={{ textAlign: "center", marginTop: 6 }}>
+            <span style={{
+              background: "#052e1699", border: "1px solid #22c55e55",
+              borderRadius: 20, padding: "4px 14px",
+              color: "#4ade80", fontSize: 11, fontWeight: 700,
+              animation: "countdown-pulse 1s ease infinite", display: "inline-block",
+            }}>🏆 {refuseCountdown}초 버티면 성공!</span>
           </div>
         )}
-      </div>
 
-      {/* 대화 영역 */}
-      {callPhase === "active" && (
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "0 14px", overflowY: "auto", minHeight: 0 }}>
-
-          {/* 이체 요청 */}
-          {showTransfer && (
-            <div style={{
-              background: "#1a0a0a", border: "1px solid #ef444466",
-              borderRadius: 14, padding: "12px 14px", marginBottom: 10,
-              animation: "slide-up 0.4s ease", flexShrink: 0,
-            }}>
-              <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
-              <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>
-                {(transferAmount / 10000).toLocaleString()}만원
-              </p>
-              <button onClick={onTransfer} style={{
-                width: "100%", padding: "10px 0", borderRadius: 10,
-                background: "#FFCC00", color: "#1a1a1a",
-                fontWeight: 800, fontSize: 13, border: "none", cursor: "pointer",
+        {/* ── 대화 영역 (active) ── */}
+        {callPhase === "active" && (
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "8px 12px 0", overflowY: "auto", minHeight: 0 }}>
+            {showTransfer && (
+              <div style={{
+                background: "#1a0505cc", border: "1px solid #ef444455",
+                borderRadius: 14, padding: "12px 14px", marginBottom: 8,
+                animation: "slide-up 0.4s ease", flexShrink: 0,
+                backdropFilter: "blur(8px)",
               }}>
-                🏦 BK민국은행 앱으로 이체
-              </button>
+                <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
+                <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>{(transferAmount / 10000).toLocaleString()}만원</p>
+                <button onClick={onTransfer} style={{
+                  width: "100%", padding: "10px 0", borderRadius: 10,
+                  background: "#FFCC00", color: "#1a1a1a",
+                  fontWeight: 800, fontSize: 13, border: "none", cursor: "pointer",
+                }}>🏦 BK민국은행 앱으로 이체</button>
+              </div>
+            )}
+            {currentTurn && (
+              <div style={{ animation: "slide-up 0.3s ease" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg,#1e5c3a,#22c55e)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+                  <div style={{ background: "#1e2d3d", borderRadius: "4px 12px 12px 12px", padding: "9px 12px", maxWidth: "84%", border: "1px solid #2d3f55" }}>
+                    {speaking ? (
+                      <div style={{ display: "flex", gap: 4, alignItems: "center", height: 18 }}>
+                        {[0, 0.2, 0.4].map((delay, i) => (
+                          <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80", animation: `dot-bounce 1.4s ${delay}s ease-in-out infinite` }} />
+                        ))}
+                      </div>
+                    ) : (
+                      <p style={{ color: "#e2e8f0", fontSize: 12, lineHeight: 1.7 }}>{currentTurn.criminal}</p>
+                    )}
+                  </div>
+                </div>
+                {!speaking && currentTurn.choices.length > 0 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 36, animation: "choice-in 0.3s ease" }}>
+                    {currentTurn.choices.map((choice, i) => (
+                      <button key={i} onClick={() => onChoice(choice)} style={{
+                        background: choice.nextTurn === -1 ? "#0f1923" : choice.nextTurn === -2 ? "#3d1a00" : "#0a1e3a",
+                        border: `1px solid ${choice.nextTurn === -1 ? "#2d3748" : choice.nextTurn === -2 ? "#c05c00" : "#1e4d8c"}`,
+                        borderRadius: 10, padding: "8px 12px",
+                        color: choice.nextTurn === -1 ? "#94a3b8" : choice.nextTurn === -2 ? "#fbbf24" : "#60a5fa",
+                        fontSize: 12, cursor: "pointer", textAlign: "left", lineHeight: 1.5,
+                      }}>
+                        {choice.nextTurn === -1 && "📵 "}{choice.nextTurn === -2 && "💸 "}{choice.text}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ height: 6 }} />
+          </div>
+        )}
+
+        {callPhase === "ringing" && <div style={{ flex: 1 }} />}
+
+        {/* 하단 버튼 영역 */}
+        <div style={{ padding: "8px 20px 30px", flexShrink: 0 }}>
+          {/* 액션 버튼 그리드 (active) */}
+          {callPhase === "active" && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 14 }}>
+              {[
+                { icon: <MicOff size={18}/>, label: muted ? "마이크켬" : "음소거", action: onMute, active: muted },
+                { icon: <Keyboard size={18}/>, label: "키패드", action: ()=>{} },
+                { icon: <Volume2 size={18}/>, label: "스피커", action: ()=>{} },
+                { icon: <Users size={18}/>, label: "통화 추가", action: ()=>{} },
+                { icon: <Phone size={18}/>, label: "영상통화", action: ()=>{} },
+                { icon: <span style={{fontSize:16}}>⋯</span>, label: "더 보기", action: ()=>{} },
+              ].map((btn, i) => (
+                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                  <button onClick={btn.action} style={{
+                    width: 50, height: 50, borderRadius: 16,
+                    background: (btn as {active?:boolean}).active ? "#22c55e" : "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                    color: (btn as {active?:boolean}).active ? "#fff" : "#ffffffcc",
+                    backdropFilter: "blur(10px)",
+                  }}>{btn.icon}</button>
+                  <span style={{ color: "#ffffff55", fontSize: 9.5 }}>{btn.label}</span>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* 범인 말풍선 + 선택지 */}
+          {/* 통화 버튼 */}
+          <div style={{ display: "flex", justifyContent: callPhase === "ringing" ? "space-around" : "center", alignItems: "center" }}>
+            {callPhase === "ringing" && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <button onClick={onHangUp} style={{
+                  width: 64, height: 64, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#dc2626,#b91c1c)",
+                  border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 6px 24px #ef444460",
+                }}><PhoneOff size={26} color="#fff"/></button>
+                <span style={{ color: "#ffffff60", fontSize: 11 }}>거절</span>
+              </div>
+            )}
+            {callPhase === "ringing" && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <button onClick={onPickUp} style={{
+                  width: 64, height: 64, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#22c55e,#16a34a)",
+                  border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 6px 24px #22c55e60",
+                }}><Phone size={26} color="#fff"/></button>
+                <span style={{ color: "#ffffff60", fontSize: 11 }}>수락</span>
+              </div>
+            )}
+            {callPhase === "active" && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <button onClick={onHangUp} style={{
+                  width: 64, height: 64, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#dc2626,#b91c1c)",
+                  border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 6px 24px #ef444460",
+                }}><PhoneOff size={26} color="#fff"/></button>
+                <span style={{ color: "#ffffff60", fontSize: 11 }}>통화 종료</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── iOS 26 Liquid Glass ─────────────────────────────────────────────────────
+  return (
+    <div style={{
+      flex: 1, display: "flex", flexDirection: "column", height: "100%", overflow: "hidden",
+      background: "linear-gradient(180deg, #1a0e3a 0%, #2d1b69 30%, #1e0e3a 65%, #0d0618 100%)",
+      position: "relative",
+    }}>
+      <style>{`
+        @keyframes ios-ripple { 0%{transform:scale(1);opacity:0.45} 100%{transform:scale(2.8);opacity:0} }
+        @keyframes ios-glow { 0%,100%{opacity:0.6} 50%{opacity:1} }
+        @keyframes ios-slide-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes dot-bounce { 0%,80%,100%{transform:scale(0);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+        @keyframes choice-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes countdown-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        @keyframes ios-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+      `}</style>
+
+      {/* 배경 글로우 오브 */}
+      <div style={{
+        position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)",
+        width: 280, height: 280, borderRadius: "50%",
+        background: "radial-gradient(circle, #7c3aed33 0%, #4c1d9522 40%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: 80, right: -40,
+        width: 180, height: 180, borderRadius: "50%",
+        background: "radial-gradient(circle, #06b6d422 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      {/* 상태바 */}
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "10px 20px 0",
+      }}>
+        <span style={{ color: "#fff", fontSize: 15, fontWeight: 700, letterSpacing: -0.3 }}>{timeStr}</span>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {/* 신호 */}
+          <div style={{ display: "flex", gap: 1.5, alignItems: "flex-end" }}>
+            {[4, 7, 10, 13].map((h, i) => (
+              <div key={i} style={{ width: 3, height: h, borderRadius: 1.5, background: "#fff" }} />
+            ))}
+          </div>
+          <span style={{ color: "#fff", fontSize: 11 }}>5G</span>
+          {/* 와이파이 */}
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+            <path d="M8 9.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" fill="white"/>
+            <path d="M3.5 6.5C5 4.8 6.4 4 8 4s3 .8 4.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+            <path d="M1 3.5C3.2 1.2 5.5 0 8 0s4.8 1.2 7 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5"/>
+          </svg>
+          {/* 배터리 */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ width: 25, height: 12, borderRadius: 3.5, border: "1.5px solid rgba(255,255,255,0.7)", position: "relative", display: "flex", alignItems: "center", padding: "1.5px 2px" }}>
+              <div style={{ width: "80%", height: "100%", background: "#30d158", borderRadius: 1.5 }} />
+              <div style={{ position: "absolute", right: -4, top: "50%", transform: "translateY(-50%)", width: 3, height: 7, background: "rgba(255,255,255,0.6)", borderRadius: "0 2px 2px 0" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 통화 상태 */}
+      <div style={{ textAlign: "center", padding: "14px 20px 0" }}>
+        {callPhase === "ringing" ? (
+          <p style={{ color: "#ffffffb0", fontSize: 14, fontWeight: 400, letterSpacing: 0.2, animation: "ios-glow 2s ease infinite" }}>
+            수신 전화
+          </p>
+        ) : (
+          <p style={{ color: "#ffffffb0", fontSize: 14, fontWeight: 400 }}>통화 중 · {timer}</p>
+        )}
+      </div>
+
+      {/* 아바타 */}
+      <div style={{ textAlign: "center", padding: "16px 20px 10px", position: "relative" }}>
+        <div style={{ display: "inline-block", position: "relative" }}>
+          {callPhase === "ringing" && [0, 0.6, 1.2].map((delay, i) => (
+            <div key={i} style={{
+              position: "absolute", top: "50%", left: "50%",
+              transform: "translate(-50%,-50%)",
+              width: 84, height: 84, borderRadius: "50%",
+              border: "1.5px solid rgba(167,139,250,0.5)",
+              animation: `ios-ripple 2.8s ease-out ${delay}s infinite`,
+            }} />
+          ))}
+          {/* iOS 26 스타일 아바타: 더 큰 원형, 부드러운 그라디언트 */}
+          <div style={{
+            width: 90, height: 90, borderRadius: "50%",
+            background: "linear-gradient(135deg, #5b21b6, #7c3aed, #9333ea)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 42, position: "relative", zIndex: 1,
+            boxShadow: "0 0 0 2px rgba(255,255,255,0.15), 0 8px 32px rgba(124,58,237,0.5)",
+            animation: callPhase === "ringing" ? "ios-float 2s ease-in-out infinite" : "none",
+          }}>👤</div>
+        </div>
+      </div>
+
+      {/* 이름 */}
+      <div style={{ textAlign: "center", padding: "0 20px 4px" }}>
+        <p style={{ color: "#fff", fontSize: 30, fontWeight: 300, letterSpacing: -0.5 }}>{caller}</p>
+        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, marginTop: 4, letterSpacing: 0.2 }}>{callerSub}</p>
+      </div>
+
+      {/* 거절 카운트다운 */}
+      {refuseCountdown !== null && refuseCountdown > 0 && (
+        <div style={{ textAlign: "center", marginTop: 6 }}>
+          <span style={{
+            background: "rgba(5,46,22,0.7)", backdropFilter: "blur(12px)",
+            border: "1px solid rgba(52,211,153,0.3)", borderRadius: 20, padding: "4px 14px",
+            color: "#6ee7b7", fontSize: 11, fontWeight: 600, display: "inline-block",
+            animation: "countdown-pulse 1s ease infinite",
+          }}>🏆 {refuseCountdown}초 버티면 성공!</span>
+        </div>
+      )}
+
+      {/* ── 대화 영역 (active) ── */}
+      {callPhase === "active" && (
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "8px 12px 0", overflowY: "auto", minHeight: 0 }}>
+          {showTransfer && (
+            <div style={{
+              background: "rgba(127,29,29,0.6)", backdropFilter: "blur(16px)",
+              border: "1px solid rgba(239,68,68,0.3)",
+              borderRadius: 16, padding: "12px 14px", marginBottom: 8,
+              animation: "ios-slide-up 0.4s ease", flexShrink: 0,
+            }}>
+              <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
+              <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>{(transferAmount / 10000).toLocaleString()}만원</p>
+              <button onClick={onTransfer} style={{
+                width: "100%", padding: "10px 0", borderRadius: 12,
+                background: "#FFCC00", color: "#1a1a1a",
+                fontWeight: 800, fontSize: 13, border: "none", cursor: "pointer",
+              }}>🏦 BK민국은행 앱으로 이체</button>
+            </div>
+          )}
           {currentTurn && (
-            <div style={{ animation: "slide-up 0.3s ease" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 12 }}>
-                <div style={{
-                  width: 30, height: 30, borderRadius: "50%",
-                  background: "#374151", flexShrink: 0,
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-                }}>👤</div>
-                <div style={{
-                  background: "#1f2937", borderRadius: "4px 12px 12px 12px",
-                  padding: "10px 12px", maxWidth: "82%",
-                }}>
+            <div style={{ animation: "ios-slide-up 0.3s ease" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg,#5b21b6,#7c3aed)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+                <div style={{ background: "rgba(255,255,255,0.10)", backdropFilter: "blur(16px)", borderRadius: "4px 14px 14px 14px", padding: "9px 12px", maxWidth: "84%", border: "1px solid rgba(255,255,255,0.12)" }}>
                   {speaking ? (
                     <div style={{ display: "flex", gap: 4, alignItems: "center", height: 18 }}>
                       {[0, 0.2, 0.4].map((delay, i) => (
-                        <div key={i} style={{
-                          width: 6, height: 6, borderRadius: "50%", background: "#9ca3af",
-                          animation: `dot-bounce 1.4s ${delay}s ease-in-out infinite`,
-                        }} />
+                        <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.7)", animation: `dot-bounce 1.4s ${delay}s ease-in-out infinite` }} />
                       ))}
                     </div>
                   ) : (
-                    <p style={{ color: "#e5e7eb", fontSize: 12, lineHeight: 1.7 }}>
-                      {currentTurn.criminal}
-                    </p>
+                    <p style={{ color: "rgba(255,255,255,0.9)", fontSize: 12, lineHeight: 1.7 }}>{currentTurn.criminal}</p>
                   )}
                 </div>
               </div>
-
-              {/* 선택 버튼 */}
               {!speaking && currentTurn.choices.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 7, paddingLeft: 38, animation: "choice-in 0.3s ease" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 36, animation: "choice-in 0.3s ease" }}>
                   {currentTurn.choices.map((choice, i) => (
                     <button key={i} onClick={() => onChoice(choice)} style={{
-                      background: choice.nextTurn === -1
-                        ? "#111827"
-                        : choice.nextTurn === -2
-                          ? "#78350f"
-                          : "#1e3a5f",
-                      border: `1px solid ${choice.nextTurn === -1 ? "#374151" : choice.nextTurn === -2 ? "#d97706" : "#3b82f6"}`,
-                      borderRadius: 10, padding: "8px 12px",
-                      color: choice.nextTurn === -1 ? "#9ca3af" : choice.nextTurn === -2 ? "#fcd34d" : "#93c5fd",
+                      background: choice.nextTurn === -1 ? "rgba(30,30,30,0.6)" : choice.nextTurn === -2 ? "rgba(120,53,15,0.6)" : "rgba(30,58,138,0.55)",
+                      backdropFilter: "blur(12px)",
+                      border: `1px solid ${choice.nextTurn === -1 ? "rgba(100,116,139,0.3)" : choice.nextTurn === -2 ? "rgba(217,119,6,0.4)" : "rgba(59,130,246,0.4)"}`,
+                      borderRadius: 12, padding: "8px 12px",
+                      color: choice.nextTurn === -1 ? "#94a3b8" : choice.nextTurn === -2 ? "#fbbf24" : "#93c5fd",
                       fontSize: 12, cursor: "pointer", textAlign: "left", lineHeight: 1.5,
-                      transition: "opacity 0.15s",
                     }}>
-                      {choice.nextTurn === -1 && "📵 "}
-                      {choice.nextTurn === -2 && "💸 "}
-                      {choice.text}
+                      {choice.nextTurn === -1 && "📵 "}{choice.nextTurn === -2 && "💸 "}{choice.text}
                     </button>
                   ))}
                 </div>
               )}
             </div>
           )}
-          <div style={{ height: 8, flexShrink: 0 }} />
+          <div style={{ height: 6 }} />
         </div>
       )}
 
       {callPhase === "ringing" && <div style={{ flex: 1 }} />}
 
-      {/* 하단 버튼 */}
-      <div style={{ padding: "10px 20px 36px", flexShrink: 0 }}>
+      {/* 하단 버튼 영역 */}
+      <div style={{ padding: "8px 20px 28px", flexShrink: 0 }}>
+        {/* 액션 버튼 그리드 (active) — iOS 26 Liquid Glass */}
         {callPhase === "active" && (
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isSamsung ? "repeat(3,1fr)" : "repeat(3,1fr)",
-            gap: 10, marginBottom: 16,
-          }}>
-            {(isSamsung
-              ? [
-                  { icon: <MicOff size={18} />, label: muted ? "해제" : "음소거", action: onMute, active: muted },
-                  { icon: <Keyboard size={18} />, label: "키패드", action: () => {} },
-                  { icon: <Volume2 size={18} />, label: "스피커", action: () => {} },
-                ]
-              : [
-                  { icon: <MicOff size={18} />, label: muted ? "켬" : "음소거", action: onMute, active: muted },
-                  { icon: <Keyboard size={18} />, label: "키패드", action: () => {} },
-                  { icon: <Volume2 size={18} />, label: "스피커", action: () => {} },
-                  { icon: <Users size={18} />, label: "통화 추가", action: () => {} },
-                  { icon: <Phone size={18} />, label: "FaceTime", action: () => {} },
-                  { icon: <span style={{ fontSize: 14 }}>⋯</span>, label: "더 보기", action: () => {} },
-                ]
-            ).map((btn, i) => (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 16 }}>
+            {[
+              { icon: <MicOff size={18}/>, label: muted ? "마이크 켬" : "음소거", action: onMute, active: muted },
+              { icon: <Keyboard size={18}/>, label: "키패드", action: ()=>{} },
+              { icon: <Volume2 size={18}/>, label: "스피커", action: ()=>{} },
+              { icon: <Users size={18}/>, label: "통화 추가", action: ()=>{} },
+              { icon: <Phone size={18}/>, label: "FaceTime", action: ()=>{} },
+              { icon: <span style={{fontSize:16}}>⋯</span>, label: "더 보기", action: ()=>{} },
+            ].map((btn, i) => (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                 <button onClick={btn.action} style={{
-                  width: 46, height: 46, borderRadius: "50%",
-                  background: (btn as {active?: boolean}).active ? "#fff" : (isSamsung ? "#2a2a2e" : "#3a3a3c"),
-                  border: "none", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: (btn as {active?: boolean}).active ? "#000" : "#fff",
+                  width: 52, height: 52, borderRadius: "50%",
+                  background: (btn as {active?:boolean}).active
+                    ? "rgba(255,255,255,0.9)"
+                    : "rgba(255,255,255,0.13)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                  color: (btn as {active?:boolean}).active ? "#1c1c1e" : "rgba(255,255,255,0.9)",
+                  boxShadow: (btn as {active?:boolean}).active ? "none" : "inset 0 1px 0 rgba(255,255,255,0.2)",
                 }}>{btn.icon}</button>
-                <span style={{ color: "#ffffff50", fontSize: 9 }}>{btn.label}</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 9.5, letterSpacing: 0.1 }}>{btn.label}</span>
               </div>
             ))}
           </div>
         )}
 
-        <div style={{ display: "flex", justifyContent: callPhase === "ringing" ? "space-around" : "center" }}>
+        {/* 통화 버튼 */}
+        <div style={{ display: "flex", justifyContent: callPhase === "ringing" ? "space-around" : "center", alignItems: "center" }}>
           {callPhase === "ringing" && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <button onClick={onHangUp} style={{
-                width: 60, height: 60, borderRadius: "50%",
-                background: rejectColor, border: "none", cursor: "pointer",
+                width: 68, height: 68, borderRadius: "50%",
+                background: "linear-gradient(135deg,#dc2626,#b91c1c)",
+                border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: `0 4px 18px ${rejectColor}60`,
-              }}><PhoneOff size={24} color="#fff" /></button>
-              <span style={{ color: "#ffffff70", fontSize: 11 }}>거절</span>
+                boxShadow: "0 4px 20px rgba(239,68,68,0.5), inset 0 1px 0 rgba(255,255,255,0.15)",
+              }}><PhoneOff size={26} color="#fff"/></button>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>거절</span>
             </div>
           )}
           {callPhase === "ringing" && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <button onClick={onPickUp} style={{
-                width: 60, height: 60, borderRadius: "50%",
-                background: accentColor, border: "none", cursor: "pointer",
+                width: 68, height: 68, borderRadius: "50%",
+                background: "linear-gradient(135deg,#30d158,#25a244)",
+                border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: `0 4px 18px ${accentColor}60`,
-              }}><Phone size={24} color="#fff" /></button>
-              <span style={{ color: "#ffffff70", fontSize: 11 }}>수락</span>
+                boxShadow: "0 4px 20px rgba(48,209,88,0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
+              }}><Phone size={26} color="#fff"/></button>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>수락</span>
             </div>
           )}
           {callPhase === "active" && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <button onClick={onHangUp} style={{
-                width: 60, height: 60, borderRadius: "50%",
-                background: rejectColor, border: "none", cursor: "pointer",
+                width: 68, height: 68, borderRadius: "50%",
+                background: "linear-gradient(135deg,#dc2626,#b91c1c)",
+                border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: `0 4px 18px ${rejectColor}60`,
-              }}><PhoneOff size={24} color="#fff" /></button>
-              <span style={{ color: "#ffffff70", fontSize: 11 }}>통화 종료</span>
+                boxShadow: "0 4px 20px rgba(239,68,68,0.5), inset 0 1px 0 rgba(255,255,255,0.15)",
+              }}><PhoneOff size={26} color="#fff"/></button>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>통화 종료</span>
             </div>
           )}
         </div>
