@@ -734,6 +734,7 @@ export default function HomePage() {
           @keyframes lampFlicker { 0%,100%{opacity:1} 88%{opacity:1} 90%{opacity:0.5} 91%{opacity:1} 95%{opacity:0.7} 97%{opacity:1} }
           @keyframes slowPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
           @keyframes diagBeam { 0%{opacity:0;transform:skewX(-15deg) translateX(-30px)} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0;transform:skewX(-15deg) translateX(30px)} }
+          @keyframes holoSweep { 0%{transform:translateX(-30%) skewX(-8deg);opacity:0} 15%{opacity:1} 50%{transform:translateX(10%) skewX(-8deg);opacity:1} 85%{opacity:1} 100%{transform:translateX(50%) skewX(-8deg);opacity:0} }
           @keyframes crtScan { 0%{background-position:0 0} 100%{background-position:0 100%} }
           @keyframes fogDrift { 0%{transform:translateX(-5%)} 50%{transform:translateX(5%)} 100%{transform:translateX(-5%)} }
         `}</style>
@@ -2238,25 +2239,45 @@ export default function HomePage() {
               pointerEvents: "none", zIndex: 1,
               transition: "background 0.1s ease",
             }} />
-            {/* 대각선 빛 줄기 */}
+            {/* 정품 인증 홀로그램 무지개 빛 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none", zIndex: 1, overflow: "hidden",
             }}>
+              {/* 무지개 스윕 레이어 */}
               <div style={{
                 position: "absolute",
-                top: "-40%", left: "-10%",
-                width: "45%", height: "200%",
-                background: "linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.055) 45%, rgba(200,160,255,0.08) 50%, rgba(255,255,255,0.055) 55%, transparent 100%)",
-                transform: "skewX(-15deg)",
-                animation: "diagBeam 6s ease-in-out infinite",
+                top: "-50%", left: "-60%",
+                width: "220%", height: "200%",
+                background: [
+                  "linear-gradient(105deg,",
+                  "transparent 0%,",
+                  "rgba(255,80,80,0.13) 10%,",
+                  "rgba(255,160,40,0.16) 18%,",
+                  "rgba(255,240,60,0.14) 26%,",
+                  "rgba(60,220,100,0.15) 34%,",
+                  "rgba(40,180,255,0.16) 42%,",
+                  "rgba(120,80,255,0.15) 50%,",
+                  "rgba(220,60,220,0.14) 58%,",
+                  "rgba(255,100,150,0.13) 66%,",
+                  "rgba(255,255,255,0.18) 74%,",
+                  "transparent 85%",
+                  ")"
+                ].join(" "),
+                animation: "holoSweep 4s ease-in-out infinite",
               }} />
+              {/* 보조 화이트 글로우 줄기 */}
               <div style={{
                 position: "absolute",
-                top: "-40%", left: "30%",
-                width: "25%", height: "200%",
-                background: "linear-gradient(105deg, transparent 0%, rgba(180,120,255,0.04) 45%, rgba(255,255,255,0.07) 50%, rgba(180,120,255,0.04) 55%, transparent 100%)",
-                transform: "skewX(-15deg)",
-                animation: "diagBeam 6s ease-in-out infinite 1.5s",
+                top: "-50%", left: "-60%",
+                width: "220%", height: "200%",
+                background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.22) 48%, rgba(255,255,255,0.08) 52%, transparent 65%)",
+                animation: "holoSweep 4s ease-in-out infinite 0.1s",
+              }} />
+              {/* 엣지 무지개 반사 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24,
+                background: "linear-gradient(135deg, rgba(255,120,120,0.06) 0%, rgba(120,80,255,0.08) 25%, rgba(40,200,255,0.07) 50%, rgba(60,220,120,0.06) 75%, rgba(255,200,60,0.08) 100%)",
+                mixBlendMode: "screen",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
