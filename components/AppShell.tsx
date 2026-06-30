@@ -28,8 +28,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [showExpMenu, setShowExpMenu] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("user_profile");
-    if (!saved) setShowProfile(true);
+    // 매 방문마다 성별/나이 입력창 표시 (통계에 반영)
+    setShowProfile(true);
   }, []);
 
   useEffect(() => {

@@ -50,9 +50,21 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
       .then(r => r.json()).then(d => setStats(d))
       .catch(() => setStats({ total: 0, gender: {}, age: {}, country: {} }))
       .finally(() => setLoadingStats(false));
+
+    // 서버 방명록 + 로컬 방명록 병합
+    const localRaw = localStorage.getItem("guestbook_local");
+    const localEntries: GuestEntry[] = localRaw ? JSON.parse(localRaw) : [];
+
     fetch("/api/guestbook")
-      .then(r => r.json()).then(d => setEntries(d.entries ?? []))
-      .catch(() => setEntries([]))
+      .then(r => r.json())
+      .then(d => {
+        const serverEntries: GuestEntry[] = d.entries ?? [];
+        // 서버에 없는 로컬 항목만 앞에 추가
+        const serverIds = new Set(serverEntries.map(e => e.id));
+        const onlyLocal = localEntries.filter(e => !serverIds.has(e.id));
+        setEntries([...onlyLocal, ...serverEntries]);
+      })
+      .catch(() => setEntries(localEntries))
       .finally(() => setLoadingEntries(false));
   }, []);
 
@@ -76,7 +88,17 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
       const data = await res.json();
       if (data.ok) {
         setSubmitDone(true); setMsg(""); setGender(""); setAgeGroup("");
-        if (data.entry) setEntries(prev => [data.entry, ...prev]);
+        const newEntry: GuestEntry = data.entry ?? {
+          id: `local-${Date.now()}`,
+          message: msg.trim(), gender, ageGroup,
+          createdAt: Date.now(),
+        };
+        // 로컬에도 저장 (KV 없어도 보임)
+        const localRaw = localStorage.getItem("guestbook_local");
+        const localEntries: GuestEntry[] = localRaw ? JSON.parse(localRaw) : [];
+        const updated = [newEntry, ...localEntries].slice(0, 30);
+        localStorage.setItem("guestbook_local", JSON.stringify(updated));
+        setEntries(prev => [newEntry, ...prev]);
       }
     } catch { setSubmitError(t("stats_send_error", lang)); }
     finally { setSubmitting(false); }

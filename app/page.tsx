@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Shield, Phone, ChevronRight, BookOpen, Users, AlertCircle, ExternalLink, X } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import { useLang } from "@/lib/LanguageContext";
@@ -49,6 +49,35 @@ export default function HomePage() {
   const [popup2Open, setPopup2Open] = useState(false);
   const [guideTab, setGuideTab] = useState("parents");
   const [selectedScenario, setSelectedScenario] = useState<typeof CRIME_SCENARIOS[0] | null>(null);
+  const [hoveredLog, setHoveredLog] = useState<number | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const instCardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 모바일: 자이로스코프
+    function onOrientation(e: DeviceOrientationEvent) {
+      const x = Math.max(-30, Math.min(30, e.gamma ?? 0));
+      const y = Math.max(-30, Math.min(30, e.beta  ?? 0));
+      setTilt({ x, y });
+    }
+    // PC: 마우스 위치
+    function onMouse(e: MouseEvent) {
+      const el = instCardRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width  / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      setTilt({ x: dx * 20, y: dy * 20 });
+    }
+    window.addEventListener("deviceorientation", onOrientation as EventListener);
+    window.addEventListener("mousemove", onMouse);
+    return () => {
+      window.removeEventListener("deviceorientation", onOrientation as EventListener);
+      window.removeEventListener("mousemove", onMouse);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setPopup1Open(true), 600);
@@ -752,7 +781,12 @@ export default function HomePage() {
                   ],
                 },
               ].map((log, i) => (
-                <div key={i} style={{ display: "flex", gap: 20, paddingBottom: 28, position: "relative" }}>
+                <div
+                  key={i}
+                  style={{ display: "flex", gap: 20, paddingBottom: 20, position: "relative" }}
+                  onMouseEnter={() => setHoveredLog(i)}
+                  onMouseLeave={() => setHoveredLog(null)}
+                >
                   {/* 타임라인 선 */}
                   {i < 13 && (
                     <div style={{
@@ -763,12 +797,13 @@ export default function HomePage() {
                   {/* 버전 배지 */}
                   <div style={{ flexShrink: 0, width: 80, textAlign: "center" }}>
                     <div style={{
-                      background: log.badgeBg, border: `1px solid ${log.badgeColor}44`,
+                      background: hoveredLog === i ? log.badgeBg : "#111",
+                      border: `1px solid ${hoveredLog === i ? log.badgeColor : "#222"}`,
                       borderRadius: 10, padding: "6px 0", marginBottom: 4,
+                      transition: "all 0.2s",
                     }}>
-                      <p style={{ color: log.badgeColor, fontWeight: 900, fontSize: 13 }}>{log.version}</p>
+                      <p style={{ color: hoveredLog === i ? log.badgeColor : "#4b5563", fontWeight: 900, fontSize: 13, transition: "color 0.2s" }}>{log.version}</p>
                     </div>
-                    <p style={{ color: "#374151", fontSize: 10 }}>{"date" in log ? (log as any).date : ""}</p>
                     {log.badge && (
                       <span style={{
                         display: "inline-block", marginTop: 4,
@@ -779,11 +814,30 @@ export default function HomePage() {
                       }}>{log.badge}</span>
                     )}
                   </div>
-                  {/* 항목들 */}
-                  <div style={{ flex: 1, paddingTop: 4 }}>
-                    {log.items.map((item, j) => (
-                      <p key={j} style={{ color: "#9ca3af", fontSize: 13, lineHeight: 1.8 }}>{item}</p>
-                    ))}
+                  {/* 항목들 — 호버 시 팝업처럼 슬라이드업 */}
+                  <div style={{
+                    flex: 1, paddingTop: 4, position: "relative",
+                    overflow: hoveredLog === i ? "visible" : "hidden",
+                    height: hoveredLog === i ? "auto" : 32,
+                  }}>
+                    {hoveredLog === i ? (
+                      <div style={{
+                        background: "#0d0d0d", border: `1px solid ${log.badgeColor}33`,
+                        borderRadius: 14, padding: "14px 16px",
+                        animation: "slideUpLog 0.2s ease",
+                        position: "absolute", top: 0, left: 0, right: 0, zIndex: 10,
+                        boxShadow: `0 8px 24px ${log.badgeColor}22`,
+                      }}>
+                        {log.items.map((item, j) => (
+                          <p key={j} style={{ color: "#d1d5db", fontSize: 13, lineHeight: 1.9, margin: 0 }}>{item}</p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p style={{ color: "#374151", fontSize: 12, lineHeight: 2, cursor: "default" }}>
+                        {log.items[0]?.slice(0, 30)}{log.items[0]?.length > 30 ? "…" : ""}
+                        {log.items.length > 1 && <span style={{ color: "#1f2937", marginLeft: 6 }}>+{log.items.length - 1}</span>}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1624,6 +1678,7 @@ export default function HomePage() {
             <style>{`
               @keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
               @keyframes slideUpCard { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+              @keyframes slideUpLog { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
             `}</style>
             <div
               onClick={(e) => e.stopPropagation()}
@@ -1794,12 +1849,32 @@ export default function HomePage() {
       {/* ── 기관 판매 문의 배너 ── */}
       <section style={{ background: "#fff", borderTop: "1px solid #e2e8f0", padding: "52px 40px" }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
-          <div style={{
-            background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)",
-            borderRadius: 24, padding: "40px 44px",
-            display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center",
-          }}>
-            <div>
+          <div
+            ref={instCardRef}
+            style={{
+              background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)",
+              borderRadius: 24, padding: "40px 44px",
+              display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center",
+              position: "relative", overflow: "hidden",
+              transform: `perspective(800px) rotateY(${tilt.x * 0.12}deg) rotateX(${-tilt.y * 0.08}deg)`,
+              transition: "transform 0.1s ease",
+              boxShadow: `${-tilt.x * 0.5}px ${tilt.y * 0.5}px 40px rgba(59,130,246,0.25)`,
+            }}
+          >
+            {/* 홀로그램 빛 오버레이 */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              background: `radial-gradient(ellipse 60% 50% at ${50 + tilt.x * 2}% ${50 + tilt.y * 2}%, rgba(255,255,255,0.13) 0%, transparent 70%)`,
+              pointerEvents: "none", zIndex: 1,
+              transition: "background 0.1s ease",
+            }} />
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              background: `linear-gradient(${120 + tilt.x * 2}deg, transparent 30%, rgba(147,197,253,0.08) 50%, transparent 70%)`,
+              pointerEvents: "none", zIndex: 1,
+              transition: "background 0.1s ease",
+            }} />
+            <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 28 }}>🏛️</span>
                 <p style={{ color: "#93c5fd", fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>INSTITUTIONAL SALES</p>
@@ -1814,6 +1889,7 @@ export default function HomePage() {
             <div style={{
               background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
               borderRadius: 20, padding: "28px 32px", minWidth: 260, flexShrink: 0,
+              position: "relative", zIndex: 2,
             }}>
               <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 16 }}>
                 {lang === "ko" ? "문의 · 도입 연락처" : lang === "en" ? "Contact & Inquiry" : lang === "ja" ? "お問い合わせ" : lang === "zh" ? "联系方式" : lang === "vi" ? "Liên hệ" : "Contacto"}
