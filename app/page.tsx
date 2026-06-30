@@ -1170,11 +1170,37 @@ export default function HomePage() {
           {/* ── 이 프로그램이 필요한 이유 ── */}
           <div style={{
             marginTop: 56,
-            background: "linear-gradient(180deg, #0a0a0f 0%, #0f0a1a 100%)",
-            border: "1px solid #1e1e2e",
+            background: "linear-gradient(160deg, #1a0a2e 0%, #0f1a2e 50%, #0a1a18 100%)",
+            border: "1px solid #7c3aed33",
             borderRadius: 24,
             padding: "48px 40px",
           }}>
+            {/* 손글씨 서약 문구 */}
+            <div style={{ textAlign: "center", marginBottom: 36 }}>
+              <p style={{
+                fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
+                fontSize: 26,
+                lineHeight: 1.7,
+                color: "#c4b5fd",
+                textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
+                letterSpacing: 1,
+                margin: 0,
+              }}>
+                범죄를 막을 수 있는 대한민국을
+              </p>
+              <p style={{
+                fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
+                fontSize: 26,
+                lineHeight: 1.7,
+                color: "#c4b5fd",
+                textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
+                letterSpacing: 1,
+                margin: 0,
+              }}>
+                저 AI개발자 <span style={{ color: "#fbbf24", textShadow: "0 0 20px #fbbf2488" }}>🦉 부엉이</span>가 만들겠습니다.
+              </p>
+              <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#7c3aed55,transparent)", margin: "24px auto", maxWidth: 400 }} />
+            </div>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <span style={{ color: "#f472b6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>WHY THIS EXISTS</span>
               <h3 style={{ color: "#f4f4f5", fontSize: 26, fontWeight: 900, marginTop: 12, marginBottom: 0, letterSpacing: -0.5 }}>
