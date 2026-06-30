@@ -670,7 +670,7 @@ export default function HomePage() {
                   fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
                 }}>1</div>
                 <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>최초 홍보 영상</p>
-                <span style={{ color: "#374151", fontSize: 11, background: "#2a1a3a", border: "1px solid #374151", borderRadius: 20, padding: "2px 10px" }}>2024</span>
+                <span style={{ color: "#6b7280", fontSize: 11, background: "#2a1a3a", border: "1px solid #6b7280", borderRadius: 20, padding: "2px 10px" }}>2024</span>
               </div>
               <div style={{
                 position: "relative", width: "100%", paddingTop: "56.25%",
@@ -747,7 +747,7 @@ export default function HomePage() {
             </p>
             {/* 관련 사이트 */}
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "6px 20px", marginTop: 14 }}>
-              <span style={{ color: "#374151", fontSize: 11 }}>더 자세히 알아보기 →</span>
+              <span style={{ color: "#6b7280", fontSize: 11 }}>더 자세히 알아보기 →</span>
               {[
                 { label: "경찰청 사이버수사국", url: "https://ecrm.police.go.kr" },
                 { label: "금융감독원 불법금융신고센터", url: "https://www.fss.or.kr/fss/main/sub1/sub1_3.do" },
@@ -755,9 +755,9 @@ export default function HomePage() {
                 { label: "사이버범죄 신고시스템", url: "https://ecrm.cyber.go.kr" },
               ].map(s => (
                 <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer"
-                  style={{ color: "#4b5563", fontSize: 11, textDecoration: "none", borderBottom: "1px solid #374151", lineHeight: 1.8 }}
+                  style={{ color: "#9ca3af", fontSize: 11, textDecoration: "none", borderBottom: "1px solid #6b7280", lineHeight: 1.8 }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#9ca3af")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#4b5563")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#9ca3af")}
                 >{s.label}</a>
               ))}
             </div>
@@ -1171,7 +1171,7 @@ export default function HomePage() {
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
                   animation: "marqueeScroll 22s linear infinite",
-                  color: "#7c3aed55", fontSize: 10, fontFamily: "monospace",
+                  color: "#c084fc99", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {["📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"].map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
@@ -1183,7 +1183,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>📸</div>
                   <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 5 ~ 2 0 1 8 ──</span>
-                  <p style={{ color: "#7c3aed88", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>SNS · 인스타그램 · 오픈마켓 사기의 시대</p>
+                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>SNS · 인스타그램 · 오픈마켓 사기의 시대</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
               </div>
@@ -1286,7 +1286,7 @@ export default function HomePage() {
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
                   animation: "marqueeScroll 25s linear infinite",
-                  color: "#164e6388", fontSize: 10, fontFamily: "monospace",
+                  color: "#22d3ee99", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {["😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보", "😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보"].map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
@@ -1298,16 +1298,16 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>😷</div>
                   <span style={{ color: "#22d3ee", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 9 ~ 2 0 2 1 ──</span>
-                  <p style={{ color: "#164e63", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>우환폐렴 · 재난지원금 · 비대면 사기의 시대</p>
+                  <p style={{ color: "#67e8f9", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>우환폐렴 · 재난지원금 · 비대면 사기의 시대</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #22d3ee44, transparent)" }} />
               </div>
 
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
+                <div style={{ height: 1, flex: 1, background: "#67e8f9", opacity: 0.6 }} />
                 <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2019~2021년 (우환폐렴 시대) ──</span>
-                <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
+                <div style={{ height: 1, flex: 1, background: "#67e8f9", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
@@ -1395,7 +1395,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>🤖</div>
                   <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 2 2 ~ 2 0 2 3 ──</span>
-                  <p style={{ color: "#7c3aed88", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>AI 전야 · 딥보이스 · 중고거래 사기의 시대</p>
+                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>AI 전야 · 딥보이스 · 중고거래 사기의 시대</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
               </div>
@@ -1489,7 +1489,7 @@ export default function HomePage() {
 
           {/* 마무리 인용 + AI 전환 문구 */}
           <div style={{ textAlign: "center", marginTop: 48 }}>
-            <p style={{ color: "#374151", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", marginBottom: 32 }}>
+            <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", marginBottom: 32 }}>
               ── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──
             </p>
             <div style={{
@@ -1542,7 +1542,7 @@ export default function HomePage() {
               </div>
               <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');`}</style>
               <p style={{
-                fontFamily: "Caveat, cursive",
+                fontFamily: "'Mansei', 'Nanum Brush Script', cursive",
                 fontSize: 30, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
                 letterSpacing: 2, margin: 0, fontWeight: 700,
@@ -1550,7 +1550,7 @@ export default function HomePage() {
                 범죄를 막을 수 있는 대한민국을
               </p>
               <p style={{
-                fontFamily: "Caveat, cursive",
+                fontFamily: "'Mansei', 'Nanum Brush Script', cursive",
                 fontSize: 30, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
                 letterSpacing: 2, margin: 0, fontWeight: 700,
