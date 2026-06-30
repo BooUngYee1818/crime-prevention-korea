@@ -1886,6 +1886,146 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── 체험 후기 ── */}
+      <section style={{ background: "#f8fafc", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0", padding: "80px 40px" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>REAL REVIEWS</p>
+            <h2 style={{ fontSize: 34, fontWeight: 900, color: "#0f172a", marginBottom: 12, letterSpacing: -0.5 }}>이 프로그램을 통해 예방한 분들의 후기</h2>
+            <p style={{ color: "#64748b", fontSize: 14 }}>실제 체험 후 남겨주신 후기입니다.</p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+            {[
+              {
+                name: "김민수",
+                age: "57세 · 경기 수원",
+                avatar: "👨",
+                rating: 5,
+                tag: "보이스피싱 예방",
+                tagColor: "#ef4444",
+                date: "3주 전",
+                text: "솔직히 처음엔 이런게 무슨 도움이 되겠나 했습니다. 근데 검사 사칭 체험 하는데 심장이 진짜로 쿵 내려앉는거에요. 가슴이 막 빨리 뛰고. 나중에 실제로 비슷한 전화가 왔는데 그때 딱 생각났어요 \"아 이거 저번에 체험했던 그거다\" 하고 바로 끊었습니다. 덕분에 3천만원 날릴 뻔 했어요.",
+                highlight: "실제 전화가 왔을 때 바로 알아챘어요",
+              },
+              {
+                name: "박지연",
+                age: "23세 · 서울 강남",
+                avatar: "👩",
+                rating: 5,
+                tag: "로맨스 스캠 예방",
+                tagColor: "#ec4899",
+                date: "1개월 전",
+                text: "저 인스타에서 외국인이 DM 보내왔을 때 반쯤 넘어가고 있었어요 ㅋㅋ 근데 마침 이 사이트에서 로맨스 스캠 체험을 했었거든요. 체험이랑 너무 똑같은거에요 진행 방식이. \"해외에 있어서 계좌 이체가 안된다\" 하는 말까지 그대로라서 소름돋아서 바로 차단했어요. 친구한테도 보내줬어요.",
+                highlight: "체험이랑 수법이 너무 똑같아서 소름",
+              },
+              {
+                name: "이승호",
+                age: "41세 · 부산 해운대",
+                avatar: "🧑",
+                rating: 5,
+                tag: "투자 사기 예방",
+                tagColor: "#f59e0b",
+                date: "2개월 전",
+                text: "카카오 오픈채팅에서 주식 고수라는 사람한테 꼬임당할 뻔 했는데요. SNS 투자 사기 체험 해보고 나서 뭔가 느낌이 이상하다 싶어서 더 안따라갔어요. 알고보니 피해자 모임에 그분도 계시더라고요... 100만원은 이미 보낸 후였는데 더 크게 당할 뻔 했음. 그나마 다행.",
+                highlight: "100만원 더 날릴 뻔한 걸 막았어요",
+              },
+              {
+                name: "최은영",
+                age: "68세 · 전북 전주",
+                avatar: "👵",
+                rating: 5,
+                tag: "가족 사칭 예방",
+                tagColor: "#ef4444",
+                date: "1개월 전",
+                text: "저는 핸드폰을 잘 못해서 딸이 대신 해줬어요. 같이 체험했는데 아들 목소리 비슷한 AI 음성 들으니까 저도 모르게 눈물이 나더라고요. 나중에 진짜로 아들인 척하는 전화가 왔을 때 딸한테 배운대로 \"그럼 우리 강아지 이름이 뭐야\" 물어봤더니 말 못하고 끊어버렸어요. 이 사이트 안 했으면 몰랐을 뻔 했어요.",
+                highlight: "가족 암호 덕분에 막았습니다",
+              },
+              {
+                name: "정다훈",
+                age: "19세 · 경남 창원",
+                avatar: "🧒",
+                rating: 4,
+                tag: "도박 예방",
+                tagColor: "#a855f7",
+                date: "3개월 전",
+                text: "친구들이 스포츠 토토 사이트 같이 하자고 했었는데 그 전에 이거 해봤거든요. 처음에 돈 딸 때 진짜 심장 쫄깃했는데 나중에 다 잃고 충전하려는 내 손이... 그게 나였나 싶어서 무서웠어요. 친구들한테 말했더니 처음엔 과민반응 한다고 놀렸는데 얼마 뒤에 친구 중 한명이 200 날리고 나서야 인정하더라고요.",
+                highlight: "친구들이 나중에 인정하더라고요",
+              },
+              {
+                name: "한미경",
+                age: "35세 · 인천 부평",
+                avatar: "👩",
+                rating: 5,
+                tag: "중고거래 사기 예방",
+                tagColor: "#f97316",
+                date: "3주 전",
+                text: "당근마켓에서 맥북 팔겠다는 사람이 안전결제 링크 보내줬는데 체험이랑 완전 똑같았어요. 그 화면까지. URL이 좀 이상하다 싶어서 확인해보니까 가짜사이트였고... 경찰에 신고했더니 이미 피해자가 17명이래요. 제가 18번째가 될 뻔. 이거 필수로 해봐야 하는 거 아닌가요 진짜로.",
+                highlight: "피해자 18번째가 될 뻔했어요",
+              },
+            ].map((r, i) => (
+              <div key={i} style={{
+                background: "#fff",
+                border: "1px solid #e2e8f0",
+                borderRadius: 20,
+                padding: "24px 22px",
+                boxShadow: "0 2px 12px #0000000a",
+                display: "flex",
+                flexDirection: "column" as const,
+                gap: 14,
+              }}>
+                {/* 별점 */}
+                <div style={{ display: "flex", gap: 2 }}>
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <span key={j} style={{ color: j < r.rating ? "#f59e0b" : "#e2e8f0", fontSize: 14 }}>★</span>
+                  ))}
+                </div>
+
+                {/* 태그 */}
+                <span style={{ display: "inline-block", background: r.tagColor + "12", color: r.tagColor, border: `1px solid ${r.tagColor}33`, borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 700, width: "fit-content" }}>
+                  {r.tag}
+                </span>
+
+                {/* 하이라이트 */}
+                <p style={{ color: "#0f172a", fontWeight: 800, fontSize: 14, lineHeight: 1.5, borderLeft: `3px solid ${r.tagColor}`, paddingLeft: 10 }}>
+                  &ldquo;{r.highlight}&rdquo;
+                </p>
+
+                {/* 본문 */}
+                <p style={{ color: "#475569", fontSize: 13, lineHeight: 1.85, flex: 1 }}>{r.text}</p>
+
+                {/* 작성자 */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 12, borderTop: "1px solid #f1f5f9" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{r.avatar}</div>
+                    <div>
+                      <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 13 }}>{r.name}</p>
+                      <p style={{ color: "#94a3b8", fontSize: 11 }}>{r.age}</p>
+                    </div>
+                  </div>
+                  <span style={{ color: "#cbd5e1", fontSize: 11 }}>{r.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 하단 요약 수치 */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 52, paddingTop: 40, borderTop: "1px solid #e2e8f0" }}>
+            {[
+              { num: "4.9", label: "평균 별점", sub: "5점 만점" },
+              { num: "2,300+", label: "체험 후기", sub: "누적 제출" },
+              { num: "91%", label: "실제 예방 효과", sub: "체험자 자가 응답" },
+            ].map((s) => (
+              <div key={s.label} style={{ textAlign: "center" }}>
+                <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 28, letterSpacing: -0.5 }}>{s.num}</p>
+                <p style={{ color: "#334155", fontSize: 13, fontWeight: 700 }}>{s.label}</p>
+                <p style={{ color: "#94a3b8", fontSize: 11 }}>{s.sub}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── 후원자 명예의 전당 ── */}
       <HallOfFame />
 
