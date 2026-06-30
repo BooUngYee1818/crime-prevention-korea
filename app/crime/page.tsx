@@ -184,21 +184,53 @@ export default function CrimeCenterPage() {
           <ChevronRight size={18} color="#a78bfa" style={{ flexShrink: 0 }} />
         </button>
 
-        {/* 새 체험 3종 그리드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
+        {/* 🧒 어린이 범죄 예방 멘트 */}
+        <div style={{
+          background: "linear-gradient(135deg,#0a1a0a,#0f2010)",
+          border: "1px solid #22c55e44",
+          borderRadius: 18, padding: "18px 20px", marginBottom: 16,
+          display: "flex", gap: 14, alignItems: "flex-start",
+        }}>
+          <div style={{ fontSize: 32, flexShrink: 0 }}>🧒</div>
+          <div>
+            <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 14, marginBottom: 6 }}>어린이 친구들에게 🌟</p>
+            <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.9 }}>
+              이 프로그램은 <strong style={{ color: "#fff" }}>나쁜 사람들의 수법을 미리 알려줘서 속지 않게</strong> 도와주는 곳이에요.<br />
+              여기서 배운 것들은 절대로 다른 사람에게 써먹으면 안 돼요.<br />
+              <strong style={{ color: "#fbbf24" }}>범죄는 상대방 마음에 평생 남는 상처를 남겨요.</strong> 절대 하면 안 된답니다! 🙅
+            </p>
+          </div>
+        </div>
+
+        {/* 새 체험 그리드 */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 10 }}>
           {[
             { path: "/crime/quiz", icon: "🕵️", label: "사기 판별 퀴즈", sub: "진짜 vs 가짜 맞추기", bg: "linear-gradient(135deg,#1e3a5f,#1d4ed8)", border: "#1d4ed8" },
             { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "당근마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
             { path: "/crime/sns-invest", icon: "📸", label: "SNS 투자 사기", sub: "인스타 DM 사기 체험", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
-            { path: "/crime/deepfake", icon: "🎭", label: "AI 딥페이크 사기", sub: "가족 사칭 영상통화", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed" },
           ].map((item) => (
-            <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 16, padding: "16px 12px", cursor: "pointer", textAlign: "center", transition: "transform 0.15s", position: "relative" }}
+            <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 14, padding: "14px 10px", cursor: "pointer", textAlign: "center" as const, transition: "transform 0.15s", position: "relative" as const }}
               onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform="translateY(0)"}>
-              <div style={{ fontSize: 28, marginBottom: 6 }}>{item.icon}</div>
-              <p style={{ color: "#fff", fontWeight: 800, fontSize: 12, marginBottom: 3 }}>{item.label}</p>
-              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 10 }}>{item.sub}</p>
-              <span style={{ position: "absolute", top: 8, right: 8, background: "#ef4444", color: "#fff", fontSize: 8, fontWeight: 700, padding: "2px 6px", borderRadius: 10 }}>NEW</span>
+              <div style={{ fontSize: 24, marginBottom: 5 }}>{item.icon}</div>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{item.label}</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{item.sub}</p>
+            </button>
+          ))}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 20 }}>
+          {[
+            { path: "/crime/deepfake", icon: "🎭", label: "AI 딥페이크 사기", sub: "가족 사칭 영상통화", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed", isNew: false },
+            { path: "/crime/ai-crimes", icon: "🤖", label: "AI 범죄 체험관", sub: "딥페이크·음성복제 등", bg: "linear-gradient(135deg,#1a0000,#7c0000)", border: "#dc2626", isNew: false },
+            { path: "/crime/ai-detective", icon: "🏆", label: "AI 탐정 도전!", sub: "가짜 영상 찾고 뱃지 획득", bg: "linear-gradient(135deg,#1a1000,#7c5200)", border: "#fbbf24", isNew: true },
+          ].map((item) => (
+            <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 14, padding: "14px 10px", cursor: "pointer", textAlign: "center" as const, transition: "transform 0.15s", position: "relative" as const }}
+              onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}
+              onMouseLeave={e => e.currentTarget.style.transform="translateY(0)"}>
+              <div style={{ fontSize: 24, marginBottom: 5 }}>{item.icon}</div>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{item.label}</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{item.sub}</p>
+              {item.isNew && <span style={{ position: "absolute" as const, top: 7, right: 7, background: "#fbbf24", color: "#000", fontSize: 7, fontWeight: 900, padding: "2px 5px", borderRadius: 8 }}>NEW</span>}
             </button>
           ))}
         </div>
