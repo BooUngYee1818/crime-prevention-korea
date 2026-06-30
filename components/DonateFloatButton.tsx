@@ -10,7 +10,7 @@ export default function DonateFloatButton() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div style={{ position: "fixed", bottom: 80, left: 24, zIndex: 9997 }}>
+    <div style={{ position: "fixed", bottom: 140, left: 24, zIndex: 9997 }}>
       {open && (
         <>
           <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: -1 }} />

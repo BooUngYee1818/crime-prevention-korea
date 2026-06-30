@@ -1024,7 +1024,7 @@ export default function HomePage() {
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
               <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>📋 업데이트 내역</h2>
             </div>
-            <div style={{ position: "relative", maxWidth: 600, margin: "0 auto" }}>
+            <div style={{ position: "relative", maxWidth: 600, margin: "0 auto", overflow: "hidden", maxHeight: 420 }}>
               {/* 항목 목록 */}
               <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                 {[...CHANGELOGS].reverse().map((log, i) => (
@@ -2894,6 +2894,28 @@ export default function HomePage() {
                 date: "3주 전",
                 text: "당근마켓에서 맥북 팔겠다는 사람이 안전결제 링크 보내줬는데 체험이랑 완전 똑같았어요. 그 화면까지. URL이 좀 이상하다 싶어서 확인해보니까 가짜사이트였고... 경찰에 신고했더니 이미 피해자가 17명이래요. 제가 18번째가 될 뻔. 이거 필수로 해봐야 하는 거 아닌가요 진짜로.",
                 highlight: "피해자 18번째가 될 뻔했어요",
+              },
+              {
+                name: "오준혁",
+                age: "28세 · 서울 마포",
+                avatar: "🧑",
+                rating: 2,
+                tag: "보이스피싱 체험",
+                tagColor: "#64748b",
+                date: "2개월 전",
+                text: "솔직히 말하면 별로였어요. 내용은 좋은데 AI 목소리가 너무 로봇같아서 몰입이 안 됐고, 실제 사기 전화랑 다르다는 느낌이 들었어요. 진짜 사기꾼은 훨씬 자연스럽게 말하던데... 그래도 수법 자체를 이해하는 데는 도움이 됐습니다. 업데이트 되면 다시 해볼게요.",
+                highlight: "목소리가 너무 로봇같아서 아쉬웠어요",
+              },
+              {
+                name: "김수아",
+                age: "45세 · 대전 서구",
+                avatar: "👩",
+                rating: 3,
+                tag: "투자 사기 체험",
+                tagColor: "#f59e0b",
+                date: "5일 전",
+                text: "체험 자체는 괜찮은데 UI가 좀 복잡해서 처음에 어디서 시작하는지 헷갈렸어요. 나이 있는 사람한테는 진입장벽이 있을 것 같아요. 그래도 내용은 알차고 실제로 이런 수법이 있다는 게 놀라웠어요. 좀 더 단순하게 만들어줬으면 좋겠어요.",
+                highlight: "내용은 좋은데 처음엔 좀 복잡했어요",
               },
             ].map((r, i) => (
               <div key={i} style={{
