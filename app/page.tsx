@@ -875,7 +875,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 과거 범죄 아카이브 ── */}
-      <section style={{ background: "#130c1c", padding: "72px 0 64px", overflow: "hidden", position: "relative" }}>
+      <section style={{ background: "linear-gradient(180deg, #1a0a2e 0%, #0d1a30 40%, #0a1a1a 100%)", padding: "72px 0 64px", overflow: "hidden", position: "relative" }}>
         {/* 시대 배경 CSS 애니메이션 */}
         <style>{`
           @keyframes flickerTV { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.7} 94%{opacity:1} 97%{opacity:0.85} 98%{opacity:1} }
@@ -917,12 +917,9 @@ export default function HomePage() {
             {/* ══ 1990년대 배경: 옛날 한국 골목 느낌 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: `
-                linear-gradient(180deg, rgba(20,10,0,0.85) 0%, rgba(40,20,0,0.75) 100%),
-                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(180,140,60,0.04) 3px, rgba(180,140,60,0.04) 4px),
-                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(180,140,60,0.03) 40px, rgba(180,140,60,0.03) 41px)
-              `,
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(160deg, #3d1f00 0%, #5c2e00 40%, #2a1500 100%)",
+              boxShadow: "0 4px 40px rgba(180,100,0,0.25)",
             }}>
               {/* 골목 벽돌 패턴 */}
               <div style={{
@@ -1013,11 +1010,9 @@ export default function HomePage() {
             {/* ══ 2000년대 배경: Windows XP / PC방 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: `
-                linear-gradient(180deg, rgba(0,10,40,0.92) 0%, rgba(10,30,70,0.85) 50%, rgba(0,20,50,0.92) 100%),
-                repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(100,180,255,0.04) 24px, rgba(100,180,255,0.04) 25px)
-              `,
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(160deg, #003366 0%, #1a5276 40%, #0d2b45 100%)",
+              boxShadow: "0 4px 40px rgba(0,100,200,0.25)",
             }}>
               {/* XP 하늘빛 글로우 */}
               <div style={{
@@ -1111,8 +1106,9 @@ export default function HomePage() {
             {/* ══ 2010년대 초: 스마트폰 시대 배경 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: "linear-gradient(180deg, rgba(2,8,20,0.95) 0%, rgba(5,20,10,0.90) 100%)",
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(160deg, #003d20 0%, #0a5c2e 40%, #012a15 100%)",
+              boxShadow: "0 4px 40px rgba(0,150,80,0.2)",
             }}>
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
@@ -1188,8 +1184,9 @@ export default function HomePage() {
             {/* ══ 2015~2018: SNS 시대 배경 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: "linear-gradient(180deg, rgba(10,0,30,0.95) 0%, rgba(25,5,50,0.90) 100%)",
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(135deg, #3d006b 0%, #6b0057 50%, #2a003d 100%)",
+              boxShadow: "0 4px 40px rgba(150,0,150,0.25)",
             }}>
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
@@ -1259,8 +1256,9 @@ export default function HomePage() {
             {/* ══ 2019~2021: 우환폐렴(코로나) 시대 배경 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: "linear-gradient(180deg, rgba(0,15,25,0.97) 0%, rgba(5,25,35,0.95) 100%)",
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(160deg, #1a2a3a 0%, #0d2233 50%, #0a1820 100%)",
+              boxShadow: "0 4px 40px rgba(20,100,150,0.2)",
             }}>
               {/* 빗방울 효과 */}
               {[...Array(8)].map((_,i) => (
@@ -1336,8 +1334,9 @@ export default function HomePage() {
             {/* ══ 2022~2023: 다크 도시 / AI 전야 배경 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
-              marginBottom: 40, padding: "32px 28px",
-              background: "linear-gradient(180deg, rgba(5,0,15,0.98) 0%, rgba(15,0,30,0.95) 100%)",
+              marginBottom: 24, padding: "32px 28px",
+              background: "linear-gradient(135deg, #2d0050 0%, #4a0080 40%, #1a0035 100%)",
+              boxShadow: "0 4px 40px rgba(120,0,200,0.3)",
             }}>
               {/* 네온 글로우 */}
               <div style={{
@@ -2395,8 +2394,13 @@ export default function HomePage() {
             ))}
           </div>
 
+          {/* AI 후기 고지 */}
+          <p style={{ textAlign: "center", color: "#cbd5e1", fontSize: 11, marginTop: 28, opacity: 0.35 }}>
+            * 위 후기는 실제 체험 데이터를 바탕으로 AI가 작성한 예시입니다.
+          </p>
+
           {/* 하단 요약 수치 */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 52, paddingTop: 40, borderTop: "1px solid #e2e8f0" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 32, paddingTop: 40, borderTop: "1px solid #e2e8f0" }}>
             {[
               { num: "4.9", label: "평균 별점", sub: "5점 만점" },
               { num: "2,300+", label: "체험 후기", sub: "누적 제출" },
@@ -2493,9 +2497,25 @@ export default function HomePage() {
 
               {/* 브랜드 소개 */}
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                  <Shield size={16} color="#9161b2" />
-                  <span style={{ color: "#dcc5e8", fontWeight: 900, fontSize: 15 }}>범죄예방 체험관</span>
+                {/* BooUngYee 로고 — 초록 크로마키 CSS 제거 */}
+                <div style={{ position: "relative", width: 180, height: 90, marginBottom: 12, overflow: "hidden", borderRadius: 12 }}>
+                  <div style={{
+                    position: "absolute", inset: 0, borderRadius: 12,
+                    background: "#00c835",
+                  }} />
+                  <img
+                    src="/logo-booungyee.png"
+                    alt="BooUngYee"
+                    style={{
+                      width: "100%", height: "100%", objectFit: "cover",
+                      mixBlendMode: "multiply",
+                      position: "relative", zIndex: 1,
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                  <Shield size={14} color="#9161b2" />
+                  <span style={{ color: "#dcc5e8", fontWeight: 900, fontSize: 14 }}>범죄예방 체험관</span>
                 </div>
                 <p style={{ color: "#4a3060", fontSize: 12, lineHeight: 2.0 }}>
                   AI가 설계한 한국 최초<br />
