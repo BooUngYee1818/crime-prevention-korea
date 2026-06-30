@@ -851,8 +851,8 @@ export default function HomePage() {
                     color: "#c9a84c", fontSize: 13, fontWeight: 700, letterSpacing: 4,
                     fontFamily: "monospace", animation: "neonBlink 4s infinite",
                     textShadow: "0 0 10px #c9a84c88",
-                  }}>── 1 9 9 0 년 대 ──</span>
-                  <p style={{ color: "#8b6914", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>골목 팩스방 · 전단지 · 전화 사기의 시대</p>
+                  }}>{lang === "ko" ? "── 1 9 9 0 년 대 ──" : "── 1 9 9 0 s ──"}</span>
+                  <p style={{ color: "#8b6914", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "골목 팩스방 · 전단지 · 전화 사기의 시대" : lang === "ja" ? "路地のFAX店・チラシ・電話詐欺の時代" : lang === "zh" ? "街边传真店·传单·电话诈骗的时代" : "Alley Fax Shops · Flyers · Phone Scam Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c9a84c88, transparent)" }} />
               </div>
@@ -863,7 +863,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 18s linear infinite",
                   color: "#8b6914", fontSize: 10, fontFamily: "monospace", letterSpacing: 1,
                 }}>
-                  {["📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고", "📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고", "📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고"]
+                    : lang === "ja"
+                    ? ["📞 ポケベル呼出", "📠 FAX詐欺", "🏪 街角商店", "🚌 市内バス", "📺 ブラウン管TV", "💿 ビデオレンタル", "🎰 宝くじ当選詐欺", "📋 チラシ広告", "📞 ポケベル呼出", "📠 FAX詐欺", "🏪 街角商店", "🚌 市内バス", "📺 ブラウン管TV", "💿 ビデオレンタル", "🎰 宝くじ当選詐欺", "📋 チラシ広告"]
+                    : ["📞 Pager Call", "📠 Fax Scam", "🏪 Corner Store", "🚌 City Bus", "📺 CRT TV", "💿 Video Rental", "🎰 Lottery Scam", "📋 Flyer Ads", "📞 Pager Call", "📠 Fax Scam", "🏪 Corner Store", "🚌 City Bus", "📺 CRT TV", "💿 Video Rental", "🎰 Lottery Scam", "📋 Flyer Ads"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -873,9 +878,9 @@ export default function HomePage() {
             <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { name: "복권 당첨 사기", tag: "FAX SCAM", desc: "「당신이 당첨됐습니다」 팩스 1장으로 수수료 편취. 스팸 팩스가 유일한 사기 수단이던 시절." },
-                  { name: "피라미드 다단계", tag: "PYRAMID", desc: "원금 보장·고수익 보장. 하위 회원 모집으로만 유지. 전국 수십만 명이 '사업'인 줄 알고 참여." },
-                  { name: "선불 사기 (삼각 사기)", tag: "PREPAY", desc: "광고지·전단지로 물건 홍보, 먼저 돈 받고 잠적. 인터넷이 없어 피해 확인조차 어려웠던 시대." },
+                  { name: lang === "ko" ? "복권 당첨 사기" : lang === "ja" ? "宝くじ当選詐欺" : lang === "zh" ? "彩票中奖诈骗" : "Lottery Winning Scam", tag: "FAX SCAM", desc: lang === "ko" ? "「당신이 당첨됐습니다」 팩스 1장으로 수수료 편취. 스팸 팩스가 유일한 사기 수단이던 시절." : lang === "ja" ? "「あなたが当選しました」という1枚のFAXで手数料をだまし取る。スパムFAXが唯一の詐欺手段だった時代。" : lang === "zh" ? "「您中奖了」一张传真骗取手续费。垃圾传真是唯一诈骗手段的年代。" : "A single fax saying 'You've won!' to steal fees. A time when spam faxes were the only scam medium." },
+                  { name: lang === "ko" ? "피라미드 다단계" : lang === "ja" ? "ネズミ講マルチ商法" : lang === "zh" ? "传销金字塔骗局" : "Pyramid Multi-Level Marketing", tag: "PYRAMID", desc: lang === "ko" ? "원금 보장·고수익 보장. 하위 회원 모집으로만 유지. 전국 수십만 명이 '사업'인 줄 알고 참여." : lang === "ja" ? "元本保証・高収益保証。下位会員の勧誘だけで維持。全国数十万人が「ビジネス」と信じて参加。" : lang === "zh" ? "保证本金·高收益保证。只靠招募下线维持。全国数十万人以为是做'生意'而参与。" : "Guaranteed principal, guaranteed high returns. Sustained only by recruiting new members. Hundreds of thousands believed it was a real business." },
+                  { name: lang === "ko" ? "선불 사기 (삼각 사기)" : lang === "ja" ? "前払い詐欺（三角詐欺）" : lang === "zh" ? "预付款诈骗（三角诈骗）" : "Advance Fee Fraud (Triangle Scam)", tag: "PREPAY", desc: lang === "ko" ? "광고지·전단지로 물건 홍보, 먼저 돈 받고 잠적. 인터넷이 없어 피해 확인조차 어려웠던 시대." : lang === "ja" ? "広告チラシで商品宣伝、先に金を受け取って逃走。インターネットがなく被害確認すら困難だった時代。" : lang === "zh" ? "用广告传单宣传商品，收钱后消失。没有互联网，连受害确认都困难的年代。" : "Advertise goods via flyers, collect money, then vanish. Without internet, even confirming scams was difficult." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "linear-gradient(145deg, #f5efd6, #ede5c4)",
@@ -955,7 +960,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 22s linear infinite",
                   color: "#3a6ea5", fontSize: 10, fontFamily: "monospace", letterSpacing: 1,
                 }}>
-                  {["💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트", "💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트", "💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트"]
+                    : lang === "ja"
+                    ? ["💾 フロッピーディスク", "📀 CD-ROM焼き", "🖨️ PCルームプリンター", "🖥️ Windows XP", "🌐 インターネット探索機", "📡 56Kモデム", "📧 メールスパム", "🎮 スタークラフト", "💾 フロッピーディスク", "📀 CD-ROM焼き", "🖨️ PCルームプリンター", "🖥️ Windows XP", "🌐 インターネット探索機", "📡 56Kモデム", "📧 メールスパム", "🎮 スタークラフト"]
+                    : ["💾 Floppy Disk", "📀 Burning CDs", "🖨️ PC Bang Printer", "🖥️ Windows XP", "🌐 Internet Explorer", "📡 56K Modem", "📧 Email Spam", "🎮 StarCraft", "💾 Floppy Disk", "📀 Burning CDs", "🖨️ PC Bang Printer", "🖥️ Windows XP", "🌐 Internet Explorer", "📡 56K Modem", "📧 Email Spam", "🎮 StarCraft"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -965,8 +975,8 @@ export default function HomePage() {
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #3a6ea588)" }} />
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>💻</div>
-                  <span style={{ color: "#7ab0e8", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace", textShadow: "0 0 8px #3a6ea888" }}>── 2 0 0 0 년 대 ──</span>
-                  <p style={{ color: "#3a6ea5", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>PC방 · 인터넷 탐색기 · 이메일 사기의 시대</p>
+                  <span style={{ color: "#7ab0e8", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace", textShadow: "0 0 8px #3a6ea888" }}>{lang === "ko" ? "── 2 0 0 0 년 대 ──" : "── 2 0 0 0 s ──"}</span>
+                  <p style={{ color: "#3a6ea5", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "PC방 · 인터넷 탐색기 · 이메일 사기의 시대" : lang === "ja" ? "PCルーム・インターネット・メール詐欺の時代" : lang === "zh" ? "网吧·互联网·邮件诈骗的时代" : "PC Bangs · Internet Explorer · Email Scam Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #3a6ea588, transparent)" }} />
               </div>
@@ -974,9 +984,9 @@ export default function HomePage() {
             <div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { name: "나이지리아 왕자 이메일", icon: "📧", desc: "\"저는 나이지리아 왕자입니다. 재산 이전을 도와주시면 수수료를 드립니다.\" 세계 최초 국제 스팸 사기의 고전." },
-                  { name: "문화상품권 사기 1세대", icon: "🎫", desc: "핀번호 긁어서 보내달라는 최초 형태. 당시엔 상품권이 낯설어 '이게 왜 사기야?' 하던 시절." },
-                  { name: "초창기 보이스피싱", icon: "☎️", desc: "\"금감원입니다. 귀하 계좌가 동결됩니다.\" 단 한 줄로 수백만원 편취. 대본이 지금보다 100배 단순." },
+                  { name: lang === "ko" ? "나이지리아 왕자 이메일" : lang === "ja" ? "ナイジェリア王子メール" : lang === "zh" ? "尼日利亚王子邮件" : "Nigerian Prince Email", icon: "📧", desc: lang === "ko" ? "\"저는 나이지리아 왕자입니다. 재산 이전을 도와주시면 수수료를 드립니다.\" 세계 최초 국제 스팸 사기의 고전." : lang === "ja" ? "\"私はナイジェリアの王子です。財産移転を手伝ってくれたら手数料を差し上げます。\" 世界初の国際スパム詐欺の古典。" : lang === "zh" ? "\"我是尼日利亚王子。帮我转移财产就给您佣金。\" 世界首个国际垃圾邮件诈骗的经典案例。" : "\"I am a Nigerian prince. Help me transfer funds and I will reward you.\" The world's first classic international email scam." },
+                  { name: lang === "ko" ? "문화상품권 사기 1세대" : lang === "ja" ? "文化商品券詐欺第一世代" : lang === "zh" ? "文化礼品券诈骗第一代" : "Gift Card Scam — First Generation", icon: "🎫", desc: lang === "ko" ? "핀번호 긁어서 보내달라는 최초 형태. 당시엔 상품권이 낯설어 '이게 왜 사기야?' 하던 시절." : lang === "ja" ? "PINコードを削って送るよう求める最初の形。当時は商品券が珍しく「なぜ詐欺なの？」と言われた時代。" : lang === "zh" ? "让人刮开礼品卡PIN码发送的最初形式。当时礼品卡很陌生，人们问'这为什么是诈骗？'的年代。" : "The earliest form: scratch the pin, send it over. Gift cards were unfamiliar then—people didn't realize it was a scam." },
+                  { name: lang === "ko" ? "초창기 보이스피싱" : lang === "ja" ? "初期のボイスフィッシング" : lang === "zh" ? "早期电话诈骗" : "Early-Stage Voice Phishing", icon: "☎️", desc: lang === "ko" ? "\"금감원입니다. 귀하 계좌가 동결됩니다.\" 단 한 줄로 수백만원 편취. 대본이 지금보다 100배 단순." : lang === "ja" ? "\"金融監督院です。あなたの口座が凍結されます。\" たった一言で数百万ウォンを詐取。脚本は今より100倍単純。" : lang === "zh" ? "\"我是金融监督院。您的账户将被冻结。\" 一句话骗走数百万韩元。话术比现在简单100倍。" : "\"This is the Financial Supervisory Service. Your account will be frozen.\" One line to steal millions. Scripts were 100x simpler than today." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#d4d0c8",
@@ -995,7 +1005,7 @@ export default function HomePage() {
                     }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                         <span style={{ fontSize: 11 }}>{c.icon}</span>
-                        <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>경고.exe</span>
+                        <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>{lang === "ko" ? "경고.exe" : "warning.exe"}</span>
                       </div>
                       <div style={{ display: "flex", gap: 2 }}>
                         {["_", "□", "✕"].map((btn, k) => (
@@ -1017,7 +1027,7 @@ export default function HomePage() {
                         <div style={{
                           background: "#d4d0c8", border: "2px solid", borderColor: "#ffffff #808080 #808080 #ffffff",
                           padding: "2px 12px", fontSize: 11, cursor: "default",
-                        }}>확인</div>
+                        }}>{lang === "ko" ? "확인" : "OK"}</div>
                       </div>
                     </div>
                   </div>
@@ -1065,7 +1075,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 20s linear infinite",
                   color: "#1a7a4a", fontSize: 10, fontFamily: "monospace",
                 }}>
-                  {["📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출", "📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출", "📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출"]
+                    : lang === "ja"
+                    ? ["📱 Galaxy S2", "📲 KakaoTalk誕生", "💬 スミッシングテキスト", "🔗 bit.ly 短縮リンク", "📶 3G LTE", "🏧 ATM引出し", "📱 Galaxy S2", "📲 KakaoTalk誕生", "💬 スミッシングテキスト", "🔗 bit.ly 短縮リンク", "📶 3G LTE", "🏧 ATM引出し"]
+                    : ["📱 Galaxy S2", "📲 KakaoTalk Launch", "💬 Smishing Texts", "🔗 bit.ly Short Links", "📶 3G LTE", "🏧 ATM Withdrawal", "📱 Galaxy S2", "📲 KakaoTalk Launch", "💬 Smishing Texts", "🔗 bit.ly Short Links", "📶 3G LTE", "🏧 ATM Withdrawal"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -1074,8 +1089,8 @@ export default function HomePage() {
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #34d39988)" }} />
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>📱</div>
-                  <span style={{ color: "#34d399", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 0 년 대 초 ──</span>
-                  <p style={{ color: "#065f46", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>스마트폰 보급 · 카카오 · 스미싱의 시대</p>
+                  <span style={{ color: "#34d399", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>{lang === "ko" ? "── 2 0 1 0 년 대 초 ──" : "── E a r l y  2 0 1 0 s ──"}</span>
+                  <p style={{ color: "#065f46", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "스마트폰 보급 · 카카오 · 스미싱의 시대" : lang === "ja" ? "スマートフォン普及・カカオ・スミッシングの時代" : lang === "zh" ? "智能手机普及·Kakao·短信钓鱼的时代" : "Smartphone Boom · KakaoTalk · Smishing Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #34d39988, transparent)" }} />
               </div>
@@ -1089,9 +1104,9 @@ export default function HomePage() {
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { sender: "[Web발신]", preview: "무료쿠폰 발급완료 수령▶ http://bit.ly/xK3m", name: "스미싱 1세대", desc: "클릭 즉시 소액결제 자동 청구. '무료쿠폰'에 의심 없이 눌렀던 시절. 당시엔 스미싱이란 단어조차 없었음." },
-                  { sender: "민지", preview: "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게", name: "카카오 해킹 초기형", desc: "계정 해킹 후 지인에게 문자형 사기. 카카오가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음." },
-                  { sender: "직구몰", preview: "아이폰5 미개봉 정품 29만원! 오늘마감 선착순50명", name: "가짜 직구몰 사기", desc: "너무 싼 해외직구 쇼핑몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 개념 자체가 없던 시대." },
+                  { sender: "[Web발신]", preview: lang === "ko" ? "무료쿠폰 발급완료 수령▶ http://bit.ly/xK3m" : lang === "ja" ? "無料クーポン発行完了 受取▶ http://bit.ly/xK3m" : lang === "zh" ? "免费优惠券已发放 领取▶ http://bit.ly/xK3m" : "Free coupon issued. Claim▶ http://bit.ly/xK3m", name: lang === "ko" ? "스미싱 1세대" : lang === "ja" ? "スミッシング第一世代" : lang === "zh" ? "短信钓鱼第一代" : "Smishing — First Generation", desc: lang === "ko" ? "클릭 즉시 소액결제 자동 청구. '무료쿠폰'에 의심 없이 눌렀던 시절. 당시엔 스미싱이란 단어조차 없었음." : lang === "ja" ? "クリック即座に少額決済が自動請求。「無料クーポン」に疑いなく押した時代。当時はスミッシングという言葉すらなかった。" : lang === "zh" ? "点击后立即自动扣取小额费用。毫无疑心地点击'免费优惠券'的年代。当时连短信钓鱼这个词都不存在。" : "One click = instant micro-payment charged. People clicked 'free coupon' without suspicion. The word 'smishing' didn't even exist yet." },
+                  { sender: lang === "ko" ? "민지" : "Minji", preview: lang === "ko" ? "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게" : lang === "ja" ? "私だよ急いでるよ😭 50万ウォンだけ貸してくれる？今夜返すから" : lang === "zh" ? "是我，我很急😭 能借我50万韩元吗？今晚还你" : "It's me, I'm in trouble😭 Can you lend me ₩500k? I'll pay back tonight", name: lang === "ko" ? "카카오 해킹 초기형" : lang === "ja" ? "カカオハッキング初期型" : lang === "zh" ? "KakaoTalk账号被盗初期型" : "KakaoTalk Account Hacking — Early Form", desc: lang === "ko" ? "계정 해킹 후 지인에게 문자형 사기. 카카오가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음." : lang === "ja" ? "アカウントハッキング後に知人へのメッセージ型詐欺。カカオが珍しかった時代、「これ本物のカカオトークなの？」と騙された。" : lang === "zh" ? "账号被黑客入侵后向熟人发送骗钱信息。KakaoTalk还很陌生的年代，人们被骗时问'这真的是KakaoTalk吗？'。" : "After hacking an account, scammers text the victim's contacts. People were fooled wondering 'is this really KakaoTalk?'" },
+                  { sender: lang === "ko" ? "직구몰" : "ShopDirect", preview: lang === "ko" ? "아이폰5 미개봉 정품 29만원! 오늘마감 선착순50명" : lang === "ja" ? "iPhone5未開封正品29万ウォン！本日締切先着50名" : lang === "zh" ? "iPhone5未开封正品29万韩元！今日截止前50名" : "iPhone 5 sealed authentic ₩290k! Closes today – first 50 only", name: lang === "ko" ? "가짜 직구몰 사기" : lang === "ja" ? "偽直接購入サイト詐欺" : lang === "zh" ? "假购物网站诈骗" : "Fake Shopping Mall Scam", desc: lang === "ko" ? "너무 싼 해외직구 쇼핑몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 개념 자체가 없던 시대." : lang === "ja" ? "安すぎる海外直購入ショッピングモール。決済後に逃走。現在の中古取引詐欺の前身。返金という概念自体がなかった時代。" : lang === "zh" ? "价格太便宜的海外直购商城。付款后消失。现在二手交易诈骗的前身。那个时代根本没有退款这个概念。" : "Too-cheap online stores. Pay, then they vanish. The precursor to today's used-goods scam. Refunds were an unknown concept." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#231232",
@@ -1103,11 +1118,11 @@ export default function HomePage() {
                     {/* 피처폰 상단바 */}
                     <div style={{ background: "#111", padding: "6px 10px", display: "flex", justifyContent: "space-between" }}>
                       <span style={{ color: "#888", fontSize: 9 }}>📶 SKT  🔋</span>
-                      <span style={{ color: "#888", fontSize: 9 }}>오전 11:23</span>
+                      <span style={{ color: "#888", fontSize: 9 }}>{lang === "ko" ? "오전 11:23" : "11:23 AM"}</span>
                     </div>
                     {/* SMS 헤더 */}
                     <div style={{ background: "#2a2a2a", padding: "8px 12px", borderBottom: "1px solid #333" }}>
-                      <p style={{ color: "#aaa", fontSize: 10, marginBottom: 2 }}>보낸 사람</p>
+                      <p style={{ color: "#aaa", fontSize: 10, marginBottom: 2 }}>{lang === "ko" ? "보낸 사람" : lang === "ja" ? "差出人" : lang === "zh" ? "发件人" : "From"}</p>
                       <p style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>{c.sender}</p>
                     </div>
                     {/* SMS 말풍선 */}
@@ -1175,7 +1190,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 22s linear infinite",
                   color: "#c084fc99", fontSize: 10, fontFamily: "monospace",
                 }}>
-                  {["📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"]
+                    : lang === "ja"
+                    ? ["📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 株式カフェ", "🎯 テレワーク詐欺", "📲 DM詐欺", "📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 株式カフェ", "🎯 テレワーク詐欺", "📲 DM詐欺"]
+                    : ["📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 Stock Forums", "🎯 WFH Scam", "📲 DM Fraud", "📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 Stock Forums", "🎯 WFH Scam", "📲 DM Fraud"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -1185,7 +1205,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>📸</div>
                   <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 5 ~ 2 0 1 8 ──</span>
-                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>SNS · 인스타그램 · 오픈마켓 사기의 시대</p>
+                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "SNS · 인스타그램 · 오픈마켓 사기의 시대" : lang === "ja" ? "SNS・Instagram・オープンマーケット詐欺の時代" : lang === "zh" ? "社交媒体·Instagram·开放市场诈骗的时代" : "SNS · Instagram · Open Market Scam Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
               </div>
@@ -1199,9 +1219,9 @@ export default function HomePage() {
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { platform: "Facebook", dot: "#1877f2", name: "SNS 지인 사칭", post: "이거 실화냐 ㅋㅋ 나 어제 이거 당했는데... 갑자기 지인 계정에서 DM 와서 돈 빌려달라고 해서 보냈더니 해킹당한 계정이었음", like: "좋아요 247개", desc: "페이스북·인스타 클론 계정. AI 없던 시대의 수작업 사기. 지인 관계망을 가장 잘 활용한 형태." },
-                  { platform: "취업카페", dot: "#ff6b35", name: "가짜 재택 취업 사기", post: "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!", like: "조회 8,402", desc: "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법." },
-                  { platform: "KakaoTalk", dot: "#ffe100", name: "3단계 메신저 피싱", post: "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게", like: "읽음 1", desc: "문자→카카오→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도." },
+                  { platform: "Facebook", dot: "#1877f2", name: lang === "ko" ? "SNS 지인 사칭" : lang === "ja" ? "SNS知人なりすまし" : lang === "zh" ? "SNS熟人冒充诈骗" : "SNS Acquaintance Impersonation", post: lang === "ko" ? "이거 실화냐 ㅋㅋ 나 어제 이거 당했는데... 갑자기 지인 계정에서 DM 와서 돈 빌려달라고 해서 보냈더니 해킹당한 계정이었음" : lang === "ja" ? "これ実話なの笑 私昨日やられたんだけど...急に知人のアカウントからDMが来て金貸してって言うから送ったらハッキングされたアカウントだった" : lang === "zh" ? "这是真事吗哈哈 我昨天就遇到了...突然收到熟人账号的私信说借钱，发过去才发现是被黑客攻击的账号" : "Is this real lol... got scammed yesterday. A DM from a friend's account asking to borrow money—turned out it was hacked.", like: lang === "ko" ? "좋아요 247개" : lang === "ja" ? "いいね 247件" : lang === "zh" ? "赞 247个" : "247 Likes", desc: lang === "ko" ? "페이스북·인스타 클론 계정. AI 없던 시대의 수작업 사기. 지인 관계망을 가장 잘 활용한 형태." : lang === "ja" ? "Facebook・Instagramクローンアカウント。AIがない時代の手作業詐欺。知人の関係網を最も巧みに利用した形態。" : lang === "zh" ? "Facebook·Instagram克隆账号。没有AI的时代的手工诈骗。最善于利用熟人关系网的形式。" : "Cloned Facebook/Instagram accounts. Manual fraud before AI. The form that best exploited personal social networks." },
+                  { platform: lang === "ko" ? "취업카페" : lang === "ja" ? "就職カフェ" : lang === "zh" ? "求职论坛" : "Job Board", dot: "#ff6b35", name: lang === "ko" ? "가짜 재택 취업 사기" : lang === "ja" ? "偽テレワーク求人詐欺" : lang === "zh" ? "假冒远程工作诈骗" : "Fake Remote Job Scam", post: lang === "ko" ? "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!" : lang === "ja" ? "★急募★ テレワーク月給300万ウォン保証！資格不要、経歴不要。教材費15万ウォン先払い後に教育開始。今すぐご連絡を！" : lang === "zh" ? "★急招★ 居家办公月薪300万韩元保证！无需资格证，无需经验。先付教材费15万韩元后开始培训。请立即联系！" : "★URGENT★ Work-from-home ₩3M/month guaranteed! No qualifications needed. Pay ₩150k for materials first. Contact now!", like: lang === "ko" ? "조회 8,402" : "Views: 8,402", desc: lang === "ko" ? "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법." : lang === "ja" ? "\"テレワーク月300万ウォン\"広告。教材費・機器費先払い後に逃走。IMF世代以降の若年層の就職難を狙った手口。" : lang === "zh" ? "\"居家办公月薪300万\"广告。先付教材费·设备费后消失。针对IMF危机后年轻人就业困难的手法。" : "'Work from home, ₩3M/month' ads. Pay for materials upfront, then they vanish. Targeted youth unemployment after the IMF crisis." },
+                  { platform: "KakaoTalk", dot: "#ffe100", name: lang === "ko" ? "3단계 메신저 피싱" : lang === "ja" ? "3段階メッセンジャーフィッシング" : lang === "zh" ? "三阶段短信钓鱼" : "3-Step Messenger Phishing", post: lang === "ko" ? "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게" : lang === "ja" ? "私だよ急いてるけど今スマホないからこの番号に連絡して。50万ウォンだけ振り込んでもらえる？今夜現金で返すから" : lang === "zh" ? "是我，我很急但现在没手机，用这个号联系我。能转账给我50万韩元吗？今晚用现金还你" : "It's me, I'm in a rush and lost my phone—use this number. Can you transfer ₩500k? I'll pay cash tonight.", like: lang === "ko" ? "읽음 1" : lang === "ja" ? "既読 1" : lang === "zh" ? "已读 1" : "Read 1", desc: lang === "ko" ? "문자→카카오→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도." : lang === "ja" ? "SMS→カカオ→電話の3段階アプローチ登場。各チャンネルで本物のふりをして信頼を構築後、最終決済を誘導。" : lang === "zh" ? "短信→KakaoTalk→电话三阶段接触方式出现。在每个渠道伪装成真人建立信任后，最终诱导付款。" : "SMS → KakaoTalk → phone: a 3-step approach. Build trust on each channel pretending to be real, then pressure payment." },
                 ].map((c, j) => (
                   <div key={j} style={{ background: "linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6)", padding: "1px", borderRadius: 12 }}>
                   <div style={{
@@ -1219,7 +1239,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <p style={{ color: "#e4e4e7", fontSize: 12, fontWeight: 700 }}>{c.platform}</p>
-                        <p style={{ color: "#71717a", fontSize: 10 }}>201X년경</p>
+                        <p style={{ color: "#71717a", fontSize: 10 }}>{lang === "ko" ? "201X년경" : "circa 201X"}</p>
                       </div>
                     </div>
                     {/* 게시물 */}
@@ -1296,7 +1316,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 25s linear infinite",
                   color: "#22d3ee99", fontSize: 10, fontFamily: "monospace",
                 }}>
-                  {["😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보", "😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보", "😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보"]
+                    : lang === "ja"
+                    ? ["😷 マスク不足", "🏠 社会的距離", "💉 ワクチン詐欺", "📦 緊急災害支援金", "🔒 距離4段階", "📰 速報", "😷 マスク不足", "🏠 社会的距離", "💉 ワクチン詐欺", "📦 緊急災害支援金", "🔒 距離4段階", "📰 速報"]
+                    : ["😷 Mask Shortage", "🏠 Social Distancing", "💉 Vaccine Scam", "📦 Relief Fund", "🔒 Lockdown Lv4", "📰 Breaking News", "😷 Mask Shortage", "🏠 Social Distancing", "💉 Vaccine Scam", "📦 Relief Fund", "🔒 Lockdown Lv4", "📰 Breaking News"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -1306,7 +1331,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>😷</div>
                   <span style={{ color: "#22d3ee", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 9 ~ 2 0 2 1 ──</span>
-                  <p style={{ color: "#67e8f9", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>우환폐렴 · 재난지원금 · 비대면 사기의 시대</p>
+                  <p style={{ color: "#67e8f9", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "우환폐렴 · 재난지원금 · 비대면 사기의 시대" : lang === "ja" ? "コロナ・災害支援金・非対面詐欺の時代" : lang === "zh" ? "新冠疫情·灾难补贴·非对面诈骗的时代" : "COVID-19 · Relief Funds · Remote Scam Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #22d3ee44, transparent)" }} />
               </div>
@@ -1314,14 +1339,14 @@ export default function HomePage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#67e8f9", opacity: 0.6 }} />
-                <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2019~2021년 (우환폐렴 시대) ──</span>
+                <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2019~2021년 (우환폐렴 시대) ──" : lang === "ja" ? "── 2019~2021 (コロナ時代) ──" : lang === "zh" ? "── 2019~2021 (新冠疫情时代) ──" : "── 2019~2021 (COVID Era) ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#67e8f9", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { breaking: "BREAKING", headline: "마스크 대란 틈타 사기 급증", sub: "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상", name: "우환폐렴 마스크 사기", desc: "위기 상황이 사기꾼의 최적 환경임을 증명. 우환폐렴(코로나) 확산으로 마스크라면 뭐든 믿던 시절." },
-                  { breaking: "속보", headline: "재난지원금 사칭 스미싱 수백만 건", sub: "정부 공식 링크인 척 개인정보 탈취 — '신청하세요'가 함정", name: "재난지원금 피싱", desc: "국가 재난 상황을 악용한 역대 최대 스미싱. '정부니까 믿어야지'라는 심리를 정확히 노림." },
-                  { breaking: "특보", headline: "비트코인 2배 보장 텔레그램 방 주의", sub: "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해", name: "코인 초기 투자 사기", desc: "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." },
+                  { breaking: "BREAKING", headline: lang === "ko" ? "마스크 대란 틈타 사기 급증" : lang === "ja" ? "マスク不足に乗じた詐欺が急増" : lang === "zh" ? "趁口罩短缺诈骗激增" : "Scams Surge During Mask Shortage", sub: lang === "ko" ? "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상" : lang === "ja" ? "\"マスク在庫あります\"先払い要求後に逃走 — 全国被害1万件以上" : lang === "zh" ? "\"口罩有货\"要求先付款后消失 — 全国受害超1万件" : "'Masks in stock' — demand prepayment, then vanish. 10,000+ victims nationwide.", name: lang === "ko" ? "우환폐렴 마스크 사기" : lang === "ja" ? "コロナウイルスマスク詐欺" : lang === "zh" ? "新冠病毒口罩诈骗" : "COVID Mask Scam", desc: lang === "ko" ? "위기 상황이 사기꾼의 최적 환경임을 증명. 우환폐렴(코로나) 확산으로 마스크라면 뭐든 믿던 시절." : lang === "ja" ? "危機状況が詐欺師の最適環境であることを証明。コロナウイルス拡散でマスクなら何でも信じた時代。" : lang === "zh" ? "证明了危机情况是诈骗者的最佳环境。新冠病毒蔓延导致人们对口罩相关内容深信不疑。" : "Proof that crises are ideal for scammers. During COVID, people trusted anything related to masks." },
+                  { breaking: lang === "ko" ? "속보" : "ALERT", headline: lang === "ko" ? "재난지원금 사칭 스미싱 수백만 건" : lang === "ja" ? "災害支援金なりすましスミッシング数百万件" : lang === "zh" ? "冒充灾难补贴短信钓鱼数百万条" : "Millions of Relief Fund Phishing Texts", sub: lang === "ko" ? "정부 공식 링크인 척 개인정보 탈취 — '신청하세요'가 함정" : lang === "ja" ? "政府公式リンクのふりをして個人情報窃取 — '申請してください'が罠" : lang === "zh" ? "假冒政府官方链接盗取个人信息 — '请申请'就是陷阱" : "Fake official govt links steal personal data — 'Apply here' is the trap.", name: lang === "ko" ? "재난지원금 피싱" : lang === "ja" ? "災害支援金フィッシング" : lang === "zh" ? "灾难补贴钓鱼诈骗" : "Relief Fund Phishing", desc: lang === "ko" ? "국가 재난 상황을 악용한 역대 최대 스미싱. '정부니까 믿어야지'라는 심리를 정확히 노림." : lang === "ja" ? "国家災害状況を悪用した史上最大のスミッシング。「政府だから信じなければ」という心理を正確に狙った。" : lang === "zh" ? "利用国家灾难情况的史上最大短信钓鱼。精准利用了'是政府所以要相信'的心理。" : "The largest smishing campaign ever, exploiting national crisis. Precisely targeted the psychology: 'it's the government, I must trust them.'" },
+                  { breaking: lang === "ko" ? "특보" : "WARN", headline: lang === "ko" ? "비트코인 2배 보장 텔레그램 방 주의" : lang === "ja" ? "ビットコイン2倍保証テレグラムグループに注意" : lang === "zh" ? "警惕比特币2倍保证Telegram群" : "Beware: 'Bitcoin 2x Guaranteed' Telegram Groups", sub: lang === "ko" ? "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해" : lang === "ja" ? "コイン自体が珍しく検証方法すら知らなかった時期 — 数千億ウォンの被害" : lang === "zh" ? "加密货币本身还很陌生，连验证方法都不知道的时期 — 数千亿韩元受损" : "Crypto was so unfamiliar, no one knew how to verify. Hundreds of billions in losses.", name: lang === "ko" ? "코인 초기 투자 사기" : lang === "ja" ? "コイン初期投資詐欺" : lang === "zh" ? "早期加密货币投资诈骗" : "Early Crypto Investment Scam", desc: lang === "ko" ? "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." : lang === "ja" ? "ブロックチェーンを誰も理解できなかった時代。「原理がわからないからとにかく信じよう」という心理が大規模被害に。" : lang === "zh" ? "没有人理解区块链的年代。'不懂原理就直接相信吧'的心理造成了大规模损失。" : "Nobody understood blockchain. The mindset 'I don't get it so I'll just trust it' led to massive losses." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "linear-gradient(135deg, #0a0e18, #0d1520)",
@@ -1397,7 +1422,12 @@ export default function HomePage() {
                   animation: "marqueeScroll 20s linear infinite",
                   color: "#c58dc655", fontSize: 10, fontFamily: "monospace",
                 }}>
-                  {["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기"].map((t,i) => (
+                  {(lang === "ko"
+                    ? ["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기"]
+                    : lang === "ja"
+                    ? ["🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 당근Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺", "🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 당근Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺"]
+                    : ["🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam", "🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam"]
+                  ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
                 </div>
@@ -1407,7 +1437,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>🤖</div>
                   <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 2 2 ~ 2 0 2 3 ──</span>
-                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>AI 전야 · 딥보이스 · 중고거래 사기의 시대</p>
+                  <p style={{ color: "#c084fc", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "AI 전야 · 딥보이스 · 중고거래 사기의 시대" : lang === "ja" ? "AI前夜・ディープボイス・中古取引詐欺の時代" : lang === "zh" ? "AI前夜·深度伪造语音·二手交易诈骗的时代" : "Pre-AI Era · Deep Voice · Used Goods Scam"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
               </div>
@@ -1415,14 +1445,14 @@ export default function HomePage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
-                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2022~2023년 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2022~2023년 ──" : "── 2022~2023 ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { tag: "AI VOICE", glow: "#c58dc6", name: "딥보이스 보이스피싱 등장", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해." },
-                  { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "카카오 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명." },
-                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", waveform: "당근🥕 번개⚡ 중고나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점." },
+                  { tag: "AI VOICE", glow: "#c58dc6", name: lang === "ko" ? "딥보이스 보이스피싱 등장" : lang === "ja" ? "ディープボイス詐欺の登場" : lang === "zh" ? "深度伪造语音诈骗兴起" : "Deepfake Voice Phishing Emerges", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: lang === "ko" ? "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해." : lang === "ja" ? "AIで子供の声を複製。3〜5秒のサンプルだけで完璧な模倣。親が初めて声さえ信用できなくなった年。" : lang === "zh" ? "AI复制子女声音。仅需3~5秒样本即可完美模仿。父母第一次连声音都无法信任的一年。" : "AI replicates a child's voice with just 3–5 seconds of audio. Parents could no longer trust even familiar voices." },
+                  { tag: "OPEN CHAT", glow: "#fbbf24", name: lang === "ko" ? "오픈채팅 투자 사기 전성기" : lang === "ja" ? "オープンチャット投資詐欺の全盛期" : lang === "zh" ? "开放聊天室投资诈骗鼎盛期" : "Open Chat Investment Scam Peak", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: lang === "ko" ? "카카오 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명." : lang === "ja" ? "カカオオープンチャット「株の達人」部屋。収益証明キャプチャーで埋め尽くし→入金誘導→逃走。同時被害者数千人。" : lang === "zh" ? "KakaoTalk开放聊天室'股票高手'群。收益截图轰炸→诱导入金→消失。同时受害者数千人。" : "KakaoTalk 'stock expert' open chat rooms. Profit screenshots → deposit pressure → disappear. Thousands of simultaneous victims." },
+                  { tag: "MARKET", glow: "#34d399", name: lang === "ko" ? "중고거래 사기 급증" : lang === "ja" ? "中古取引詐欺の急増" : lang === "zh" ? "二手交易诈骗激增" : "Used Goods Scam Surge", waveform: lang === "ko" ? "당근🥕 번개⚡ 중고나라" : "Carrot🥕 Bunjang⚡ Junggo", desc: lang === "ko" ? "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점." : lang === "ja" ? "プラットフォームの爆発的成長とともに詐欺も急増。「直接取引文化」が詐欺に悪用され始めた転換点。" : lang === "zh" ? "随着平台爆炸式增长，诈骗也急剧增加。'直接交易文化'开始被诈骗分子利用的转折点。" : "Scams surged alongside platform explosive growth. The 'direct trade culture' began being exploited by fraudsters." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#09090b",
@@ -1456,14 +1486,14 @@ export default function HomePage() {
             <div style={{ marginTop: 40 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
-                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2024년 ~ 현재 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2024년 ~ 현재 ──" : "── 2024 ~ Present ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { tag: "DEEPFAKE", glow: "#c58dc6", name: "AI 딥페이크 협박 사기", visual: "👤 → 🤖 → 🎭", desc: "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작." },
-                  { tag: "GPT SCAM", glow: "#c58dc6", name: "AI 자동 문자 폭탄", visual: "🤖 → 📱 × 10,000", desc: "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화." },
-                  { tag: "VOICE AI", glow: "#34d399", name: "실시간 목소리 복제 통화", visual: "☎️ → AI → 가족목소리", desc: "3초 샘플로 가족 목소리 실시간 복제 통화. 납치 당했다며 송금 요구. 목소리로는 더 이상 진위 구분 불가." },
+                  { tag: "DEEPFAKE", glow: "#c58dc6", name: lang === "ko" ? "AI 딥페이크 협박 사기" : lang === "ja" ? "AIディープフェイク脅迫詐欺" : lang === "zh" ? "AI深度伪造恐吓诈骗" : "AI Deepfake Extortion Scam", visual: "👤 → 🤖 → 🎭", desc: lang === "ko" ? "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작." : lang === "ja" ? "実際の顔・声をAIで合成して知人のふりをして近づいたり、存在しない動画を作って脅迫。目で見ても信じられない時代の始まり。" : lang === "zh" ? "用AI合成真实面孔和声音假扮熟人接近，或制作不存在的视频进行恐吓。眼见也不能为实的时代开始。" : "AI synthesizes real faces/voices to impersonate acquaintances, or fabricates videos to extort. The start of an era where seeing is no longer believing." },
+                  { tag: "GPT SCAM", glow: "#c58dc6", name: lang === "ko" ? "AI 자동 문자 폭탄" : lang === "ja" ? "AI自動テキスト爆弾" : lang === "zh" ? "AI自动短信轰炸" : "AI Auto-Text Bombing", visual: "🤖 → 📱 × 10,000", desc: lang === "ko" ? "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화." : lang === "ja" ? "ChatGPT・LLMで完璧な文法の個人맞춤詐欺テキストを大量生成。誤字・不自然さで見分けていた従来の方法が完全に無力化。" : lang === "zh" ? "用ChatGPT·LLM大量生成语法完美的个人定制诈骗短信。通过错字·不自然感辨别的传统方法完全失效。" : "ChatGPT/LLMs generate perfectly written personalized scam texts at scale. Typos and awkwardness—once the telltale signs—are now gone." },
+                  { tag: "VOICE AI", glow: "#34d399", name: lang === "ko" ? "실시간 목소리 복제 통화" : lang === "ja" ? "リアルタイム音声複製通話" : lang === "zh" ? "实时声音复制通话" : "Real-Time Voice Cloning Call", visual: lang === "ko" ? "☎️ → AI → 가족목소리" : "☎️ → AI → Family Voice", desc: lang === "ko" ? "3초 샘플로 가족 목소리 실시간 복제 통화. 납치 당했다며 송금 요구. 목소리로는 더 이상 진위 구분 불가." : lang === "ja" ? "3秒サンプルで家族の声をリアルタイム複製通話。誘拐されたと言って送金要求。声では真偽を判断できなくなった。" : lang === "zh" ? "用3秒样本实时复制家人声音打电话。声称被绑架要求汇款。声音已无法辨别真假。" : "Clone a family member's voice from 3 seconds, call in real-time claiming kidnapping. Voices can no longer prove identity." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#09090b",
@@ -1502,7 +1532,7 @@ export default function HomePage() {
           {/* 마무리 인용 + AI 전환 문구 */}
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", marginBottom: 32 }}>
-              ── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──
+              {lang === "ko" ? "── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──" : lang === "ja" ? "── 手口は変わっても、人間の心理を狙うという本質は変わっていません ──" : lang === "zh" ? "── 手法虽然改变，但针对人类心理的本质从未改变 ──" : "── The methods change, but the essence — exploiting human psychology — never does ──"}
             </p>
             <div style={{
               background: "linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 100%)",
