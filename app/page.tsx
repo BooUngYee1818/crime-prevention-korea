@@ -48,6 +48,7 @@ export default function HomePage() {
   const [popup1Open, setPopup1Open] = useState(false);
   const [popup2Open, setPopup2Open] = useState(false);
   const [guideTab, setGuideTab] = useState("parents");
+  const [selectedScenario, setSelectedScenario] = useState<typeof CRIME_SCENARIOS[0] | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setPopup1Open(true), 600);
@@ -767,7 +768,7 @@ export default function HomePage() {
                     }}>
                       <p style={{ color: log.badgeColor, fontWeight: 900, fontSize: 13 }}>{log.version}</p>
                     </div>
-                    <p style={{ color: "#374151", fontSize: 10 }}>{log.date}</p>
+                    <p style={{ color: "#374151", fontSize: 10 }}>{"date" in log ? (log as any).date : ""}</p>
                     {log.badge && (
                       <span style={{
                         display: "inline-block", marginTop: 4,
@@ -1515,7 +1516,7 @@ export default function HomePage() {
           {CRIME_SCENARIOS.map((s) => (
             <button
               key={s.id}
-              onClick={() => router.push(s.id === "illegal-gambling" ? "/gambling" : `/crime/${s.id}`)}
+              onClick={() => setSelectedScenario(s)}
               style={{
                 background: "#fff", border: "1px solid #f1f5f9",
                 borderRadius: 20, padding: "22px 20px", textAlign: "left",
@@ -1565,6 +1566,139 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ── 시나리오 전체화면 오버레이 ── */}
+      {selectedScenario && (() => {
+        const s = selectedScenario;
+        return (
+          <div
+            onClick={() => setSelectedScenario(null)}
+            style={{
+              position: "fixed", inset: 0, zIndex: 9000,
+              background: "rgba(0,0,0,0.72)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: "20px",
+              animation: "fadeInOverlay 0.2s ease",
+            }}
+          >
+            <style>{`
+              @keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
+              @keyframes slideUpCard { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+            `}</style>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#fff", borderRadius: 28,
+                width: "100%", maxWidth: 600, maxHeight: "90vh",
+                overflowY: "auto", boxShadow: "0 32px 80px rgba(0,0,0,0.28)",
+                animation: "slideUpCard 0.25s ease",
+              }}
+            >
+              {/* 헤더 */}
+              <div style={{
+                background: s.color + "12",
+                borderBottom: `1px solid ${s.color}22`,
+                padding: "28px 28px 24px",
+                borderRadius: "28px 28px 0 0",
+                position: "relative",
+              }}>
+                <button
+                  onClick={() => setSelectedScenario(null)}
+                  style={{
+                    position: "absolute", top: 20, right: 20,
+                    width: 36, height: 36, borderRadius: "50%",
+                    background: "#f1f5f9", border: "none", cursor: "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 18, color: "#64748b",
+                  }}
+                >×</button>
+                <div style={{
+                  width: 60, height: 60, borderRadius: 18,
+                  background: s.color + "20",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 30, marginBottom: 16,
+                }}>{s.icon}</div>
+                <div style={{
+                  display: "inline-block", marginBottom: 10,
+                  fontSize: 10, padding: "3px 10px", borderRadius: 20,
+                  background: s.color + "18", color: s.color,
+                  border: `1px solid ${s.color}33`, fontWeight: 700,
+                }}>
+                  {t(SC_CAT_KEY[s.id] ?? "cat_gambling", lang)}
+                </div>
+                <h2 style={{ color: "#0f172a", fontSize: 22, fontWeight: 900, marginBottom: 6, lineHeight: 1.3 }}>{s.title}</h2>
+                <p style={{ color: "#64748b", fontSize: 14 }}>{s.subtitle}</p>
+              </div>
+
+              {/* 본문 */}
+              <div style={{ padding: "24px 28px 28px" }}>
+                {/* 수법 설명 */}
+                <div style={{ marginBottom: 24 }}>
+                  <p style={{ color: "#dc2626", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 10 }}>⚠️ 수법 설명</p>
+                  <p style={{ color: "#334155", fontSize: 14, lineHeight: 1.85 }}>{s.reveal.description}</p>
+                </div>
+
+                {/* 통계 */}
+                <div style={{
+                  background: "#fef2f2", border: "1px solid #fecaca",
+                  borderRadius: 14, padding: "14px 18px", marginBottom: 24,
+                  display: "flex", alignItems: "center", gap: 12,
+                }}>
+                  <span style={{ fontSize: 20 }}>📊</span>
+                  <p style={{ color: "#991b1b", fontSize: 13, fontWeight: 600, lineHeight: 1.6 }}>{s.reveal.stats}</p>
+                </div>
+
+                {/* 예방법 */}
+                <div style={{ marginBottom: 28 }}>
+                  <p style={{ color: "#16a34a", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 12 }}>✅ 이렇게 막으세요</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {s.reveal.howToAvoid.map((tip, i) => (
+                      <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <div style={{
+                          width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+                          background: "#dcfce7", color: "#16a34a",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 11, fontWeight: 700,
+                        }}>{i + 1}</div>
+                        <p style={{ color: "#334155", fontSize: 14, lineHeight: 1.7 }}>{tip}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 신고 + 체험 버튼 */}
+                <div style={{ display: "flex", gap: 10 }}>
+                  <a
+                    href={`tel:${s.reveal.reportNumber}`}
+                    style={{
+                      flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                      background: "#fef2f2", border: "1px solid #fecaca",
+                      borderRadius: 14, padding: "14px", textDecoration: "none",
+                      color: "#dc2626", fontWeight: 700, fontSize: 15,
+                    }}
+                  >
+                    ☎ {s.reveal.reportNumber} 신고
+                  </a>
+                  <button
+                    onClick={() => {
+                      setSelectedScenario(null);
+                      router.push(s.id === "illegal-gambling" ? "/gambling" : `/crime/${s.id}`);
+                    }}
+                    style={{
+                      flex: 2, background: s.color, border: "none",
+                      borderRadius: 14, padding: "14px", cursor: "pointer",
+                      color: "#fff", fontWeight: 700, fontSize: 15,
+                      boxShadow: `0 4px 16px ${s.color}44`,
+                    }}
+                  >
+                    직접 체험하기 →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── 신고 번호 ── */}
       <section id="report" style={{
