@@ -248,10 +248,69 @@ export default function AIDetectivePage() {
 
           <button
             onClick={() => setPhase("quiz")}
-            style={{ background: "linear-gradient(135deg,#f59e0b,#d97706)", color: "#fff", fontWeight: 900, fontSize: 16, padding: "16px 48px", borderRadius: 50, border: "none", cursor: "pointer", boxShadow: "0 0 32px #f59e0b44" }}
+            style={{ background: "linear-gradient(135deg,#f59e0b,#d97706)", color: "#fff", fontWeight: 900, fontSize: 16, padding: "16px 48px", borderRadius: 50, border: "none", cursor: "pointer", boxShadow: "0 0 32px #f59e0b44", marginBottom: 36 }}
           >
             🕵️ 탐정 도전 시작!
           </button>
+
+          {/* ── 관련 영상 모음 ── */}
+          <div style={{ textAlign: "left", marginTop: 8 }}>
+            <p style={{ color: "#fbbf24", fontSize: 11, fontWeight: 700, letterSpacing: 2, textAlign: "center", marginBottom: 16 }}>📺 AI 탐정 관련 영상 모음</p>
+
+            {/* AI가 만든 영상 예시 */}
+            <div style={{ background: "#0f0f1a", border: "1px solid #fbbf2422", borderRadius: 14, padding: "14px 16px", marginBottom: 10 }}>
+              <p style={{ color: "#fbbf24", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>🤖 AI가 만든 딥페이크 예시 (유튜브 공개 영상)</p>
+              {[
+                { title: "딥페이크로 만든 오바마 연설 — 가짜 영상 최초 공개", channel: "BuzzFeedVideo", tag: "유명 딥페이크 사례" },
+                { title: "AI가 만든 가짜 뉴스 앵커 영상 — 실제 방송처럼 보이는 이유", channel: "VICE Korea", tag: "딥페이크 뉴스" },
+                { title: "내 얼굴로 영상 만들어봤다 — AI 영상 생성 실험", channel: "테크 유튜버", tag: "체험 영상" },
+              ].map((v, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 0", borderBottom: i < 2 ? "1px solid #1a1a2e" : "none" }}>
+                  <div style={{ width: 36, height: 36, background: "#1a1400", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>🎬</div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ color: "#f1f5f9", fontSize: 12, fontWeight: 600, marginBottom: 2, lineHeight: 1.4 }}>{v.title}</p>
+                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                      <span style={{ color: "#6b7280", fontSize: 10 }}>{v.channel}</span>
+                      <span style={{ background: "#fbbf2422", color: "#fbbf24", fontSize: 9, padding: "1px 6px", borderRadius: 6, fontWeight: 700 }}>{v.tag}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <p style={{ color: "#374151", fontSize: 10, marginTop: 8 }}>💡 유튜브에서 &quot;딥페이크 탐지&quot; &quot;AI 가짜 영상&quot; 으로 검색해보세요</p>
+            </div>
+
+            {/* 사람이 만든 교육 영상 */}
+            <div style={{ background: "#0f0f1a", border: "1px solid #22c55e22", borderRadius: 14, padding: "14px 16px", marginBottom: 10 }}>
+              <p style={{ color: "#22c55e", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>👨‍🏫 사람이 만든 AI 탐지 교육 영상</p>
+              {[
+                { title: "AI 영상인지 5초 안에 구별하는 방법 — 전문가가 알려주는 3가지 신호", channel: "경찰청 공식 유튜브", tag: "공식 교육" },
+                { title: "딥페이크 피해 실제 사례 — 20대 피해자 인터뷰 (재연)", channel: "MBC 뉴스", tag: "피해 사례" },
+                { title: "AI가 내 목소리를 복제하는 데 걸리는 시간은? — 3초 실험", channel: "SBS 뉴스", tag: "실험 영상" },
+              ].map((v, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 0", borderBottom: i < 2 ? "1px solid #0f2010" : "none" }}>
+                  <div style={{ width: 36, height: 36, background: "#0f2010", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>📹</div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ color: "#f1f5f9", fontSize: 12, fontWeight: 600, marginBottom: 2, lineHeight: 1.4 }}>{v.title}</p>
+                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                      <span style={{ color: "#6b7280", fontSize: 10 }}>{v.channel}</span>
+                      <span style={{ background: "#22c55e22", color: "#22c55e", fontSize: 9, padding: "1px 6px", borderRadius: 6, fontWeight: 700 }}>{v.tag}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <p style={{ color: "#374151", fontSize: 10, marginTop: 8 }}>💡 유튜브에서 &quot;딥페이크 탐지 방법&quot; &quot;AI 사기 피해&quot; 로 검색해보세요</p>
+            </div>
+
+            {/* 검색 팁 */}
+            <div style={{ background: "#1a0a2e", border: "1px solid #7c3aed33", borderRadius: 12, padding: "12px 14px" }}>
+              <p style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, marginBottom: 6 }}>🔍 직접 찾아보는 법</p>
+              {["유튜브: \"딥페이크 탐지\" \"AI 목소리 복제\" \"보이스피싱 실제 통화\"",
+                "구글: \"딥페이크 사례 뉴스\" \"AI 생성 영상 구별법\"",
+                "경찰청 유튜브 채널에 공식 교육 영상이 많아요!"].map((tip, i) => (
+                <p key={i} style={{ color: "#7c3aed", fontSize: 11, lineHeight: 1.8 }}>· {tip}</p>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 

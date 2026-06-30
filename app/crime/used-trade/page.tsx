@@ -46,11 +46,12 @@ export default function UsedTradePage() {
     setProduct(p);
     setMsgs([]);
     setScriptIdx(0);
+    scriptIdxRef.current = 0;
     setInfoGiven([]);
     setPhase("chat");
     setTimeout(() => {
       setTyping(true);
-      setTimeout(() => { setTyping(false); addScammer(SCAM_SCRIPTS[0]); scheduleNext(1); }, 1800);
+      setTimeout(() => { setTyping(false); addScammer(SCAM_SCRIPTS[0]); scriptIdxRef.current = 1; setScriptIdx(1); scheduleNext(1); }, 1800);
     }, 1200);
   }
 
@@ -62,11 +63,14 @@ export default function UsedTradePage() {
       setTimeout(() => {
         setTyping(false);
         addScammer(SCAM_SCRIPTS[idx]);
+        scriptIdxRef.current = idx + 1;
         setScriptIdx(idx + 1);
         scheduleNext(idx + 1);
       }, 1500 + Math.random() * 1000);
     }, idx === 3 ? 3000 : 12000);
   }
+
+  const scriptIdxRef = useRef(0);
 
   function send() {
     if (!input.trim()) return;
@@ -85,19 +89,21 @@ export default function UsedTradePage() {
     if (autoRef.current) clearTimeout(autoRef.current);
 
     // 링크 클릭 언급 감지 → 해킹 화면
-    if (/링크|결제|클릭|눌렀|입력/.test(text) && scriptIdx >= 4) {
+    if (/링크|결제|클릭|눌렀|입력/.test(text) && scriptIdxRef.current >= 4) {
       setTimeout(() => setPhase("hack"), 600);
       return;
     }
 
-    // 다음 스크립트
-    if (scriptIdx < SCAM_SCRIPTS.length) {
+    // 다음 스크립트 (ref로 최신 인덱스 읽기)
+    const nextIdx = scriptIdxRef.current;
+    if (nextIdx < SCAM_SCRIPTS.length) {
       setTimeout(() => {
         setTyping(true);
         setTimeout(() => {
           setTyping(false);
-          addScammer(SCAM_SCRIPTS[scriptIdx]);
-          setScriptIdx(s => s + 1);
+          addScammer(SCAM_SCRIPTS[nextIdx]);
+          scriptIdxRef.current = nextIdx + 1;
+          setScriptIdx(nextIdx + 1);
         }, 1200);
       }, 800);
     }
@@ -210,10 +216,10 @@ export default function UsedTradePage() {
       {/* 헤더 */}
       <div style={{ background:"#ff6f0f", padding:"12px 16px", display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
         <button onClick={() => setPhase("select")} style={{ background:"none", border:"none", color:"#fff", fontSize:20, cursor:"pointer" }}>‹</button>
-        <div style={{ width:36, height:36, borderRadius:"50%", background:"rgba(255,255,255,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>😊</div>
+        <div style={{ width:36, height:36, borderRadius:"50%", background:"rgba(255,255,255,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>😈</div>
         <div>
-          <p style={{ color:"#fff", fontWeight:700, fontSize:14 }}>구매자</p>
-          <p style={{ color:"rgba(255,255,255,0.7)", fontSize:11 }}>채팅 중...</p>
+          <p style={{ color:"#fff", fontWeight:700, fontSize:14 }}>사기 구매자 (상대방)</p>
+          <p style={{ color:"rgba(255,255,255,0.7)", fontSize:11 }}>⚠️ 나는 판매자 역할 — 이 사람이 사기범</p>
         </div>
         <div style={{ marginLeft:"auto", background:"rgba(0,0,0,0.2)", color:"#fff", fontSize:10, fontWeight:700, padding:"3px 10px", borderRadius:20 }}>⚠️ 사기 체험</div>
       </div>

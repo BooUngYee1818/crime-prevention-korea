@@ -188,7 +188,7 @@ export default function CrimeCenterPage() {
         <div style={{
           background: "linear-gradient(135deg,#1a102a,#0f2010)",
           border: "1px solid #22c55e44",
-          borderRadius: 18, padding: "18px 20px", marginBottom: 16,
+          borderRadius: 18, padding: "18px 20px", marginBottom: 10,
           display: "flex", gap: 14, alignItems: "flex-start",
         }}>
           <div style={{ fontSize: 32, flexShrink: 0 }}>🧒</div>
@@ -200,6 +200,33 @@ export default function CrimeCenterPage() {
               <strong style={{ color: "#fbbf24" }}>범죄는 상대방 마음에 평생 남는 상처를 남겨요.</strong> 절대 하면 안 된답니다! 🙅
             </p>
           </div>
+        </div>
+
+        {/* ⚖️ 어린이 법률 안내 */}
+        <div style={{
+          background: "linear-gradient(135deg,#1a0a0a,#2a0a0a)",
+          border: "1px solid #ef444444",
+          borderRadius: 18, padding: "16px 18px", marginBottom: 16,
+        }}>
+          <p style={{ color: "#ef4444", fontWeight: 800, fontSize: 13, marginBottom: 10 }}>⚖️ 이 프로그램의 내용을 실제로 따라 하면?</p>
+          {[
+            { icon: "📞", act: "전화로 \"경찰이에요\" 하고 속이면", law: "사기죄 (형법 제347조)", penalty: "최대 10년 징역" },
+            { icon: "💬", act: "문자로 링크 보내 정보 빼내면", law: "정보통신망법 제49조", penalty: "최대 5년 징역" },
+            { icon: "🎭", act: "친구 사진·영상을 AI로 만들어 퍼뜨리면", law: "성폭력처벌법·정보통신망법", penalty: "최대 5년 징역" },
+            { icon: "🎰", act: "불법 도박 사이트에서 돈을 걸면", law: "게임산업진흥법·형법 제246조", penalty: "최대 3년 징역 또는 벌금" },
+            { icon: "🥕", act: "물건 판다고 속이고 돈만 받으면", law: "사기죄 (형법 제347조)", penalty: "최대 10년 징역" },
+          ].map((item, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 4 ? 8 : 0, padding: "8px 10px", background: "rgba(239,68,68,0.06)", borderRadius: 10 }}>
+              <span style={{ fontSize: 16, flexShrink: 0 }}>{item.icon}</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: "#fca5a5", fontSize: 12, marginBottom: 2 }}>{item.act}</p>
+                <p style={{ color: "#ef4444", fontSize: 11, fontWeight: 700 }}>→ <span style={{ color: "#fbbf24" }}>{item.law}</span>에 의해 <span style={{ color: "#f87171" }}>{item.penalty}</span>이에요!</p>
+              </div>
+            </div>
+          ))}
+          <p style={{ color: "#6b7280", fontSize: 11, marginTop: 10, lineHeight: 1.7 }}>
+            💡 만 14세 미만은 소년법으로 보호받지만, 14세 이상이면 형사처벌을 받을 수 있어요. 친구들, 이 체험은 <strong style={{ color: "#22c55e" }}>당하지 않기 위한 연습</strong>이에요!
+          </p>
         </div>
 
         {/* 새 체험 그리드 */}

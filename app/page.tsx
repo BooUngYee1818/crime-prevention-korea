@@ -619,8 +619,20 @@ export default function HomePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
                 {
-                  version: "v1.6",
+                  version: "v1.7",
                   badge: "최신",
+                  badgeColor: "#c58dc6",
+                  badgeBg: "#1a0a2e",
+                  items: [
+                    "🏛️ 과거 범죄 아카이브 — 1990년대 골목부터 AI 시대까지 시대별 배경 추가",
+                    "😷 우환폐렴(코로나) 시대 빗방울 효과 및 추억 마퀴 적용",
+                    "⚖️ 어린이 법률 안내 — 체험 행위별 처벌 조항 쉬운 말로 추가",
+                    "🥕 당근마켓 사기 체험 역할 표시 개선 및 중복 메시지 버그 수정",
+                  ],
+                },
+                {
+                  version: "v1.6",
+                  badge: null,
                   badgeColor: "#22c55e",
                   badgeBg: "#052e16",
                   items: [
@@ -784,8 +796,6 @@ export default function HomePage() {
                 <div
                   key={i}
                   style={{ display: "flex", gap: 20, paddingBottom: 20, position: "relative" }}
-                  onMouseEnter={() => setHoveredLog(i)}
-                  onMouseLeave={() => setHoveredLog(null)}
                 >
                   {/* 타임라인 선 */}
                   {i < 13 && (
@@ -814,29 +824,46 @@ export default function HomePage() {
                       }}>{log.badge}</span>
                     )}
                   </div>
-                  {/* 항목들 — 호버 시 팝업처럼 슬라이드업 */}
-                  <div style={{
-                    flex: 1, paddingTop: 4, position: "relative",
-                    overflow: hoveredLog === i ? "visible" : "hidden",
-                    height: hoveredLog === i ? "auto" : 32,
-                  }}>
-                    {hoveredLog === i ? (
+                  {/* 항목들 — 누르고 있는 동안만 팝업 */}
+                  <div style={{ flex: 1, paddingTop: 4, position: "relative" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                      <p style={{ color: "#4b5563", fontSize: 12, lineHeight: 1.6, flex: 1 }}>
+                        {log.items[0]?.slice(0, 32)}{log.items[0]?.length > 32 ? "…" : ""}
+                        {log.items.length > 1 && <span style={{ color: "#374151", marginLeft: 6 }}>외 {log.items.length - 1}건</span>}
+                      </p>
+                      <button
+                        style={{
+                          flexShrink: 0,
+                          background: hoveredLog === i ? log.badgeBg : "#111",
+                          border: `1px solid ${hoveredLog === i ? log.badgeColor : "#333"}`,
+                          borderRadius: 8, padding: "3px 10px",
+                          color: hoveredLog === i ? log.badgeColor : "#4b5563",
+                          fontSize: 10, fontWeight: 700, cursor: "pointer",
+                          transition: "all 0.15s", userSelect: "none" as const,
+                          WebkitUserSelect: "none" as const,
+                        }}
+                        onMouseDown={() => setHoveredLog(i)}
+                        onMouseUp={() => setHoveredLog(null)}
+                        onMouseLeave={() => setHoveredLog(null)}
+                        onTouchStart={e => { e.preventDefault(); setHoveredLog(i); }}
+                        onTouchEnd={() => setHoveredLog(null)}
+                      >
+                        자세히 보기
+                      </button>
+                    </div>
+                    {hoveredLog === i && (
                       <div style={{
-                        background: "#1a1026", border: `1px solid ${log.badgeColor}33`,
+                        background: "#1a1026", border: `1px solid ${log.badgeColor}44`,
                         borderRadius: 14, padding: "14px 16px",
-                        animation: "slideUpLog 0.2s ease",
-                        position: "absolute", top: 0, left: 0, right: 0, zIndex: 10,
+                        animation: "slideUpLog 0.15s ease",
+                        position: "absolute", top: "100%", left: 0, right: 0, zIndex: 20,
                         boxShadow: `0 8px 24px ${log.badgeColor}22`,
+                        marginTop: 4,
                       }}>
                         {log.items.map((item, j) => (
                           <p key={j} style={{ color: "#d1d5db", fontSize: 13, lineHeight: 1.9, margin: 0 }}>{item}</p>
                         ))}
                       </div>
-                    ) : (
-                      <p style={{ color: "#374151", fontSize: 12, lineHeight: 2, cursor: "default" }}>
-                        {log.items[0]?.slice(0, 30)}{log.items[0]?.length > 30 ? "…" : ""}
-                        {log.items.length > 1 && <span style={{ color: "#1f2937", marginLeft: 6 }}>+{log.items.length - 1}</span>}
-                      </p>
                     )}
                   </div>
                 </div>
@@ -1479,21 +1506,22 @@ export default function HomePage() {
                   />
                 </div>
               </div>
+              <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');`}</style>
               <p style={{
-                fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
-                fontSize: 26, lineHeight: 1.7, color: "#dcc5e8",
+                fontFamily: "Caveat, cursive",
+                fontSize: 30, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
-                letterSpacing: 1, margin: 0,
+                letterSpacing: 2, margin: 0, fontWeight: 700,
               }}>
                 범죄를 막을 수 있는 대한민국을
               </p>
               <p style={{
-                fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
-                fontSize: 26, lineHeight: 1.7, color: "#dcc5e8",
+                fontFamily: "Caveat, cursive",
+                fontSize: 30, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
-                letterSpacing: 1, margin: 0,
+                letterSpacing: 2, margin: 0, fontWeight: 700,
               }}>
-                저 AI개발자 <span style={{ color: "#fbbf24", textShadow: "0 0 20px #fbbf2488" }}>부엉이</span>가 만들겠습니다.
+                저 AI개발자 <span style={{ color: "#fbbf24", textShadow: "0 0 20px #fbbf2488" }}>🦉 부엉이</span>가 만들겠습니다.
               </p>
               <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#7c3aed55,transparent)", margin: "24px auto", maxWidth: 400 }} />
             </div>
