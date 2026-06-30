@@ -2,14 +2,17 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 
-// ── 승률: 처음엔 무조건 이김 → 점점 급락 ────────────────────────────────────
-function getWinRate(round: number): number {
-  if (round <= 3) return 0.97;   // 처음 3판: 거의 무조건 이김
-  if (round <= 5) return 0.75;
-  if (round <= 8) return 0.42;
-  if (round <= 12) return 0.20;
-  if (round <= 16) return 0.10;
-  return 0.05;
+// ── 승률: 초반 유리 → 점점 불리, 하지만 연패시 희망고문으로 중독 유도 ─────────
+function getWinRate(round: number, streak: {wins:number; losses:number} = {wins:0,losses:0}): number {
+  // 기본 하우스 엣지 (라운드가 늘수록 점점 불리)
+  const base = round <= 3 ? 0.84 : round <= 7 ? 0.60 : round <= 12 ? 0.40 : round <= 18 ? 0.28 : 0.18;
+  // 연패 시 "희망고문" — 잃을수록 한 번쯤은 따게 해서 그만두지 못하게
+  const lossBump = streak.losses >= 4 ? 0.28 : streak.losses >= 3 ? 0.18 : streak.losses >= 2 ? 0.08 : 0;
+  // 연승 시 쿨다운 — 너무 많이 따면 다시 잃게
+  const winDamp = streak.wins >= 4 ? -0.22 : streak.wins >= 3 ? -0.14 : streak.wins >= 2 ? -0.06 : 0;
+  // 높은 변동성 (±18%) — 랜덤하게 따다가 잃어 예측 불가
+  const variance = (Math.random() - 0.5) * 0.36;
+  return Math.max(0.06, Math.min(0.95, base + lossBump + winDamp + variance));
 }
 
 // ── 카드 덱 ──────────────────────────────────────────────────────────────────
@@ -466,7 +469,7 @@ function RevealScreen({ totalLost, totalCharged, round, onRetry, onHome }: { tot
 // ═══════════════════════════════════════════════════════════════════════════
 // ── 바카라 ──────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
-function BaccaratGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function BaccaratGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [bet, setBet] = useState<"player"|"banker"|"tie"|null>(null);
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"deal"|"result">("bet");
@@ -477,7 +480,7 @@ function BaccaratGame({ balance, onResult, round }: { balance:number; onResult:(
   const deal = useCallback(() => {
     if (!bet || betAmount > balance || betAmount <= 0) return;
     setPhase("deal"); setPlayerCards([]); setBankerCards([]); setWinner(null);
-    const shouldWin = Math.random() < getWinRate(round);
+    const shouldWin = Math.random() < getWinRate(round, streak);
     const pCards = [randCard(), randCard()];
     const bCards = [randCard(), randCard()];
     if (shouldWin) {
@@ -572,30 +575,36 @@ function BaccaratGame({ balance, onResult, round }: { balance:number; onResult:(
 // ═══════════════════════════════════════════════════════════════════════════
 // ── 달팽이 ──────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
-function SnailGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function SnailGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [pick, setPick] = useState<number|null>(null);
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"racing"|"result">("bet");
   const [positions, setPositions] = useState<number[]>([0,0,0,0,0,0]);
   const [winner, setWinner] = useState<number|null>(null);
+  const [nearFinish, setNearFinish] = useState(false);
   const animRef = useRef<ReturnType<typeof setInterval>|null>(null);
 
   const startRace = useCallback(() => {
     if (pick===null||betAmount>balance) return;
-    setPhase("racing"); setPositions([0,0,0,0,0,0]); setWinner(null);
-    const shouldWin = Math.random()<getWinRate(round);
+    setPhase("racing"); setPositions([0,0,0,0,0,0]); setWinner(null); setNearFinish(false);
+    const shouldWin = Math.random()<getWinRate(round, streak);
     const winnerIdx = shouldWin ? pick : (() => { let w=Math.floor(Math.random()*6); while(w===pick) w=Math.floor(Math.random()*6); return w; })();
     const pos=[0,0,0,0,0,0];
     animRef.current = setInterval(() => {
-      for (let i=0;i<6;i++) if(pos[i]<100) pos[i]=Math.min(100,pos[i]+(i===winnerIdx?3.5:2.8)+Math.random()*1.5);
+      const leading = Math.max(...pos);
+      // 결승선 앞(75% 이상)에서 모두 급감속 → 긴장감
+      const isClose = leading >= 75;
+      if (isClose && !nearFinish) setNearFinish(true);
+      const slowFactor = isClose ? 0.45 : 1;
+      for (let i=0;i<6;i++) if(pos[i]<100) pos[i]=Math.min(100,pos[i]+((i===winnerIdx?3.5:2.8)+Math.random()*1.5)*slowFactor);
       setPositions([...pos]);
       if(pos[winnerIdx]>=100){
         clearInterval(animRef.current!);
-        setWinner(winnerIdx); setPhase("result");
+        setNearFinish(false); setWinner(winnerIdx); setPhase("result");
         onResult(winnerIdx===pick ? Math.floor(betAmount*5) : -betAmount);
       }
     },80);
-  },[pick,betAmount,balance,round,onResult]);
+  },[pick,betAmount,balance,round,streak,onResult]);
 
   useEffect(() => () => { if(animRef.current) clearInterval(animRef.current); },[]);
   const reset = () => { setPhase("bet"); setPick(null); setPositions([0,0,0,0,0,0]); setWinner(null); };
@@ -628,8 +637,13 @@ function SnailGame({ balance, onResult, round }: { balance:number; onResult:(d:n
           </div>
         ))}
       </div>
+      {nearFinish && (
+        <div style={{ marginBottom:8, background:"linear-gradient(135deg,#0a1a00,#162400)", border:"1px solid #22c55e66", borderRadius:10, padding:"8px 14px", textAlign:"center" }}>
+          <span style={{ color:"#86efac", fontWeight:900, fontSize:13 }}>🏁 결승선 코앞! 제발 내 달팽이...!</span>
+        </div>
+      )}
       {phase==="bet"&&<button onClick={startRace} disabled={pick===null||betAmount>balance} style={{ width:"100%", padding:"14px 0", borderRadius:12, fontSize:15, fontWeight:900, background: pick!==null&&betAmount<=balance?"linear-gradient(135deg,#22c55e,#16a34a)":"#1a1a1a", color: pick!==null?"#fff":"#444", border:"none", cursor: pick!==null?"pointer":"default" }}>{pick===null?"달팽이를 선택하세요":`#${pick+1} 달팽이에 ₩${betAmount.toLocaleString()} 베팅!`}</button>}
-      {phase==="racing"&&<div style={{ textAlign:"center", padding:"14px 0", color:"#22c55e", fontWeight:700 }}>🏁 경주 중...</div>}
+      {phase==="racing"&&<div style={{ textAlign:"center", padding:"14px 0", color: nearFinish?"#ffd700":"#22c55e", fontWeight:700 }}>{nearFinish?"🎯 막판 역전 가능?":"🏁 경주 중..."}</div>}
       {phase==="result"&&(
         <div style={{ display:"flex", gap:10 }}>
           <div style={{ flex:1, textAlign:"center", padding:"13px 0", borderRadius:12, background: winner===pick?"#052e16":"#1a0808", border:`1px solid ${winner===pick?"#16a34a":"#dc2626"}` }}>
@@ -645,43 +659,79 @@ function SnailGame({ balance, onResult, round }: { balance:number; onResult:(d:n
 // ═══════════════════════════════════════════════════════════════════════════
 // ── 사다리 ──────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
-function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function LadderGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [pick, setPick] = useState<number|null>(null);
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"climbing"|"result">("bet");
-  const [pathStep, setPathStep] = useState(0);
+  const [pathStep, setPathStep] = useState(0);         // 현재 내려온 행 (0=출발)
+  const [ballCol, setBallCol] = useState(0);           // 공의 실제 열
   const [result, setResult] = useState<number|null>(null);
   const [ladderMap, setLadderMap] = useState<boolean[][]>([]);
+  const [ladderPath, setLadderPath] = useState<number[]>([]); // 행마다 공의 열
+  const [suspense, setSuspense] = useState(false);     // 마지막 직전 긴장 연출
+  const ivRef = useRef<ReturnType<typeof setInterval>|null>(null);
   const COLS=4, ROWS=6, LABELS=["①","②","③","④"];
 
-  const generateLadder = useCallback((shouldWin:boolean, startCol:number) => {
-    const grid:boolean[][] = Array.from({length:ROWS},()=>Array(COLS-1).fill(false));
-    for(let r=0;r<ROWS;r++){
-      const cols=Array.from({length:COLS-1},(_,i)=>i).sort(()=>Math.random()-0.5);
-      let placed=0;
-      for(const c of cols){
-        if(placed>=2) break;
-        if(c===0||!grid[r][c-1]){ grid[r][c]=true; placed++; }
+  // 그리드 생성: 인접 가로줄 버그 완전 수정 + 경로 반환
+  const buildLadder = useCallback((shouldWin:boolean, startCol:number) => {
+    // 재시도: 자연 경로가 원하는 결과와 맞을 때까지 최대 40회
+    for (let attempt = 0; attempt < 40; attempt++) {
+      const grid:boolean[][] = Array.from({length:ROWS}, () => Array(COLS-1).fill(false));
+      for (let r = 0; r < ROWS; r++) {
+        const cols = Array.from({length:COLS-1}, (_,i) => i).sort(() => Math.random()-0.5);
+        let placed = 0;
+        for (const c of cols) {
+          if (placed >= 2) break;
+          // 양쪽 인접 가로줄 없어야 설치 가능 (버그 수정 핵심)
+          const leftOk  = c === 0 || !grid[r][c-1];
+          const rightOk = c >= COLS-2 || !grid[r][c+1];
+          if (leftOk && rightOk) { grid[r][c] = true; placed++; }
+        }
       }
+      // 경로 시뮬레이션
+      let pos = startCol;
+      const path = [startCol];
+      for (let r = 0; r < ROWS; r++) {
+        if (pos > 0 && grid[r][pos-1])       pos--;
+        else if (pos < COLS-1 && grid[r][pos]) pos++;
+        path.push(pos);
+      }
+      const natural = pos;
+      if (shouldWin && natural === startCol) return { grid, path, outcome: startCol };
+      if (!shouldWin && natural !== startCol) return { grid, path, outcome: natural };
     }
-    let pos=startCol;
-    for(let r=0;r<ROWS;r++){
-      if(pos>0&&grid[r][pos-1]) pos--;
-      else if(pos<COLS-1&&grid[r][pos]) pos++;
-    }
-    return { grid, outcome: shouldWin ? startCol : (pos===startCol ? (startCol+1)%COLS : pos) };
-  },[]);
+    // 폴백 (거의 발생 안함)
+    const grid:boolean[][] = Array.from({length:ROWS}, () => Array(COLS-1).fill(false));
+    const path = Array(ROWS+1).fill(startCol);
+    const fallout = (startCol + 1) % COLS;
+    return { grid, path, outcome: shouldWin ? startCol : fallout };
+  }, []);
 
   const start = useCallback(() => {
-    if(pick===null||betAmount>balance) return;
-    setPhase("climbing"); setPathStep(0);
-    const { grid, outcome } = generateLadder(Math.random()<getWinRate(round), pick);
-    setLadderMap(grid);
-    let step=0;
-    const iv=setInterval(()=>{ step++; setPathStep(step); if(step>=ROWS+1){ clearInterval(iv); setResult(outcome); setPhase("result"); onResult(outcome===pick?Math.floor(betAmount*3.5):-betAmount); } },350);
-  },[pick,betAmount,balance,round,generateLadder,onResult]);
+    if (pick===null || betAmount>balance) return;
+    const { grid, path, outcome } = buildLadder(Math.random() < getWinRate(round, streak), pick);
+    setLadderMap(grid); setLadderPath(path);
+    setPhase("climbing"); setPathStep(0); setBallCol(pick); setSuspense(false);
 
-  const reset = () => { setPhase("bet"); setPick(null); setResult(null); setPathStep(0); setLadderMap([]); };
+    let step = 0;
+    ivRef.current = setInterval(() => {
+      step++;
+      // 마지막 2행에서 긴장감: 속도 절반 + suspense 표시
+      if (step === ROWS - 1) setSuspense(true);
+      setPathStep(step);
+      setBallCol(path[Math.min(step, path.length-1)]);
+      if (step >= ROWS + 1) {
+        clearInterval(ivRef.current!);
+        setSuspense(false);
+        setResult(outcome);
+        setPhase("result");
+        onResult(outcome === pick ? Math.floor(betAmount*3.5) : -betAmount);
+      }
+    }, 400);
+  }, [pick, betAmount, balance, round, streak, buildLadder, onResult]);
+
+  useEffect(() => () => { if(ivRef.current) clearInterval(ivRef.current); }, []);
+  const reset = () => { setPhase("bet"); setPick(null); setResult(null); setPathStep(0); setBallCol(0); setLadderMap([]); setLadderPath([]); setSuspense(false); };
 
   return (
     <div>
@@ -696,7 +746,15 @@ function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:
         ))}
         <span style={{ color:"#555", fontSize:11, padding:"6px 4px" }}>당첨 3.5배</span>
       </div>
-      <div style={{ background:"#0f0f1f", borderRadius:14, padding:"16px 12px", marginBottom:14, border:"1px solid #1a1a3a" }}>
+
+      {/* 긴장 배너 */}
+      {suspense && (
+        <div style={{ marginBottom:10, background:"linear-gradient(135deg,#1a0a2e,#2e1a4a)", border:"1px solid #a855f766", borderRadius:10, padding:"8px 14px", textAlign:"center", animation:"pulse 0.5s ease infinite alternate" }}>
+          <span style={{ color:"#d8b4fe", fontWeight:900, fontSize:13 }}>⚡ 결과 직전... 제발...!</span>
+        </div>
+      )}
+
+      <div style={{ background:"#0f0f1f", borderRadius:14, padding:"16px 12px", marginBottom:14, border:`1px solid ${suspense?"#a855f766":"#1a1a3a"}`, transition:"border-color 0.3s" }}>
         <div style={{ display:"grid", gridTemplateColumns:`repeat(${COLS},1fr)`, marginBottom:8 }}>
           {LABELS.map((l,i)=>(
             <div key={i} style={{ textAlign:"center" }}>
@@ -704,15 +762,28 @@ function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:
             </div>
           ))}
         </div>
-        <div style={{ position:"relative", height:ROWS*28 }}>
+        <div style={{ position:"relative", height:ROWS*32 }}>
+          {/* 세로줄 */}
           {Array.from({length:COLS},(_,i)=>(
             <div key={i} style={{ position:"absolute", left:`${(i/(COLS-1))*100}%`, top:0, bottom:0, width:2, background:"#2a2a4a", transform:"translateX(-50%)" }} />
           ))}
+          {/* 가로줄 */}
           {ladderMap.map((row,r)=>row.map((has,c)=>has?(
-            <div key={`${r}-${c}`} style={{ position:"absolute", left:`${(c/(COLS-1))*100}%`, top:r*28+12, width:`${(1/(COLS-1))*100}%`, height:2, background:"#3b3b6a" }} />
+            <div key={`${r}-${c}`} style={{ position:"absolute", left:`${(c/(COLS-1))*100}%`, top:r*32+14, width:`${(1/(COLS-1))*100}%`, height:3, background:"#6b3fa0", borderRadius:2 }} />
           ):null))}
-          {phase!=="bet"&&pick!==null&&(
-            <div style={{ position:"absolute", left:`${(pick/(COLS-1))*100}%`, top:Math.min(pathStep*28,ROWS*28)-8, width:16, height:16, borderRadius:"50%", background:"#a855f7", boxShadow:"0 0 10px #a855f7", transform:"translateX(-50%)", transition:"top 0.3s", zIndex:10 }} />
+          {/* 공 — ballCol로 좌우 이동 */}
+          {phase!=="bet" && (
+            <div style={{
+              position:"absolute",
+              left:`${(ballCol/(COLS-1))*100}%`,
+              top: Math.min(pathStep*32, ROWS*32) - 10,
+              width:20, height:20, borderRadius:"50%",
+              background: suspense ? "linear-gradient(135deg,#ffd700,#f59e0b)" : "#a855f7",
+              boxShadow: suspense ? "0 0 16px #ffd70088" : "0 0 10px #a855f7",
+              transform:"translateX(-50%)",
+              transition:"left 0.35s ease, top 0.35s ease, background 0.3s",
+              zIndex:10,
+            }} />
           )}
         </div>
         <div style={{ display:"grid", gridTemplateColumns:`repeat(${COLS},1fr)`, marginTop:8 }}>
@@ -724,7 +795,7 @@ function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:
         </div>
       </div>
       {phase==="bet"&&<button onClick={start} disabled={pick===null||betAmount>balance} style={{ width:"100%", padding:"14px 0", borderRadius:12, fontSize:15, fontWeight:900, background: pick!==null&&betAmount<=balance?"linear-gradient(135deg,#a855f7,#7c3aed)":"#1a1a1a", color: pick!==null?"#fff":"#444", border:"none", cursor: pick!==null?"pointer":"default" }}>{pick===null?"출발 번호를 선택하세요":`${LABELS[pick]}번에서 출발 — ₩${betAmount.toLocaleString()} 베팅`}</button>}
-      {phase==="climbing"&&<div style={{ textAlign:"center", padding:"14px 0", color:"#a855f7", fontWeight:700 }}>🪜 올라가는 중...</div>}
+      {phase==="climbing"&&<div style={{ textAlign:"center", padding:"14px 0", color: suspense?"#ffd700":"#a855f7", fontWeight:700 }}>{suspense?"🎯 거의 다 왔어요...":"🪜 내려가는 중..."}</div>}
       {phase==="result"&&(
         <div style={{ display:"flex", gap:10 }}>
           <div style={{ flex:1, textAlign:"center", padding:"13px 0", borderRadius:12, background: result===pick?"#052e16":"#1a0808", border:`1px solid ${result===pick?"#16a34a":"#dc2626"}` }}>
@@ -740,7 +811,7 @@ function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:
 // ═══════════════════════════════════════════════════════════════════════════
 // ── 홀짝 ────────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
-function HoljakGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function HoljakGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [pick, setPick] = useState<"홀"|"짝"|null>(null);
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"spinning"|"result">("bet");
@@ -751,7 +822,7 @@ function HoljakGame({ balance, onResult, round }: { balance:number; onResult:(d:
   const spin = useCallback(() => {
     if (!pick || betAmount > balance) return;
     setPhase("spinning"); setFinalNum(null);
-    const shouldWin = Math.random() < getWinRate(round);
+    const shouldWin = Math.random() < getWinRate(round, streak);
     const isOdd = pick === "홀";
     const oddPool = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45];
     const evenPool = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44];
@@ -848,7 +919,7 @@ function checkPwWin(b:PwBet, n:number, p:number) {
   if(b==="power_under") return p<=4;
   return p>=5;
 }
-function PowerballGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function PowerballGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [bet, setBet] = useState<PwBet|null>(null);
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"drawing"|"result">("bet");
@@ -866,7 +937,7 @@ function PowerballGame({ balance, onResult, round }: { balance:number; onResult:
   const draw = useCallback(() => {
     if (!bet||betAmount>balance) return;
     setPhase("drawing"); setNb(null); setPb(null);
-    const shouldWin = Math.random()<getWinRate(round);
+    const shouldWin = Math.random()<getWinRate(round, streak);
     let n:number, p:number;
     if (shouldWin) {
       if(bet==="normal_odd"){n=rn(oddN);p=rn([...oddP,...evenP]);}
@@ -960,7 +1031,7 @@ function calcSlotWin(r:string[]): number {
   if(r[0]===r[1]||r[1]===r[2]||r[0]===r[2]) return 0.5;
   return 0;
 }
-function SlotGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+function SlotGame({ balance, onResult, round, streak }: { balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number} }) {
   const [betAmount, setBetAmount] = useState(10000);
   const [phase, setPhase] = useState<"bet"|"spinning"|"result">("bet");
   const [disp, setDisp] = useState<string[]>(["❓","❓","❓"]);
@@ -970,7 +1041,7 @@ function SlotGame({ balance, onResult, round }: { balance:number; onResult:(d:nu
   const spin = useCallback(() => {
     if(betAmount>balance) return;
     setPhase("spinning"); setMult(0);
-    const shouldWin = Math.random()<getWinRate(round);
+    const shouldWin = Math.random()<getWinRate(round, streak);
     let final:string[];
     if(shouldWin){
       const r=Math.random();
@@ -1061,10 +1132,12 @@ function PlayContent() {
   const [showReveal, setShowReveal] = useState(false);
   const [addictionDismissed, setAddictionDismissed] = useState(false);
 
-  // 초반 연승 카운터
+  // 연승/연패 카운터
   const [winStreak, setWinStreak] = useState(0);
+  const [lossStreak, setLossStreak] = useState(0);
   const [showStreakBanner, setShowStreakBanner] = useState(false);
   const streakTimer = useRef<ReturnType<typeof setTimeout>|null>(null);
+  const streak = { wins: winStreak, losses: lossStreak };
 
   // 잔액 소진 감지
   const prevBalance = useRef(balance);
@@ -1096,6 +1169,7 @@ function PlayContent() {
       });
     } else {
       setWinStreak(0);
+      setLossStreak(l => l + 1);
     }
 
     if (!addictionDismissed && totalDelta + delta < -40000) {
@@ -1112,7 +1186,7 @@ function PlayContent() {
   const handleRetry = () => {
     setBalance(INITIAL_BALANCE); setRound(0); setTotalDelta(0); setTotalCharged(0);
     setHistory([]); setShowReveal(false); setShowAddiction(false);
-    setAddictionDismissed(false); setWinStreak(0);
+    setAddictionDismissed(false); setWinStreak(0); setLossStreak(0);
     setShowDisclaimer(false); setShowFreeCoin(true);
   };
 
@@ -1274,12 +1348,12 @@ function PlayContent() {
                   ❓ 처음이에요
                 </button>
               </div>
-              {activeGame==="baccarat"  && <BaccaratGame  balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="snail"     && <SnailGame     balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="ladder"    && <LadderGame    balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="holzak"   && <HoljakGame    balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="powerball" && <PowerballGame balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="slot"      && <SlotGame      balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="baccarat"  && <BaccaratGame  balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="snail"     && <SnailGame     balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="ladder"    && <LadderGame    balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="holzak"   && <HoljakGame    balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="powerball" && <PowerballGame balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="slot"      && <SlotGame      balance={balance} onResult={handleResult} round={round} streak={streak} />}
             </div>
 
             {/* 잔액 0 */}
