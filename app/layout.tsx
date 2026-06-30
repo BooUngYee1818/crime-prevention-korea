@@ -26,6 +26,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-L31H0R3SEK"></script>
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-L31H0R3SEK');
+        `}} />
       </head>
       <body>
         <LanguageProvider>
