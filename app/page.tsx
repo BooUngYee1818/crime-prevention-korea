@@ -1211,12 +1211,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: `
-                radial-gradient(ellipse 55% 160px at 30% -5%, rgba(220,80,180,0.45) 0%, transparent 100%),
-                radial-gradient(ellipse 45% 160px at 75% 10%, rgba(180,60,240,0.3) 0%, transparent 100%),
-                radial-gradient(ellipse 60% 80% at 50% 110%, rgba(20,0,30,0.85) 0%, transparent 100%),
-                linear-gradient(160deg, #100018 0%, #1a0028 45%, #0d0018 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(80,10,60,0.55), rgba(20,0,35,0.65)), url('/alley-2020s.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 벽 타일 패턴 */}
               <div style={{
@@ -1326,10 +1323,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: `
-                radial-gradient(ellipse 80% 140px at 50% -5%, rgba(100,150,180,0.25) 0%, transparent 100%),
-                linear-gradient(180deg, #050a10 0%, #080f18 40%, #040810 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(5,15,30,0.6), rgba(5,20,40,0.68)), url('/alley-2026.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 빗길 아스팔트 텍스처 */}
               <div style={{
