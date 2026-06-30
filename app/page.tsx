@@ -1155,16 +1155,16 @@ export default function HomePage() {
               boxShadow: "0 0 40px #7c3aed22",
             }}>
               <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>AI TIME</p>
-              <p style={{ color: "#e2e8f0", fontSize: 15, lineHeight: 1.9, marginBottom: 20 }}>
+              <p style={{ color: "#e2e8f0", fontSize: 15, lineHeight: 2.0, marginBottom: 20 }}>
                 옛날의 수법이랑 지금의 수법은 시대가 변하면서 많이 달라졌습니다.<br />
                 <span style={{ color: "#a78bfa" }}>AI의 증가에 따른 수법을 이용하여 만드는 사기</span>도 이에 한몫을 하죠.
               </p>
               <div style={{ height: 1, background: "#7c3aed33", margin: "20px 0" }} />
-              <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.8 }}>
+              <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 2.0 }}>
                 이제 사기는 <strong style={{ color: "#f472b6" }}>AI가 당신의 얼굴을 만들고</strong>,&nbsp;
                 <strong style={{ color: "#34d399" }}>가족의 목소리로 전화하며</strong>,&nbsp;
                 <strong style={{ color: "#fbbf24" }}>완벽한 문법으로 문자를 보냅니다.</strong><br />
-                오타 하나, 어색한 말투 하나로 구별하던 시대는 끝났습니다.
+                오타 하나, <strong style={{ color: "#e2e8f0" }}>어색한 말투</strong>와 <strong style={{ color: "#e2e8f0" }}>어눌한 조선어</strong> 하나로 구별하던 시대는 끝났습니다.
               </p>
             </div>
           </div>
