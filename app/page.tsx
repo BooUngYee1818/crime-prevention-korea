@@ -848,7 +848,16 @@ export default function HomePage() {
       </section>
 
       {/* ── 과거 범죄 아카이브 ── */}
-      <section style={{ background: "#130c1c", padding: "72px 0 64px", overflow: "hidden" }}>
+      <section style={{ background: "#130c1c", padding: "72px 0 64px", overflow: "hidden", position: "relative" }}>
+        {/* 시대 배경 CSS 애니메이션 */}
+        <style>{`
+          @keyframes flickerTV { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.7} 94%{opacity:1} 97%{opacity:0.85} 98%{opacity:1} }
+          @keyframes rainDrop { 0%{transform:translateY(-20px);opacity:0} 10%{opacity:0.6} 90%{opacity:0.4} 100%{transform:translateY(120px);opacity:0} }
+          @keyframes scanline { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+          @keyframes neonBlink { 0%,100%{opacity:1;text-shadow:0 0 8px #f59e0b,0 0 20px #f59e0b} 45%{opacity:0.7;text-shadow:none} 50%{opacity:1;text-shadow:0 0 8px #f59e0b} }
+          @keyframes glitchEra { 0%,100%{clip-path:inset(0 0 98% 0)} 10%{clip-path:inset(30% 0 50% 0)} 30%{clip-path:inset(70% 0 10% 0)} 60%{clip-path:inset(10% 0 80% 0)} }
+          @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        `}</style>
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 40px" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 4, marginBottom: 10, fontFamily: "monospace" }}>[ CRIME ARCHIVE ]</p>
@@ -876,15 +885,69 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
-            {/* ── 1990년대: 팩스 종이 느낌 ── */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ height: 1, flex: 1, background: "#4b3a1a", opacity: 0.6 }} />
-                <span style={{ color: "#c9a84c", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 1990년대 ──</span>
-                <div style={{ height: 1, flex: 1, background: "#4b3a1a", opacity: 0.6 }} />
+            {/* ══ 1990년대 배경: 옛날 한국 골목 느낌 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: `
+                linear-gradient(180deg, rgba(20,10,0,0.85) 0%, rgba(40,20,0,0.75) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(180,140,60,0.04) 3px, rgba(180,140,60,0.04) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(180,140,60,0.03) 40px, rgba(180,140,60,0.03) 41px)
+              `,
+            }}>
+              {/* 골목 벽돌 패턴 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24,
+                backgroundImage: `
+                  repeating-linear-gradient(90deg, rgba(139,90,43,0.08) 0px, rgba(139,90,43,0.08) 60px, transparent 60px, transparent 62px),
+                  repeating-linear-gradient(0deg, rgba(100,60,20,0.12) 0px, rgba(100,60,20,0.12) 28px, transparent 28px, transparent 30px)
+                `,
+                pointerEvents: "none",
+              }} />
+              {/* TV 잡음 오버레이 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
+                animation: "flickerTV 8s infinite",
+              }} />
+              {/* 노란 가로등 빛 효과 */}
+              <div style={{
+                position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)",
+                width: 300, height: 200,
+                background: "radial-gradient(ellipse, rgba(255,200,80,0.18) 0%, transparent 70%)",
+                pointerEvents: "none",
+              }} />
+              {/* 시대 텍스트 */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #c9a84c88)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 32, marginBottom: 4 }}>📠</div>
+                  <span style={{
+                    color: "#c9a84c", fontSize: 13, fontWeight: 700, letterSpacing: 4,
+                    fontFamily: "monospace", animation: "neonBlink 4s infinite",
+                    textShadow: "0 0 10px #c9a84c88",
+                  }}>── 1 9 9 0 년 대 ──</span>
+                  <p style={{ color: "#8b6914", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>골목 팩스방 · 전단지 · 전화 사기의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c9a84c88, transparent)" }} />
               </div>
+              {/* 흘러가는 추억 마퀴 */}
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 32, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 18s linear infinite",
+                  color: "#8b6914", fontSize: 10, fontFamily: "monospace", letterSpacing: 1,
+                }}>
+                  {["📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고", "📞 삐삐 호출", "📠 팩스방 사기", "🏪 구멍가게", "🚌 시내버스", "📺 브라운관 TV", "💿 비디오 대여점", "🎰 복권 당첨 사기", "📋 전단지 광고"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 1990년대 카드들 */}
+            <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { name: "복권 당첨 사기", tag: "FAX SCAM", desc: "「당신이 당첨됐습니다」 팩스 1장으로 수수료 편취. 스팸 팩스가 유일한 사기 수단이던 시절." },
@@ -918,14 +981,52 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ 1990년대 배경 래퍼 끝 ══ */}
 
-            {/* ── 2000년대: Windows XP 스타일 ── */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
-                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2000년대 ──</span>
-                <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
+            {/* ══ 2000년대 배경: Windows XP / PC방 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: `
+                linear-gradient(180deg, rgba(0,10,40,0.92) 0%, rgba(10,30,70,0.85) 50%, rgba(0,20,50,0.92) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(100,180,255,0.04) 24px, rgba(100,180,255,0.04) 25px)
+              `,
+            }}>
+              {/* XP 하늘빛 글로우 */}
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0, height: 160,
+                background: "linear-gradient(180deg, rgba(60,140,240,0.18) 0%, transparent 100%)",
+                pointerEvents: "none",
+              }} />
+              {/* 스캔라인 */}
+              <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 6px)",
+              }} />
+              {/* 흘러가는 마퀴 */}
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 28, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 22s linear infinite",
+                  color: "#3a6ea5", fontSize: 10, fontFamily: "monospace", letterSpacing: 1,
+                }}>
+                  {["💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트", "💾 플로피디스크", "📀 CD롬 굽기", "🖨️ PC방 프린터", "🖥️ 윈도우XP", "🌐 인터넷 탐색기", "📡 56K 모뎀", "📧 이메일 스팸", "🎮 스타크래프트"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
               </div>
+              {/* 시대 레이블 */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #3a6ea588)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 28, marginBottom: 4 }}>💻</div>
+                  <span style={{ color: "#7ab0e8", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace", textShadow: "0 0 8px #3a6ea888" }}>── 2 0 0 0 년 대 ──</span>
+                  <p style={{ color: "#3a6ea5", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>PC방 · 인터넷 탐색기 · 이메일 사기의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #3a6ea588, transparent)" }} />
+              </div>
+              {/* 2000년대 카드들 */}
+            <div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { name: "나이지리아 왕자 이메일", icon: "📧", desc: "\"저는 나이지리아 왕자입니다. 재산 이전을 도와주시면 수수료를 드립니다.\" 세계 최초 국제 스팸 사기의 고전." },
@@ -978,8 +1079,36 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ 2000년대 배경 래퍼 끝 ══ */}
 
-            {/* ── 2010년대 초: 피처폰/초기 스마트폰 SMS ── */}
+            {/* ══ 2010년대 초: 스마트폰 시대 배경 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: "linear-gradient(180deg, rgba(2,8,20,0.95) 0%, rgba(5,20,10,0.90) 100%)",
+            }}>
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 28, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 20s linear infinite",
+                  color: "#1a7a4a", fontSize: 10, fontFamily: "monospace",
+                }}>
+                  {["📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출", "📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #34d39988)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 28, marginBottom: 4 }}>📱</div>
+                  <span style={{ color: "#34d399", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 0 년 대 초 ──</span>
+                  <p style={{ color: "#065f46", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>스마트폰 보급 · 카카오 · 스미싱의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #34d39988, transparent)" }} />
+              </div>
+
+              {/* ── 2010년대 초: 피처폰/초기 스마트폰 SMS ── */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#064e3b", opacity: 0.6 }} />
@@ -1027,8 +1156,36 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ 2010년대 초 래퍼 끝 ══ */}
 
-            {/* ── 2015~2018: 플랫 디자인/SNS 시대 ── */}
+            {/* ══ 2015~2018: SNS 시대 배경 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: "linear-gradient(180deg, rgba(10,0,30,0.95) 0%, rgba(25,5,50,0.90) 100%)",
+            }}>
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 28, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 22s linear infinite",
+                  color: "#7c3aed55", fontSize: 10, fontFamily: "monospace",
+                }}>
+                  {["📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #c58dc688)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 28, marginBottom: 4 }}>📸</div>
+                  <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 5 ~ 2 0 1 8 ──</span>
+                  <p style={{ color: "#7c3aed88", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>SNS · 인스타그램 · 오픈마켓 사기의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
+              </div>
+
+              {/* ── 2015~2018: 플랫 디자인/SNS 시대 ── */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
@@ -1070,17 +1227,58 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ SNS 시대 래퍼 끝 ══ */}
 
-            {/* ── 2019~2021: 코로나 시대 (다크 뉴스 피드) ── */}
+            {/* ══ 2019~2021: 우환폐렴(코로나) 시대 배경 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: "linear-gradient(180deg, rgba(0,15,25,0.97) 0%, rgba(5,25,35,0.95) 100%)",
+            }}>
+              {/* 빗방울 효과 */}
+              {[...Array(8)].map((_,i) => (
+                <div key={i} style={{
+                  position: "absolute",
+                  top: 0,
+                  left: `${10 + i * 12}%`,
+                  width: 1,
+                  height: 60,
+                  background: "linear-gradient(180deg, transparent, rgba(100,200,255,0.3), transparent)",
+                  animation: `rainDrop ${2 + (i % 3) * 0.7}s linear infinite`,
+                  animationDelay: `${i * 0.4}s`,
+                  pointerEvents: "none",
+                }} />
+              ))}
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 28, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 25s linear infinite",
+                  color: "#164e6388", fontSize: 10, fontFamily: "monospace",
+                }}>
+                  {["😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보", "😷 마스크 대란", "🏠 사회적 거리두기", "💉 백신 사기", "📦 긴급재난지원금", "🔒 거리두기 4단계", "📰 속보"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #22d3ee44)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 28, marginBottom: 4 }}>😷</div>
+                  <span style={{ color: "#22d3ee", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 1 9 ~ 2 0 2 1 ──</span>
+                  <p style={{ color: "#164e63", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>우환폐렴 · 재난지원금 · 비대면 사기의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #22d3ee44, transparent)" }} />
+              </div>
+
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
-                <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2019~2021년 (코로나 시대) ──</span>
+                <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2019~2021년 (우환폐렴 시대) ──</span>
                 <div style={{ height: 1, flex: 1, background: "#164e63", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { breaking: "BREAKING", headline: "마스크 대란 틈타 사기 급증", sub: "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상", name: "코로나 마스크 사기", desc: "위기 상황이 사기꾼의 최적 환경임을 증명. 사람들이 마스크라면 뭐든 믿던 시절." },
+                  { breaking: "BREAKING", headline: "마스크 대란 틈타 사기 급증", sub: "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상", name: "우환폐렴 마스크 사기", desc: "위기 상황이 사기꾼의 최적 환경임을 증명. 우환폐렴(코로나) 확산으로 마스크라면 뭐든 믿던 시절." },
                   { breaking: "속보", headline: "재난지원금 사칭 스미싱 수백만 건", sub: "정부 공식 링크인 척 개인정보 탈취 — '신청하세요'가 함정", name: "재난지원금 피싱", desc: "국가 재난 상황을 악용한 역대 최대 스미싱. '정부니까 믿어야지'라는 심리를 정확히 노림." },
                   { breaking: "특보", headline: "비트코인 2배 보장 텔레그램 방 주의", sub: "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해", name: "코인 초기 투자 사기", desc: "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." },
                 ].map((c, j) => (
@@ -1106,8 +1304,41 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ 우환폐렴 시대 래퍼 끝 ══ */}
 
-            {/* ── 2022~2023: 다크모드/AI 시대 ── */}
+            {/* ══ 2022~2023: 다크 도시 / AI 전야 배경 ══ */}
+            <div style={{
+              position: "relative", borderRadius: 24, overflow: "hidden",
+              marginBottom: 40, padding: "32px 28px",
+              background: "linear-gradient(180deg, rgba(5,0,15,0.98) 0%, rgba(15,0,30,0.95) 100%)",
+            }}>
+              {/* 네온 글로우 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 120,
+                background: "linear-gradient(0deg, rgba(140,60,200,0.12) 0%, transparent 100%)",
+                pointerEvents: "none",
+              }} />
+              <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{
+                  display: "flex", gap: 28, whiteSpace: "nowrap",
+                  animation: "marqueeScroll 20s linear infinite",
+                  color: "#c58dc655", fontSize: 10, fontFamily: "monospace",
+                }}>
+                  {["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기"].map((t,i) => (
+                    <span key={i}>{t} &nbsp;·&nbsp;</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, transparent, #c58dc688)" }} />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 28, marginBottom: 4 }}>🤖</div>
+                  <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>── 2 0 2 2 ~ 2 0 2 3 ──</span>
+                  <p style={{ color: "#7c3aed88", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>AI 전야 · 딥보이스 · 중고거래 사기의 시대</p>
+                </div>
+                <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #c58dc688, transparent)" }} />
+              </div>
+
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
@@ -1146,6 +1377,7 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            </div> {/* ══ 2022-2023 래퍼 끝 ══ */}
 
             {/* ── 2024~현재: AI·딥페이크 시대 ── */}
             <div style={{ marginTop: 40 }}>
