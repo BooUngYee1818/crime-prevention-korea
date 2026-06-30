@@ -160,11 +160,20 @@ function ScamSimSection({ lang }: { lang: string }) {
                 <p style={{ fontSize: 13, lineHeight: 1.7, color: result === "win" ? "#166534" : "#991b1b", fontWeight: 700, marginBottom: 12 }}>
                   {result === "win" ? scenario.winMsg : scenario.loseMsg}
                 </p>
-                <button onClick={() => setActive(null)} style={{
-                  padding: "10px 24px", borderRadius: 10, border: "none",
-                  background: result === "win" ? "#16a34a" : "#dc2626",
-                  color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer",
-                }}>다른 사기 체험하기</button>
+                <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+                  <button onClick={() => setActive(null)} style={{
+                    padding: "10px 20px", borderRadius: 10, border: "none",
+                    background: result === "win" ? "#16a34a" : "#dc2626",
+                    color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer",
+                  }}>다른 사기 체험하기</button>
+                  {result === "lose" && (
+                    <a href="https://ecrm.police.go.kr/minwon/main" target="_blank" rel="noopener noreferrer" style={{
+                      padding: "10px 20px", borderRadius: 10, border: "2px solid #dc2626",
+                      background: "#fff", color: "#dc2626", fontWeight: 700, fontSize: 13,
+                      cursor: "pointer", textDecoration: "none", display: "inline-block",
+                    }}>🚨 실제 피해 신고하기</a>
+                  )}
+                </div>
               </div>
             )}
             {!allShown && !result && (
