@@ -183,12 +183,76 @@ function FreeCoinPopup({ siteName, onClaim }: { siteName: string; onClaim: () =>
   );
 }
 
+// ── 체험 전 자동입력 안내 팝업 ────────────────────────────────────────────────
+function AutoFillNotice({ onDone }: { onDone: () => void }) {
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    const t1 = setTimeout(() => setStep(1), 600);
+    const t2 = setTimeout(() => setStep(2), 1800);
+    const t3 = setTimeout(() => { setStep(3); setTimeout(onDone, 1200); }, 3200);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [onDone]);
+  return (
+    <div style={{ position:"fixed", inset:0, zIndex:800, background:"rgba(0,0,0,0.97)", backdropFilter:"blur(16px)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <div style={{ maxWidth:420, width:"100%", textAlign:"center" }}>
+        <div style={{ fontSize:44, marginBottom:16, opacity: step>=1?1:0, transition:"opacity 0.5s" }}>⚠️</div>
+        <div style={{ color:"#fbbf24", fontWeight:900, fontSize:18, marginBottom:12, opacity:step>=1?1:0, transition:"opacity 0.5s 0.1s" }}>
+          체험 시작 전 안내
+        </div>
+        <div style={{ background:"rgba(251,191,36,0.08)", border:"1px solid #fbbf2444", borderRadius:16, padding:"20px 22px", marginBottom:20, opacity:step>=2?1:0, transition:"opacity 0.5s", textAlign:"left" }}>
+          <p style={{ color:"#fde68a", fontSize:14, lineHeight:2, margin:0 }}>
+            이 프로그램은 <strong style={{ color:"#fbbf24" }}>자동 입력</strong>되는 시스템으로<br/>
+            카드 정보가 입력되는 장면이 시연됩니다.
+          </p>
+          <p style={{ color:"#888", fontSize:12, lineHeight:1.8, marginTop:10, marginBottom:0 }}>
+            실제 불법 사이트에서 카드정보·개인정보를 탈취하는 방식을 교육 목적으로 보여드립니다.<br/>
+            <strong style={{ color:"#ef4444" }}>실제 카드정보는 절대 입력하지 마세요.</strong>
+          </p>
+        </div>
+        <div style={{ color: step>=3?"#22c55e":"#555", fontSize:13, fontWeight:700, transition:"color 0.5s" }}>
+          {step>=3 ? "✅ 확인됨 — 시작합니다" : "잠시 후 자동으로 시작됩니다..."}
+        </div>
+        <div style={{ marginTop:16, height:3, background:"#111", borderRadius:10, overflow:"hidden" }}>
+          <div style={{ height:"100%", background:"#fbbf24", borderRadius:10, width:`${Math.min(100,(step/3)*100)}%`, transition:"width 0.6s ease" }} />
+        </div>
+        <button onClick={onDone} style={{ marginTop:20, padding:"10px 32px", borderRadius:24, background:"none", border:"1px solid #2a2a2a", color:"#555", fontSize:13, cursor:"pointer" }}>건너뛰기</button>
+      </div>
+    </div>
+  );
+}
+
 // ── 충전 결제 팝업 ────────────────────────────────────────────────────────────
 function ChargePopup({ onClose, onCharge, onReveal }: { onClose: () => void; onCharge: (amount: number) => void; onReveal: () => void }) {
   const [selected, setSelected] = useState<number|null>(null);
   const [step, setStep] = useState<"select"|"payment"|"done">("select");
   const [cardNum, setCardNum] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvc, setCvc] = useState("");
   const [processing, setProcessing] = useState(false);
+  const [autoFilling, setAutoFilling] = useState(false);
+
+  // 결제 단계 진입 시 자동입력 시연
+  useEffect(() => {
+    if (step !== "payment") return;
+    setAutoFilling(true);
+    setCardNum(""); setExpiry(""); setCvc("");
+    const fakeCard = "4242424242424242";
+    const fakeExpiry = "12/26";
+    const fakeCvc = "123";
+    let i = 0;
+    const iv = setInterval(() => {
+      i++;
+      const pos = Math.floor(i * fakeCard.length / 18);
+      const raw = fakeCard.slice(0, pos);
+      setCardNum(raw.replace(/(.{4})/g,"$1 ").trim());
+      if (i >= 18) { clearInterval(iv);
+        setTimeout(() => setExpiry(fakeExpiry), 300);
+        setTimeout(() => setCvc(fakeCvc), 700);
+        setTimeout(() => setAutoFilling(false), 900);
+      }
+    }, 60);
+    return () => clearInterval(iv);
+  }, [step]);
 
   const PACKAGES = [
     { amount:30000, bonus:0, label:"₩3만", tag:null },
@@ -254,17 +318,23 @@ function ChargePopup({ onClose, onCharge, onReveal }: { onClose: () => void; onC
             placeholder="0000 - 0000 - 0000 - 0000"
             value={cardNum}
             onChange={e => setCardNum(e.target.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim())}
-            style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:"#1a1a1a", border:"1px solid #2a2a2a", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box" }}
+            style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:autoFilling?"#1a1a00":"#1a1a1a", border:`1px solid ${autoFilling?"#fbbf2466":"#2a2a2a"}`, color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", transition:"all 0.3s" }}
           />
         </div>
+        {autoFilling && (
+          <div style={{ marginBottom:10, background:"#1a1a00", border:"1px solid #fbbf2444", borderRadius:10, padding:"8px 14px", display:"flex", gap:8, alignItems:"center" }}>
+            <span style={{ fontSize:14 }}>⚡</span>
+            <span style={{ color:"#fbbf24", fontSize:12, fontWeight:700 }}>정보 자동 입력 중...</span>
+          </div>
+        )}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:16 }}>
           <div>
             <label style={{ color:"#9ca3af", fontSize:12, display:"block", marginBottom:6 }}>유효기간</label>
-            <input placeholder="MM / YY" style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:"#1a1a1a", border:"1px solid #2a2a2a", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box" }} />
+            <input value={expiry} onChange={e=>setExpiry(e.target.value)} placeholder="MM / YY" style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:autoFilling?"#1a1a00":"#1a1a1a", border:`1px solid ${autoFilling?"#fbbf2466":"#2a2a2a"}`, color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", transition:"all 0.3s" }} />
           </div>
           <div>
             <label style={{ color:"#9ca3af", fontSize:12, display:"block", marginBottom:6 }}>CVC</label>
-            <input placeholder="•••" type="password" style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:"#1a1a1a", border:"1px solid #2a2a2a", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box" }} />
+            <input value={cvc} onChange={e=>setCvc(e.target.value)} placeholder="•••" type="text" style={{ width:"100%", padding:"12px 14px", borderRadius:10, background:autoFilling?"#1a1a00":"#1a1a1a", border:`1px solid ${autoFilling?"#fbbf2466":"#2a2a2a"}`, color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", transition:"all 0.3s" }} />
           </div>
         </div>
         <div style={{ background:"#0f1a0f", border:"1px solid #16a34a22", borderRadius:10, padding:"8px 12px", marginBottom:8, display:"flex", gap:8, alignItems:"center" }}>
@@ -983,7 +1053,8 @@ function PlayContent() {
   const [history, setHistory] = useState<{game:string;delta:number;bal:number}[]>([]);
 
   // 오버레이 상태
-  const [showFreeCoin, setShowFreeCoin] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [showFreeCoin, setShowFreeCoin] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showCharge, setShowCharge] = useState(false);
   const [showAddiction, setShowAddiction] = useState(false);
@@ -1041,7 +1112,8 @@ function PlayContent() {
   const handleRetry = () => {
     setBalance(INITIAL_BALANCE); setRound(0); setTotalDelta(0); setTotalCharged(0);
     setHistory([]); setShowReveal(false); setShowAddiction(false);
-    setAddictionDismissed(false); setWinStreak(0); setShowFreeCoin(true);
+    setAddictionDismissed(false); setWinStreak(0);
+    setShowDisclaimer(false); setShowFreeCoin(true);
   };
 
   const TABS = [
@@ -1060,10 +1132,16 @@ function PlayContent() {
       <style>{`
         @keyframes streakIn { from { opacity:0; transform:scale(0.8) translateY(-10px); } to { opacity:1; transform:scale(1) translateY(0); } }
         @keyframes gold-shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        * { -webkit-tap-highlight-color: transparent !important; }
+        button { -webkit-tap-highlight-color: transparent !important; outline: none; }
+        button:focus { outline: none; }
       `}</style>
 
+      {/* ── 체험 전 자동입력 안내 ── */}
+      {showDisclaimer && <AutoFillNotice onDone={() => { setShowDisclaimer(false); setShowFreeCoin(true); }} />}
+
       {/* ── 무료 코인 팝업 ── */}
-      {showFreeCoin && <FreeCoinPopup siteName={siteName} onClaim={() => setShowFreeCoin(false)} />}
+      {!showDisclaimer && showFreeCoin && <FreeCoinPopup siteName={siteName} onClaim={() => setShowFreeCoin(false)} />}
 
       {/* ── 충전 팝업 ── */}
       {showCharge && <ChargePopup onClose={() => setShowCharge(false)} onCharge={handleCharge} onReveal={() => { setShowCharge(false); setShowReveal(true); }} />}

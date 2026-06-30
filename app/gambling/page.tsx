@@ -662,6 +662,9 @@ export default function GamblingPortalPage() {
 
       <style>{`
         @keyframes shimmer { 0%{background-position:0% center} 100%{background-position:200% center} }
+        * { -webkit-tap-highlight-color: transparent !important; }
+        button { -webkit-tap-highlight-color: transparent !important; outline: none; }
+        button:focus { outline: none; }
       `}</style>
     </div>
   );
