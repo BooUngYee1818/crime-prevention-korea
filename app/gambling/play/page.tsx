@@ -4,15 +4,15 @@ import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 
 // ── 승률: 초반 유리 → 점점 불리, 하지만 연패시 희망고문으로 중독 유도 ─────────
 function getWinRate(round: number, streak: {wins:number; losses:number} = {wins:0,losses:0}): number {
-  // 기본 하우스 엣지 (라운드가 늘수록 점점 불리)
-  const base = round <= 3 ? 0.84 : round <= 7 ? 0.60 : round <= 12 ? 0.40 : round <= 18 ? 0.28 : 0.18;
-  // 연패 시 "희망고문" — 잃을수록 한 번쯤은 따게 해서 그만두지 못하게
-  const lossBump = streak.losses >= 4 ? 0.28 : streak.losses >= 3 ? 0.18 : streak.losses >= 2 ? 0.08 : 0;
-  // 연승 시 쿨다운 — 너무 많이 따면 다시 잃게
-  const winDamp = streak.wins >= 4 ? -0.22 : streak.wins >= 3 ? -0.14 : streak.wins >= 2 ? -0.06 : 0;
-  // 높은 변동성 (±18%) — 랜덤하게 따다가 잃어 예측 불가
-  const variance = (Math.random() - 0.5) * 0.36;
-  return Math.max(0.06, Math.min(0.95, base + lossBump + winDamp + variance));
+  // 1~2판: 거의 무조건 당첨 (미끼), 이후 급격히 하락
+  const base = round <= 2 ? 0.97 : round <= 4 ? 0.72 : round <= 7 ? 0.45 : round <= 12 ? 0.28 : round <= 18 ? 0.18 : 0.11;
+  // 연패 시 "희망고문" — 4연패 후 한 번쯤 따게 해서 못 그만두게
+  const lossBump = streak.losses >= 5 ? 0.35 : streak.losses >= 4 ? 0.22 : streak.losses >= 3 ? 0.12 : 0;
+  // 연승 시 쿨다운 — 연속으로 따면 바로 잃게
+  const winDamp = streak.wins >= 3 ? -0.30 : streak.wins >= 2 ? -0.15 : 0;
+  // 변동성 (±12%) — 너무 예측 가능하지 않게
+  const variance = (Math.random() - 0.5) * 0.24;
+  return Math.max(0.04, Math.min(0.97, base + lossBump + winDamp + variance));
 }
 
 // ── 카드 덱 ──────────────────────────────────────────────────────────────────
