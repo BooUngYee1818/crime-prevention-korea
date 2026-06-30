@@ -2292,89 +2292,85 @@ export default function HomePage() {
               transform: `perspective(800px) rotateY(${tilt.x * 0.12}deg) rotateX(${-tilt.y * 0.08}deg)`,
               transition: "transform 0.1s ease",
               boxShadow: `${-tilt.x * 0.5}px ${tilt.y * 0.5}px 40px rgba(59,130,246,0.25)`,
-              cursor: "none",
+              cursor: "default",
             }}
           >
-            {/* ── 원형 홀로그램 스티커 (커서 따라다님) ── */}
+            {/* ── 고정 홀로그램 정품 스티커 ── */}
             <div style={{
               position: "absolute",
-              left: `${holoPos.x}%`,
-              top: `${holoPos.y}%`,
-              transform: "translate(-50%, -50%)",
-              width: 140, height: 140,
+              bottom: 28, right: 32,
+              width: 90, height: 90,
               borderRadius: "50%",
               pointerEvents: "none",
               zIndex: 10,
-              opacity: isHoveringCard ? 1 : 0,
-              transition: "opacity 0.25s ease, left 0.04s linear, top 0.04s linear",
+              flexShrink: 0,
             }}>
               {/* 은박 베이스 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "linear-gradient(145deg, #e4e4ec 0%, #d2d2de 35%, #eaeaf4 60%, #c8c8d8 100%)",
+                background: "linear-gradient(145deg, #e6e6ee 0%, #d4d4e0 40%, #ececf4 65%, #cacad8 100%)",
               }} />
-              {/* 무지개 띠 — 슬라이드 클립 컨테이너 */}
+              {/* 무지개 띠 — 마우스 X위치로 슬라이드 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 overflow: "hidden",
               }}>
-                {/* 실제 무지개 띠 (oversized → translateX로 좌우 슬라이드) */}
                 <div style={{
                   position: "absolute",
-                  top: "-30%", left: "-40%",
-                  width: "180%", height: "160%",
-                  background: `linear-gradient(${90 + mouseDir * 0.06}deg,
-                    transparent                    0%,
-                    hsl(300, 55%, 80%)             8%,
-                    hsl(330, 65%, 78%)            16%,
-                    hsl(0,   75%, 78%)            24%,
-                    hsl(22,  82%, 80%)            32%,
-                    hsl(48,  78%, 82%)            42%,
-                    hsl(110, 55%, 77%)            52%,
-                    hsl(175, 62%, 77%)            62%,
-                    hsl(210, 70%, 78%)            71%,
-                    hsl(255, 62%, 78%)            80%,
-                    hsl(280, 55%, 80%)            88%,
-                    transparent                   100%
+                  top: "-25%", left: "-50%",
+                  width: "200%", height: "150%",
+                  background: `linear-gradient(${92 + (holoPos.x - 50) * 0.08}deg,
+                    transparent                0%,
+                    hsl(300, 52%, 79%)         7%,
+                    hsl(330, 62%, 77%)        15%,
+                    hsl(0,   72%, 77%)        23%,
+                    hsl(22,  80%, 80%)        32%,
+                    hsl(50,  76%, 82%)        42%,
+                    hsl(112, 52%, 76%)        52%,
+                    hsl(176, 58%, 76%)        62%,
+                    hsl(212, 68%, 77%)        71%,
+                    hsl(252, 60%, 77%)        80%,
+                    hsl(282, 52%, 79%)        88%,
+                    transparent              100%
                   )`,
-                  transform: `translateX(${(holoPos.x - 50) * 1.2}px) translateY(${(holoPos.y - 50) * 0.25}px)`,
+                  transform: `translateX(${(holoPos.x - 50) * 0.7}px) translateY(${(holoPos.y - 50) * 0.15}px)`,
                   mixBlendMode: "multiply",
-                  opacity: 0.92,
-                  transition: "transform 0.04s linear",
+                  opacity: 0.95,
+                  transition: "transform 0.06s linear, background 0.06s linear",
                 }} />
               </div>
-              {/* 미세 수평 광택선 (은박 질감) */}
+              {/* 미세 광택선 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 backgroundImage: `repeating-linear-gradient(
-                  ${90 + mouseDir * 0.04}deg,
-                  rgba(255,255,255,0) 0px,
-                  rgba(255,255,255,0) 4px,
-                  rgba(255,255,255,0.10) 4.5px,
-                  rgba(255,255,255,0) 5px
+                  ${88 + (holoPos.x - 50) * 0.05}deg,
+                  rgba(255,255,255,0)    0px,
+                  rgba(255,255,255,0)    4.5px,
+                  rgba(255,255,255,0.11) 5px,
+                  rgba(255,255,255,0)    5.5px
                 )`,
                 mixBlendMode: "screen",
               }} />
-              {/* 스펙큘러 하이라이트 — 커서 위치 따라 이동 */}
+              {/* 스펙큘러 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `radial-gradient(ellipse 55% 45% at ${50 + (holoPos.x - 50) * 0.28}% ${50 + (holoPos.y - 50) * 0.28}%,
-                  rgba(255,255,255,0.62) 0%,
-                  rgba(255,255,255,0.22) 30%,
-                  transparent 65%
+                background: `radial-gradient(ellipse 52% 44% at ${48 + (holoPos.x - 50) * 0.3}% ${46 + (holoPos.y - 50) * 0.3}%,
+                  rgba(255,255,255,0.65) 0%,
+                  rgba(255,255,255,0.20) 32%,
+                  transparent 62%
                 )`,
-                transition: "background 0.05s linear",
+                transition: "background 0.06s linear",
               }} />
               {/* 엣지 그림자 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.22) 100%)",
+                background: "radial-gradient(circle at 50% 50%, transparent 52%, rgba(0,0,0,0.20) 100%)",
               }} />
-              {/* 테두리 링 */}
+              {/* 테두리 */}
               <div style={{
                 position: "absolute", inset: 1, borderRadius: "50%",
-                border: "1.5px solid rgba(255,255,255,0.55)",
-                boxShadow: "0 0 8px 2px rgba(180,160,220,0.3), inset 0 0 5px rgba(255,255,255,0.15)",
+                border: "1.5px solid rgba(255,255,255,0.5)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.25), inset 0 0 5px rgba(255,255,255,0.15)",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
