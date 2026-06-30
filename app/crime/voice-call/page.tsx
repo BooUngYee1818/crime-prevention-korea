@@ -390,12 +390,22 @@ function CallScreen({
   const now = new Date();
   const timeStr = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
 
+  // 시나리오별 컬러 팔레트
+  const samsungPalette = caller.includes("민준") || caller.includes("엄마")
+    ? { bg: "linear-gradient(160deg, #0f4c35 0%, #1a6b47 30%, #0d3d2a 65%, #081f16 100%)", accent: "#4ade80", accentDark: "#16a34a", orb1: "#4ade8022", orb2: "#22c55e11" }
+    : { bg: "linear-gradient(160deg, #1e1b4b 0%, #312e81 30%, #1e1b4b 65%, #0f0e2a 100%)", accent: "#818cf8", accentDark: "#4f46e5", orb1: "#818cf822", orb2: "#6366f111" };
+
+  const iosPalette = caller.includes("민준") || caller.includes("엄마")
+    ? { bg: "linear-gradient(160deg, #7c2d12 0%, #c2410c 25%, #9a3412 55%, #431407 100%)", accent: "#fb923c", accentDark: "#ea580c" }
+    : { bg: "linear-gradient(160deg, #1e3a5f 0%, #1d4ed8 25%, #1e3a8a 55%, #0c1a3d 100%)", accent: "#60a5fa", accentDark: "#2563eb" };
+
   // ── Samsung One UI 8.5 ──────────────────────────────────────────────────────
   if (isSamsung) {
+    const p = samsungPalette;
     return (
       <div style={{
         flex: 1, display: "flex", flexDirection: "column", height: "100%", overflow: "hidden",
-        background: "linear-gradient(180deg, #0d1117 0%, #0a1628 40%, #090e1a 100%)",
+        background: p.bg,
         position: "relative",
       }}>
         <style>{`
@@ -405,14 +415,19 @@ function CallScreen({
           @keyframes dot-bounce { 0%,80%,100%{transform:scale(0);opacity:0.3} 40%{transform:scale(1);opacity:1} }
           @keyframes choice-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
           @keyframes countdown-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-          @keyframes ou-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         `}</style>
 
-        {/* 배경 블러 원형 장식 */}
+        {/* 배경 글로우 오브 */}
         <div style={{
-          position: "absolute", top: -60, left: -60,
-          width: 260, height: 260, borderRadius: "50%",
-          background: "radial-gradient(circle, #1a4a2e44 0%, transparent 70%)",
+          position: "absolute", top: -80, right: -60,
+          width: 300, height: 300, borderRadius: "50%",
+          background: `radial-gradient(circle, ${p.orb1} 0%, transparent 70%)`,
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute", bottom: 100, left: -80,
+          width: 250, height: 250, borderRadius: "50%",
+          background: `radial-gradient(circle, ${p.orb2} 0%, transparent 70%)`,
           pointerEvents: "none",
         }} />
 
@@ -444,10 +459,7 @@ function CallScreen({
         {/* 수신 라벨 */}
         <div style={{ textAlign: "center", padding: "16px 20px 0" }}>
           {callPhase === "ringing" ? (
-            <p style={{
-              color: "#4ade80", fontSize: 13, fontWeight: 600,
-              animation: "ou-pulse 1.5s ease infinite",
-            }}>수신 전화</p>
+            <p style={{ color: p.accent, fontSize: 13, fontWeight: 600, animation: "ou-pulse 1.5s ease infinite" }}>수신 전화</p>
           ) : (
             <p style={{ color: "#ffffffa0", fontSize: 13, fontWeight: 500 }}>통화 중 · {timer}</p>
           )}
@@ -458,21 +470,19 @@ function CallScreen({
           <div style={{ display: "inline-block", position: "relative" }}>
             {callPhase === "ringing" && [0, 0.5, 1].map((delay, i) => (
               <div key={i} style={{
-                position: "absolute",
-                top: "50%", left: "50%",
+                position: "absolute", top: "50%", left: "50%",
                 transform: "translate(-50%,-50%)",
-                width: 80, height: 80,
-                borderRadius: "50%",
-                border: "2px solid #4ade8066",
+                width: 80, height: 80, borderRadius: "50%",
+                border: `2px solid ${p.accent}55`,
                 animation: `ou-ripple 2.4s ease-out ${delay}s infinite`,
               }} />
             ))}
             <div style={{
-              width: 82, height: 82, borderRadius: "50%",
-              background: "linear-gradient(135deg, #1e5c3a, #22c55e)",
+              width: 86, height: 86, borderRadius: "50%",
+              background: `linear-gradient(135deg, ${p.accentDark}, ${p.accent})`,
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 38, position: "relative", zIndex: 1,
-              boxShadow: "0 0 0 3px #0d1117, 0 0 0 5px #22c55e44",
+              fontSize: 40, position: "relative", zIndex: 1,
+              boxShadow: `0 0 0 3px rgba(0,0,0,0.4), 0 0 0 5px ${p.accent}33, 0 8px 24px ${p.accent}44`,
             }}>👤</div>
           </div>
         </div>
@@ -480,16 +490,16 @@ function CallScreen({
         {/* 이름 */}
         <div style={{ textAlign: "center", padding: "0 20px 4px" }}>
           <p style={{ color: "#fff", fontSize: 26, fontWeight: 700, letterSpacing: -0.5 }}>{caller}</p>
-          <p style={{ color: "#ffffff60", fontSize: 12, marginTop: 3 }}>{callerSub}</p>
+          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 3 }}>{callerSub}</p>
         </div>
 
         {/* 거절 카운트다운 */}
         {refuseCountdown !== null && refuseCountdown > 0 && (
           <div style={{ textAlign: "center", marginTop: 6 }}>
             <span style={{
-              background: "#052e1699", border: "1px solid #22c55e55",
+              background: "rgba(0,0,0,0.4)", border: `1px solid ${p.accent}55`,
               borderRadius: 20, padding: "4px 14px",
-              color: "#4ade80", fontSize: 11, fontWeight: 700,
+              color: p.accent, fontSize: 11, fontWeight: 700,
               animation: "countdown-pulse 1s ease infinite", display: "inline-block",
             }}>🏆 {refuseCountdown}초 버티면 성공!</span>
           </div>
@@ -500,10 +510,9 @@ function CallScreen({
           <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "8px 12px 0", overflowY: "auto", minHeight: 0 }}>
             {showTransfer && (
               <div style={{
-                background: "#1a0505cc", border: "1px solid #ef444455",
+                background: "rgba(127,29,29,0.7)", border: "1px solid #ef444455",
                 borderRadius: 14, padding: "12px 14px", marginBottom: 8,
-                animation: "slide-up 0.4s ease", flexShrink: 0,
-                backdropFilter: "blur(8px)",
+                animation: "slide-up 0.4s ease", flexShrink: 0, backdropFilter: "blur(8px)",
               }}>
                 <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
                 <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>{(transferAmount / 10000).toLocaleString()}만원</p>
@@ -517,12 +526,12 @@ function CallScreen({
             {currentTurn && (
               <div style={{ animation: "slide-up 0.3s ease" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg,#1e5c3a,#22c55e)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
-                  <div style={{ background: "#1e2d3d", borderRadius: "4px 12px 12px 12px", padding: "9px 12px", maxWidth: "84%", border: "1px solid #2d3f55" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: `linear-gradient(135deg,${p.accentDark},${p.accent})`, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+                  <div style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", borderRadius: "4px 12px 12px 12px", padding: "9px 12px", maxWidth: "84%", border: "1px solid rgba(255,255,255,0.1)" }}>
                     {speaking ? (
                       <div style={{ display: "flex", gap: 4, alignItems: "center", height: 18 }}>
                         {[0, 0.2, 0.4].map((delay, i) => (
-                          <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80", animation: `dot-bounce 1.4s ${delay}s ease-in-out infinite` }} />
+                          <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: p.accent, animation: `dot-bounce 1.4s ${delay}s ease-in-out infinite` }} />
                         ))}
                       </div>
                     ) : (
@@ -534,8 +543,9 @@ function CallScreen({
                   <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 36, animation: "choice-in 0.3s ease" }}>
                     {currentTurn.choices.map((choice, i) => (
                       <button key={i} onClick={() => onChoice(choice)} style={{
-                        background: choice.nextTurn === -1 ? "#0f1923" : choice.nextTurn === -2 ? "#3d1a00" : "#0a1e3a",
-                        border: `1px solid ${choice.nextTurn === -1 ? "#2d3748" : choice.nextTurn === -2 ? "#c05c00" : "#1e4d8c"}`,
+                        background: choice.nextTurn === -1 ? "rgba(15,25,35,0.8)" : choice.nextTurn === -2 ? "rgba(61,26,0,0.8)" : "rgba(10,30,58,0.8)",
+                        backdropFilter: "blur(8px)",
+                        border: `1px solid ${choice.nextTurn === -1 ? "rgba(100,116,139,0.3)" : choice.nextTurn === -2 ? "rgba(192,92,0,0.4)" : "rgba(59,130,246,0.4)"}`,
                         borderRadius: 10, padding: "8px 12px",
                         color: choice.nextTurn === -1 ? "#94a3b8" : choice.nextTurn === -2 ? "#fbbf24" : "#60a5fa",
                         fontSize: 12, cursor: "pointer", textAlign: "left", lineHeight: 1.5,
@@ -555,7 +565,6 @@ function CallScreen({
 
         {/* 하단 버튼 영역 */}
         <div style={{ padding: "8px 20px 30px", flexShrink: 0 }}>
-          {/* 액션 버튼 그리드 (active) */}
           {callPhase === "active" && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 14 }}>
               {[
@@ -568,55 +577,54 @@ function CallScreen({
               ].map((btn, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                   <button onClick={btn.action} style={{
-                    width: 50, height: 50, borderRadius: 16,
-                    background: (btn as {active?:boolean}).active ? "#22c55e" : "rgba(255,255,255,0.10)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    width: 52, height: 52, borderRadius: 18,
+                    background: (btn as {active?:boolean}).active ? p.accent : "rgba(255,255,255,0.12)",
+                    border: `1px solid ${(btn as {active?:boolean}).active ? p.accent : "rgba(255,255,255,0.1)"}`,
                     cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-                    color: (btn as {active?:boolean}).active ? "#fff" : "#ffffffcc",
+                    color: (btn as {active?:boolean}).active ? "#000" : "#ffffffcc",
                     backdropFilter: "blur(10px)",
+                    boxShadow: (btn as {active?:boolean}).active ? `0 4px 16px ${p.accent}60` : "none",
                   }}>{btn.icon}</button>
-                  <span style={{ color: "#ffffff55", fontSize: 9.5 }}>{btn.label}</span>
+                  <span style={{ color: "rgba(255,255,255,0.45)", fontSize: 9.5 }}>{btn.label}</span>
                 </div>
               ))}
             </div>
           )}
-
-          {/* 통화 버튼 */}
           <div style={{ display: "flex", justifyContent: callPhase === "ringing" ? "space-around" : "center", alignItems: "center" }}>
             {callPhase === "ringing" && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                 <button onClick={onHangUp} style={{
-                  width: 64, height: 64, borderRadius: "50%",
+                  width: 66, height: 66, borderRadius: "50%",
                   background: "linear-gradient(135deg,#dc2626,#b91c1c)",
                   border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 6px 24px #ef444460",
+                  boxShadow: "0 6px 24px rgba(239,68,68,0.55)",
                 }}><PhoneOff size={26} color="#fff"/></button>
-                <span style={{ color: "#ffffff60", fontSize: 11 }}>거절</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>거절</span>
               </div>
             )}
             {callPhase === "ringing" && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                 <button onClick={onPickUp} style={{
-                  width: 64, height: 64, borderRadius: "50%",
-                  background: "linear-gradient(135deg,#22c55e,#16a34a)",
+                  width: 66, height: 66, borderRadius: "50%",
+                  background: `linear-gradient(135deg,${p.accent},${p.accentDark})`,
                   border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 6px 24px #22c55e60",
+                  boxShadow: `0 6px 24px ${p.accent}66`,
                 }}><Phone size={26} color="#fff"/></button>
-                <span style={{ color: "#ffffff60", fontSize: 11 }}>수락</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>수락</span>
               </div>
             )}
             {callPhase === "active" && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                 <button onClick={onHangUp} style={{
-                  width: 64, height: 64, borderRadius: "50%",
+                  width: 66, height: 66, borderRadius: "50%",
                   background: "linear-gradient(135deg,#dc2626,#b91c1c)",
                   border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 6px 24px #ef444460",
+                  boxShadow: "0 6px 24px rgba(239,68,68,0.55)",
                 }}><PhoneOff size={26} color="#fff"/></button>
-                <span style={{ color: "#ffffff60", fontSize: 11 }}>통화 종료</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>통화 종료</span>
               </div>
             )}
           </div>
@@ -626,10 +634,11 @@ function CallScreen({
   }
 
   // ── iOS 26 Liquid Glass ─────────────────────────────────────────────────────
+  const ip = iosPalette;
   return (
     <div style={{
       flex: 1, display: "flex", flexDirection: "column", height: "100%", overflow: "hidden",
-      background: "linear-gradient(180deg, #1a0e3a 0%, #2d1b69 30%, #1e0e3a 65%, #0d0618 100%)",
+      background: ip.bg,
       position: "relative",
     }}>
       <style>{`
@@ -639,20 +648,20 @@ function CallScreen({
         @keyframes dot-bounce { 0%,80%,100%{transform:scale(0);opacity:0.3} 40%{transform:scale(1);opacity:1} }
         @keyframes choice-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         @keyframes countdown-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-        @keyframes ios-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+        @keyframes ios-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
       `}</style>
 
       {/* 배경 글로우 오브 */}
       <div style={{
-        position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)",
-        width: 280, height: 280, borderRadius: "50%",
-        background: "radial-gradient(circle, #7c3aed33 0%, #4c1d9522 40%, transparent 70%)",
+        position: "absolute", top: -60, left: "50%", transform: "translateX(-50%)",
+        width: 300, height: 300, borderRadius: "50%",
+        background: `radial-gradient(circle, ${ip.accent}28 0%, transparent 70%)`,
         pointerEvents: "none",
       }} />
       <div style={{
-        position: "absolute", bottom: 80, right: -40,
-        width: 180, height: 180, borderRadius: "50%",
-        background: "radial-gradient(circle, #06b6d422 0%, transparent 70%)",
+        position: "absolute", bottom: 60, right: -50,
+        width: 200, height: 200, borderRadius: "50%",
+        background: `radial-gradient(circle, ${ip.accentDark}22 0%, transparent 70%)`,
         pointerEvents: "none",
       }} />
 
@@ -704,18 +713,17 @@ function CallScreen({
             <div key={i} style={{
               position: "absolute", top: "50%", left: "50%",
               transform: "translate(-50%,-50%)",
-              width: 84, height: 84, borderRadius: "50%",
-              border: "1.5px solid rgba(167,139,250,0.5)",
+              width: 88, height: 88, borderRadius: "50%",
+              border: `1.5px solid ${ip.accent}55`,
               animation: `ios-ripple 2.8s ease-out ${delay}s infinite`,
             }} />
           ))}
-          {/* iOS 26 스타일 아바타: 더 큰 원형, 부드러운 그라디언트 */}
           <div style={{
-            width: 90, height: 90, borderRadius: "50%",
-            background: "linear-gradient(135deg, #5b21b6, #7c3aed, #9333ea)",
+            width: 92, height: 92, borderRadius: "50%",
+            background: `linear-gradient(135deg, ${ip.accentDark}, ${ip.accent})`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 42, position: "relative", zIndex: 1,
-            boxShadow: "0 0 0 2px rgba(255,255,255,0.15), 0 8px 32px rgba(124,58,237,0.5)",
+            fontSize: 44, position: "relative", zIndex: 1,
+            boxShadow: `0 0 0 2px rgba(255,255,255,0.2), 0 8px 32px ${ip.accent}55`,
             animation: callPhase === "ringing" ? "ios-float 2s ease-in-out infinite" : "none",
           }}>👤</div>
         </div>
@@ -761,7 +769,7 @@ function CallScreen({
           {currentTurn && (
             <div style={{ animation: "ios-slide-up 0.3s ease" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg,#5b21b6,#7c3aed)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: `linear-gradient(135deg,${ip.accentDark},${ip.accent})`, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
                 <div style={{ background: "rgba(255,255,255,0.10)", backdropFilter: "blur(16px)", borderRadius: "4px 14px 14px 14px", padding: "9px 12px", maxWidth: "84%", border: "1px solid rgba(255,255,255,0.12)" }}>
                   {speaking ? (
                     <div style={{ display: "flex", gap: 4, alignItems: "center", height: 18 }}>
