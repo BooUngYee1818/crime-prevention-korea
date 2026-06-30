@@ -1132,6 +1132,44 @@ function PlayContent() {
   const [showReveal, setShowReveal] = useState(false);
   const [addictionDismissed, setAddictionDismissed] = useState(false);
 
+  // ── 자동 사이트 폐쇄 ──────────────────────────────────────────────────────
+  const [forceClosed, setForceClosed] = useState(false);
+  const [forceCloseReason, setForceCloseReason] = useState<string[]>([]);
+  const [closeCountdown, setCloseCountdown] = useState(10);
+  const [chargeCount, setChargeCount] = useState(0);
+  const sessionStart = useRef(Date.now());
+  const forceCloseRef = useRef(false);
+
+  const triggerForceClose = useCallback((reasons: string[]) => {
+    if (forceCloseRef.current) return;
+    forceCloseRef.current = true;
+    setForceCloseReason(reasons);
+    setForceClosed(true);
+    setCloseCountdown(10);
+  }, []);
+
+  // 시간 감시 (8분 연속 플레이)
+  useEffect(() => {
+    const t = setInterval(() => {
+      if (forceCloseRef.current) return;
+      const mins = (Date.now() - sessionStart.current) / 60000;
+      if (mins >= 8) {
+        triggerForceClose([
+          `⏱️ 연속 ${Math.floor(mins)}분 플레이 감지`,
+          "장시간 도박은 판단력을 흐리게 합니다.",
+        ]);
+      }
+    }, 10000);
+    return () => clearInterval(t);
+  }, [triggerForceClose]);
+
+  // 카운트다운 (폐쇄 후 10초)
+  useEffect(() => {
+    if (!forceClosed) return;
+    const t = setInterval(() => setCloseCountdown(c => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(t);
+  }, [forceClosed]);
+
   // 연승/연패 카운터
   const [winStreak, setWinStreak] = useState(0);
   const [lossStreak, setLossStreak] = useState(0);
@@ -1149,7 +1187,6 @@ function PlayContent() {
   }, [balance]);
 
   const handleResult = useCallback((delta: number) => {
-    setRound(r => r + 1);
     setBalance(b => {
       const nb = Math.max(0, b + delta);
       setHistory(h => [{ game: activeGame, delta, bal: nb }, ...h].slice(0, 20));
@@ -1175,12 +1212,33 @@ function PlayContent() {
     if (!addictionDismissed && totalDelta + delta < -40000) {
       setTimeout(() => setShowAddiction(true), 600);
     }
-  }, [activeGame, totalDelta, addictionDismissed]);
+
+    // 25판 이상 플레이 → 강제 종료
+    setRound(r => {
+      if (r + 1 >= 25 && !forceCloseRef.current) {
+        setTimeout(() => triggerForceClose([
+          "🎰 25판 연속 게임 감지",
+          "실제 도박 중독자의 평균 연속 게임 횟수를 초과했습니다.",
+        ]), 800);
+      }
+      return r + 1;
+    });
+  }, [activeGame, totalDelta, addictionDismissed, triggerForceClose]);
 
   const handleCharge = (amount: number) => {
     setBalance(b => b + amount);
     setTotalCharged(t => t + amount);
     setShowCharge(false);
+    setChargeCount(c => {
+      const next = c + 1;
+      if (next >= 2 && !forceCloseRef.current) {
+        setTimeout(() => triggerForceClose([
+          `💳 ${next}회 충전 감지`,
+          "충전을 반복하는 것은 도박 중독의 대표적 신호입니다.",
+        ]), 400);
+      }
+      return next;
+    });
   };
 
   const handleRetry = () => {
@@ -1210,6 +1268,72 @@ function PlayContent() {
         button { -webkit-tap-highlight-color: transparent !important; outline: none; }
         button:focus { outline: none; }
       `}</style>
+
+      {/* ── 자동 사이트 폐쇄 ── */}
+      {forceClosed && (
+        <div style={{ position:"fixed", inset:0, zIndex:9999, background:"#000", display:"flex", alignItems:"center", justifyContent:"center", padding:20, flexDirection:"column" }}>
+          <style>{`@keyframes glitch{0%,100%{transform:translate(0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}}`}</style>
+
+          {/* 경광등 효과 */}
+          <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 50% 0%,#ef444411,transparent 60%)", animation:"blink 0.8s ease-in-out infinite", pointerEvents:"none" }} />
+
+          <div style={{ maxWidth:460, width:"100%", textAlign:"center", position:"relative", zIndex:1 }}>
+            {/* 시스템 종료 아이콘 */}
+            <div style={{ fontSize:64, marginBottom:16, animation:"glitch 0.5s ease-in-out infinite" }}>🚫</div>
+
+            <div style={{ background:"#ef444422", border:"2px solid #ef4444", borderRadius:4, padding:"6px 16px", display:"inline-block", marginBottom:20 }}>
+              <span style={{ color:"#ef4444", fontSize:11, fontWeight:900, letterSpacing:3 }}>SYSTEM SHUTDOWN</span>
+            </div>
+
+            <h2 style={{ color:"#fff", fontSize:22, fontWeight:900, marginBottom:6, lineHeight:1.4 }}>
+              이 사이트가 자동으로<br/>
+              <span style={{ color:"#ef4444" }}>폐쇄되었습니다</span>
+            </h2>
+            <p style={{ color:"#6b7280", fontSize:13, marginBottom:24 }}>
+              과몰입 방지 시스템이 작동했습니다
+            </p>
+
+            {/* 감지 이유 */}
+            <div style={{ background:"#0f0f0f", border:"1px solid #1f1f1f", borderRadius:16, padding:"18px 20px", marginBottom:24, textAlign:"left" }}>
+              <p style={{ color:"#f59e0b", fontWeight:700, fontSize:12, marginBottom:12 }}>⚠️ 감지된 과몰입 신호</p>
+              {forceCloseReason.map((r, i) => (
+                <div key={i} style={{ display:"flex", gap:10, alignItems:"flex-start", marginBottom:8 }}>
+                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#ef4444", flexShrink:0, marginTop:5 }} />
+                  <p style={{ color:"#fca5a5", fontSize:13, lineHeight:1.6 }}>{r}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* 도박 중독 상담 */}
+            <div style={{ background:"#052e16", border:"1px solid #16a34a44", borderRadius:16, padding:"16px 20px", marginBottom:24 }}>
+              <p style={{ color:"#22c55e", fontWeight:700, fontSize:13, marginBottom:8 }}>💚 도움이 필요하신가요?</p>
+              <p style={{ color:"#86efac", fontSize:12, lineHeight:1.8 }}>
+                한국도박문제예방치유원<br/>
+                <strong style={{ fontSize:22, letterSpacing:2, color:"#22c55e" }}>☎ 1336</strong><br/>
+                <span style={{ color:"#4ade80", fontSize:11 }}>24시간 무료 · 익명 보장</span>
+              </p>
+            </div>
+
+            {/* 버튼 */}
+            <div style={{ display:"flex", gap:10 }}>
+              <button
+                onClick={() => router.push("/")}
+                style={{ flex:2, padding:"14px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", border:"none", cursor:"pointer" }}
+              >
+                🛡️ 예방센터로 나가기
+              </button>
+              <button
+                disabled={closeCountdown > 0}
+                onClick={() => { forceCloseRef.current = false; setForceClosed(false); setCloseCountdown(10); sessionStart.current = Date.now(); }}
+                style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:13, background:"#111", border:"1px solid #2a2a2a", color: closeCountdown > 0 ? "#444" : "#888", cursor: closeCountdown > 0 ? "default" : "pointer" }}
+              >
+                {closeCountdown > 0 ? `${closeCountdown}초 후 가능` : "무시하고 계속"}
+              </button>
+            </div>
+            <p style={{ color:"#1f1f1f", fontSize:10, marginTop:12 }}>본 기능은 과몰입 예방을 위해 자동 작동합니다</p>
+          </div>
+        </div>
+      )}
 
       {/* ── 체험 전 자동입력 안내 ── */}
       {showDisclaimer && <AutoFillNotice onDone={() => { setShowDisclaimer(false); setShowFreeCoin(true); }} />}
