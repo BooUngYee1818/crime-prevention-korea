@@ -8,9 +8,9 @@ interface Stats { total: number; gender: Record<string, number>; age: Record<str
 interface GuestEntry { id: string; message: string; gender: string; ageGroup: string; createdAt: number; }
 
 const AGE_ORDER = ["10대","20대","30대","40대","50대","60대 이상"];
-const AGE_COLOR = ["#3b82f6","#8b5cf6","#ec4899","#f59e0b","#22c55e","#ef4444"];
+const AGE_COLOR = ["#a57cbb","#a57cbb","#b3889e","#f59e0b","#22c55e","#ef4444"];
 const GENDER_EMOJI: Record<string, string> = { 남성:"👨", 여성:"👩", 비공개:"🔒" };
-const GENDER_COLOR: Record<string, string> = { 남성:"#3b82f6", 여성:"#ec4899", 비공개:"#6b7280" };
+const GENDER_COLOR: Record<string, string> = { 남성:"#a57cbb", 여성:"#b3889e", 비공개:"#6b7280" };
 
 export default function StatsModal({ onClose }: { onClose: () => void }) {
   const { lang } = useLang();
@@ -74,7 +74,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
   const topCountries = Object.entries(stats?.country ?? {})
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
-  const COUNTRY_COLORS = ["#f59e0b","#3b82f6","#22c55e","#ec4899","#8b5cf6","#f97316","#06b6d4","#e11d48","#84cc16","#a78bfa"];
+  const COUNTRY_COLORS = ["#f59e0b","#a57cbb","#22c55e","#b3889e","#a57cbb","#f97316","#06b6d4","#e11d48","#84cc16","#c58dc6"];
 
   async function handleSubmit() {
     if (!msg.trim() || !gender || !ageGroup) { setSubmitError(t("stats_error", lang)); return; }
@@ -114,8 +114,8 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
       backdropFilter: "blur(4px)",
     }}>
       <div style={{
-        width: "100%", maxWidth: 480, background: "#0a0a0a",
-        border: "1px solid #1e1e1e", borderRadius: "24px 24px 0 0",
+        width: "100%", maxWidth: 480, background: "#130c1c",
+        border: "1px solid #2a1a3a", borderRadius: "24px 24px 0 0",
         maxHeight: "90vh", overflowY: "auto", padding: "0 0 40px",
       }}>
         <div style={{ display: "flex", justifyContent: "center", padding: "14px 0 0" }}>
@@ -124,7 +124,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px 20px" }}>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 20, margin: 0 }}>{t("stats_modal_title", lang)}</h2>
           <button onClick={onClose} style={{
-            background: "#1a1a1a", border: "1px solid #2a2a2a", color: "#6b7280",
+            background: "#231232", border: "1px solid #2a2a2a", color: "#6b7280",
             width: 32, height: 32, borderRadius: "50%", cursor: "pointer",
             fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center",
           }}>×</button>
@@ -136,13 +136,13 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
           ) : (
             <>
               {/* 총 이용자 */}
-              <div style={{ background:"linear-gradient(135deg,#0a1628,#0d1f3c)", border:"1px solid #1e3a5f", borderRadius:20, padding:24, textAlign:"center" }}>
-                <p style={{ color:"#60a5fa", fontSize:13, marginBottom:6 }}>{t("stats_total_lbl", lang)}</p>
+              <div style={{ background:"linear-gradient(135deg,#160a26,#1c0f32)", border:"1px solid #3d1f5a", borderRadius:20, padding:24, textAlign:"center" }}>
+                <p style={{ color:"#c58dc6", fontSize:13, marginBottom:6 }}>{t("stats_total_lbl", lang)}</p>
                 <p style={{ color:"#fff", fontWeight:900, fontSize:52, lineHeight:1 }}>{(stats?.total ?? 0).toLocaleString()}</p>
                 <p style={{ color:"#4b7ab5", fontSize:12, marginTop:8 }}>
                   {unit}{unit ? " " : ""}{t("stats_total_sub", lang)}
                 </p>
-                <div style={{ marginTop:14, padding:"10px 16px", background:"#0d2a4a", borderRadius:12, display:"inline-block" }}>
+                <div style={{ marginTop:14, padding:"10px 16px", background:"#241040", borderRadius:12, display:"inline-block" }}>
                   <p style={{ color:"#22c55e", fontSize:13, fontWeight:700 }}>
                     {t("stats_prevention", lang)} {Math.floor((stats?.total ?? 0) * 0.73).toLocaleString()}{unit}
                   </p>
@@ -151,7 +151,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
               </div>
 
               {/* 성별 */}
-              <div style={{ background:"#0d0d0d", border:"1px solid #1e1e1e", borderRadius:20, padding:20 }}>
+              <div style={{ background:"#1a1026", border:"1px solid #2a1a3a", borderRadius:20, padding:20 }}>
                 <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>{t("stats_gender_dist", lang)}</p>
                 {["남성","여성","비공개"].map((g) => {
                   const count = stats?.gender?.[g] ?? 0;
@@ -162,7 +162,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                         <span style={{ color:"#d1d5db", fontSize:13 }}>{GENDER_EMOJI[g]} {GENDER_LABEL[g]}</span>
                         <span style={{ color:"#9ca3af", fontSize:13 }}>{count.toLocaleString()}{unit} ({pct}%)</span>
                       </div>
-                      <div style={{ height:8, background:"#1a1a1a", borderRadius:4, overflow:"hidden" }}>
+                      <div style={{ height:8, background:"#231232", borderRadius:4, overflow:"hidden" }}>
                         <div style={{ height:"100%", borderRadius:4, width:`${pct}%`, background:GENDER_COLOR[g], transition:"width 0.6s ease" }} />
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
               </div>
 
               {/* 연령대 */}
-              <div style={{ background:"#0d0d0d", border:"1px solid #1e1e1e", borderRadius:20, padding:20 }}>
+              <div style={{ background:"#1a1026", border:"1px solid #2a1a3a", borderRadius:20, padding:20 }}>
                 <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>{t("stats_age_dist", lang)}</p>
                 {AGE_ORDER.map((ag, i) => {
                   const count = stats?.age?.[ag] ?? 0;
@@ -182,7 +182,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                         <span style={{ color:"#d1d5db", fontSize:13 }}>{AGE_LABEL[ag]}</span>
                         <span style={{ color:"#9ca3af", fontSize:13 }}>{count.toLocaleString()}{unit} ({pct}%)</span>
                       </div>
-                      <div style={{ height:8, background:"#1a1a1a", borderRadius:4, overflow:"hidden" }}>
+                      <div style={{ height:8, background:"#231232", borderRadius:4, overflow:"hidden" }}>
                         <div style={{ height:"100%", borderRadius:4, width:`${pct}%`, background:AGE_COLOR[i], transition:"width 0.6s ease" }} />
                       </div>
                     </div>
@@ -191,7 +191,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
               </div>
 
               {/* 국가별 */}
-              <div style={{ background:"#0d0d0d", border:"1px solid #1e1e1e", borderRadius:20, padding:20 }}>
+              <div style={{ background:"#1a1026", border:"1px solid #2a1a3a", borderRadius:20, padding:20 }}>
                 <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>
                   🌍 {t("stats_country_dist", lang)}
                 </p>
@@ -209,7 +209,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                           </span>
                           <span style={{ color:"#9ca3af", fontSize:13 }}>{count.toLocaleString()}{unit} ({pct}%)</span>
                         </div>
-                        <div style={{ height:8, background:"#1a1a1a", borderRadius:4, overflow:"hidden" }}>
+                        <div style={{ height:8, background:"#231232", borderRadius:4, overflow:"hidden" }}>
                           <div style={{ height:"100%", borderRadius:4, width:`${pct}%`, background:COUNTRY_COLORS[i % COUNTRY_COLORS.length], transition:"width 0.6s ease" }} />
                         </div>
                       </div>
@@ -221,7 +221,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
           )}
 
           {/* 방명록 */}
-          <div style={{ background:"#0d0d0d", border:"1px solid #1e1e1e", borderRadius:20, padding:20 }}>
+          <div style={{ background:"#1a1026", border:"1px solid #2a1a3a", borderRadius:20, padding:20 }}>
             <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>
               {t("stats_guestbook", lang)}
             </p>
@@ -238,7 +238,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                 <div style={{ display:"flex", gap:8 }}>
                   <select value={gender} onChange={e => setGender(e.target.value)} style={{
                     flex:1, padding:"9px 10px", borderRadius:10, fontSize:13,
-                    background:"#1a1a1a", border:"1px solid #2a2a2a", color:gender?"#fff":"#6b7280",
+                    background:"#231232", border:"1px solid #2a2a2a", color:gender?"#fff":"#6b7280",
                     outline:"none", cursor:"pointer",
                   }}>
                     <option value="" disabled>{t("stats_gender_sel", lang)}</option>
@@ -248,7 +248,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                   </select>
                   <select value={ageGroup} onChange={e => setAgeGroup(e.target.value)} style={{
                     flex:1, padding:"9px 10px", borderRadius:10, fontSize:13,
-                    background:"#1a1a1a", border:"1px solid #2a2a2a", color:ageGroup?"#fff":"#6b7280",
+                    background:"#231232", border:"1px solid #2a2a2a", color:ageGroup?"#fff":"#6b7280",
                     outline:"none", cursor:"pointer",
                   }}>
                     <option value="" disabled>{t("stats_age_sel", lang)}</option>
@@ -265,7 +265,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                     rows={3}
                     style={{
                       width:"100%", padding:"10px 12px", borderRadius:10, fontSize:13,
-                      background:"#1a1a1a", border:"1px solid #2a2a2a", color:"#fff",
+                      background:"#231232", border:"1px solid #2a2a2a", color:"#fff",
                       outline:"none", resize:"none", lineHeight:1.6,
                       fontFamily:"inherit", boxSizing:"border-box",
                     }}
@@ -286,7 +286,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                 </div>
                 <button onClick={handleSubmit} disabled={submitting} style={{
                   padding:"11px 0", borderRadius:12, fontSize:13, fontWeight:700,
-                  background: submitting ? "#1a1a1a" : "linear-gradient(135deg,#534AB7,#7c3aed)",
+                  background: submitting ? "#231232" : "linear-gradient(135deg,#534AB7,#7c3aed)",
                   color: submitting ? "#4a4a4a" : "#fff",
                   border:"none", cursor: submitting ? "default" : "pointer", transition:"all 0.2s",
                 }}>
@@ -302,7 +302,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
             ) : (
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 {entries.map(entry => (
-                  <div key={entry.id} style={{ background:"#141414", border:"1px solid #222", borderRadius:14, padding:"12px 14px" }}>
+                  <div key={entry.id} style={{ background:"#1e1028", border:"1px solid #222", borderRadius:14, padding:"12px 14px" }}>
                     <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
                       <span style={{ fontSize:11, color:GENDER_COLOR[entry.gender]??"#6b7280", fontWeight:700 }}>
                         {GENDER_EMOJI[entry.gender]??"👤"} {GENDER_LABEL[entry.gender] ?? entry.gender}

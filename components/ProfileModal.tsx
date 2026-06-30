@@ -62,7 +62,7 @@ export default function ProfileModal({ onComplete }: Props) {
     }}>
       <div style={{
         width: "100%", maxWidth: 420,
-        background: "#0d0d0d", border: "1px solid #1e1e1e",
+        background: "#1a1026", border: "1px solid #2a1a3a",
         borderRadius: 24, padding: "24px 20px",
         display: "flex", flexDirection: "column", gap: 20,
         marginTop: "auto", marginBottom: "auto",
@@ -89,9 +89,9 @@ export default function ProfileModal({ onComplete }: Props) {
               <button key={g} onClick={() => setGender(g)} style={{
                 flex: 1, padding: "12px 0", borderRadius: 14, fontSize: 13, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.15s",
-                background: gender === g ? "#1d4ed8" : "#1a1a1a",
+                background: gender === g ? "#7c3aed" : "#231232",
                 color: gender === g ? "#fff" : "#6b7280",
-                border: `1.5px solid ${gender === g ? "#3b82f6" : "#2a2a2a"}`,
+                border: `1.5px solid ${gender === g ? "#a57cbb" : "#2a2a2a"}`,
               }}>
                 {GENDER_LABEL[g]}
               </button>
@@ -109,7 +109,7 @@ export default function ProfileModal({ onComplete }: Props) {
               <button key={ag} onClick={() => setAgeGroup(ag)} style={{
                 padding: "12px 0", borderRadius: 14, fontSize: 13, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.15s",
-                background: ageGroup === ag ? "#166534" : "#1a1a1a",
+                background: ageGroup === ag ? "#166534" : "#231232",
                 color: ageGroup === ag ? "#4ade80" : "#6b7280",
                 border: `1.5px solid ${ageGroup === ag ? "#22c55e" : "#2a2a2a"}`,
               }}>
@@ -129,7 +129,7 @@ export default function ProfileModal({ onComplete }: Props) {
             onChange={e => setCountry(e.target.value)}
             style={{
               width: "100%", padding: "12px 14px", borderRadius: 14, fontSize: 14,
-              background: "#1a1a1a", border: `1.5px solid ${country ? "#a78bfa" : "#2a2a2a"}`,
+              background: "#231232", border: `1.5px solid ${country ? "#c58dc6" : "#2a2a2a"}`,
               color: country ? "#fff" : "#6b7280", outline: "none", cursor: "pointer",
               appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\")",
               backgroundRepeat: "no-repeat", backgroundPosition: "right 14px center",
@@ -148,7 +148,7 @@ export default function ProfileModal({ onComplete }: Props) {
           style={{
             width: "100%", padding: "16px 0", borderRadius: 16,
             fontSize: 16, fontWeight: 900,
-            background: gender && ageGroup ? "linear-gradient(135deg,#1d4ed8,#7c3aed)" : "#1a1a1a",
+            background: gender && ageGroup ? "linear-gradient(135deg,#7c3aed,#7c3aed)" : "#231232",
             color: gender && ageGroup ? "#fff" : "#374151",
             border: "none", cursor: gender && ageGroup ? "pointer" : "not-allowed",
             transition: "all 0.2s",

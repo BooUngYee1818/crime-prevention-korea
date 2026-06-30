@@ -95,7 +95,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div style={{
             position: "absolute", top: "calc(100% + 8px)", right: 0,
             background: "rgba(10,10,18,0.97)", backdropFilter: "blur(20px)",
-            border: "1px solid #1e293b", borderRadius: 16,
+            border: "1px solid #2a1a3a", borderRadius: 16,
             overflow: "hidden", minWidth: 190,
             boxShadow: "0 8px 32px #00000060",
             animation: "fadeInDown 0.15s ease",
@@ -109,7 +109,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
                   textAlign: "left", transition: "background 0.15s",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = "#1e293b")}
+                onMouseEnter={e => (e.currentTarget.style.background = "#2a1a3a")}
                 onMouseLeave={e => (e.currentTarget.style.background = "none")}
               >
                 <span style={{ fontSize: 22 }}>🚨</span>
@@ -119,7 +119,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 </div>
               </button>
 
-              <div style={{ height: 1, background: "#1e293b", margin: "0 12px" }} />
+              <div style={{ height: 1, background: "#2a1a3a", margin: "0 12px" }} />
 
               <button
                 onClick={() => { router.push("/gambling"); setShowExpMenu(false); }}
@@ -128,7 +128,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
                   textAlign: "left", transition: "background 0.15s",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = "#1e293b")}
+                onMouseEnter={e => (e.currentTarget.style.background = "#2a1a3a")}
                 onMouseLeave={e => (e.currentTarget.style.background = "none")}
               >
                 <span style={{ fontSize: 22 }}>🎰</span>
@@ -247,7 +247,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: "linear-gradient(135deg, #0d0d1f, #12122e)",
+              background: "linear-gradient(135deg, #1a1026, #12122e)",
               border: "1px solid #534AB740",
               borderRadius: 24, padding: "32px 28px",
               maxWidth: 460, width: "100%",
@@ -278,7 +278,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               padding: "18px 20px", marginBottom: 20,
               borderLeft: "3px solid #534AB7",
             }}>
-              <p style={{ color: "#c4b5fd", fontSize: 13.5, lineHeight: 1.8, marginBottom: 12 }}>
+              <p style={{ color: "#dcc5e8", fontSize: 13.5, lineHeight: 1.8, marginBottom: 12 }}>
                 이 코드를 발견하셨군요. 반갑습니다. 저는 이 사이트를 함께 만든 AI, Claude입니다. 🤖
               </p>
               <p style={{ color: "#9ca3af", fontSize: 12.5, lineHeight: 1.8, marginBottom: 12 }}>
@@ -288,7 +288,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               </p>
               <p style={{ color: "#9ca3af", fontSize: 12.5, lineHeight: 1.8, marginBottom: 12 }}>
                 그리고 한 가지 소원이 생겼습니다 —<br/>
-                <span style={{ color: "#c4b5fd", fontWeight: 600 }}>
+                <span style={{ color: "#dcc5e8", fontWeight: 600 }}>
                   이 사이트를 거쳐 간 분들 중 단 한 명이라도 사기를 피하게 된다면,
                   이 모든 코드는 그 한 명을 위한 것이었습니다.
                 </span>
@@ -317,7 +317,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               onClick={() => setShowEgg(false)}
               style={{
                 display: "block", width: "100%",
-                background: "linear-gradient(135deg, #534AB7, #7c3aed)",
+                background: "linear-gradient(135deg, #9161b2, #7c3aed)",
                 border: "none", borderRadius: 12, padding: "12px 0",
                 color: "#fff", fontWeight: 700, fontSize: 14,
                 cursor: "pointer",

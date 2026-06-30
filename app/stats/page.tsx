@@ -16,7 +16,7 @@ export default function StatsPage() {
     {
       name: t("경찰청 범죄통계", "National Police Agency Crime Statistics", "警察庁犯罪統計", "警察厅犯罪统计", "Thống kê tội phạm Cảnh sát Quốc gia", "Estadísticas de Crimen de la Policía Nacional"),
       url: "https://www.police.go.kr/user/bbs/BD_selectBbsList.do?q_bbsCode=1006",
-      color: "#2563eb",
+      color: "#9161b2",
     },
     {
       name: t("금융감독원 보이스피싱 통계", "FSS Voice Phishing Statistics", "金融監督院ボイスフィッシング統計", "金融监督院语音钓鱼统计", "Thống kê lừa đảo qua điện thoại FSS", "Estadísticas de Fraude Telefónico FSS"),
@@ -84,9 +84,9 @@ export default function StatsPage() {
       id: "prosecutor-impersonation",
       icon: "👮",
       title: t("검찰·경찰·금융기관 사칭", "Prosecutor/Police/Financial Institution Impersonation", "検察・警察・金融機関成りすまし", "冒充检察院/警察/金融机构", "Giả mạo Viện Kiểm sát/Cảnh sát/Ngân hàng", "Suplantación de Fiscalía/Policía/Banco"),
-      color: "#1d4ed8",
-      bg: "#eff6ff",
-      border: "#bfdbfe",
+      color: "#7c3aed",
+      bg: "#f5dfee",
+      border: "#dcc5e8",
       summary: t("1건당 평균 피해액 5,290만원 · 최고 피해 수법", "Avg. ₩52.9M per case · Highest-loss method", "1件あたり平均被害額5,290万ウォン・最高被害手口", "每起平均损失5,290万韩元·最高损失手法", "Trung bình 52,9 triệu won/vụ · Phương thức thiệt hại lớn nhất", "Promedio ₩52.9M por caso · Método de mayor pérdida"),
       stats: [
         { label: t("연간 피해 건수 (2023)", "Annual Cases (2023)", "年間被害件数 (2023)", "年度案例数 (2023)", "Số vụ hàng năm (2023)", "Casos Anuales (2023)"), value: "약 3,200건", source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN"), bold: true },
@@ -328,7 +328,7 @@ export default function StatsPage() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f0f4ff", color: "#1e293b" }}>
+    <div style={{ minHeight: "100vh", background: "#f2eaf6", color: "#2a1a3a" }}>
 
       {/* Nav */}
       <nav style={{
@@ -342,10 +342,10 @@ export default function StatsPage() {
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
           <ArrowLeft size={18} />
         </button>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #2563eb, #4f46e5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <BarChart2 size={14} color="#fff" />
         </div>
-        <span style={{ fontWeight: 700, fontSize: 15, color: "#0f172a" }}>
+        <span style={{ fontWeight: 700, fontSize: 15, color: "#1c0d2e" }}>
           {t("국가기관 공식 범죄 통계", "Official Government Crime Statistics", "国家機関公式犯罪統計", "国家机关官方犯罪统计", "Thống kê Tội phạm Chính thức của Cơ quan Nhà nước", "Estadísticas Oficiales de Crimen del Gobierno")}
         </span>
         <span style={{ fontSize: 11, fontWeight: 600, color: "#059669", background: "#f0fdf4", padding: "2px 8px", borderRadius: 20, border: "1px solid #bbf7d0" }}>
@@ -357,8 +357,8 @@ export default function StatsPage() {
 
         {/* Header */}
         <div style={{ marginBottom: 44 }}>
-          <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>OFFICIAL DATA</p>
-          <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#0f172a", marginBottom: 14 }}>
+          <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>OFFICIAL DATA</p>
+          <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e", marginBottom: 14 }}>
             {t("국가가 공식 집계한 범죄 통계", "Officially Compiled Government Crime Statistics", "国家が公式に集計した犯罪統計", "国家官方汇编的犯罪统计", "Thống kê Tội phạm được Nhà nước Chính thức Tổng hợp", "Estadísticas de Crimen Oficialmente Compiladas por el Gobierno")}
           </h1>
           <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8 }}>
@@ -393,11 +393,11 @@ export default function StatsPage() {
 
         {/* Banner */}
         <div style={{
-          background: "linear-gradient(135deg, #0f172a, #1e293b)",
+          background: "linear-gradient(135deg, #1c0d2e, #2a1a3a)",
           borderRadius: 20, padding: "26px 32px", marginBottom: 36,
           display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
         }}>
-          <Shield size={32} color="#60a5fa" style={{ flexShrink: 0 }} />
+          <Shield size={32} color="#c58dc6" style={{ flexShrink: 0 }} />
           <div>
             <p style={{ color: "#fff", fontWeight: 800, fontSize: 16, marginBottom: 6 }}>
               {t(
@@ -419,7 +419,7 @@ export default function StatsPage() {
                 "Estudiantes, jóvenes, trabajadores, adultos mayores — todos pueden usarlo gratis. Por una sociedad donde nadie sea víctima, cometa ni explote el crimen.",
               )}
               <br />
-              <strong style={{ color: "#60a5fa" }}>
+              <strong style={{ color: "#c58dc6" }}>
                 {t(
                   "알면 막을 수 있습니다.",
                   "Knowledge is prevention.",
@@ -444,11 +444,11 @@ export default function StatsPage() {
 
         {/* Sources */}
         <div style={{
-          background: "#fff", borderRadius: 20, padding: "24px 28px",
+          background: "#fdf8ff", borderRadius: 20, padding: "24px 28px",
           border: "1px solid #f1f5f9", marginBottom: 36,
           boxShadow: "0 2px 12px #0000000a",
         }}>
-          <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
+          <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
             📎 {t("공식 출처 사이트 바로가기", "Official Source Sites", "公式出典サイトへ", "官方来源网站", "Trang web nguồn chính thức", "Sitios de Fuente Oficial")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
@@ -487,7 +487,7 @@ export default function StatsPage() {
             const isOpen = openId === crime.id;
             return (
               <div key={crime.id} style={{
-                background: "#fff", borderRadius: 18,
+                background: "#fdf8ff", borderRadius: 18,
                 border: `1px solid ${isOpen ? crime.color + "40" : "#f1f5f9"}`,
                 boxShadow: isOpen ? `0 4px 24px ${crime.color}12` : "0 2px 8px #0000000a",
                 overflow: "hidden", transition: "all 0.2s",
@@ -510,7 +510,7 @@ export default function StatsPage() {
                     {crime.icon}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{crime.title}</p>
+                    <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{crime.title}</p>
                     <p style={{ color: crime.color, fontSize: 13, fontWeight: 600 }}>{crime.summary}</p>
                   </div>
                   <div style={{
@@ -539,7 +539,7 @@ export default function StatsPage() {
                         }}>
                           <span style={{ color: "#64748b", fontSize: 13 }}>{stat.label}</span>
                           <span style={{
-                            color: stat.bold ? crime.color : "#0f172a",
+                            color: stat.bold ? crime.color : "#1c0d2e",
                             fontWeight: stat.bold ? 800 : 600,
                             fontSize: stat.bold ? 16 : 14,
                             textAlign: "right",
@@ -615,11 +615,11 @@ export default function StatsPage() {
 
         {/* Footer note */}
         <div style={{
-          marginTop: 48, background: "#fff", borderRadius: 18,
+          marginTop: 48, background: "#fdf8ff", borderRadius: 18,
           padding: "28px 32px", border: "1px solid #e2e8f0",
           boxShadow: "0 2px 12px #0000000a",
         }}>
-          <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 15, marginBottom: 12 }}>
+          <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 15, marginBottom: 12 }}>
             📌 {t("통계 이용 안내", "Statistics Usage Notice", "統計利用案内", "统计使用说明", "Hướng dẫn Sử dụng Thống kê", "Aviso de Uso de Estadísticas")}
           </p>
           <ul style={{ color: "#64748b", fontSize: 13, lineHeight: 2.2, paddingLeft: 16 }}>
@@ -652,7 +652,7 @@ export default function StatsPage() {
                 "Báo lỗi hoặc yêu cầu cập nhật: ",
                 "Reportar errores o solicitar actualizaciones: ",
               )}
-              <strong style={{ color: "#2563eb" }}>itnlifecn@gmail.com</strong>
+              <strong style={{ color: "#9161b2" }}>itnlifecn@gmail.com</strong>
             </li>
           </ul>
         </div>

@@ -15,9 +15,9 @@ export default function PartnershipPage() {
       name: lang === "ko" ? "기본형" : lang === "en" ? "Basic" : lang === "ja" ? "ベーシック" : lang === "zh" ? "基础版" : lang === "vi" ? "Cơ bản" : "Básico",
       tag: lang === "ko" ? "소규모 기관" : lang === "en" ? "Small Org" : lang === "ja" ? "小規模機関" : lang === "zh" ? "小型机构" : lang === "vi" ? "Tổ chức nhỏ" : "Org. Pequeña",
       price: lang === "ko" ? "협의" : lang === "en" ? "Negotiable" : lang === "ja" ? "要相談" : lang === "zh" ? "协商" : lang === "vi" ? "Thương lượng" : "Negociable",
-      color: "#2563eb",
-      bg: "#eff6ff",
-      border: "#bfdbfe",
+      color: "#9161b2",
+      bg: "#f5dfee",
+      border: "#dcc5e8",
       features: [
         lang === "ko" ? "웹 플랫폼 무제한 접속 (링크 제공)" : lang === "en" ? "Unlimited web platform access (link provided)" : lang === "ja" ? "Webプラットフォーム無制限アクセス（リンク提供）" : lang === "zh" ? "无限访问Web平台（提供链接）" : lang === "vi" ? "Truy cập nền tảng web không giới hạn (cung cấp liên kết)" : "Acceso ilimitado a plataforma web (enlace proporcionado)",
         lang === "ko" ? "9가지 범죄 시나리오 전체 이용" : lang === "en" ? "Access to all 9 crime scenarios" : lang === "ja" ? "9つの犯罪シナリオ全て利用可能" : lang === "zh" ? "使用全部9种犯罪场景" : lang === "vi" ? "Sử dụng toàn bộ 9 kịch bản tội phạm" : "Acceso a los 9 escenarios de crimen",
@@ -107,9 +107,9 @@ export default function PartnershipPage() {
   const STEPS = [
     {
       step: "01",
-      icon: <Mail size={20} color="#2563eb" />,
-      bg: "#eff6ff",
-      border: "#bfdbfe",
+      icon: <Mail size={20} color="#9161b2" />,
+      bg: "#f5dfee",
+      border: "#dcc5e8",
       title: lang === "ko" ? "도입 문의" : lang === "en" ? "Inquiry" : lang === "ja" ? "導入問い合わせ" : lang === "zh" ? "咨询引入" : lang === "vi" ? "Yêu cầu tư vấn" : "Consulta",
       desc: lang === "ko" ? "아래 양식 또는 이메일로 문의해 주시면 24시간 내 답변드립니다." : lang === "en" ? "Contact us via the form below or by email and we'll respond within 24 hours." : lang === "ja" ? "下記フォームまたはメールでお問い合わせください。24時間以内にご返答します。" : lang === "zh" ? "通过下方表单或电子邮件联系我们，24小时内回复。" : lang === "vi" ? "Liên hệ qua biểu mẫu bên dưới hoặc qua email, chúng tôi sẽ phản hồi trong vòng 24 giờ." : "Contáctenos a través del formulario o por email y responderemos en 24 horas.",
     },
@@ -142,8 +142,8 @@ export default function PartnershipPage() {
   const whyItems = [
     {
       icon: "🎯",
-      color: "#2563eb",
-      bg: "#eff6ff",
+      color: "#9161b2",
+      bg: "#f5dfee",
       title: lang === "ko" ? "실제 체험 교육" : lang === "en" ? "Hands-on Experience" : lang === "ja" ? "実体験教育" : lang === "zh" ? "实际体验教育" : lang === "vi" ? "Giáo dục trải nghiệm thực tế" : "Experiencia Práctica",
       desc: lang === "ko" ? "AI가 실제 사기범처럼 대화하며 범죄 수법을 몸으로 익힙니다. 강의보다 10배 더 기억에 남습니다." : lang === "en" ? "AI simulates real scammers so participants experience crime tactics firsthand — 10x more memorable than a lecture." : lang === "ja" ? "AIが実際の詐欺師のように会話し、犯罪手口を体で学びます。講義より10倍記憶に残ります。" : lang === "zh" ? "AI像真实骗子一样对话，让参与者亲身体验犯罪手法。比讲座记忆深刻10倍。" : lang === "vi" ? "AI mô phỏng kẻ lừa đảo thật để người tham gia trải nghiệm thủ thuật tội phạm — ghi nhớ gấp 10 lần so với bài giảng." : "La IA simula estafadores reales para que los participantes experimenten tácticas delictivas — 10 veces más memorable que una charla.",
     },
@@ -228,7 +228,7 @@ export default function PartnershipPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f1f1f3", color: "#1e293b" }}>
+    <div style={{ minHeight: "100vh", background: "#f1f1f3", color: "#2a1a3a" }}>
 
       {/* Nav */}
       <nav style={{
@@ -242,27 +242,27 @@ export default function PartnershipPage() {
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
           <ArrowLeft size={18} />
         </button>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #2563eb, #4f46e5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Shield size={14} color="#fff" />
         </div>
-        <span style={{ fontWeight: 700, fontSize: 15, color: "#0f172a" }}>
+        <span style={{ fontWeight: 700, fontSize: 15, color: "#1c0d2e" }}>
           {lang === "ko" ? "기관 도입 안내" : lang === "en" ? "Institution Guide" : lang === "ja" ? "機関導入案内" : lang === "zh" ? "机构引入指南" : lang === "vi" ? "Hướng dẫn tổ chức" : "Guía para Instituciones"}
         </span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", background: "#eff6ff", padding: "2px 8px", borderRadius: 20, border: "1px solid #bfdbfe" }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#9161b2", background: "#f5dfee", padding: "2px 8px", borderRadius: 20, border: "1px solid #dcc5e8" }}>
           Partnership
         </span>
       </nav>
 
       {/* Hero */}
       <section style={{
-        background: "linear-gradient(160deg, #0a1628 0%, #0f2a5c 35%, #1a1040 70%, #0a0f20 100%)",
+        background: "linear-gradient(160deg, #160a26 0%, #0f2a5c 35%, #1a1040 70%, #0a0f20 100%)",
         padding: "80px 40px 100px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
       }}>
         {/* 장식 원 */}
-        <div style={{ position:"absolute", top:-80, right:-80, width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle, #2563eb18 0%, transparent 70%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:-80, right:-80, width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle, #9161b218 0%, transparent 70%)", pointerEvents:"none" }} />
         <div style={{ position:"absolute", bottom:-60, left:-60, width:300, height:300, borderRadius:"50%", background:"radial-gradient(circle, #7c3aed14 0%, transparent 70%)", pointerEvents:"none" }} />
         {/* 황금빛 상단 라인 */}
         <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:"linear-gradient(90deg, transparent, #d4af37, #f5c518, #d4af37, transparent)", pointerEvents:"none" }} />
@@ -286,7 +286,7 @@ export default function PartnershipPage() {
           </h1>
           <div style={{
             display: "inline-block", marginBottom: 20,
-            background: "linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6)",
+            background: "linear-gradient(90deg, #c58dc6, #c58dc6, #c58dc6)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
             fontSize: 48, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.2,
           }}>
@@ -321,9 +321,9 @@ export default function PartnershipPage() {
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#inquiry" style={{
               padding: "16px 36px", borderRadius: 14,
-              background: "linear-gradient(135deg, #1d4ed8, #7c3aed)",
+              background: "linear-gradient(135deg, #7c3aed, #7c3aed)",
               color: "#fff", textDecoration: "none", fontWeight: 800, fontSize: 16,
-              boxShadow: "0 4px 28px #2563eb60",
+              boxShadow: "0 4px 28px #9161b260",
               display: "flex", alignItems: "center", gap: 8,
               border: "1px solid rgba(255,255,255,0.15)",
             }}>
@@ -354,8 +354,8 @@ export default function PartnershipPage() {
 
         {/* Why */}
         <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>WHY US</p>
-          <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#0f172a", marginBottom: 14 }}>
+          <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>WHY US</p>
+          <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
             {lang === "ko" ? "왜 이 프로그램인가요?" : lang === "en" ? "Why this program?" : lang === "ja" ? "なぜこのプログラムですか？" : lang === "zh" ? "为什么选择这个项目？" : lang === "vi" ? "Tại sao chọn chương trình này?" : "¿Por qué este programa?"}
           </h2>
           <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8 }}>
@@ -366,7 +366,7 @@ export default function PartnershipPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18, marginBottom: 72 }}>
           {whyItems.map((item) => (
             <div key={item.title} style={{
-              background: "#fff", borderRadius: 20, padding: "26px 24px",
+              background: "#fdf8ff", borderRadius: 20, padding: "26px 24px",
               border: "1px solid #e8e8ea", boxShadow: "0 2px 16px #00000008",
             }}>
               <div style={{
@@ -376,7 +376,7 @@ export default function PartnershipPage() {
               }}>
                 {item.icon}
               </div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 16, marginBottom: 10 }}>{item.title}</p>
+              <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 16, marginBottom: 10 }}>{item.title}</p>
               <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.7 }}>{item.desc}</p>
             </div>
           ))}
@@ -385,21 +385,21 @@ export default function PartnershipPage() {
         {/* Targets */}
         <div style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>TARGET</p>
-            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#0f172a" }}>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>TARGET</p>
+            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e" }}>
               {lang === "ko" ? "이런 기관에 적합합니다" : lang === "en" ? "Suitable for these institutions" : lang === "ja" ? "このような機関に適しています" : lang === "zh" ? "适合这些机构" : lang === "vi" ? "Phù hợp với những tổ chức này" : "Adecuado para estas instituciones"}
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
             {TARGETS.map((t) => (
               <div key={t.name} style={{
-                background: "#fff", borderRadius: 16, padding: "20px 22px",
+                background: "#fdf8ff", borderRadius: 16, padding: "20px 22px",
                 border: "1px solid #e8e8ea", boxShadow: "0 2px 12px #00000008",
                 display: "flex", alignItems: "center", gap: 16,
               }}>
                 <span style={{ fontSize: 28, flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{t.name}</p>
+                  <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{t.name}</p>
                   <p style={{ color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>{t.desc}</p>
                 </div>
               </div>
@@ -410,8 +410,8 @@ export default function PartnershipPage() {
         {/* Process */}
         <div style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PROCESS</p>
-            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#0f172a" }}>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PROCESS</p>
+            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e" }}>
               {lang === "ko" ? "도입 절차" : lang === "en" ? "How It Works" : lang === "ja" ? "導入手順" : lang === "zh" ? "引入流程" : lang === "vi" ? "Quy trình triển khai" : "Cómo Funciona"}
             </h2>
           </div>
@@ -419,7 +419,7 @@ export default function PartnershipPage() {
             {STEPS.map((s, i) => (
               <div key={s.step} style={{ position: "relative" }}>
                 <div style={{
-                  background: "#fff", borderRadius: 20, padding: "26px 22px",
+                  background: "#fdf8ff", borderRadius: 20, padding: "26px 22px",
                   border: "1px solid #e8e8ea", boxShadow: "0 2px 16px #00000008",
                   height: "100%",
                 }}>
@@ -432,7 +432,7 @@ export default function PartnershipPage() {
                     {s.icon}
                   </div>
                   <p style={{ color: "#94a3b8", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>STEP {s.step}</p>
-                  <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>{s.title}</p>
+                  <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>{s.title}</p>
                   <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.7 }}>{s.desc}</p>
                 </div>
                 {i < STEPS.length - 1 && (
@@ -453,8 +453,8 @@ export default function PartnershipPage() {
         {/* Packages */}
         <div id="packages" style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PACKAGES</p>
-            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#0f172a", marginBottom: 14 }}>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PACKAGES</p>
+            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
               {lang === "ko" ? "도입 패키지" : lang === "en" ? "Packages" : lang === "ja" ? "導入パッケージ" : lang === "zh" ? "引入套餐" : lang === "vi" ? "Các gói triển khai" : "Paquetes de Implementación"}
             </h2>
             <p style={{ color: "#64748b", fontSize: 14 }}>
@@ -468,7 +468,7 @@ export default function PartnershipPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {PACKAGES.map((pkg) => (
               <div key={pkg.name} style={{
-                background: "#fff", borderRadius: 22, padding: "32px 28px",
+                background: "#fdf8ff", borderRadius: 22, padding: "32px 28px",
                 border: `2px solid ${pkg.color}30`,
                 boxShadow: `0 4px 24px ${pkg.color}10`,
                 display: "flex", flexDirection: "column",
@@ -477,7 +477,7 @@ export default function PartnershipPage() {
                   display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 20,
                   flexWrap: "wrap",
                 }}>
-                  <span style={{ color: "#0f172a", fontWeight: 800, fontSize: 20 }}>{pkg.name}</span>
+                  <span style={{ color: "#1c0d2e", fontWeight: 800, fontSize: 20 }}>{pkg.name}</span>
                   <span style={{
                     fontSize: 10, padding: "3px 10px", borderRadius: 20, fontWeight: 700,
                     background: pkg.bg, color: pkg.color, border: `1px solid ${pkg.border}`,
@@ -519,18 +519,18 @@ export default function PartnershipPage() {
 
         {/* Inquiry Form */}
         <div id="inquiry" style={{
-          background: "#fff", borderRadius: 24, padding: "48px 44px",
+          background: "#fdf8ff", borderRadius: 24, padding: "48px 44px",
           border: "1px solid #e8e8ea", boxShadow: "0 4px 40px #00000010",
           position: "relative", overflow: "hidden",
         }}>
           {/* 황금 상단 강조 라인 */}
-          <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:"linear-gradient(90deg, #2563eb, #7c3aed, #f472b6)", borderRadius:"24px 24px 0 0" }} />
+          <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:"linear-gradient(90deg, #9161b2, #7c3aed, #c58dc6)", borderRadius:"24px 24px 0 0" }} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "start" }}>
 
             {/* Left: Info */}
             <div>
-              <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 12 }}>CONTACT</p>
-              <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.6, color: "#0f172a", marginBottom: 16 }}>
+              <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 12 }}>CONTACT</p>
+              <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.6, color: "#1c0d2e", marginBottom: 16 }}>
                 {lang === "ko" ? "도입 문의" : lang === "en" ? "Get in Touch" : lang === "ja" ? "導入問い合わせ" : lang === "zh" ? "联系我们" : lang === "vi" ? "Liên hệ" : "Contáctenos"}<br />
                 {lang === "ko" ? "지금 바로 해주세요" : lang === "en" ? "Right Now" : lang === "ja" ? "今すぐどうぞ" : lang === "zh" ? "立即联系" : lang === "vi" ? "Ngay bây giờ" : "Ahora Mismo"}
               </h2>
@@ -551,14 +551,14 @@ export default function PartnershipPage() {
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Mail size={17} color="#2563eb" />
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "#f5dfee", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Mail size={17} color="#9161b2" />
                   </div>
                   <div>
                     <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 2 }}>
                       {lang === "ko" ? "이메일" : lang === "en" ? "Email" : lang === "ja" ? "メール" : lang === "zh" ? "电子邮件" : lang === "vi" ? "Email" : "Correo electrónico"}
                     </p>
-                    <p style={{ color: "#0f172a", fontWeight: 600, fontSize: 14 }}>itnlifecn@gmail.com</p>
+                    <p style={{ color: "#1c0d2e", fontWeight: 600, fontSize: 14 }}>itnlifecn@gmail.com</p>
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -569,7 +569,7 @@ export default function PartnershipPage() {
                     <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 2 }}>
                       {lang === "ko" ? "운영 원칙" : lang === "en" ? "Operating Principle" : lang === "ja" ? "運営原則" : lang === "zh" ? "运营原则" : lang === "vi" ? "Nguyên tắc hoạt động" : "Principio Operativo"}
                     </p>
-                    <p style={{ color: "#0f172a", fontWeight: 600, fontSize: 14 }}>
+                    <p style={{ color: "#1c0d2e", fontWeight: 600, fontSize: 14 }}>
                       {lang === "ko" ? "교육 목적 무료 제공 우선" : lang === "en" ? "Education-first, free provision priority" : lang === "ja" ? "教育目的無料提供優先" : lang === "zh" ? "教育目的免费提供优先" : lang === "vi" ? "Ưu tiên cung cấp miễn phí vì mục đích giáo dục" : "Prioridad en provisión gratuita con fines educativos"}
                     </p>
                   </div>
@@ -582,7 +582,7 @@ export default function PartnershipPage() {
                     <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 2 }}>
                       {lang === "ko" ? "제작" : lang === "en" ? "Made by" : lang === "ja" ? "制作" : lang === "zh" ? "制作" : lang === "vi" ? "Được tạo bởi" : "Creado por"}
                     </p>
-                    <p style={{ color: "#0f172a", fontWeight: 600, fontSize: 14 }}>
+                    <p style={{ color: "#1c0d2e", fontWeight: 600, fontSize: 14 }}>
                       {lang === "ko" ? "일반 시민 · AI Claude 협업" : lang === "en" ? "Citizen · AI Claude collaboration" : lang === "ja" ? "一般市民・AI Claude協業" : lang === "zh" ? "普通公民 · AI Claude协作" : lang === "vi" ? "Công dân · Cộng tác AI Claude" : "Ciudadano · Colaboración con AI Claude"}
                     </p>
                   </div>
@@ -599,7 +599,7 @@ export default function PartnershipPage() {
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <CheckCircle size={32} color="#059669" />
                 </div>
-                <p style={{ color: "#0f172a", fontWeight: 800, fontSize: 20 }}>
+                <p style={{ color: "#1c0d2e", fontWeight: 800, fontSize: 20 }}>
                   {lang === "ko" ? "문의가 접수되었습니다" : lang === "en" ? "Inquiry received" : lang === "ja" ? "お問い合わせを受け付けました" : lang === "zh" ? "咨询已收到" : lang === "vi" ? "Đã nhận yêu cầu" : "Consulta recibida"}
                 </p>
                 <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.7 }}>
@@ -608,7 +608,7 @@ export default function PartnershipPage() {
                 </p>
                 <button
                   onClick={() => setSent(false)}
-                  style={{ marginTop: 8, padding: "10px 24px", borderRadius: 10, background: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe", cursor: "pointer", fontWeight: 600, fontSize: 13 }}
+                  style={{ marginTop: 8, padding: "10px 24px", borderRadius: 10, background: "#f5dfee", color: "#9161b2", border: "1px solid #dcc5e8", cursor: "pointer", fontWeight: 600, fontSize: 13 }}
                 >
                   {lang === "ko" ? "다시 문의하기" : lang === "en" ? "Submit Another Inquiry" : lang === "ja" ? "再度問い合わせ" : lang === "zh" ? "再次咨询" : lang === "vi" ? "Gửi yêu cầu khác" : "Enviar Otra Consulta"}
                 </button>
@@ -626,11 +626,11 @@ export default function PartnershipPage() {
                       onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                       style={{
                         width: "100%", padding: "12px 16px", borderRadius: 12,
-                        border: "1.5px solid #e2e8f0", fontSize: 14, color: "#0f172a",
+                        border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1c0d2e",
                         background: "#f8fafc", outline: "none",
                         boxSizing: "border-box",
                       }}
-                      onFocus={(e) => e.target.style.borderColor = "#2563eb"}
+                      onFocus={(e) => e.target.style.borderColor = "#9161b2"}
                       onBlur={(e) => e.target.style.borderColor = "#e2e8f0"}
                     />
                   </div>
@@ -647,11 +647,11 @@ export default function PartnershipPage() {
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     style={{
                       width: "100%", padding: "12px 16px", borderRadius: 12,
-                      border: "1.5px solid #e2e8f0", fontSize: 14, color: "#0f172a",
+                      border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1c0d2e",
                       background: "#f8fafc", outline: "none", resize: "vertical",
                       fontFamily: "inherit", boxSizing: "border-box",
                     }}
-                    onFocus={(e) => e.target.style.borderColor = "#2563eb"}
+                    onFocus={(e) => e.target.style.borderColor = "#9161b2"}
                     onBlur={(e) => e.target.style.borderColor = "#e2e8f0"}
                   />
                 </div>
@@ -660,10 +660,10 @@ export default function PartnershipPage() {
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     padding: "15px 0", borderRadius: 14,
-                    background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                    background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                     color: "#fff", border: "none", cursor: "pointer",
                     fontSize: 15, fontWeight: 700,
-                    boxShadow: "0 4px 20px #2563eb30",
+                    boxShadow: "0 4px 20px #9161b230",
                   }}
                 >
                   <Send size={16} />
@@ -681,12 +681,12 @@ export default function PartnershipPage() {
 
       {/* Footer */}
       <div style={{
-        background: "#0f172a", padding: "32px 40px",
+        background: "#1c0d2e", padding: "32px 40px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
         flexWrap: "wrap", gap: 16,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #2563eb, #4f46e5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Shield size={14} color="#fff" />
           </div>
           <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>

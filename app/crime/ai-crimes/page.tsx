@@ -20,7 +20,7 @@ const CRIMES: CrimeCard[] = [
     id: "deepfake-blackmail",
     icon: "🎭",
     tag: "DEEPFAKE",
-    color: "#f472b6",
+    color: "#c58dc6",
     bg: "linear-gradient(135deg,#500724,#be185d)",
     title: "딥페이크 성착취 협박",
     subtitle: "얼굴만 있으면 만든다",
@@ -31,7 +31,7 @@ const CRIMES: CrimeCard[] = [
     id: "voice-clone",
     icon: "🎙️",
     tag: "VOICE AI",
-    color: "#a78bfa",
+    color: "#c58dc6",
     bg: "linear-gradient(135deg,#2e1065,#7c3aed)",
     title: "AI 음성 복제 보이스피싱",
     subtitle: "3초면 당신 목소리가 된다",
@@ -82,8 +82,8 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
       content: (
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>📸</div>
-          <p style={{ color: "#f472b6", fontSize: 13, fontWeight: 700, marginBottom: 8 }}>텔레그램 DM 수신</p>
-          <div style={{ background: "#1a0020", border: "1px solid #f472b644", borderRadius: 12, padding: "16px 20px", marginBottom: 20, textAlign: "left" }}>
+          <p style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, marginBottom: 8 }}>텔레그램 DM 수신</p>
+          <div style={{ background: "#1a0020", border: "1px solid #c58dc644", borderRadius: 12, padding: "16px 20px", marginBottom: 20, textAlign: "left" }}>
             <p style={{ color: "#94a3b8", fontSize: 11, marginBottom: 6 }}>알 수 없는 번호 · 방금 전</p>
             <p style={{ color: "#f4f4f5", fontSize: 14, lineHeight: 1.8 }}>
               안녕하세요. 귀하의 얼굴이 포함된 영상을 보유하고 있습니다.<br />
@@ -100,7 +100,7 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
       bg: "#0a0010",
       content: (
         <div>
-          <p style={{ color: "#f472b6", fontWeight: 700, fontSize: 13, marginBottom: 16 }}>🤖 AI가 하는 일</p>
+          <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 13, marginBottom: 16 }}>🤖 AI가 하는 일</p>
           {[
             { step: "①", text: "인스타·페이스북 공개 사진 수집", detail: "얼굴 각도 3장 이상이면 충분" },
             { step: "②", text: "딥페이크 생성 (처리 시간 약 2분)", detail: "무료 오픈소스 AI 도구로 가능" },
@@ -108,7 +108,7 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
             { step: "④", text: "입금 계좌 안내 (가상화폐)", detail: "추적 불가능한 해외 거래소 활용" },
           ].map((r, i) => (
             <div key={i} style={{ display: "flex", gap: 14, marginBottom: 12, background: "#150020", border: "1px solid #f472b422", borderRadius: 10, padding: "12px 14px" }}>
-              <span style={{ color: "#f472b6", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{r.step}</span>
+              <span style={{ color: "#c58dc6", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{r.step}</span>
               <div>
                 <p style={{ color: "#f4f4f5", fontSize: 13, fontWeight: 700 }}>{r.text}</p>
                 <p style={{ color: "#6b7280", fontSize: 11, marginTop: 2 }}>{r.detail}</p>
@@ -132,7 +132,7 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
           ].map((t, i) => (
             <p key={i} style={{ color: "#86efac", fontSize: 12, lineHeight: 1.7, paddingLeft: 8, borderLeft: "2px solid #22c55e44", marginBottom: 8 }}>{t}</p>
           ))}
-          <div style={{ background: "#0a1a0a", borderRadius: 10, padding: "12px 14px", marginTop: 16 }}>
+          <div style={{ background: "#1a102a", borderRadius: 10, padding: "12px 14px", marginTop: 16 }}>
             <p style={{ color: "#22c55e", fontSize: 13, fontWeight: 700 }}>☎ 182 · 1366 · 117</p>
             <p style={{ color: "#6b7280", fontSize: 11 }}>사이버수사대 · 여성긴급전화 · 학교폭력신고</p>
           </div>
@@ -140,7 +140,7 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
       ),
     },
   ];
-  return <SimModal title="딥페이크 성착취 협박" color="#f472b6" steps={steps} step={step} setStep={setStep} onClose={onClose} />;
+  return <SimModal title="딥페이크 성착취 협박" color="#c58dc6" steps={steps} step={step} setStep={setStep} onClose={onClose} />;
 }
 
 // ── AI 음성 복제 시뮬레이션 ──
@@ -154,11 +154,11 @@ function VoiceCloneSim({ onClose }: { onClose: () => void }) {
       content: (
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>📞</div>
-          <p style={{ color: "#a78bfa", fontWeight: 700, fontSize: 14, marginBottom: 16 }}>수신 전화 — "아버지"</p>
+          <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 14, marginBottom: 16 }}>수신 전화 — "아버지"</p>
           <div style={{ background: "#1a1030", border: "1px solid #7c3aed44", borderRadius: 12, padding: "20px", marginBottom: 16 }}>
             <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "flex-end", height: 36, marginBottom: 8 }}>
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={i} style={{ width: 4, borderRadius: 2, background: waveActive ? "#a78bfa" : "#374151", height: waveActive ? `${Math.random() * 28 + 8}px` : "8px", transition: "height 0.1s, background 0.3s" }} />
+                <div key={i} style={{ width: 4, borderRadius: 2, background: waveActive ? "#c58dc6" : "#374151", height: waveActive ? `${Math.random() * 28 + 8}px` : "8px", transition: "height 0.1s, background 0.3s" }} />
               ))}
             </div>
             <p style={{ color: "#e2e8f0", fontSize: 14, lineHeight: 1.9, fontStyle: "italic" }}>
@@ -176,7 +176,7 @@ function VoiceCloneSim({ onClose }: { onClose: () => void }) {
       bg: "#0a001a",
       content: (
         <div>
-          <p style={{ color: "#a78bfa", fontWeight: 700, fontSize: 13, marginBottom: 14 }}>🤖 AI 음성 복제 과정</p>
+          <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 13, marginBottom: 14 }}>🤖 AI 음성 복제 과정</p>
           {[
             { label: "샘플 수집", desc: "유튜브 영상, 전화 녹음, SNS 라이브 3초~30초면 충분" },
             { label: "음성 모델 학습", desc: "ElevenLabs·RVC 등 무료 AI로 목소리 패턴·억양·숨소리까지 복제" },
@@ -184,7 +184,7 @@ function VoiceCloneSim({ onClose }: { onClose: () => void }) {
             { label: "긴급 상황 설정", desc: "사고·납치·체포 등 확인할 시간이 없게 만드는 시나리오 삽입" },
           ].map((r, i) => (
             <div key={i} style={{ background: "#150030", border: "1px solid #7c3aed33", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-              <p style={{ color: "#a78bfa", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>STEP {i + 1} · {r.label}</p>
+              <p style={{ color: "#c58dc6", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>STEP {i + 1} · {r.label}</p>
               <p style={{ color: "#94a3b8", fontSize: 12, lineHeight: 1.6 }}>{r.desc}</p>
             </div>
           ))}
@@ -196,7 +196,7 @@ function VoiceCloneSim({ onClose }: { onClose: () => void }) {
       content: (
         <div>
           <p style={{ color: "#22c55e", fontWeight: 700, fontSize: 13, marginBottom: 14 }}>✅ 방어법 — 가족 암호 설정</p>
-          <div style={{ background: "#0a1a0a", border: "1px solid #22c55e44", borderRadius: 12, padding: "20px", marginBottom: 16 }}>
+          <div style={{ background: "#1a102a", border: "1px solid #22c55e44", borderRadius: 12, padding: "20px", marginBottom: 16 }}>
             <p style={{ color: "#86efac", fontWeight: 700, fontSize: 14, marginBottom: 10 }}>지금 바로 가족 암호를 정하세요</p>
             <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.8 }}>
               예시: "우리 강아지 이름이 뭐야?"<br />
@@ -215,7 +215,7 @@ function VoiceCloneSim({ onClose }: { onClose: () => void }) {
       ),
     },
   ];
-  return <SimModal title="AI 음성 복제 보이스피싱" color="#a78bfa" steps={steps} step={step} setStep={setStep} onClose={onClose} />;
+  return <SimModal title="AI 음성 복제 보이스피싱" color="#c58dc6" steps={steps} step={step} setStep={setStep} onClose={onClose} />;
 }
 
 // ── 스피어피싱 시뮬레이션 ──
@@ -301,14 +301,14 @@ function FakeDocSim({ onClose }: { onClose: () => void }) {
       content: (
         <div>
           <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 13, marginBottom: 12 }}>📄 받은 서류</p>
-          <div style={{ background: "#fff", borderRadius: 12, padding: "20px", marginBottom: 16, position: "relative" as const }}>
+          <div style={{ background: "#fdf8ff", borderRadius: 12, padding: "20px", marginBottom: 16, position: "relative" as const }}>
             <div style={{ position: "absolute" as const, top: 8, right: 8, background: "#dc2626", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 }}>AI 생성 가짜</div>
-            <p style={{ color: "#1e3a5f", fontWeight: 900, fontSize: 13, marginBottom: 6, borderBottom: "2px solid #1e3a5f", paddingBottom: 6 }}>부동산 등기부등본 (갑구)</p>
+            <p style={{ color: "#3d1f5a", fontWeight: 900, fontSize: 13, marginBottom: 6, borderBottom: "2px solid #3d1f5a", paddingBottom: 6 }}>부동산 등기부등본 (갑구)</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "4px 12px" }}>
               {[["소재지", "서울특별시 강남구 ○○동 123-45"], ["면적", "84.52㎡ (25.57평)"], ["소유자", "김○○ (등록번호 ●●●●●●-●●●●●●●)"], ["근저당권", "없음"], ["발급일", "2025.06.28"]].map(([k, v], i) => (
                 <>
                   <p key={`k${i}`} style={{ color: "#64748b", fontSize: 10 }}>{k}</p>
-                  <p key={`v${i}`} style={{ color: "#0f172a", fontSize: 10, fontWeight: 600 }}>{v}</p>
+                  <p key={`v${i}`} style={{ color: "#1c0d2e", fontSize: 10, fontWeight: 600 }}>{v}</p>
                 </>
               ))}
             </div>
@@ -474,7 +474,7 @@ function SimModal({
         <div style={{ minHeight: 300 }}>{steps[step].content}</div>
         <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
           {step > 0 && (
-            <button onClick={() => setStep(step - 1)} style={{ flex: 1, background: "#1e1e2e", border: "1px solid #374151", borderRadius: 12, padding: "12px", color: "#94a3b8", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>← 이전</button>
+            <button onClick={() => setStep(step - 1)} style={{ flex: 1, background: "#2a1a3a", border: "1px solid #374151", borderRadius: 12, padding: "12px", color: "#94a3b8", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>← 이전</button>
           )}
           {step < steps.length - 1 ? (
             <button onClick={() => setStep(step + 1)} style={{ flex: 2, background: color, border: "none", borderRadius: 12, padding: "12px", color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>다음 →</button>
@@ -507,15 +507,15 @@ export default function AICrimesPage() {
       `}</style>
 
       {/* 헤더 */}
-      <div style={{ background: "#0a0a0f", borderBottom: "1px solid #1e1e2e", padding: "16px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ background: "#130c1c", borderBottom: "1px solid #2a1a3a", padding: "16px 24px", display: "flex", alignItems: "center", gap: 16 }}>
         <a href="/crime" style={{ color: "#6b7280", fontSize: 13, textDecoration: "none" }}>← 뒤로</a>
-        <div style={{ width: 1, height: 16, background: "#1e1e2e" }} />
+        <div style={{ width: 1, height: 16, background: "#2a1a3a" }} />
         <span style={{ color: "#f87171", fontSize: 13, fontWeight: 700 }}>AI 범죄 체험관</span>
         <span style={{ marginLeft: "auto", background: "#dc262622", border: "1px solid #dc262644", borderRadius: 20, padding: "2px 10px", color: "#f87171", fontSize: 11, fontWeight: 700 }}>AI CRIME</span>
       </div>
 
       {/* 히어로 */}
-      <div style={{ background: "linear-gradient(180deg,#0a0010 0%,#050508 100%)", padding: "48px 24px 40px", textAlign: "center", borderBottom: "1px solid #1e1e2e", position: "relative", overflow: "hidden" }}>
+      <div style={{ background: "linear-gradient(180deg,#0a0010 0%,#050508 100%)", padding: "48px 24px 40px", textAlign: "center", borderBottom: "1px solid #2a1a3a", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 50% at 50% 0%, #7c3aed18, transparent)", pointerEvents: "none" }} />
         <p style={{ color: "#f87171", fontSize: 11, fontWeight: 700, letterSpacing: 3, marginBottom: 12 }}>AI × CRIME</p>
         <h1 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.5, marginBottom: 12, lineHeight: 1.3 }}>

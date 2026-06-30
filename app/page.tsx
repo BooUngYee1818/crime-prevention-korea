@@ -14,7 +14,7 @@ const RAINBOW_STYLE = `
   16%  { box-shadow: 0 0 14px 4px #ff8800aa; border-color: #ff8800; }
   33%  { box-shadow: 0 0 14px 4px #ffff00aa; border-color: #ffff00; }
   50%  { box-shadow: 0 0 14px 4px #00cc44aa; border-color: #00cc44; }
-  66%  { box-shadow: 0 0 14px 4px #2563ebaa; border-color: #2563eb; }
+  66%  { box-shadow: 0 0 14px 4px #9161b2aa; border-color: #9161b2; }
   83%  { box-shadow: 0 0 14px 4px #9333eaaa; border-color: #9333ea; }
   100% { box-shadow: 0 0 14px 4px #ff0000aa; border-color: #ff0000; }
 }
@@ -23,7 +23,7 @@ const RAINBOW_STYLE = `
   16%  { color: #ff8800; }
   33%  { color: #d4a000; }
   50%  { color: #16a34a; }
-  66%  { color: #2563eb; }
+  66%  { color: #9161b2; }
   83%  { color: #9333ea; }
   100% { color: #ff4444; }
 }
@@ -98,7 +98,7 @@ export default function HomePage() {
   ];
 
   const REPORT_NUMBERS = [
-    { org: t("rpt_police_org", lang), number: "112",  desc: t("rpt_police_desc", lang), color: "#2563eb" },
+    { org: t("rpt_police_org", lang), number: "112",  desc: t("rpt_police_desc", lang), color: "#9161b2" },
     { org: t("rpt_fss_org", lang),    number: "1332", desc: t("rpt_fss_desc", lang),    color: "#0891b2" },
     { org: t("rpt_kisa_org", lang),   number: "118",  desc: t("rpt_kisa_desc", lang),   color: "#059669" },
     { org: t("rpt_gamble_org", lang), number: "1336", desc: t("rpt_gamble_desc", lang), color: "#7c3aed" },
@@ -109,7 +109,7 @@ export default function HomePage() {
       id: "parents",
       label: "👴👵 " + t("popup2_tab1", lang),
       subtitle: lang === "ko" ? "자녀가 부모님을 도와드리는 방법" : lang === "en" ? "How children can help their parents" : lang === "ja" ? "子どもが親を助ける方法" : lang === "zh" ? "子女帮助父母的方法" : lang === "vi" ? "Cách con cái giúp cha mẹ" : "Cómo los hijos ayudan a sus padres",
-      color: "#2563eb", bg: "#eff6ff", border: "#bfdbfe",
+      color: "#9161b2", bg: "#f5dfee", border: "#dcc5e8",
       steps: [
         {
           icon: "📺",
@@ -194,7 +194,7 @@ export default function HomePage() {
   const activeTab = GUIDE_TABS.find(tab => tab.id === guideTab) || GUIDE_TABS[0];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f0f4ff", color: "#1e293b" }}>
+    <div style={{ minHeight: "100vh", background: "#f2eaf6", color: "#2a1a3a" }}>
       <style>{RAINBOW_STYLE}</style>
 
       {/* ── 팝업 1: 피해 신고 안내 ── */}
@@ -206,7 +206,7 @@ export default function HomePage() {
           padding: "20px",
         }}>
           <div className="popup-card" style={{
-            background: "#fff", borderRadius: 24, padding: "36px 36px 32px",
+            background: "#fdf8ff", borderRadius: 24, padding: "36px 36px 32px",
             maxWidth: 520, width: "100%", position: "relative",
             boxShadow: "0 24px 80px #00000030",
           }}>
@@ -220,12 +220,12 @@ export default function HomePage() {
             </button>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-              <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #2563eb, #4f46e5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>
                 🛡️
               </div>
               <div>
-                <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 18 }}>{t("popup1_title", lang)}</p>
-                <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 600 }}>{t("popup1_sub", lang)}</p>
+                <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: 18 }}>{t("popup1_title", lang)}</p>
+                <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 600 }}>{t("popup1_sub", lang)}</p>
               </div>
             </div>
 
@@ -253,10 +253,10 @@ export default function HomePage() {
                 onClick={closePopup1}
                 style={{
                   flex: 1, padding: "14px 0", borderRadius: 14,
-                  background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                  background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                   color: "#fff", border: "none", cursor: "pointer",
                   fontWeight: 700, fontSize: 14,
-                  boxShadow: "0 4px 16px #2563eb30",
+                  boxShadow: "0 4px 16px #9161b230",
                 }}
               >
                 {t("popup1_start", lang)}
@@ -275,7 +275,7 @@ export default function HomePage() {
           padding: "20px",
         }}>
           <div style={{
-            background: "#fff", borderRadius: 24, padding: "32px 32px 28px",
+            background: "#fdf8ff", borderRadius: 24, padding: "32px 32px 28px",
             maxWidth: 600, width: "100%", position: "relative",
             boxShadow: "0 24px 80px #00000030",
             maxHeight: "90vh", overflowY: "auto",
@@ -290,7 +290,7 @@ export default function HomePage() {
             </button>
 
             <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>HOW TO USE</p>
-            <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 20, marginBottom: 6 }}>{t("popup2_who", lang)}</p>
+            <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: 20, marginBottom: 6 }}>{t("popup2_who", lang)}</p>
             <p style={{ color: "#64748b", fontSize: 13, marginBottom: 22 }}>{t("popup2_guide", lang)}</p>
 
             {/* 탭 */}
@@ -319,7 +319,7 @@ export default function HomePage() {
                   <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                     <span style={{ fontSize: 22, flexShrink: 0 }}>{step.icon}</span>
                     <div>
-                      <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{step.title}</p>
+                      <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{step.title}</p>
                       <p style={{ color: "#475569", fontSize: 13, lineHeight: 1.7 }}>{step.desc}</p>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export default function HomePage() {
         style={{
           position: "fixed", top: 80, right: 24, zIndex: 900,
           padding: "11px 18px", borderRadius: 24,
-          background: "#fff", border: "2px solid #ff4444",
+          background: "#fdf8ff", border: "2px solid #ff4444",
           cursor: "pointer", fontWeight: 700, fontSize: 13,
           animation: "rainbow-glow 3s linear infinite",
           display: "flex", alignItems: "center", gap: 8,
@@ -372,17 +372,17 @@ export default function HomePage() {
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
             width: 32, height: 32, borderRadius: 10,
-            background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+            background: "linear-gradient(135deg, #9161b2, #7c4da8)",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
             <Shield size={18} color="#fff" />
           </div>
           <div>
-            <span style={{ fontWeight: 800, fontSize: 15, color: "#1e293b", letterSpacing: -0.3 }}>{t("nav_brand", lang)}</span>
+            <span style={{ fontWeight: 800, fontSize: 15, color: "#2a1a3a", letterSpacing: -0.3 }}>{t("nav_brand", lang)}</span>
             <span style={{
-              marginLeft: 8, fontSize: 10, fontWeight: 600, color: "#2563eb",
-              background: "#eff6ff", padding: "2px 7px", borderRadius: 20,
-              border: "1px solid #bfdbfe",
+              marginLeft: 8, fontSize: 10, fontWeight: 600, color: "#9161b2",
+              background: "#f5dfee", padding: "2px 7px", borderRadius: 20,
+              border: "1px solid #dcc5e8",
             }}>{t("nav_edu_badge", lang)}</span>
           </div>
         </div>
@@ -416,10 +416,10 @@ export default function HomePage() {
             onClick={() => router.push("/crime")}
             style={{
               padding: "9px 22px", borderRadius: 22,
-              background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+              background: "linear-gradient(135deg, #9161b2, #7c4da8)",
               color: "#fff", border: "none", cursor: "pointer",
               fontSize: 13, fontWeight: 700,
-              boxShadow: "0 2px 12px #2563eb40",
+              boxShadow: "0 2px 12px #9161b240",
             }}
           >
             {t("nav_start", lang)} →
@@ -432,7 +432,7 @@ export default function HomePage() {
           style={{
             display: "none",
             padding: "8px 16px", borderRadius: 20,
-            background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+            background: "linear-gradient(135deg, #9161b2, #7c4da8)",
             color: "#fff", border: "none", cursor: "pointer",
             fontSize: 13, fontWeight: 700,
           }}
@@ -456,10 +456,10 @@ export default function HomePage() {
             <span style={{ color: "#dc2626", fontSize: 12, fontWeight: 700 }}>{t("hero_alert", lang)}</span>
           </div>
 
-          <h1 style={{ fontSize: 50, fontWeight: 900, lineHeight: 1.15, marginBottom: 20, letterSpacing: -1.5, color: "#0f172a" }}>
+          <h1 style={{ fontSize: 50, fontWeight: 900, lineHeight: 1.15, marginBottom: 20, letterSpacing: -1.5, color: "#1c0d2e" }}>
             {t("hero_title1", lang)}<br />
             <span style={{
-              background: "linear-gradient(90deg, #2563eb, #7c3aed)",
+              background: "linear-gradient(90deg, #9161b2, #7c3aed)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
             }}>
               {t("hero_title2", lang)}
@@ -476,10 +476,10 @@ export default function HomePage() {
               style={{
                 display: "flex", alignItems: "center", gap: 8,
                 padding: "15px 30px", borderRadius: 14,
-                background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                 color: "#fff", border: "none", cursor: "pointer",
                 fontSize: 15, fontWeight: 700,
-                boxShadow: "0 4px 20px #2563eb40",
+                boxShadow: "0 4px 20px #9161b240",
               }}
             >
               {t("hero_cta", lang)} <ChevronRight size={16} />
@@ -487,7 +487,7 @@ export default function HomePage() {
             <a href="#scenarios" style={{
               display: "flex", alignItems: "center", gap: 8,
               padding: "15px 22px", borderRadius: 14,
-              background: "#fff", color: "#475569",
+              background: "#fdf8ff", color: "#475569",
               border: "1px solid #e2e8f0", cursor: "pointer",
               fontSize: 15, textDecoration: "none", fontWeight: 500,
             }}>
@@ -519,12 +519,12 @@ export default function HomePage() {
           ))}
           <div style={{
             gridColumn: "1 / -1",
-            background: "#eff6ff", border: "1px solid #bfdbfe",
+            background: "#f5dfee", border: "1px solid #dcc5e8",
             borderRadius: 18, padding: "16px 20px",
             display: "flex", alignItems: "center", gap: 12,
           }}>
-            <Shield size={18} color="#2563eb" style={{ flexShrink: 0 }} />
-            <p style={{ color: "#1d4ed8", fontSize: 13, lineHeight: 1.5 }}>
+            <Shield size={18} color="#9161b2" style={{ flexShrink: 0 }} />
+            <p style={{ color: "#7c3aed", fontSize: 13, lineHeight: 1.5 }}>
               {t("hero_edu_full", lang)}
             </p>
           </div>
@@ -533,7 +533,7 @@ export default function HomePage() {
 
       {/* ── 홍보 영상 ── */}
       <section style={{
-        background: "#0a0a0f", borderTop: "1px solid #1e1e2e",
+        background: "#130c1c", borderTop: "1px solid #2a1a3a",
         padding: "64px 40px",
       }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
@@ -557,18 +557,18 @@ export default function HomePage() {
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 8,
-                  background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                  background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
                 }}>1</div>
                 <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>최초 홍보 영상</p>
-                <span style={{ color: "#374151", fontSize: 11, background: "#1e1e2e", border: "1px solid #374151", borderRadius: 20, padding: "2px 10px" }}>2024</span>
+                <span style={{ color: "#374151", fontSize: 11, background: "#2a1a3a", border: "1px solid #374151", borderRadius: 20, padding: "2px 10px" }}>2024</span>
               </div>
               <div style={{
                 position: "relative", width: "100%", paddingTop: "56.25%",
                 borderRadius: 16, overflow: "hidden",
                 boxShadow: "0 16px 48px #00000060",
-                border: "1px solid #1e1e2e",
+                border: "1px solid #2a1a3a",
               }}>
                 <iframe
                   src="https://www.youtube.com/embed/vCDSs2nMy18"
@@ -611,7 +611,7 @@ export default function HomePage() {
           </div>
 
           {/* ── 업데이트 내역 ── */}
-          <div style={{ marginTop: 56, borderTop: "1px solid #1e1e2e", paddingTop: 48 }}>
+          <div style={{ marginTop: 56, borderTop: "1px solid #2a1a3a", paddingTop: 48 }}>
             <div style={{ textAlign: "center", marginBottom: 32 }}>
               <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
               <h3 style={{ color: "#fff", fontWeight: 900, fontSize: 22, letterSpacing: -0.5 }}>업데이트 내역</h3>
@@ -720,8 +720,8 @@ export default function HomePage() {
                 {
                   version: "v1.2.1",
                   badge: null,
-                  badgeColor: "#60a5fa",
-                  badgeBg: "#0a1628",
+                  badgeColor: "#c58dc6",
+                  badgeBg: "#160a26",
                   items: [
                     "📊 이용 통계 실시간 표시",
                     "👑 명예의 전당 기능 추가",
@@ -731,8 +731,8 @@ export default function HomePage() {
                 {
                   version: "v1.2",
                   badge: null,
-                  badgeColor: "#60a5fa",
-                  badgeBg: "#0a1628",
+                  badgeColor: "#c58dc6",
+                  badgeBg: "#160a26",
                   items: [
                     "🎰 불법도박 체험 시나리오 추가",
                     "🌏 10개 언어 다국어 지원",
@@ -741,7 +741,7 @@ export default function HomePage() {
                 {
                   version: "v1.1.1",
                   badge: null,
-                  badgeColor: "#a78bfa",
+                  badgeColor: "#c58dc6",
                   badgeBg: "#1e1b4b",
                   items: [
                     "📱 모바일 최적화 (터치 영역·레이아웃 개선)",
@@ -751,7 +751,7 @@ export default function HomePage() {
                 {
                   version: "v1.1",
                   badge: null,
-                  badgeColor: "#a78bfa",
+                  badgeColor: "#c58dc6",
                   badgeBg: "#1e1b4b",
                   items: [
                     "💸 가짜 송금 애니메이션 추가",
@@ -791,7 +791,7 @@ export default function HomePage() {
                   {i < 13 && (
                     <div style={{
                       position: "absolute", left: 39, top: 32, bottom: 0,
-                      width: 1, background: "#1e1e2e",
+                      width: 1, background: "#2a1a3a",
                     }} />
                   )}
                   {/* 버전 배지 */}
@@ -822,7 +822,7 @@ export default function HomePage() {
                   }}>
                     {hoveredLog === i ? (
                       <div style={{
-                        background: "#0d0d0d", border: `1px solid ${log.badgeColor}33`,
+                        background: "#1a1026", border: `1px solid ${log.badgeColor}33`,
                         borderRadius: 14, padding: "14px 16px",
                         animation: "slideUpLog 0.2s ease",
                         position: "absolute", top: 0, left: 0, right: 0, zIndex: 10,
@@ -848,7 +848,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 과거 범죄 아카이브 ── */}
-      <section style={{ background: "#0a0a0a", padding: "72px 0 64px", overflow: "hidden" }}>
+      <section style={{ background: "#130c1c", padding: "72px 0 64px", overflow: "hidden" }}>
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 40px" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 4, marginBottom: 10, fontFamily: "monospace" }}>[ CRIME ARCHIVE ]</p>
@@ -923,7 +923,7 @@ export default function HomePage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
-                <span style={{ color: "#60a5fa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2000년대 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2000년대 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#1a3a5c", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -963,9 +963,9 @@ export default function HomePage() {
                     </div>
                     {/* 콘텐츠 */}
                     <div style={{ padding: "12px 12px 10px", background: "#d4d0c8" }}>
-                      <div style={{ background: "#fff", border: "2px inset #808080", padding: "8px", marginBottom: 8 }}>
+                      <div style={{ background: "#fdf8ff", border: "2px inset #808080", padding: "8px", marginBottom: 8 }}>
                         <p style={{ color: "#000080", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
-                        <p style={{ color: "#1a1a1a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                        <p style={{ color: "#231232", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
                       </div>
                       <div style={{ display: "flex", justifyContent: "flex-end" }}>
                         <div style={{
@@ -993,7 +993,7 @@ export default function HomePage() {
                   { sender: "직구몰", preview: "아이폰5 미개봉 정품 29만원! 오늘마감 선착순50명", name: "가짜 직구몰 사기", desc: "너무 싼 해외직구 쇼핑몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 개념 자체가 없던 시대." },
                 ].map((c, j) => (
                   <div key={j} style={{
-                    background: "#1a1a1a",
+                    background: "#231232",
                     border: "1px solid #333",
                     borderRadius: 12,
                     overflow: "hidden",
@@ -1010,7 +1010,7 @@ export default function HomePage() {
                       <p style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>{c.sender}</p>
                     </div>
                     {/* SMS 말풍선 */}
-                    <div style={{ padding: "12px", background: "#1a1a1a" }}>
+                    <div style={{ padding: "12px", background: "#231232" }}>
                       <div style={{
                         background: "#2e7d32", borderRadius: "4px 12px 12px 12px",
                         padding: "8px 10px", maxWidth: "85%", marginBottom: 12,
@@ -1032,7 +1032,7 @@ export default function HomePage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
-                <span style={{ color: "#a78bfa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2015~2018년 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2015~2018년 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -1062,7 +1062,7 @@ export default function HomePage() {
                       <p style={{ color: "#a1a1aa", fontSize: 11, lineHeight: 1.6, marginBottom: 8, fontStyle: "italic", borderLeft: "2px solid #3f3f46", paddingLeft: 8 }}>{c.post}</p>
                       <p style={{ color: "#52525b", fontSize: 10, marginBottom: 10 }}>{c.like}</p>
                       <div style={{ borderTop: "1px solid #27272a", paddingTop: 8 }}>
-                        <p style={{ color: "#a78bfa", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
+                        <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>{c.name}</p>
                         <p style={{ color: "#71717a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
                       </div>
                     </div>
@@ -1085,7 +1085,7 @@ export default function HomePage() {
                   { breaking: "특보", headline: "비트코인 2배 보장 텔레그램 방 주의", sub: "코인 자체가 낯설어 검증 방법조차 몰랐던 시기 — 수천억 피해", name: "코인 초기 투자 사기", desc: "블록체인을 아무도 이해 못 하던 시절. '원리를 모르니 그냥 믿자'는 심리가 대규모 피해로." },
                 ].map((c, j) => (
                   <div key={j} style={{
-                    background: "#0a0a0a",
+                    background: "#130c1c",
                     border: "1px solid #1f2937",
                     borderRadius: 8,
                     overflow: "hidden",
@@ -1093,7 +1093,7 @@ export default function HomePage() {
                   }}>
                     {/* 뉴스 속보 헤더 */}
                     <div style={{ background: "#dc2626", padding: "4px 10px", display: "flex", alignItems: "center", gap: 6 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff", animation: "pulse 1s infinite" }} />
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#fdf8ff", animation: "pulse 1s infinite" }} />
                       <span style={{ color: "#fff", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>{c.breaking}</span>
                     </div>
                     <div style={{ padding: "12px" }}>
@@ -1111,12 +1111,12 @@ export default function HomePage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
-                <span style={{ color: "#f472b6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2022~2023년 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2022~2023년 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { tag: "AI VOICE", glow: "#f472b6", name: "딥보이스 보이스피싱 등장", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해." },
+                  { tag: "AI VOICE", glow: "#c58dc6", name: "딥보이스 보이스피싱 등장", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해." },
                   { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "카카오 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명." },
                   { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", waveform: "당근🥕 번개⚡ 중고나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점." },
                 ].map((c, j) => (
@@ -1151,13 +1151,13 @@ export default function HomePage() {
             <div style={{ marginTop: 40 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
-                <span style={{ color: "#a78bfa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2024년 ~ 현재 ──</span>
+                <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2024년 ~ 현재 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
-                  { tag: "DEEPFAKE", glow: "#a78bfa", name: "AI 딥페이크 협박 사기", visual: "👤 → 🤖 → 🎭", desc: "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작." },
-                  { tag: "GPT SCAM", glow: "#f472b6", name: "AI 자동 문자 폭탄", visual: "🤖 → 📱 × 10,000", desc: "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화." },
+                  { tag: "DEEPFAKE", glow: "#c58dc6", name: "AI 딥페이크 협박 사기", visual: "👤 → 🤖 → 🎭", desc: "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작." },
+                  { tag: "GPT SCAM", glow: "#c58dc6", name: "AI 자동 문자 폭탄", visual: "🤖 → 📱 × 10,000", desc: "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화." },
                   { tag: "VOICE AI", glow: "#34d399", name: "실시간 목소리 복제 통화", visual: "☎️ → AI → 가족목소리", desc: "3초 샘플로 가족 목소리 실시간 복제 통화. 납치 당했다며 송금 요구. 목소리로는 더 이상 진위 구분 불가." },
                 ].map((c, j) => (
                   <div key={j} style={{
@@ -1208,7 +1208,7 @@ export default function HomePage() {
               margin: "0 auto",
               boxShadow: "0 0 40px #7c3aed22",
             }}>
-              <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>AI TIME</p>
+              <p style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>AI TIME</p>
               <p style={{ color: "#e2e8f0", fontSize: 15, lineHeight: 2.0, marginBottom: 20 }}>
                 옛날의 수법이랑 지금의 수법은 시대가 변하면서 많이 달라졌습니다.<br />
                 AI의 증가에 따른 수법을 이용하여 만드는 사기도 이에 한몫을 하죠.
@@ -1235,7 +1235,7 @@ export default function HomePage() {
                 fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
                 fontSize: 26,
                 lineHeight: 1.7,
-                color: "#c4b5fd",
+                color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
                 letterSpacing: 1,
                 margin: 0,
@@ -1246,7 +1246,7 @@ export default function HomePage() {
                 fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
                 fontSize: 26,
                 lineHeight: 1.7,
-                color: "#c4b5fd",
+                color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
                 letterSpacing: 1,
                 margin: 0,
@@ -1256,7 +1256,7 @@ export default function HomePage() {
               <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#7c3aed55,transparent)", margin: "24px auto", maxWidth: 400 }} />
             </div>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
-              <span style={{ color: "#f472b6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>WHY THIS EXISTS</span>
+              <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>WHY THIS EXISTS</span>
               <h3 style={{ color: "#f4f4f5", fontSize: 26, fontWeight: 900, marginTop: 12, marginBottom: 0, letterSpacing: -0.5 }}>
                 그래서 이 프로그램이 필요합니다
               </h3>
@@ -1265,7 +1265,7 @@ export default function HomePage() {
               {[
                 {
                   icon: "🧠",
-                  color: "#a78bfa",
+                  color: "#c58dc6",
                   title: "직접 겪어야 안 속는다",
                   body: "경고 문자 100번보다 한 번 직접 당해보는 경험이 훨씬 강력합니다. 이 앱은 안전하게 '한 번 당해볼 수 있는' 공간입니다.",
                 },
@@ -1298,7 +1298,7 @@ export default function HomePage() {
             <div style={{ textAlign: "center", marginTop: 36 }}>
               <a href="/crime" style={{
                 display: "inline-block",
-                background: "linear-gradient(135deg, #7c3aed, #f472b6)",
+                background: "linear-gradient(135deg, #7c3aed, #c58dc6)",
                 color: "#fff",
                 fontWeight: 700,
                 fontSize: 15,
@@ -1316,7 +1316,7 @@ export default function HomePage() {
 
       {/* ── 제작 목적 & 실제 통계 ── */}
       <section id="why" style={{
-        background: "#fff", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
+        background: "#fdf8ff", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
         padding: "80px 40px",
       }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
@@ -1324,7 +1324,7 @@ export default function HomePage() {
           {/* 섹션 헤더 */}
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ color: "#dc2626", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>WHY WE BUILT THIS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#0f172a", marginBottom: 14 }}>
+            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e", marginBottom: 14 }}>
               {lang === "ko" ? "왜 이 프로그램이 필요한가" : lang === "en" ? "Why This Program Is Needed" : lang === "ja" ? "なぜこのプログラムが必要か" : lang === "zh" ? "为什么需要这个程序" : lang === "vi" ? "Tại sao cần chương trình này" : "Por qué se necesita este programa"}
             </h2>
             <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8, maxWidth: 600, margin: "0 auto" }}>
@@ -1397,7 +1397,7 @@ export default function HomePage() {
                   <p style={{ color: "#7c3aed", fontWeight: 800, fontSize: 16 }}>
                     {lang === "ko" ? "불법 도박 피해" : lang === "en" ? "Illegal Gambling Damage" : lang === "ja" ? "違法賭博被害" : lang === "zh" ? "非法赌博损失" : lang === "vi" ? "Thiệt hại cờ bạc bất hợp pháp" : "Daños por Juego Ilegal"}
                   </p>
-                  <p style={{ color: "#a78bfa", fontSize: 11 }}>
+                  <p style={{ color: "#c58dc6", fontSize: 11 }}>
                     {lang === "ko" ? "출처: 한국도박문제관리센터(KCGP)" : lang === "en" ? "Source: Korean Center on Gambling Problems (KCGP)" : lang === "ja" ? "出典: 韓国ギャンブル問題管理センター" : lang === "zh" ? "来源: 韩国赌博问题管理中心(KCGP)" : lang === "vi" ? "Nguồn: Trung tâm Quản lý Vấn đề Cờ bạc Hàn Quốc" : "Fuente: Centro Coreano de Problemas de Juego"}
                   </p>
                 </div>
@@ -1414,7 +1414,7 @@ export default function HomePage() {
                     display: "flex", alignItems: "flex-start", gap: 12,
                     padding: "10px 14px", borderRadius: 12,
                     background: row.highlight ? "#7c3aed10" : "transparent",
-                    border: row.highlight ? "1px solid #c4b5fd" : "none",
+                    border: row.highlight ? "1px solid #dcc5e8" : "none",
                   }}>
                     <span style={{ color: "#7c3aed", fontSize: 18, lineHeight: 1, flexShrink: 0, marginTop: 2 }}>▸</span>
                     <div>
@@ -1429,7 +1429,7 @@ export default function HomePage() {
 
           {/* 자살 통계 강조 배너 */}
           <div style={{
-            background: "linear-gradient(135deg, #0f172a, #1e293b)",
+            background: "linear-gradient(135deg, #1c0d2e, #2a1a3a)",
             borderRadius: 20, padding: "28px 36px",
             display: "flex", alignItems: "center", gap: 32, marginBottom: 40,
             flexWrap: "wrap",
@@ -1449,7 +1449,7 @@ export default function HomePage() {
               {[
                 { n: "12,906명", l: lang === "ko" ? "2022년 자살 사망자 (통계청)" : "2022 suicide deaths (Statistics Korea)", c: "#f87171" },
                 { n: lang === "ko" ? "하루 35명" : "35/day", l: lang === "ko" ? "매일 35명이 스스로 목숨을 끊습니다" : "35 people take their own lives every day", c: "#fb923c" },
-                { n: "1336", l: lang === "ko" ? "도박중독 24시간 무료 상담 전화" : "Gambling addiction 24h free helpline", c: "#a78bfa" },
+                { n: "1336", l: lang === "ko" ? "도박중독 24시간 무료 상담 전화" : "Gambling addiction 24h free helpline", c: "#c58dc6" },
               ].map((d) => (
                 <div key={d.n} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <span style={{ color: d.c, fontWeight: 900, fontSize: 20, minWidth: 90 }}>{d.n}</span>
@@ -1461,14 +1461,14 @@ export default function HomePage() {
 
           {/* 제작자 소개 */}
           <div style={{
-            background: "linear-gradient(135deg, #f0fdf4, #eff6ff)",
+            background: "linear-gradient(135deg, #f0fdf4, #f5dfee)",
             border: "1px solid #bbf7d0",
             borderRadius: 20, padding: "32px 36px", marginBottom: 24,
           }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 20, flexWrap: "wrap" }}>
               <div style={{
                 width: 56, height: 56, borderRadius: "50%", flexShrink: 0,
-                background: "linear-gradient(135deg, #2563eb, #059669)",
+                background: "linear-gradient(135deg, #9161b2, #059669)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 26,
               }}>
@@ -1476,18 +1476,18 @@ export default function HomePage() {
               </div>
               <div style={{ flex: 1, minWidth: 280 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
-                  <p style={{ color: "#0f172a", fontWeight: 800, fontSize: 18 }}>
+                  <p style={{ color: "#1c0d2e", fontWeight: 800, fontSize: 18 }}>
                     {lang === "ko" ? "만든 사람 이야기" : lang === "en" ? "About the Creator" : lang === "ja" ? "作成者について" : lang === "zh" ? "关于创作者" : lang === "vi" ? "Về người tạo ra" : "Sobre el creador"}
                   </p>
                   <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, fontWeight: 700, background: "#dcfce7", color: "#15803d", border: "1px solid #bbf7d0" }}>
                     {lang === "ko" ? "일반 시민 제작" : lang === "en" ? "Made by a Citizen" : lang === "ja" ? "一般市民制作" : lang === "zh" ? "普通市民制作" : lang === "vi" ? "Người dân bình thường tạo ra" : "Hecho por un ciudadano"}
                   </span>
-                  <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, fontWeight: 700, background: "#eff6ff", color: "#1d4ed8", border: "1px solid #bfdbfe" }}>
+                  <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, fontWeight: 700, background: "#f5dfee", color: "#7c3aed", border: "1px solid #dcc5e8" }}>
                     AI Claude
                   </span>
                 </div>
                 <p style={{ color: "#334155", fontSize: 15, lineHeight: 1.95, marginBottom: 20 }}>
-                  {lang === "ko" ? <>저는 법률 전문가도, 경찰도 아닌 <strong style={{ color: "#0f172a" }}>평범한 일반 시민</strong>입니다.<br />보이스피싱에 속아 전재산을 잃고, 도박 빚으로 삶을 포기하는<br />이웃들을 보며 &ldquo;내가 뭔가 할 수 있지 않을까&rdquo; 하는 마음으로 시작했습니다.<br /><br /><strong style={{ color: "#0f172a" }}>Anthropic의 AI Claude</strong>와 함께 직접 개발한 이 프로그램이<br />단 한 명이라도 범죄 피해로부터 지킬 수 있다면, 그걸로 충분합니다.</> : lang === "en" ? <>I&apos;m not a legal expert or police officer — just an <strong style={{ color: "#0f172a" }}>ordinary citizen</strong>.<br />Seeing neighbors lose everything to scams and gambling debt made me think:<br />&ldquo;Can I do something?&rdquo;<br /><br />Built with <strong style={{ color: "#0f172a" }}>Anthropic&apos;s AI Claude</strong>, I hope this program<br />protects even one person from becoming a victim.</> : lang === "ja" ? <>私は法律の専門家でも警察官でもなく、<strong style={{ color: "#0f172a" }}>ごく普通の市民</strong>です。<br />詐欺で全財産を失い、ギャンブル借金で人生を諦める隣人を見て<br />「何かできないか」という思いで始めました。<br /><br /><strong style={{ color: "#0f172a" }}>AnthropicのAI Claude</strong>と一緒に開発したこのプログラムが<br />一人でも犯罪被害から守れるなら、それで十分です。</> : lang === "zh" ? <>我不是法律专家，也不是警察，只是一名<strong style={{ color: "#0f172a" }}>普通市民</strong>。<br />看到邻居因诈骗失去一切，因赌博债务放弃生命，<br />我想：「我能做些什么吗？」<br /><br />与<strong style={{ color: "#0f172a" }}>Anthropic的AI Claude</strong>共同开发的这个程序，<br />希望能保护哪怕一个人免受犯罪侵害。</> : lang === "vi" ? <>Tôi không phải chuyên gia pháp luật hay cảnh sát — chỉ là một <strong style={{ color: "#0f172a" }}>công dân bình thường</strong>.<br />Thấy hàng xóm mất tất cả vì lừa đảo và nợ cờ bạc, tôi nghĩ:<br />&ldquo;Mình có thể làm gì đó không?&rdquo;<br /><br />Được phát triển cùng <strong style={{ color: "#0f172a" }}>AI Claude của Anthropic</strong>,<br />tôi hy vọng chương trình này bảo vệ được dù chỉ một người.</> : <>No soy experto legal ni policía — solo un <strong style={{ color: "#0f172a" }}>ciudadano ordinario</strong>.<br />Ver a vecinos perder todo por estafas y deudas de juego me hizo pensar:<br />&ldquo;¿Puedo hacer algo?&rdquo;<br /><br />Desarrollado con <strong style={{ color: "#0f172a" }}>AI Claude de Anthropic</strong>,<br />espero que este programa proteja aunque sea a una persona.</>}
+                  {lang === "ko" ? <>저는 법률 전문가도, 경찰도 아닌 <strong style={{ color: "#1c0d2e" }}>평범한 일반 시민</strong>입니다.<br />보이스피싱에 속아 전재산을 잃고, 도박 빚으로 삶을 포기하는<br />이웃들을 보며 &ldquo;내가 뭔가 할 수 있지 않을까&rdquo; 하는 마음으로 시작했습니다.<br /><br /><strong style={{ color: "#1c0d2e" }}>Anthropic의 AI Claude</strong>와 함께 직접 개발한 이 프로그램이<br />단 한 명이라도 범죄 피해로부터 지킬 수 있다면, 그걸로 충분합니다.</> : lang === "en" ? <>I&apos;m not a legal expert or police officer — just an <strong style={{ color: "#1c0d2e" }}>ordinary citizen</strong>.<br />Seeing neighbors lose everything to scams and gambling debt made me think:<br />&ldquo;Can I do something?&rdquo;<br /><br />Built with <strong style={{ color: "#1c0d2e" }}>Anthropic&apos;s AI Claude</strong>, I hope this program<br />protects even one person from becoming a victim.</> : lang === "ja" ? <>私は法律の専門家でも警察官でもなく、<strong style={{ color: "#1c0d2e" }}>ごく普通の市民</strong>です。<br />詐欺で全財産を失い、ギャンブル借金で人生を諦める隣人を見て<br />「何かできないか」という思いで始めました。<br /><br /><strong style={{ color: "#1c0d2e" }}>AnthropicのAI Claude</strong>と一緒に開発したこのプログラムが<br />一人でも犯罪被害から守れるなら、それで十分です。</> : lang === "zh" ? <>我不是法律专家，也不是警察，只是一名<strong style={{ color: "#1c0d2e" }}>普通市民</strong>。<br />看到邻居因诈骗失去一切，因赌博债务放弃生命，<br />我想：「我能做些什么吗？」<br /><br />与<strong style={{ color: "#1c0d2e" }}>Anthropic的AI Claude</strong>共同开发的这个程序，<br />希望能保护哪怕一个人免受犯罪侵害。</> : lang === "vi" ? <>Tôi không phải chuyên gia pháp luật hay cảnh sát — chỉ là một <strong style={{ color: "#1c0d2e" }}>công dân bình thường</strong>.<br />Thấy hàng xóm mất tất cả vì lừa đảo và nợ cờ bạc, tôi nghĩ:<br />&ldquo;Mình có thể làm gì đó không?&rdquo;<br /><br />Được phát triển cùng <strong style={{ color: "#1c0d2e" }}>AI Claude của Anthropic</strong>,<br />tôi hy vọng chương trình này bảo vệ được dù chỉ một người.</> : <>No soy experto legal ni policía — solo un <strong style={{ color: "#1c0d2e" }}>ciudadano ordinario</strong>.<br />Ver a vecinos perder todo por estafas y deudas de juego me hizo pensar:<br />&ldquo;¿Puedo hacer algo?&rdquo;<br /><br />Desarrollado con <strong style={{ color: "#1c0d2e" }}>AI Claude de Anthropic</strong>,<br />espero que este programa proteja aunque sea a una persona.</>}
                 </p>
               </div>
             </div>
@@ -1495,19 +1495,19 @@ export default function HomePage() {
 
           {/* 기관 협력 배너 */}
           <div style={{
-            background: "#eff6ff", border: "1px solid #bfdbfe",
+            background: "#f5dfee", border: "1px solid #dcc5e8",
             borderRadius: 20, padding: "28px 32px",
           }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 20, flexWrap: "wrap" }}>
               <div style={{ flex: 1, minWidth: 300 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                  <Shield size={18} color="#2563eb" />
-                  <p style={{ color: "#1d4ed8", fontWeight: 800, fontSize: 16 }}>
+                  <Shield size={18} color="#9161b2" />
+                  <p style={{ color: "#7c3aed", fontWeight: 800, fontSize: 16 }}>
                     {lang === "ko" ? "국가기관과 함께하고 싶습니다" : lang === "en" ? "We want to partner with public institutions" : lang === "ja" ? "国家機関と連携したいです" : lang === "zh" ? "我们希望与公共机构合作" : lang === "vi" ? "Chúng tôi muốn hợp tác với các cơ quan nhà nước" : "Queremos colaborar con instituciones públicas"}
                   </p>
                 </div>
-                <p style={{ color: "#3b82f6", fontSize: 14, lineHeight: 1.8 }}>
-                  {lang === "ko" ? <>{lang === "ko" && "이 프로그램은 "}<strong style={{ color: "#1d4ed8" }}>경찰청, 교육청, 금융감독원, 지자체</strong>{lang === "ko" ? " 등 공공기관과의 협력을 희망합니다." : ""}</> : lang === "en" ? <>This program seeks collaboration with <strong style={{ color: "#1d4ed8" }}>the police, schools, financial regulators, and local governments</strong>.</> : lang === "ja" ? <>このプログラムは<strong style={{ color: "#1d4ed8" }}>警察庁、教育委員会、金融監督院、地方自治体</strong>との協力を希望します。</> : lang === "zh" ? <>本程序寻求与<strong style={{ color: "#1d4ed8" }}>警察局、教育局、金融监督院、地方政府</strong>合作。</> : lang === "vi" ? <>Chương trình này mong muốn hợp tác với <strong style={{ color: "#1d4ed8" }}>cảnh sát, trường học, cơ quan tài chính và chính quyền địa phương</strong>.</> : <>Este programa busca colaborar con <strong style={{ color: "#1d4ed8" }}>policía, escuelas, reguladores financieros y gobiernos locales</strong>.</>}
+                <p style={{ color: "#a57cbb", fontSize: 14, lineHeight: 1.8 }}>
+                  {lang === "ko" ? <>{lang === "ko" && "이 프로그램은 "}<strong style={{ color: "#7c3aed" }}>경찰청, 교육청, 금융감독원, 지자체</strong>{lang === "ko" ? " 등 공공기관과의 협력을 희망합니다." : ""}</> : lang === "en" ? <>This program seeks collaboration with <strong style={{ color: "#7c3aed" }}>the police, schools, financial regulators, and local governments</strong>.</> : lang === "ja" ? <>このプログラムは<strong style={{ color: "#7c3aed" }}>警察庁、教育委員会、金融監督院、地方自治体</strong>との協力を希望します。</> : lang === "zh" ? <>本程序寻求与<strong style={{ color: "#7c3aed" }}>警察局、教育局、金融监督院、地方政府</strong>合作。</> : lang === "vi" ? <>Chương trình này mong muốn hợp tác với <strong style={{ color: "#7c3aed" }}>cảnh sát, trường học, cơ quan tài chính và chính quyền địa phương</strong>.</> : <>Este programa busca colaborar con <strong style={{ color: "#7c3aed" }}>policía, escuelas, reguladores financieros y gobiernos locales</strong>.</>}
                 </p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, flexShrink: 0 }}>
@@ -1519,7 +1519,7 @@ export default function HomePage() {
                 ].map((org) => (
                   <div key={org.label} style={{
                     display: "flex", alignItems: "center", gap: 12,
-                    background: "#fff", borderRadius: 10, padding: "10px 16px",
+                    background: "#fdf8ff", borderRadius: 10, padding: "10px 16px",
                     border: "1px solid #e0e7ff", minWidth: 260,
                   }}>
                     <span style={{ fontSize: 18 }}>{org.icon}</span>
@@ -1532,13 +1532,13 @@ export default function HomePage() {
               </div>
             </div>
             <div style={{
-              marginTop: 20, paddingTop: 18, borderTop: "1px solid #bfdbfe",
+              marginTop: 20, paddingTop: 18, borderTop: "1px solid #dcc5e8",
               display: "flex", alignItems: "center", gap: 8,
             }}>
               <span style={{ fontSize: 14 }}>📧</span>
-              <p style={{ color: "#3b82f6", fontSize: 13 }}>
+              <p style={{ color: "#a57cbb", fontSize: 13 }}>
                 {lang === "ko" ? "협력·도입 문의:" : lang === "en" ? "Partnership inquiry:" : lang === "ja" ? "協力・導入のお問い合わせ:" : lang === "zh" ? "合作咨询:" : lang === "vi" ? "Liên hệ hợp tác:" : "Consulta de alianza:"}{" "}
-                <strong style={{ color: "#1d4ed8" }}>itnlifecn@gmail.com</strong>
+                <strong style={{ color: "#7c3aed" }}>itnlifecn@gmail.com</strong>
               </p>
             </div>
           </div>
@@ -1553,17 +1553,17 @@ export default function HomePage() {
       }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>HOW IT WORKS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#0f172a" }}>{t("how_title", lang)}</h2>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>HOW IT WORKS</p>
+            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("how_title", lang)}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {[
-              { icon: <BookOpen size={22} color="#2563eb" />, bg: "#eff6ff", border: "#bfdbfe", step: "01", titleKey: "step1_title" as const, descKey: "step1_desc" as const },
+              { icon: <BookOpen size={22} color="#9161b2" />, bg: "#f5dfee", border: "#dcc5e8", step: "01", titleKey: "step1_title" as const, descKey: "step1_desc" as const },
               { icon: <Phone size={22} color="#7c3aed" />, bg: "#faf5ff", border: "#ddd6fe", step: "02", titleKey: "step2_title" as const, descKey: "step2_desc" as const },
               { icon: <Shield size={22} color="#059669" />, bg: "#f0fdf4", border: "#bbf7d0", step: "03", titleKey: "step3_title" as const, descKey: "step3_desc" as const },
             ].map((item) => (
               <div key={item.step} style={{
-                background: "#fff", border: "1px solid #f1f5f9",
+                background: "#fdf8ff", border: "1px solid #f1f5f9",
                 borderRadius: 22, padding: "30px 28px",
                 boxShadow: "0 2px 16px #0000000a",
               }}>
@@ -1576,7 +1576,7 @@ export default function HomePage() {
                   {item.icon}
                 </div>
                 <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>STEP {item.step}</p>
-                <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 18, marginBottom: 12 }}>{t(item.titleKey, lang)}</p>
+                <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 18, marginBottom: 12 }}>{t(item.titleKey, lang)}</p>
                 <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.7 }}>{t(item.descKey, lang)}</p>
               </div>
             ))}
@@ -1588,8 +1588,8 @@ export default function HomePage() {
       <section id="scenarios" style={{ maxWidth: 1140, margin: "0 auto", padding: "80px 40px" }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 44 }}>
           <div>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>SCENARIOS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#0f172a" }}>{t("sc_section_title", lang)}</h2>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>SCENARIOS</p>
+            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("sc_section_title", lang)}</h2>
             <p style={{ color: "#64748b", fontSize: 14, marginTop: 10 }}>{t("sc_section_sub", lang)}</p>
           </div>
           <button
@@ -1597,8 +1597,8 @@ export default function HomePage() {
             style={{
               display: "flex", alignItems: "center", gap: 8,
               padding: "10px 20px", borderRadius: 10,
-              background: "#fff", color: "#2563eb",
-              border: "1px solid #bfdbfe", cursor: "pointer", fontSize: 13, fontWeight: 600,
+              background: "#fdf8ff", color: "#9161b2",
+              border: "1px solid #dcc5e8", cursor: "pointer", fontSize: 13, fontWeight: 600,
               boxShadow: "0 1px 4px #0000000a",
             }}
           >
@@ -1612,7 +1612,7 @@ export default function HomePage() {
               key={s.id}
               onClick={() => setSelectedScenario(s)}
               style={{
-                background: "#fff", border: "1px solid #f1f5f9",
+                background: "#fdf8ff", border: "1px solid #f1f5f9",
                 borderRadius: 20, padding: "22px 20px", textAlign: "left",
                 cursor: "pointer", transition: "all 0.2s",
                 boxShadow: "0 2px 12px #0000000a",
@@ -1644,7 +1644,7 @@ export default function HomePage() {
               }}>
                 {t(SC_CAT_KEY[s.id] ?? "cat_gambling", lang)}
               </div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 15, marginBottom: 6, lineHeight: 1.4 }}>{s.title}</p>
+              <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 15, marginBottom: 6, lineHeight: 1.4 }}>{s.title}</p>
               <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.6 }}>{s.subtitle}</p>
               {s.targetAge === "senior" && (
                 <div style={{
@@ -1683,7 +1683,7 @@ export default function HomePage() {
             <div
               onClick={(e) => e.stopPropagation()}
               style={{
-                background: "#fff", borderRadius: 28,
+                background: "#fdf8ff", borderRadius: 28,
                 width: "100%", maxWidth: 600, maxHeight: "90vh",
                 overflowY: "auto", boxShadow: "0 32px 80px rgba(0,0,0,0.28)",
                 animation: "slideUpCard 0.25s ease",
@@ -1721,7 +1721,7 @@ export default function HomePage() {
                 }}>
                   {t(SC_CAT_KEY[s.id] ?? "cat_gambling", lang)}
                 </div>
-                <h2 style={{ color: "#0f172a", fontSize: 22, fontWeight: 900, marginBottom: 6, lineHeight: 1.3 }}>{s.title}</h2>
+                <h2 style={{ color: "#1c0d2e", fontSize: 22, fontWeight: 900, marginBottom: 6, lineHeight: 1.3 }}>{s.title}</h2>
                 <p style={{ color: "#64748b", fontSize: 14 }}>{s.subtitle}</p>
               </div>
 
@@ -1797,13 +1797,13 @@ export default function HomePage() {
 
       {/* ── 신고 번호 ── */}
       <section id="report" style={{
-        background: "#fff", borderTop: "1px solid #e2e8f0",
+        background: "#fdf8ff", borderTop: "1px solid #e2e8f0",
         padding: "72px 40px",
       }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
             <p style={{ color: "#dc2626", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>EMERGENCY</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#0f172a" }}>{t("rpt_section_title", lang)}</h2>
+            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("rpt_section_title", lang)}</h2>
             <p style={{ color: "#64748b", fontSize: 14, marginTop: 10 }}>{t("rpt_section_sub", lang)}</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
@@ -1812,7 +1812,7 @@ export default function HomePage() {
                 key={r.number}
                 href={`tel:${r.number}`}
                 style={{
-                  display: "block", background: "#fff",
+                  display: "block", background: "#fdf8ff",
                   border: "1px solid #e2e8f0", borderRadius: 20,
                   padding: "26px 22px", textDecoration: "none",
                   transition: "all 0.2s",
@@ -1847,12 +1847,12 @@ export default function HomePage() {
       </section>
 
       {/* ── 기관 판매 문의 배너 ── */}
-      <section style={{ background: "#fff", borderTop: "1px solid #e2e8f0", padding: "52px 40px" }}>
+      <section style={{ background: "#fdf8ff", borderTop: "1px solid #e2e8f0", padding: "52px 40px" }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div
             ref={instCardRef}
             style={{
-              background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)",
+              background: "linear-gradient(135deg, #1c0d2e 0%, #4a2478 50%, #1c0d2e 100%)",
               borderRadius: 24, padding: "40px 44px",
               display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center",
               position: "relative", overflow: "hidden",
@@ -1877,13 +1877,13 @@ export default function HomePage() {
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 28 }}>🏛️</span>
-                <p style={{ color: "#93c5fd", fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>INSTITUTIONAL SALES</p>
+                <p style={{ color: "#dcc5e8", fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>INSTITUTIONAL SALES</p>
               </div>
               <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 26, letterSpacing: -0.5, marginBottom: 14, lineHeight: 1.4 }}>
                 {lang === "ko" ? <>교육부·경찰청·지자체·학교 등<br />국가 교육기관에 납품 가능합니다</> : lang === "en" ? <>Available for Ministry of Education, Police,<br />Local Governments, Schools & More</> : lang === "ja" ? <>教育部・警察庁・地方自治体・学校等<br />国家教育機関への提供が可能です</> : lang === "zh" ? <>可向教育部、警察局、地方政府、<br />学校等国家教育机构供应</> : lang === "vi" ? <>Có thể cung cấp cho Bộ Giáo dục, Cảnh sát,<br />Chính quyền địa phương, Trường học, v.v.</> : <>Disponible para Ministerio de Educación, Policía,<br />Gobiernos Locales, Escuelas y más</>}
               </h2>
               <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.9, marginBottom: 20 }}>
-                {lang === "ko" ? <>범죄 예방 교육 콘텐츠로 공공기관·교육청·복지관·기업 등에 도입을 원하시면 이메일로 연락 주세요.<br /><strong style={{ color: "#60a5fa" }}>비영리·공익 목적 기관은 무료 제공을 우선합니다.</strong></> : lang === "en" ? <>Contact us via email to adopt this for public agencies, schools, welfare centers, or companies.<br /><strong style={{ color: "#60a5fa" }}>Non-profit and public interest institutions are given free access first.</strong></> : lang === "ja" ? <>犯罪予防教育コンテンツとして公共機関・教育委員会・福祉館・企業等への導入を希望される方はメールでご連絡ください。<br /><strong style={{ color: "#60a5fa" }}>非営利・公益目的機関は無料提供を優先します。</strong></> : lang === "zh" ? <>如需将犯罪预防教育内容引入公共机构、教育局、福利中心或企业，请通过电子邮件联系我们。<br /><strong style={{ color: "#60a5fa" }}>非营利及公益目的机构优先免费提供。</strong></> : lang === "vi" ? <>Liên hệ qua email để áp dụng cho cơ quan công cộng, trường học, trung tâm phúc lợi hoặc công ty.<br /><strong style={{ color: "#60a5fa" }}>Các tổ chức phi lợi nhuận và công ích được ưu tiên miễn phí.</strong></> : <>Contáctanos por email para adoptar esto en agencias públicas, escuelas, centros de bienestar o empresas.<br /><strong style={{ color: "#60a5fa" }}>Las instituciones sin fines de lucro tienen acceso gratuito primero.</strong></>}
+                {lang === "ko" ? <>범죄 예방 교육 콘텐츠로 공공기관·교육청·복지관·기업 등에 도입을 원하시면 이메일로 연락 주세요.<br /><strong style={{ color: "#c58dc6" }}>비영리·공익 목적 기관은 무료 제공을 우선합니다.</strong></> : lang === "en" ? <>Contact us via email to adopt this for public agencies, schools, welfare centers, or companies.<br /><strong style={{ color: "#c58dc6" }}>Non-profit and public interest institutions are given free access first.</strong></> : lang === "ja" ? <>犯罪予防教育コンテンツとして公共機関・教育委員会・福祉館・企業等への導入を希望される方はメールでご連絡ください。<br /><strong style={{ color: "#c58dc6" }}>非営利・公益目的機関は無料提供を優先します。</strong></> : lang === "zh" ? <>如需将犯罪预防教育内容引入公共机构、教育局、福利中心或企业，请通过电子邮件联系我们。<br /><strong style={{ color: "#c58dc6" }}>非营利及公益目的机构优先免费提供。</strong></> : lang === "vi" ? <>Liên hệ qua email để áp dụng cho cơ quan công cộng, trường học, trung tâm phúc lợi hoặc công ty.<br /><strong style={{ color: "#c58dc6" }}>Các tổ chức phi lợi nhuận và công ích được ưu tiên miễn phí.</strong></> : <>Contáctanos por email para adoptar esto en agencias públicas, escuelas, centros de bienestar o empresas.<br /><strong style={{ color: "#c58dc6" }}>Las instituciones sin fines de lucro tienen acceso gratuito primero.</strong></>}
               </p>
             </div>
             <div style={{
@@ -1899,7 +1899,7 @@ export default function HomePage() {
                   <p style={{ color: "#64748b", fontSize: 11, marginBottom: 4 }}>
                     {lang === "ko" ? "기관 도입 · 납품 문의" : lang === "en" ? "Institutional adoption" : lang === "ja" ? "機関導入・納品" : lang === "zh" ? "机构采购" : lang === "vi" ? "Hợp tác tổ chức" : "Adopción institucional"}
                   </p>
-                  <a href="mailto:itnlifecn@gmail.com" style={{ color: "#60a5fa", fontWeight: 700, fontSize: 15, textDecoration: "none" }}>
+                  <a href="mailto:itnlifecn@gmail.com" style={{ color: "#c58dc6", fontWeight: 700, fontSize: 15, textDecoration: "none" }}>
                     itnlifecn@gmail.com
                   </a>
                 </div>
@@ -1912,7 +1912,7 @@ export default function HomePage() {
                   style={{
                     display: "block", textAlign: "center",
                     padding: "12px 0", borderRadius: 12,
-                    background: "linear-gradient(135deg, #2563eb, #4f46e5)",
+                    background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                     color: "#fff", textDecoration: "none",
                     fontWeight: 700, fontSize: 14,
                   }}
@@ -1926,7 +1926,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 개인정보 안심 배너 ── */}
-      <div style={{ background: "#0f172a", padding: "32px 40px" }}>
+      <div style={{ background: "#1c0d2e", padding: "32px 40px" }}>
         <div style={{
           maxWidth: 1140, margin: "0 auto",
           display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
@@ -1958,7 +1958,7 @@ export default function HomePage() {
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
             <div style={{
               width: 42, height: 42, borderRadius: "50%",
-              background: "linear-gradient(135deg, #534AB7, #7c3aed)",
+              background: "linear-gradient(135deg, #9161b2, #7c3aed)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 20, flexShrink: 0,
             }}>🤖</div>
@@ -2006,8 +2006,8 @@ export default function HomePage() {
       <section style={{ background: "#f8fafc", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0", padding: "80px 40px" }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <p style={{ color: "#2563eb", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>REAL REVIEWS</p>
-            <h2 style={{ fontSize: 34, fontWeight: 900, color: "#0f172a", marginBottom: 12, letterSpacing: -0.5 }}>이 프로그램을 통해 예방한 분들의 후기</h2>
+            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>REAL REVIEWS</p>
+            <h2 style={{ fontSize: 34, fontWeight: 900, color: "#1c0d2e", marginBottom: 12, letterSpacing: -0.5 }}>이 프로그램을 통해 예방한 분들의 후기</h2>
             <p style={{ color: "#64748b", fontSize: 14 }}>실제 체험 후 남겨주신 후기입니다.</p>
           </div>
 
@@ -2030,7 +2030,7 @@ export default function HomePage() {
                 avatar: "👩",
                 rating: 5,
                 tag: "로맨스 스캠 예방",
-                tagColor: "#ec4899",
+                tagColor: "#b3889e",
                 date: "1개월 전",
                 text: "저 인스타에서 외국인이 DM 보내왔을 때 반쯤 넘어가고 있었어요 ㅋㅋ 근데 마침 이 사이트에서 로맨스 스캠 체험을 했었거든요. 체험이랑 너무 똑같은거에요 진행 방식이. \"해외에 있어서 계좌 이체가 안된다\" 하는 말까지 그대로라서 소름돋아서 바로 차단했어요. 친구한테도 보내줬어요.",
                 highlight: "체험이랑 수법이 너무 똑같아서 소름",
@@ -2081,7 +2081,7 @@ export default function HomePage() {
               },
             ].map((r, i) => (
               <div key={i} style={{
-                background: "#fff",
+                background: "#fdf8ff",
                 border: "1px solid #e2e8f0",
                 borderRadius: 20,
                 padding: "24px 22px",
@@ -2103,7 +2103,7 @@ export default function HomePage() {
                 </span>
 
                 {/* 하이라이트 */}
-                <p style={{ color: "#0f172a", fontWeight: 800, fontSize: 14, lineHeight: 1.5, borderLeft: `3px solid ${r.tagColor}`, paddingLeft: 10 }}>
+                <p style={{ color: "#1c0d2e", fontWeight: 800, fontSize: 14, lineHeight: 1.5, borderLeft: `3px solid ${r.tagColor}`, paddingLeft: 10 }}>
                   &ldquo;{r.highlight}&rdquo;
                 </p>
 
@@ -2115,7 +2115,7 @@ export default function HomePage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{r.avatar}</div>
                     <div>
-                      <p style={{ color: "#0f172a", fontWeight: 700, fontSize: 13 }}>{r.name}</p>
+                      <p style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 13 }}>{r.name}</p>
                       <p style={{ color: "#94a3b8", fontSize: 11 }}>{r.age}</p>
                     </div>
                   </div>
@@ -2133,7 +2133,7 @@ export default function HomePage() {
               { num: "91%", label: "실제 예방 효과", sub: "체험자 자가 응답" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
-                <p style={{ color: "#0f172a", fontWeight: 900, fontSize: 28, letterSpacing: -0.5 }}>{s.num}</p>
+                <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: 28, letterSpacing: -0.5 }}>{s.num}</p>
                 <p style={{ color: "#334155", fontSize: 13, fontWeight: 700 }}>{s.label}</p>
                 <p style={{ color: "#94a3b8", fontSize: 11 }}>{s.sub}</p>
               </div>
@@ -2147,8 +2147,8 @@ export default function HomePage() {
 
       {/* ── 푸터 ── */}
       <footer style={{
-        borderTop: "1px solid #1e293b", padding: "24px 40px",
-        background: "#0f172a",
+        borderTop: "1px solid #2a1a3a", padding: "24px 40px",
+        background: "#1c0d2e",
       }}>
         <div style={{
           maxWidth: 1140, margin: "0 auto",
@@ -2156,7 +2156,7 @@ export default function HomePage() {
           flexWrap: "wrap", gap: 12,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Shield size={14} color="#2563eb" />
+            <Shield size={14} color="#9161b2" />
             <span style={{ color: "#475569", fontSize: 13 }}>{t("footer_brand_text", lang)}</span>
           </div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>

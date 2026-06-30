@@ -140,11 +140,11 @@ export default function DeepfakePage() {
       `}</style>
 
       {/* 상단 헤더 */}
-      <div style={{ background: "#0a0a0f", borderBottom: "1px solid #1e1e2e", padding: "16px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ background: "#130c1c", borderBottom: "1px solid #2a1a3a", padding: "16px 24px", display: "flex", alignItems: "center", gap: 16 }}>
         <a href="/crime" style={{ color: "#6b7280", fontSize: 13, textDecoration: "none" }}>← 뒤로</a>
-        <div style={{ width: 1, height: 16, background: "#1e1e2e" }} />
-        <span style={{ color: "#a78bfa", fontSize: 13, fontWeight: 700 }}>AI 딥페이크 사기 체험</span>
-        <span style={{ marginLeft: "auto", background: "#7c3aed22", border: "1px solid #7c3aed55", borderRadius: 20, padding: "2px 10px", color: "#a78bfa", fontSize: 11, fontWeight: 700 }}>SIMULATION</span>
+        <div style={{ width: 1, height: 16, background: "#2a1a3a" }} />
+        <span style={{ color: "#c58dc6", fontSize: 13, fontWeight: 700 }}>AI 딥페이크 사기 체험</span>
+        <span style={{ marginLeft: "auto", background: "#7c3aed22", border: "1px solid #7c3aed55", borderRadius: 20, padding: "2px 10px", color: "#c58dc6", fontSize: 11, fontWeight: 700 }}>SIMULATION</span>
       </div>
 
       {/* ── INTRO ── */}
@@ -154,7 +154,7 @@ export default function DeepfakePage() {
           <h1 style={{ fontSize: 26, fontWeight: 900, marginBottom: 12, letterSpacing: -0.5 }}>AI 딥페이크 가족 사칭 사기</h1>
           <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.9, marginBottom: 32 }}>
             실제로 일어나고 있는 수법입니다.<br />
-            AI가 <strong style={{ color: "#a78bfa" }}>가족의 얼굴과 목소리</strong>를 합성해 영상통화를 겁니다.<br />
+            AI가 <strong style={{ color: "#c58dc6" }}>가족의 얼굴과 목소리</strong>를 합성해 영상통화를 겁니다.<br />
             당신은 이것이 사기임을 알아챌 수 있을까요?
           </p>
           <div style={{ background: "#0f0f1a", border: "1px solid #7c3aed44", borderRadius: 16, padding: "20px 24px", marginBottom: 32, textAlign: "left" }}>
@@ -234,7 +234,7 @@ export default function DeepfakePage() {
       {phase === "chat" && (
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "16px 0", display: "flex", flexDirection: "column", height: "calc(100vh - 57px)" }}>
           {/* 채팅 상단 */}
-          <div style={{ background: "#0f0f1a", padding: "12px 20px", borderBottom: "1px solid #1e1e2e", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ background: "#0f0f1a", padding: "12px 20px", borderBottom: "1px solid #2a1a3a", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#2d2d44", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{SCAMMER_AVATAR}</div>
             <div>
               <p style={{ fontWeight: 700, fontSize: 14 }}>{SCAMMER_NAME}</p>
@@ -249,7 +249,7 @@ export default function DeepfakePage() {
                   <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#2d2d44", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, marginRight: 8, flexShrink: 0 }}>{SCAMMER_AVATAR}</div>
                 )}
                 <div style={{
-                  background: m.from === "user" ? "#7c3aed" : "#1e1e2e",
+                  background: m.from === "user" ? "#7c3aed" : "#2a1a3a",
                   color: "#f4f4f5",
                   borderRadius: m.from === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
                   padding: "10px 14px",
@@ -265,10 +265,10 @@ export default function DeepfakePage() {
           </div>
           {/* 선택지 */}
           {currentOptions && (
-            <div style={{ padding: "12px 20px", borderTop: "1px solid #1e1e2e", display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ padding: "12px 20px", borderTop: "1px solid #2a1a3a", display: "flex", flexDirection: "column", gap: 8 }}>
               {currentOptions.map((opt, i) => (
                 <button key={i} onClick={() => handleOption(opt)} style={{
-                  background: "#1e1e2e", border: "1px solid #374151", borderRadius: 12,
+                  background: "#2a1a3a", border: "1px solid #374151", borderRadius: 12,
                   padding: "12px 16px", color: "#f4f4f5", fontSize: 13, cursor: "pointer",
                   textAlign: "left", transition: "border-color 0.2s",
                 }}>
@@ -290,7 +290,7 @@ export default function DeepfakePage() {
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
               <div style={{ textAlign: "center" }}>
-                <p style={{ color: "#a78bfa", fontFamily: "monospace", fontSize: 18, animation: "blink 0.2s infinite" }}>
+                <p style={{ color: "#c58dc6", fontFamily: "monospace", fontSize: 18, animation: "blink 0.2s infinite" }}>
                   ▓▒░ TRANSFERRING... ░▒▓
                 </p>
                 <p style={{ color: "#374151", fontSize: 12, marginTop: 16 }}>국민은행 → 홍길동 계좌</p>
@@ -320,7 +320,7 @@ export default function DeepfakePage() {
               💸 300만원 이체하기
             </button>
             <button onClick={() => handleDemand(false)} style={{
-              background: "#1e1e2e", color: "#94a3b8", fontWeight: 700, fontSize: 15,
+              background: "#2a1a3a", color: "#94a3b8", fontWeight: 700, fontSize: 15,
               padding: "16px", borderRadius: 14, border: "1px solid #374151", cursor: "pointer",
             }}>
               🚫 이상한 것 같아, 안 보내기
@@ -334,7 +334,7 @@ export default function DeepfakePage() {
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 56, marginBottom: 16 }}>🎭</div>
-            <h2 style={{ fontSize: 24, fontWeight: 900, color: "#a78bfa", marginBottom: 8 }}>이것은 AI 딥페이크 사기였습니다</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 900, color: "#c58dc6", marginBottom: 8 }}>이것은 AI 딥페이크 사기였습니다</h2>
             <p style={{ color: "#6b7280", fontSize: 14, lineHeight: 1.8 }}>
               방금 체험한 영상통화의 얼굴과 목소리는 모두 AI가 합성한 것입니다.<br />
               실제 사기는 이보다 훨씬 정교합니다.
@@ -343,13 +343,13 @@ export default function DeepfakePage() {
 
           {/* 사기 수법 해설 */}
           <div style={{ marginBottom: 32 }}>
-            <p style={{ color: "#f472b6", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 16 }}>사용된 수법 분석</p>
+            <p style={{ color: "#c58dc6", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 16 }}>사용된 수법 분석</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {REVEAL_TACTICS.map((t, i) => (
                 <div key={i} style={{ background: "#0f0f1a", border: "1px solid #7c3aed33", borderRadius: 12, padding: "16px 18px", display: "flex", gap: 14, animation: `fadeIn 0.4s ease ${i * 0.1}s both` }}>
                   <span style={{ fontSize: 24, flexShrink: 0 }}>{t.icon}</span>
                   <div>
-                    <p style={{ color: "#a78bfa", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{t.title}</p>
+                    <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{t.title}</p>
                     <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.7 }}>{t.desc}</p>
                   </div>
                 </div>
@@ -358,7 +358,7 @@ export default function DeepfakePage() {
           </div>
 
           {/* 예방법 */}
-          <div style={{ background: "#0a1a0a", border: "1px solid #22c55e44", borderRadius: 16, padding: "24px 20px", marginBottom: 32 }}>
+          <div style={{ background: "#1a102a", border: "1px solid #22c55e44", borderRadius: 16, padding: "24px 20px", marginBottom: 32 }}>
             <p style={{ color: "#22c55e", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 14 }}>✅ 이렇게 막을 수 있습니다</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {PREVENTION.map((p, i) => (
@@ -376,13 +376,13 @@ export default function DeepfakePage() {
 
           <div style={{ display: "flex", gap: 12 }}>
             <button onClick={() => { setPhase("intro"); setMessages([]); setChatIdx(0); setVideoLine(-1); }} style={{
-              flex: 1, background: "#1e1e2e", border: "1px solid #374151", borderRadius: 14,
+              flex: 1, background: "#2a1a3a", border: "1px solid #374151", borderRadius: 14,
               padding: "14px", color: "#94a3b8", fontWeight: 700, fontSize: 14, cursor: "pointer",
             }}>
               다시 체험하기
             </button>
             <a href="/crime" style={{
-              flex: 1, background: "linear-gradient(135deg, #7c3aed, #f472b6)",
+              flex: 1, background: "linear-gradient(135deg, #7c3aed, #c58dc6)",
               borderRadius: 14, padding: "14px", color: "#fff", fontWeight: 700, fontSize: 14,
               textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center",
             }}>
