@@ -8,14 +8,14 @@ export default function DonorEventPopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("donor_popup_hidden_until");
+    const stored = localStorage.getItem("donor_popup_hidden_v2");
     if (stored && Date.now() < parseInt(stored)) return;
     const timer = setTimeout(() => setVisible(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
   function hideToday() {
-    localStorage.setItem("donor_popup_hidden_until", String(Date.now() + 24 * 60 * 60 * 1000));
+    localStorage.setItem("donor_popup_hidden_v2", String(Date.now() + 24 * 60 * 60 * 1000));
     setVisible(false);
   }
 
