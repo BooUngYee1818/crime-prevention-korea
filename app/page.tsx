@@ -133,10 +133,10 @@ export default function HomePage() {
 
   // 번역에 의존하는 배열들 — 컴포넌트 내부에서 정의
   const STATS = [
-    { value: "1조원+",    label: t("stat1_lbl", lang), icon: "📉", bg: "#fef2f2", color: "#dc2626" },
-    { value: "7.8만건",   label: t("stat2_lbl", lang), icon: "📋", bg: "#fff7ed", color: "#ea580c" },
-    { value: "5,290만원", label: t("stat3_lbl", lang), icon: "💸", bg: "#fefce8", color: "#ca8a04" },
-    { value: "200만명",   label: t("stat4_lbl", lang), icon: "⚠️", bg: "#fdf4ff", color: "#9333ea" },
+    { value: lang === "ko" ? "1조원+" : lang === "ja" ? "1兆ウォン+" : lang === "zh" ? "1万亿韩元+" : "₩1T+",    label: t("stat1_lbl", lang), icon: "📉", bg: "#fef2f2", color: "#dc2626" },
+    { value: lang === "ko" ? "7.8만건" : lang === "ja" ? "7.8万件" : lang === "zh" ? "7.8万件" : "78,000+",   label: t("stat2_lbl", lang), icon: "📋", bg: "#fff7ed", color: "#ea580c" },
+    { value: lang === "ko" ? "5,290만원" : lang === "ja" ? "5,290万ウォン" : lang === "zh" ? "5,290万韩元" : "₩52.9M", label: t("stat3_lbl", lang), icon: "💸", bg: "#fefce8", color: "#ca8a04" },
+    { value: lang === "ko" ? "200만명" : lang === "ja" ? "200万人" : lang === "zh" ? "200万人" : "2M+",   label: t("stat4_lbl", lang), icon: "⚠️", bg: "#fdf4ff", color: "#9333ea" },
   ];
 
   const REPORT_NUMBERS = [
@@ -1674,11 +1674,11 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                  { stat: "약 1조 2,000억원", desc: lang === "ko" ? "2023년 보이스피싱 연간 피해액 (경찰청)" : "2023 annual voice phishing losses (Police)", highlight: true },
-                  { stat: "약 18,000건", desc: lang === "ko" ? "2023년 보이스피싱 피해 신고 건수 (경찰청)" : "2023 voice phishing reports (Police)", highlight: false },
-                  { stat: "약 5,290만원", desc: lang === "ko" ? "1건당 평균 피해액 (금감원)" : "Average loss per case (FSS)", highlight: false },
-                  { stat: "피해자 34%", desc: lang === "ko" ? "60대 이상 고령자 — 가장 취약한 연령대 (경찰청)" : "60+ seniors — most vulnerable age group (Police)", highlight: false },
-                  { stat: "연간 78,000건+", desc: lang === "ko" ? "전체 사기 범죄 신고 건수 (경찰청)" : "Total fraud crime reports (Police)", highlight: false },
+                  { stat: lang === "ko" ? "약 1조 2,000억원" : lang === "ja" ? "約1.2兆ウォン" : lang === "zh" ? "约1.2万亿韩元" : "~₩1.2T", desc: lang === "ko" ? "2023년 보이스피싱 연간 피해액 (경찰청)" : lang === "ja" ? "2023年ボイスフィッシング年間被害額 (警察庁)" : lang === "zh" ? "2023年电话诈骗年度损失 (警察厅)" : "2023 annual voice phishing losses (Police)", highlight: true },
+                  { stat: lang === "ko" ? "약 18,000건" : "~18,000", desc: lang === "ko" ? "2023년 보이스피싱 피해 신고 건수 (경찰청)" : lang === "ja" ? "2023年ボイスフィッシング被害届件数 (警察庁)" : "2023 voice phishing reports (Police)", highlight: false },
+                  { stat: lang === "ko" ? "약 5,290만원" : lang === "ja" ? "約5,290万ウォン" : lang === "zh" ? "约5,290万韩元" : "~₩52.9M", desc: lang === "ko" ? "1건당 평균 피해액 (금감원)" : lang === "ja" ? "1件あたりの平均被害額 (金融監督院)" : "Average loss per case (FSS)", highlight: false },
+                  { stat: lang === "ko" ? "피해자 34%" : "34%", desc: lang === "ko" ? "60대 이상 고령자 — 가장 취약한 연령대 (경찰청)" : lang === "ja" ? "60代以上の高齢者 — 最も脆弱な年齢層 (警察庁)" : "60+ seniors — most vulnerable age group (Police)", highlight: false },
+                  { stat: lang === "ko" ? "연간 78,000건+" : "78,000+/yr", desc: lang === "ko" ? "전체 사기 범죄 신고 건수 (경찰청)" : lang === "ja" ? "全体詐欺犯罪届出件数 (警察庁)" : "Total fraud crime reports (Police)", highlight: false },
                 ].map((row) => (
                   <div key={row.stat} style={{
                     display: "flex", alignItems: "flex-start", gap: 12,
@@ -1720,10 +1720,10 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                  { stat: "추정 200만명", desc: lang === "ko" ? "도박 중독 추정 인구 — 성인의 약 5% (KCGP 2023)" : "Estimated gambling addicts — ~5% of adults (KCGP 2023)", highlight: true },
-                  { stat: "연간 약 84조원", desc: lang === "ko" ? "불법 도박 시장 규모 추정 (형사정책연구원)" : "Estimated illegal gambling market size", highlight: false },
-                  { stat: "중독자 30.4%", desc: lang === "ko" ? "자살 충동 경험률 — 일반인의 10배 이상 (KCGP)" : "Suicidal ideation rate — 10x higher than average (KCGP)", highlight: false },
-                  { stat: "평균 빚 3,800만원", desc: lang === "ko" ? "도박 중독으로 인한 평균 부채 (KCGP)" : "Average debt from gambling addiction (KCGP)", highlight: false },
+                  { stat: lang === "ko" ? "추정 200만명" : lang === "ja" ? "推定200万人" : lang === "zh" ? "估计200万人" : "~2M people", desc: lang === "ko" ? "도박 중독 추정 인구 — 성인의 약 5% (KCGP 2023)" : lang === "ja" ? "ギャンブル依存症推定人口 — 成人の約5% (KCGP 2023)" : "Estimated gambling addicts — ~5% of adults (KCGP 2023)", highlight: true },
+                  { stat: lang === "ko" ? "연간 약 84조원" : lang === "ja" ? "年間約84兆ウォン" : lang === "zh" ? "每年约84万亿韩元" : "~₩84T/yr", desc: lang === "ko" ? "불법 도박 시장 규모 추정 (형사정책연구원)" : lang === "ja" ? "違法賭博市場規模推定 (刑事政策研究院)" : "Estimated illegal gambling market size", highlight: false },
+                  { stat: "30.4%", desc: lang === "ko" ? "자살 충동 경험률 — 일반인의 10배 이상 (KCGP)" : lang === "ja" ? "自殺衝動経験率 — 一般人の10倍以上 (KCGP)" : "Suicidal ideation rate — 10x higher than average (KCGP)", highlight: false },
+                  { stat: lang === "ko" ? "평균 빚 3,800만원" : lang === "ja" ? "平均借金3,800万ウォン" : lang === "zh" ? "平均债务3,800万韩元" : "Avg. debt ₩38M", desc: lang === "ko" ? "도박 중독으로 인한 평균 부채 (KCGP)" : lang === "ja" ? "ギャンブル依存による平均負債 (KCGP)" : "Average debt from gambling addiction (KCGP)", highlight: false },
                   { stat: "36.9%", desc: lang === "ko" ? "처음 도박 계기가 '온라인/모바일' (KCGP 2022)" : "First gambling was online/mobile (KCGP 2022)", highlight: false },
                 ].map((row) => (
                   <div key={row.stat} style={{
