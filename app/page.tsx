@@ -922,13 +922,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              /* 골목 기본색: 짙은 갈색 벽돌 + 바닥 */
-              background: `
-                radial-gradient(ellipse 60% 180px at 18% -10%, rgba(255,170,30,0.55) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 180px at 82% -10%, rgba(255,160,20,0.40) 0%, transparent 70%),
-                radial-gradient(ellipse 80% 60% at 50% 105%, rgba(30,15,0,0.9) 0%, transparent 100%),
-                linear-gradient(180deg, #0d0600 0%, #1c0c00 20%, #2a1400 55%, #1a0a00 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.52)), url('/alley-1990s.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 벽돌 질감 - 가로 줄눈 */}
               <div style={{
@@ -1067,12 +1063,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: `
-                radial-gradient(ellipse 70% 120px at 50% -5%, rgba(80,160,255,0.35) 0%, transparent 100%),
-                radial-gradient(ellipse 40% 200px at 5% 50%, rgba(0,80,180,0.2) 0%, transparent 100%),
-                radial-gradient(ellipse 40% 200px at 95% 50%, rgba(0,60,160,0.2) 0%, transparent 100%),
-                linear-gradient(180deg, #020d1f 0%, #051428 40%, #030a18 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.52)), url('/alley-2000s.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 콘크리트 벽 텍스처 */}
               <div style={{
@@ -1190,11 +1183,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: `
-                radial-gradient(ellipse 50% 150px at 25% 0%, rgba(255,230,50,0.2) 0%, transparent 100%),
-                radial-gradient(ellipse 40% 200px at 75% 30%, rgba(0,200,80,0.18) 0%, transparent 100%),
-                linear-gradient(180deg, #030d06 0%, #071508 40%, #040a05 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.54)), url('/alley-2020s.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 야간 콘크리트 벽 */}
               <div style={{
@@ -1505,12 +1496,9 @@ export default function HomePage() {
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: `
-                radial-gradient(ellipse 50% 180px at 20% 0%, rgba(180,0,255,0.4) 0%, transparent 100%),
-                radial-gradient(ellipse 40% 180px at 80% 0%, rgba(0,200,255,0.25) 0%, transparent 100%),
-                radial-gradient(ellipse 60% 80% at 50% 110%, rgba(10,0,20,0.9) 0%, transparent 100%),
-                linear-gradient(180deg, #050008 0%, #0a000f 40%, #050008 100%)
-              `,
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.52)), url('/alley-2026.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}>
               {/* 콘크리트 벽 */}
               <div style={{
