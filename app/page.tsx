@@ -55,6 +55,8 @@ export default function HomePage() {
   const changelogTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const instCardRef = useRef<HTMLDivElement>(null);
+  const [holoPos, setHoloPos] = useState({ x: 50, y: 50 });
+  const [isHoveringCard, setIsHoveringCard] = useState(false);
 
   // 통계 카운터
   const statsRef = useRef<HTMLDivElement>(null);
@@ -2268,6 +2270,15 @@ export default function HomePage() {
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div
             ref={instCardRef}
+            onMouseMove={(e) => {
+              const rect = instCardRef.current?.getBoundingClientRect();
+              if (rect) setHoloPos({
+                x: ((e.clientX - rect.left) / rect.width) * 100,
+                y: ((e.clientY - rect.top) / rect.height) * 100,
+              });
+            }}
+            onMouseEnter={() => setIsHoveringCard(true)}
+            onMouseLeave={() => setIsHoveringCard(false)}
             style={{
               background: "linear-gradient(135deg, #1c0d2e 0%, #4a2478 50%, #1c0d2e 100%)",
               borderRadius: 24, padding: "40px 44px",
@@ -2276,78 +2287,64 @@ export default function HomePage() {
               transform: `perspective(800px) rotateY(${tilt.x * 0.12}deg) rotateX(${-tilt.y * 0.08}deg)`,
               transition: "transform 0.1s ease",
               boxShadow: `${-tilt.x * 0.5}px ${tilt.y * 0.5}px 40px rgba(59,130,246,0.25)`,
+              cursor: "none",
             }}
           >
-            {/* 홀로그램 빛 오버레이 */}
+            {/* ── 원형 홀로그램 스티커 (커서 따라다님) ── */}
             <div style={{
-              position: "absolute", inset: 0, borderRadius: 24,
-              background: `radial-gradient(ellipse 60% 50% at ${50 + tilt.x * 2}% ${50 + tilt.y * 2}%, rgba(255,255,255,0.13) 0%, transparent 70%)`,
-              pointerEvents: "none", zIndex: 1,
-              transition: "background 0.1s ease",
-            }} />
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: 24,
-              background: `linear-gradient(${120 + tilt.x * 2}deg, transparent 30%, rgba(147,197,253,0.08) 50%, transparent 70%)`,
-              pointerEvents: "none", zIndex: 1,
-              transition: "background 0.1s ease",
-            }} />
-            {/* 정품 인증 홀로그램 스티커 효과 */}
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none", zIndex: 1, overflow: "hidden",
+              position: "absolute",
+              left: `${holoPos.x}%`,
+              top: `${holoPos.y}%`,
+              transform: "translate(-50%, -50%)",
+              width: 140, height: 140,
+              borderRadius: "50%",
+              pointerEvents: "none",
+              zIndex: 10,
+              opacity: isHoveringCard ? 1 : 0,
+              transition: "opacity 0.25s ease, left 0.04s linear, top 0.04s linear",
             }}>
-              {/* 레이어 1: 전체 스펙트럼 — hue-rotate로 색상 자체가 돌아감 */}
+              {/* 레이어 1: conic 무지개 스펙트럼 */}
               <div style={{
-                position: "absolute", inset: 0,
-                background: `linear-gradient(${105 + tilt.x * 3}deg,
-                  hsl(0,100%,55%) 0%,
-                  hsl(30,100%,55%) 14%,
-                  hsl(60,100%,52%) 28%,
-                  hsl(120,100%,45%) 42%,
-                  hsl(195,100%,52%) 56%,
-                  hsl(240,100%,60%) 70%,
-                  hsl(280,100%,58%) 84%,
-                  hsl(320,100%,55%) 100%
+                position: "absolute", inset: 0, borderRadius: "50%",
+                background: `conic-gradient(from ${tilt.x * 8 + tilt.y * 4}deg,
+                  hsl(0,100%,60%),
+                  hsl(45,100%,58%),
+                  hsl(60,100%,55%),
+                  hsl(120,100%,48%),
+                  hsl(180,100%,50%),
+                  hsl(220,100%,62%),
+                  hsl(270,100%,62%),
+                  hsl(310,100%,58%),
+                  hsl(360,100%,60%)
                 )`,
-                opacity: 0.38,
-                filter: `hue-rotate(${tilt.x * 18 + tilt.y * 8}deg) saturate(1.8) brightness(1.2)`,
+                filter: `hue-rotate(${tilt.x * 15 + tilt.y * 7}deg) saturate(2) brightness(1.1)`,
+                opacity: 0.85,
                 mixBlendMode: "screen",
-                transition: "filter 0.07s ease, background 0.07s ease",
+                transition: "filter 0.06s ease",
               }} />
-              {/* 레이어 2: 얇은 수평 줄무늬 — 스티커 특유의 결 */}
+              {/* 레이어 2: 미세 방사형 줄무늬 (결) */}
               <div style={{
-                position: "absolute", inset: 0,
-                backgroundImage: `repeating-linear-gradient(
-                  ${90 + tilt.y * 2}deg,
-                  transparent 0px,
-                  transparent 3px,
-                  rgba(255,255,255,0.04) 3px,
-                  rgba(255,255,255,0.04) 4px
+                position: "absolute", inset: 0, borderRadius: "50%",
+                backgroundImage: `repeating-conic-gradient(
+                  rgba(255,255,255,0.06) 0deg 1deg,
+                  transparent 1deg 3deg
                 )`,
-                transition: "background-image 0.07s ease",
               }} />
-              {/* 레이어 3: 이동하는 화이트 글레어 줄기 */}
+              {/* 레이어 3: 돔 하이라이트 */}
               <div style={{
-                position: "absolute", inset: 0,
-                background: `linear-gradient(${105 + tilt.x * 3}deg,
-                  transparent ${32 + tilt.x * 2.5 + tilt.y * 1}%,
-                  rgba(255,255,255,0.45) ${44 + tilt.x * 2.5 + tilt.y * 1}%,
-                  rgba(255,255,255,0.15) ${48 + tilt.x * 2.5 + tilt.y * 1}%,
-                  transparent ${56 + tilt.x * 2.5 + tilt.y * 1}%
+                position: "absolute", inset: 0, borderRadius: "50%",
+                background: `radial-gradient(circle at ${38 - tilt.x * 0.8}% ${32 - tilt.y * 0.8}%,
+                  rgba(255,255,255,0.55) 0%,
+                  rgba(255,255,255,0.15) 30%,
+                  transparent 65%
                 )`,
-                transition: "background 0.07s ease",
+                transition: "background 0.06s ease",
               }} />
-              {/* 레이어 4: 엣지 쪽 은은한 보조 색상 */}
+              {/* 레이어 4: 테두리 링 */}
               <div style={{
-                position: "absolute", inset: 0,
-                background: `radial-gradient(ellipse 80% 60% at ${50 + tilt.x * 3}% ${50 + tilt.y * 3}%,
-                  transparent 30%,
-                  rgba(120,80,255,0.12) 60%,
-                  rgba(40,180,255,0.10) 80%,
-                  transparent 100%
-                )`,
-                filter: `hue-rotate(${-tilt.x * 12}deg)`,
-                transition: "background 0.07s ease, filter 0.07s ease",
-                mixBlendMode: "screen",
+                position: "absolute", inset: 2, borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.35)",
+                boxShadow: "0 0 12px 2px rgba(180,120,255,0.4), inset 0 0 8px rgba(255,255,255,0.1)",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
