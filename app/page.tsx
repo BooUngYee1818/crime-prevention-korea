@@ -804,6 +804,22 @@ export default function HomePage() {
             <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7 }}>
               수법은 시대마다 달라졌지만, 심리를 이용한다는 본질은 변하지 않았습니다.
             </p>
+            {/* 관련 사이트 */}
+            <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "6px 20px", marginTop: 14 }}>
+              <span style={{ color: "#374151", fontSize: 11 }}>더 자세히 알아보기 →</span>
+              {[
+                { label: "경찰청 사이버수사국", url: "https://ecrm.police.go.kr" },
+                { label: "금융감독원 불법금융신고센터", url: "https://www.fss.or.kr/fss/main/sub1/sub1_3.do" },
+                { label: "한국소비자원 피해사례 DB", url: "https://www.kca.go.kr" },
+                { label: "사이버범죄 신고시스템", url: "https://ecrm.cyber.go.kr" },
+              ].map(s => (
+                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer"
+                  style={{ color: "#4b5563", fontSize: 11, textDecoration: "none", borderBottom: "1px solid #374151", lineHeight: 1.8 }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#9ca3af")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#4b5563")}
+                >{s.label}</a>
+              ))}
+            </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
