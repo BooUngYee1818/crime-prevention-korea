@@ -2456,103 +2456,198 @@ export default function HomePage() {
 
       {/* ── 푸터 ── */}
       {/* ── 브랜드 컬러 & 연락처 푸터 ── */}
-      <footer style={{ background: "#130c1c", borderTop: "1px solid #2a1a3a" }}>
+      <footer style={{ background: "#0e1a14", borderTop: "1px solid #2a3d30" }}>
 
-        {/* 브랜드 컬러 팔레트 */}
-        <div style={{ borderBottom: "1px solid #2a1a3a", padding: "52px 40px" }}>
+        {/* ── 개인정보 처리방침 & 면책조항 ── */}
+        <div style={{ borderBottom: "1px solid #1e3028", padding: "48px 40px" }}>
           <div style={{ maxWidth: 1140, margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: 40 }}>
-              <p style={{ color: "#6b4d7a", fontSize: 11, fontWeight: 700, letterSpacing: 3, marginBottom: 8, fontFamily: "monospace" }}>BRAND IDENTITY</p>
-              <h3 style={{ color: "#dcc5e8", fontWeight: 900, fontSize: 20 }}>사이트 대표 컬러</h3>
-              <p style={{ color: "#4a3060", fontSize: 12, marginTop: 6 }}>이 색상들이 범죄예방 체험관의 아이덴티티를 구성합니다</p>
+            {/* 헤더 */}
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: 10,
+                background: "linear-gradient(135deg, #2a5c3f, #3d7a55)",
+                display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
+              }}>🔒</div>
+              <div>
+                <p style={{ color: "#9FC0A2", fontSize: 11, fontWeight: 700, letterSpacing: 2, fontFamily: "monospace", margin: 0 }}>PRIVACY & DISCLAIMER</p>
+                <h3 style={{ color: "#D7E3DF", fontWeight: 900, fontSize: 18, margin: 0 }}>개인정보 처리방침 및 면책조항</h3>
+              </div>
             </div>
 
-            {/* 메인 팔레트 6색 */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 12, marginBottom: 28 }}>
-              {[
-                { hex: "#9161b2", name: "Purple",   role: "Primary" },
-                { hex: "#c58dc6", name: "Orchid",   role: "Secondary" },
-                { hex: "#dcc5e8", name: "Lavender", role: "Light Accent" },
-                { hex: "#b3889e", name: "Mauve",    role: "Rose" },
-                { hex: "#f8966c", name: "Peach",    role: "Warm Accent" },
-                { hex: "#fcd3af", name: "Cream",    role: "Soft Warm" },
-              ].map((c) => (
-                <div key={c.hex} style={{ textAlign: "center" }}>
-                  <div style={{
-                    height: 80, borderRadius: 16, background: c.hex, marginBottom: 10,
-                    boxShadow: `0 4px 20px ${c.hex}55`,
-                  }} />
-                  <p style={{ color: "#dcc5e8", fontWeight: 700, fontSize: 11, fontFamily: "monospace" }}>{c.hex.toUpperCase()}</p>
-                  <p style={{ color: "#9161b2", fontSize: 10, marginTop: 2 }}>{c.name}</p>
-                  <p style={{ color: "#4a3060", fontSize: 9, letterSpacing: 0.5 }}>{c.role}</p>
-                </div>
-              ))}
-            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
 
-            {/* 다크 팔레트 5색 */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginBottom: 28 }}>
-              {[
-                { hex: "#130c1c", name: "Deep Dark",    role: "Background" },
-                { hex: "#1c0d2e", name: "Dark Purple",  role: "Section BG" },
-                { hex: "#231232", name: "Card Dark",    role: "Card BG" },
-                { hex: "#2a1a3a", name: "Border",       role: "Divider" },
-                { hex: "#6b4d7a", name: "Muted Purple", role: "Subtle Text" },
-              ].map((c) => (
-                <div key={c.hex} style={{ textAlign: "center" }}>
-                  <div style={{ height: 44, borderRadius: 10, background: c.hex, border: "1px solid #2a1a3a", marginBottom: 8 }} />
-                  <p style={{ color: "#6b4d7a", fontWeight: 700, fontSize: 10, fontFamily: "monospace" }}>{c.hex.toUpperCase()}</p>
-                  <p style={{ color: "#4a3060", fontSize: 9, marginTop: 2 }}>{c.role}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* 시그니처 그라데이션 */}
-            <div>
-              <p style={{ color: "#4a3060", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 10, fontFamily: "monospace" }}>SIGNATURE GRADIENTS</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {/* 개인정보 처리방침 */}
+              <div style={{
+                background: "linear-gradient(135deg, #0a1a10 0%, #112418 100%)",
+                border: "1px solid #2a4030",
+                borderRadius: 16, padding: "22px 24px",
+              }}>
+                <p style={{ color: "#92B2A2", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 14, fontFamily: "monospace" }}>📋 개인정보 처리방침</p>
                 {[
-                  { gradient: "linear-gradient(90deg, #9161b2, #c58dc6, #f8966c)", label: "Primary Warm" },
-                  { gradient: "linear-gradient(90deg, #1c0d2e, #4a2478, #9161b2)", label: "Dark to Purple" },
-                  { gradient: "linear-gradient(90deg, #dcc5e8, #f5dfee, #fcd9dc)", label: "Soft Pastel" },
-                ].map((g) => (
-                  <div key={g.label} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ flex: 1, height: 22, borderRadius: 8, background: g.gradient }} />
-                    <p style={{ color: "#4a3060", fontSize: 10, minWidth: 100, fontFamily: "monospace" }}>{g.label}</p>
+                  {
+                    icon: "✅",
+                    title: "개인정보 미수집 원칙",
+                    desc: "본 서비스는 이름·전화번호·주민등록번호·계좌번호 등 어떠한 개인정보도 수집하지 않습니다.",
+                    color: "#B7D4C8",
+                  },
+                  {
+                    icon: "⚖️",
+                    title: "무단 수집 시 법적 처벌",
+                    desc: "만약 개인정보가 수집될 경우 「개인정보보호법」 제71조에 따라 5년 이하 징역 또는 5천만 원 이하 벌금에 처해집니다.",
+                    color: "#D5E7AF",
+                  },
+                  {
+                    icon: "📡",
+                    title: "통신비밀 보호",
+                    desc: "사용자 대화 내용은 저장·열람되지 않으며, 「통신비밀보호법」 위반 시 1년 이상 10년 이하 징역에 처해집니다.",
+                    color: "#B7D4C8",
+                  },
+                  {
+                    icon: "💳",
+                    title: "금융정보 무수집",
+                    desc: "체험 중 표시되는 모든 계좌·카드번호는 시뮬레이션이며, 실제 금융정보를 입력·수집하는 행위는 「전자금융거래법」 제49조 위반입니다.",
+                    color: "#D5E7AF",
+                  },
+                  {
+                    icon: "🤝",
+                    title: "후원 관련 개인정보",
+                    desc: "후원 시 닉네임 또는 일부 가려진 실명(예: 홍○○)이 명예의 전당에 표시될 수 있으며, 본인 동의 하에만 게시됩니다.",
+                    color: "#C7DCD4",
+                  },
+                ].map((item, i) => (
+                  <div key={i} style={{
+                    display: "flex", gap: 12, marginBottom: i < 4 ? 14 : 0,
+                    paddingBottom: i < 4 ? 14 : 0,
+                    borderBottom: i < 4 ? "1px solid #1e3028" : "none",
+                  }}>
+                    <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
+                    <div>
+                      <p style={{ color: item.color, fontSize: 12, fontWeight: 700, marginBottom: 3 }}>{item.title}</p>
+                      <p style={{ color: "#6b8c78", fontSize: 11, lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 면책조항 */}
+              <div style={{
+                background: "linear-gradient(135deg, #0a1a10 0%, #112418 100%)",
+                border: "1px solid #2a4030",
+                borderRadius: 16, padding: "22px 24px",
+              }}>
+                <p style={{ color: "#92B2A2", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 14, fontFamily: "monospace" }}>⚠️ 면책조항</p>
+                {[
+                  {
+                    icon: "🚫",
+                    title: "실제 범죄 유도 없음",
+                    desc: "본 프로그램의 모든 시나리오는 범죄 예방 교육 목적으로 제작되었으며, 어떠한 실제 범죄도 유도·조장·지원하지 않습니다.",
+                    color: "#D5E7AF",
+                  },
+                  {
+                    icon: "🎭",
+                    title: "시뮬레이션 환경",
+                    desc: "체험 중 발생하는 모든 대화·금액·계좌·결제는 가상 시뮬레이션이며 실제 이체, 결제, 해킹이 발생하지 않습니다.",
+                    color: "#B7D4C8",
+                  },
+                  {
+                    icon: "📚",
+                    title: "교육 목적 비영리",
+                    desc: "본 서비스는 교육 목적의 비영리 프로그램으로, 상업적 사기나 불법 도박을 권장하지 않습니다.",
+                    color: "#C7DCD4",
+                  },
+                  {
+                    icon: "🔄",
+                    title: "콘텐츠 업데이트 면책",
+                    desc: "v1.0 이후 다수의 업데이트(v1.7 현재)로 콘텐츠가 변경될 수 있으며, 이전 버전과의 차이에 대해 운영자는 책임을 지지 않습니다.",
+                    color: "#D5E7AF",
+                  },
+                  {
+                    icon: "⚡",
+                    title: "AI 생성 콘텐츠 면책",
+                    desc: "AI(Claude, Anthropic)가 생성한 대화·후기·시나리오는 예시 데이터이며, 실제 사건·인물·기관과 무관합니다.",
+                    color: "#B7D4C8",
+                  },
+                ].map((item, i) => (
+                  <div key={i} style={{
+                    display: "flex", gap: 12, marginBottom: i < 4 ? 14 : 0,
+                    paddingBottom: i < 4 ? 14 : 0,
+                    borderBottom: i < 4 ? "1px solid #1e3028" : "none",
+                  }}>
+                    <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
+                    <div>
+                      <p style={{ color: item.color, fontSize: 12, fontWeight: 700, marginBottom: 3 }}>{item.title}</p>
+                      <p style={{ color: "#6b8c78", fontSize: 11, lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* 법 요약 배너 */}
+            <div style={{
+              marginTop: 16, padding: "12px 20px", borderRadius: 12,
+              background: "linear-gradient(90deg, #0d2018, #142e1e, #0d2018)",
+              border: "1px solid #2a4030",
+              display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
+            }}>
+              <span style={{ fontSize: 14 }}>📜</span>
+              <span style={{ color: "#6b8c78", fontSize: 11 }}>관련 법령:</span>
+              {["개인정보보호법", "통신비밀보호법", "전자금융거래법", "정보통신망법", "형법"].map((law) => (
+                <span key={law} style={{
+                  background: "#1a3525", border: "1px solid #2a5035",
+                  color: "#92B2A2", fontSize: 10, fontWeight: 700,
+                  padding: "2px 8px", borderRadius: 20,
+                }}>{law}</span>
+              ))}
+              <span style={{ color: "#4a6a55", fontSize: 10, marginLeft: "auto" }}>본 서비스는 위 법령을 준수합니다</span>
+            </div>
           </div>
         </div>
 
-        {/* 연락처 & 링크 */}
-        <div style={{ padding: "44px 40px 32px" }}>
+        {/* ── 브랜드 팔레트 ── */}
+        <div style={{ borderBottom: "1px solid #1e3028", padding: "40px 40px 32px" }}>
           <div style={{ maxWidth: 1140, margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 40, marginBottom: 36 }}>
+            <p style={{ color: "#4a6a55", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 14, fontFamily: "monospace" }}>BRAND COLORS</p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {[
+                { hex: "#D7E3DF", label: "Mist" },
+                { hex: "#C7DCD4", label: "Sage" },
+                { hex: "#B7D4C8", label: "Fern" },
+                { hex: "#92B2A2", label: "Stone" },
+                { hex: "#9FC0A2", label: "Moss" },
+                { hex: "#D5E7AF", label: "Lime" },
+                { hex: "#9161b2", label: "Purple" },
+                { hex: "#c58dc6", label: "Orchid" },
+              ].map((c) => (
+                <div key={c.hex} style={{ textAlign: "center" }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: c.hex, marginBottom: 4, boxShadow: `0 2px 8px ${c.hex}44` }} />
+                  <p style={{ color: "#4a6a55", fontSize: 9, fontFamily: "monospace" }}>{c.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── 연락처 & 링크 ── */}
+        <div style={{ padding: "36px 40px 28px" }}>
+          <div style={{ maxWidth: 1140, margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 40, marginBottom: 28 }}>
 
               {/* 브랜드 소개 */}
               <div>
-                {/* BooUngYee 로고 — 초록 크로마키 CSS 제거 */}
-                <div style={{ position: "relative", width: 180, height: 90, marginBottom: 12, overflow: "hidden", borderRadius: 12 }}>
-                  <div style={{
-                    position: "absolute", inset: 0, borderRadius: 12,
-                    background: "#00c835",
-                  }} />
+                {/* BooUngYee 로고 — 초록 제거된 투명 PNG */}
+                <div style={{ width: 90, height: 45, marginBottom: 14, overflow: "hidden", borderRadius: 8 }}>
                   <img
-                    src="/logo-booungyee.png"
+                    src="/logo-booungyee-transparent.png"
                     alt="BooUngYee"
-                    style={{
-                      width: "100%", height: "100%", objectFit: "cover",
-                      mixBlendMode: "multiply",
-                      position: "relative", zIndex: 1,
-                    }}
+                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
                   />
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                  <Shield size={14} color="#9161b2" />
-                  <span style={{ color: "#dcc5e8", fontWeight: 900, fontSize: 14 }}>범죄예방 체험관</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                  <Shield size={14} color="#9FC0A2" />
+                  <span style={{ color: "#D7E3DF", fontWeight: 900, fontSize: 14 }}>범죄예방 체험관</span>
                 </div>
-                <p style={{ color: "#4a3060", fontSize: 12, lineHeight: 2.0 }}>
+                <p style={{ color: "#4a6a55", fontSize: 12, lineHeight: 2.0 }}>
                   AI가 설계한 한국 최초<br />
                   몰입형 범죄 예방 체험 프로그램.<br />
                   실제 체험으로 사기를 막습니다.
@@ -2561,27 +2656,27 @@ export default function HomePage() {
 
               {/* 연락처 */}
               <div>
-                <p style={{ color: "#6b4d7a", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>CONTACT</p>
+                <p style={{ color: "#4a6a55", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>CONTACT</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <a href="mailto:itnlifecn@gmail.com" style={{
                     display: "flex", alignItems: "center", gap: 10, textDecoration: "none",
                     padding: "11px 14px", borderRadius: 12,
-                    background: "#1c0d2e", border: "1px solid #2a1a3a",
+                    background: "#0d1f14", border: "1px solid #2a4030",
                   }}
-                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#9161b2")}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = "#2a1a3a")}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#9FC0A2")}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = "#2a4030")}
                   >
                     <span style={{ fontSize: 18 }}>✉️</span>
                     <div>
-                      <p style={{ color: "#c58dc6", fontWeight: 700, fontSize: 13 }}>itnlifecn@gmail.com</p>
-                      <p style={{ color: "#4a3060", fontSize: 10, marginTop: 2 }}>기관 도입 · 제휴 · 일반 문의</p>
+                      <p style={{ color: "#B7D4C8", fontWeight: 700, fontSize: 13 }}>itnlifecn@gmail.com</p>
+                      <p style={{ color: "#4a6a55", fontSize: 10, marginTop: 2 }}>기관 도입 · 제휴 · 일반 문의</p>
                     </div>
                   </a>
                   <a href="mailto:itnlifecn@gmail.com?subject=[기관 도입 문의]&body=기관명:%0A담당자:%0A문의내용:" style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     textDecoration: "none", padding: "11px 0", borderRadius: 12,
-                    background: "linear-gradient(135deg, #9161b2, #c58dc6)",
-                    color: "#fff", fontWeight: 700, fontSize: 13,
+                    background: "linear-gradient(135deg, #2a5c3f, #3d7a55)",
+                    color: "#D7E3DF", fontWeight: 700, fontSize: 13,
                   }}>
                     📧 이메일로 문의하기
                   </a>
@@ -2590,7 +2685,7 @@ export default function HomePage() {
 
               {/* 페이지 */}
               <div>
-                <p style={{ color: "#6b4d7a", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>PAGES</p>
+                <p style={{ color: "#4a6a55", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>PAGES</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {[
                     { label: "🚨 사기 범죄 체험", path: "/crime" },
@@ -2601,10 +2696,10 @@ export default function HomePage() {
                   ].map((item) => (
                     <button key={item.path} onClick={() => router.push(item.path)} style={{
                       background: "none", border: "none", cursor: "pointer",
-                      color: "#4a3060", fontSize: 12, textAlign: "left", padding: "2px 0",
+                      color: "#4a6a55", fontSize: 12, textAlign: "left", padding: "2px 0",
                     }}
-                      onMouseEnter={e => (e.currentTarget.style.color = "#c58dc6")}
-                      onMouseLeave={e => (e.currentTarget.style.color = "#4a3060")}
+                      onMouseEnter={e => (e.currentTarget.style.color = "#B7D4C8")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "#4a6a55")}
                     >
                       {item.label}
                     </button>
@@ -2613,10 +2708,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* 카피라이트 라인 */}
-            <div style={{ borderTop: "1px solid #2a1a3a", paddingTop: 20, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-              <p style={{ color: "#2a1a3a", fontSize: 11, fontFamily: "monospace" }}>© 2024–2026 범죄예방 체험관 · Made with AI (Claude) · 부엉이 🦉</p>
-              <p style={{ color: "#2a1a3a", fontSize: 11 }}>교육 목적 비영리 · 개인정보 무수집 · 실제 결제 없음</p>
+            {/* 카피라이트 */}
+            <div style={{ borderTop: "1px solid #1e3028", paddingTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+              <p style={{ color: "#2a4030", fontSize: 11, fontFamily: "monospace" }}>© 2024–2026 범죄예방 체험관 · Made with AI (Claude) · 부엉이 🦉</p>
+              <p style={{ color: "#2a4030", fontSize: 11 }}>교육 목적 비영리 · 개인정보 무수집 · 실제 결제 없음</p>
             </div>
           </div>
         </div>
