@@ -227,6 +227,9 @@ export default function CrimeCenterPage() {
           <p style={{ color: "#6b7280", fontSize: 11, marginTop: 10, lineHeight: 1.7 }}>
             💡 만 14세 미만은 소년법으로 보호받지만, 14세 이상이면 형사처벌을 받을 수 있어요. 친구들, 이 체험은 <strong style={{ color: "#22c55e" }}>당하지 않기 위한 연습</strong>이에요!
           </p>
+          <p style={{ color: "#f87171", fontSize: 11, marginTop: 6, lineHeight: 1.7, fontWeight: 600 }}>
+            ⚠️ 소년법 보호를 받더라도 <strong style={{ color: "#fca5a5" }}>안전한 게 아니에요</strong> — 보호처분·소년원 송치·피해자 민사소송은 나이 제한 없이 적용돼요.
+          </p>
         </div>
 
         {/* 새 체험 그리드 */}
