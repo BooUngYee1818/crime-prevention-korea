@@ -884,7 +884,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 과거 범죄 아카이브 ── */}
-      <section style={{ background: "linear-gradient(180deg, #1a0a2e 0%, #0d1a30 40%, #0a1a1a 100%)", padding: "72px 0 64px", overflow: "hidden", position: "relative" }}>
+      <section style={{ background: "linear-gradient(180deg, #3d2060 0%, #2a3d6e 40%, #1a3d3d 100%)", padding: "72px 0 64px", overflow: "hidden", position: "relative" }}>
         {/* 시대 배경 CSS 애니메이션 */}
         <style>{`
           @keyframes flickerTV { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.7} 94%{opacity:1} 97%{opacity:0.85} 98%{opacity:1} }
