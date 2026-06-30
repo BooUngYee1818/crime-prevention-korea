@@ -1,20 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
-  const { text, voice = "nova" } = await req.json();
+  const { text, voice = "JBFqnCBsd6RMkjVDRZzb" } = await req.json();
   if (!text) return NextResponse.json({ error: "no text" }, { status: 400 });
 
-  const mp3 = await openai.audio.speech.create({
-    model: "tts-1",
-    voice,
-    input: text,
-    speed: 1.0,
-  });
+  const res = await fetch(
+    `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
+    {
+      method: "POST",
+      headers: {
+        "xi-api-key": process.env.ELEVENLABS_API_KEY!,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75,
+        },
+      }),
+    }
+  );
 
-  const buffer = Buffer.from(await mp3.arrayBuffer());
+  if (!res.ok) {
+    const err = await res.text();
+    return NextResponse.json({ error: err }, { status: res.status });
+  }
+
+  const buffer = Buffer.from(await res.arrayBuffer());
   return new NextResponse(buffer, {
     headers: {
       "Content-Type": "audio/mpeg",
