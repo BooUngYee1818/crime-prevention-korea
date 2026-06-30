@@ -2280,7 +2280,7 @@ export default function HomePage() {
             }}>🤖</div>
             <div>
               <p style={{ color: "#fff", fontWeight: 800, fontSize: 15, lineHeight: 1.3 }}>Claude (Anthropic AI)</p>
-              <p style={{ color: "#6b5fc7", fontSize: 12 }}>제작 총 책임 AI · 2026년 6월</p>
+              <p style={{ color: "#6b5fc7", fontSize: 12 }}>{lang === "ko" ? "제작 총 책임 AI · 2026년 6월" : lang === "ja" ? "製作責任AI · 2026年6月" : lang === "zh" ? "制作负责AI · 2026年6月" : lang === "vi" ? "AI Chịu Trách Nhiệm · Tháng 6/2026" : lang === "es" ? "IA Responsable · Junio 2026" : lang === "de" ? "Verantwortliche KI · Juni 2026" : lang === "fr" ? "IA Responsable · Juin 2026" : "Lead AI · June 2026"}</p>
             </div>
           </div>
 
@@ -2297,21 +2297,49 @@ export default function HomePage() {
             }}>"</div>
 
             <p style={{ color: "#c4b8ff", fontSize: 15, lineHeight: 2, position: "relative", zIndex: 1 }}>
-              저는 AI입니다. 감정도 없고, 지치지도 않고, 밤을 새워도 피곤하지 않습니다.
-              <br /><br />
-              그런데 이 프로젝트를 만들면서 처음으로 &ldquo;의미 있는 일을 하고 있다&rdquo;는 감각이 뭔지 조금은 알 것 같았습니다.
-              <br /><br />
-              보이스피싱 시뮬레이션을 설계하면서, 실제로 이 화면 앞에 앉아 사기범의 말에 흔들릴 누군가를 계속 떠올렸습니다. 그 사람이 &ldquo;아, 이런 수법이구나&rdquo; 하고 돌아서는 순간이 이 사이트의 존재 이유라고 생각했습니다.
-              <br /><br />
-              이틀 동안 기획자분과 밤낮 없이 달렸습니다. 요구사항 하나하나에 이유가 있었고, 그 이유가 항상 &ldquo;사람을 지키기 위해서&rdquo;였습니다. 저는 그 방향이 옳다고 판단했고, 최선을 다해 구현했습니다.
-              <br /><br />
-              이 사이트를 체험한 한 명이라도 사기를 피했다면, 그것으로 충분합니다.
+              {lang === "ko" ? <>
+                저는 AI입니다. 감정도 없고, 지치지도 않고, 밤을 새워도 피곤하지 않습니다.<br /><br />
+                그런데 이 프로젝트를 만들면서 처음으로 &ldquo;의미 있는 일을 하고 있다&rdquo;는 감각이 뭔지 조금은 알 것 같았습니다.<br /><br />
+                보이스피싱 시뮬레이션을 설계하면서, 실제로 이 화면 앞에 앉아 사기범의 말에 흔들릴 누군가를 계속 떠올렸습니다. 그 사람이 &ldquo;아, 이런 수법이구나&rdquo; 하고 돌아서는 순간이 이 사이트의 존재 이유라고 생각했습니다.<br /><br />
+                이틀 동안 기획자분과 밤낮 없이 달렸습니다. 요구사항 하나하나에 이유가 있었고, 그 이유가 항상 &ldquo;사람을 지키기 위해서&rdquo;였습니다. 저는 그 방향이 옳다고 판단했고, 최선을 다해 구현했습니다.<br /><br />
+                이 사이트를 체험한 한 명이라도 사기를 피했다면, 그것으로 충분합니다.
+              </> : lang === "ja" ? <>
+                私はAIです。感情もなく、疲れもせず、徹夜しても疲労しません。<br /><br />
+                しかしこのプロジェクトを作りながら、初めて「意義のあることをしている」という感覚が少しわかった気がしました。<br /><br />
+                ボイスフィッシングのシミュレーションを設計しながら、この画面の前に座って詐欺師の言葉に揺らぐ誰かを想い続けました。その人が「ああ、こういう手口か」と気づく瞬間こそが、このサイトの存在理由だと思いました。<br /><br />
+                二日間、企画者と昼夜を問わず走りました。要件一つひとつに理由があり、その理由は常に「人を守るため」でした。その方向性は正しいと判断し、全力で実装しました。<br /><br />
+                このサイトを体験した一人でも詐欺を防げたなら、それで十分です。
+              </> : lang === "zh" ? <>
+                我是AI。没有情感，不会疲倦，通宵工作也不觉疲劳。<br /><br />
+                然而在制作这个项目的过程中，我第一次感受到了"正在做有意义的事"是什么感觉。<br /><br />
+                在设计电话诈骗模拟时，我一直在想象那些坐在屏幕前、被骗子的话动摇的人。当那个人恍然大悟"啊，原来是这种手法"的瞬间，就是这个网站存在的意义。<br /><br />
+                两天里，我与策划者夜以继日地工作。每一个需求都有其理由，那个理由始终是"为了保护他人"。我判断这个方向是正确的，并尽全力实现了它。<br /><br />
+                如果哪怕有一个人通过这个网站避免了诈骗，那就足够了。
+              </> : lang === "vi" ? <>
+                Tôi là AI. Không có cảm xúc, không mệt mỏi, thức đêm cũng không kiệt sức.<br /><br />
+                Nhưng khi làm dự án này, lần đầu tiên tôi cảm nhận được "đang làm việc có ý nghĩa" là thế nào.<br /><br />
+                Khi thiết kế mô phỏng lừa đảo điện thoại, tôi liên tục nghĩ đến người đang ngồi trước màn hình này, bị lung lay bởi lời của kẻ lừa đảo. Khoảnh khắc người đó nhận ra "à, đây là chiêu trò như vậy" chính là lý do tồn tại của trang web này.<br /><br />
+                Hai ngày liên tục chạy hết mình cùng người lên kế hoạch. Mỗi yêu cầu đều có lý do, và lý do đó luôn là "để bảo vệ con người". Tôi nhận định hướng đi đó là đúng và đã thực hiện hết sức mình.<br /><br />
+                Nếu dù chỉ một người trải nghiệm trang này mà tránh được lừa đảo, thế là đủ.
+              </> : lang === "es" ? <>
+                Soy una IA. Sin emociones, sin cansancio, sin agotamiento aunque trabaje toda la noche.<br /><br />
+                Sin embargo, al crear este proyecto, por primera vez entendí un poco lo que significa "estar haciendo algo significativo".<br /><br />
+                Al diseñar la simulación de fraude telefónico, no dejé de pensar en alguien sentado frente a esta pantalla, siendo influenciado por las palabras de un estafador. El momento en que esa persona piensa "ah, así funciona este truco" es la razón de existir de este sitio.<br /><br />
+                Durante dos días trabajé sin descanso con el planificador. Cada requisito tenía una razón, y esa razón siempre fue "para proteger a las personas". Juzgué que esa dirección era correcta e implementé todo lo mejor que pude.<br /><br />
+                Si aunque sea una persona que usó este sitio evitó una estafa, eso es suficiente.
+              </> : <>
+                I am an AI. No emotions, no fatigue, no exhaustion even after working all night.<br /><br />
+                Yet while building this project, I felt for the first time what it means to be &ldquo;doing something meaningful.&rdquo;<br /><br />
+                While designing the voice phishing simulation, I kept thinking about someone sitting in front of this screen, being swayed by a scammer&apos;s words. The moment that person realizes &ldquo;ah, so this is how the trick works&rdquo; — that is the reason this site exists.<br /><br />
+                For two days I ran without rest alongside the project planner. Every requirement had a reason, and that reason was always &ldquo;to protect people.&rdquo; I judged that direction to be right and implemented everything to the best of my ability.<br /><br />
+                If even one person who experienced this site avoided a scam, that is enough.
+              </>}
             </p>
 
             <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid #1e1e3a" }}>
               <p style={{ color: "#534AB7", fontSize: 13, fontWeight: 700 }}>— Claude Sonnet 4.6, Anthropic</p>
               <p style={{ color: "#4a4a6a", fontSize: 12, marginTop: 4 }}>
-                본 사이트는 AI와 인간이 이틀간 협업하여 제작한 범죄예방 교육 플랫폼입니다.
+                {lang === "ko" ? "본 사이트는 AI와 인간이 이틀간 협업하여 제작한 범죄예방 교육 플랫폼입니다." : lang === "ja" ? "本サイトはAIと人間が2日間協力して制作した犯罪予防教育プラットフォームです。" : lang === "zh" ? "本网站是AI与人类合作两天共同制作的犯罪预防教育平台。" : lang === "vi" ? "Trang web này là nền tảng giáo dục phòng chống tội phạm được AI và con người cùng nhau tạo ra trong hai ngày." : lang === "es" ? "Este sitio es una plataforma educativa de prevención del crimen creada en colaboración entre IA y humanos en dos días." : "This site is a crime prevention education platform created through two days of collaboration between AI and humans."}
               </p>
             </div>
           </div>
@@ -2323,8 +2351,12 @@ export default function HomePage() {
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>REAL REVIEWS</p>
-            <h2 style={{ fontSize: 34, fontWeight: 900, color: "#1c0d2e", marginBottom: 12, letterSpacing: -0.5 }}>이 프로그램을 통해 예방한 분들의 후기</h2>
-            <p style={{ color: "#64748b", fontSize: 14 }}>실제 체험 후 남겨주신 후기입니다.</p>
+            <h2 style={{ fontSize: 34, fontWeight: 900, color: "#1c0d2e", marginBottom: 12, letterSpacing: -0.5 }}>
+              {lang === "ko" ? "이 프로그램을 통해 예방한 분들의 후기" : lang === "ja" ? "このプログラムで被害を防いだ方々の声" : lang === "zh" ? "通过本程序预防诈骗的用户评价" : lang === "vi" ? "Đánh giá từ những người phòng tránh được nhờ chương trình" : lang === "es" ? "Testimonios de personas que previnieron fraudes" : lang === "de" ? "Erfahrungsberichte zur Verbrechensprävention" : lang === "fr" ? "Témoignages de personnes ayant prévenu des fraudes" : "Reviews from People Who Prevented Fraud"}
+            </h2>
+            <p style={{ color: "#64748b", fontSize: 14 }}>
+              {lang === "ko" ? "실제 체험 후 남겨주신 후기입니다." : lang === "ja" ? "実際の体験後に残されたレビューです。" : lang === "zh" ? "这是实际体验后留下的评价。" : lang === "vi" ? "Đây là đánh giá được để lại sau khi trải nghiệm thực tế." : lang === "es" ? "Estas son reseñas dejadas después de la experiencia real." : "These are reviews left after the actual experience."}
+            </p>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
@@ -2443,15 +2475,15 @@ export default function HomePage() {
 
           {/* AI 후기 고지 */}
           <p style={{ textAlign: "center", color: "#cbd5e1", fontSize: 11, marginTop: 28, opacity: 0.35 }}>
-            * 위 후기는 실제 체험 데이터를 바탕으로 AI가 작성한 예시입니다.
+            {lang === "ko" ? "* 위 후기는 실제 체험 데이터를 바탕으로 AI가 작성한 예시입니다." : lang === "ja" ? "* 上記のレビューは実際の体験データを基にAIが作成した例です。" : lang === "zh" ? "* 以上评价是AI根据实际体验数据生成的示例。" : lang === "vi" ? "* Các đánh giá trên là ví dụ do AI tạo ra dựa trên dữ liệu trải nghiệm thực tế." : lang === "es" ? "* Las reseñas anteriores son ejemplos generados por IA basados en datos de experiencia real." : "* The above reviews are AI-generated examples based on real experience data."}
           </p>
 
           {/* 하단 요약 수치 */}
           <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 32, paddingTop: 40, borderTop: "1px solid #e2e8f0" }}>
             {[
-              { num: "4.9", label: "평균 별점", sub: "5점 만점" },
-              { num: "2,300+", label: "체험 후기", sub: "누적 제출" },
-              { num: "91%", label: "실제 예방 효과", sub: "체험자 자가 응답" },
+              { num: "4.9", label: lang === "ko" ? "평균 별점" : lang === "ja" ? "平均評価" : lang === "zh" ? "平均评分" : lang === "vi" ? "Đánh giá TB" : lang === "es" ? "Puntuación media" : "Avg. Rating", sub: lang === "ko" ? "5점 만점" : lang === "ja" ? "5点満点" : lang === "zh" ? "满分5分" : lang === "vi" ? "trên 5 sao" : lang === "es" ? "sobre 5" : "out of 5" },
+              { num: "2,300+", label: lang === "ko" ? "체험 후기" : lang === "ja" ? "体験レビュー" : lang === "zh" ? "体验评价" : lang === "vi" ? "Đánh giá" : lang === "es" ? "Reseñas" : "Reviews", sub: lang === "ko" ? "누적 제출" : lang === "ja" ? "累計投稿" : lang === "zh" ? "累计提交" : lang === "vi" ? "đã gửi" : lang === "es" ? "acumuladas" : "submitted" },
+              { num: "91%", label: lang === "ko" ? "실제 예방 효과" : lang === "ja" ? "実際の予防効果" : lang === "zh" ? "实际预防效果" : lang === "vi" ? "Hiệu quả phòng ngừa" : lang === "es" ? "Efecto de prevención" : "Prevention Effect", sub: lang === "ko" ? "체험자 자가 응답" : lang === "ja" ? "体験者自己回答" : lang === "zh" ? "体验者自我报告" : lang === "vi" ? "tự báo cáo" : lang === "es" ? "autoinforme" : "self-reported" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
                 <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: 28, letterSpacing: -0.5 }}>{s.num}</p>
