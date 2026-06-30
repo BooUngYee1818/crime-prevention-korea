@@ -569,7 +569,7 @@ export default function HomePage() {
                 border: "1px solid #1e3a2e",
               }}>
                 <iframe
-                  src="https://www.youtube.com/embed/Be7nrFNTid4"
+                  src="https://www.youtube.com/embed/APWktjzq4f4"
                   title="범죄예방 체험관 홍보영상 2"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -588,6 +588,22 @@ export default function HomePage() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
+                {
+                  version: "v1.4.1",
+                  date: "2025.06",
+                  badge: "최신",
+                  badgeColor: "#f59e0b",
+                  badgeBg: "#1c1002",
+                  items: [
+                    "📱 문자 사기 체험 (스미싱) 추가 — 택배·건강보험·카드 3종 3분 AI 대화",
+                    "🎰 불법 도박 신규 게임 3종 추가 (홀짝·파워볼·슬롯머신)",
+                    "📚 도박 게임별 튜토리얼 팝업 추가",
+                    "💳 카드 자동입력 애니메이션 + 사전 안내 문구 추가",
+                    "🎢 도박 긴장감 강화 — 연패/연승 심리 확률 + 결승 직전 서스펜스",
+                    "🪜 사다리 게임 경로 오류 수정 (좌우 이동 정상 작동)",
+                    "👆 모바일 버튼 터치 시 글씨 사라짐 현상 전체 수정",
+                  ],
+                },
                 {
                   version: "v1.4",
                   date: "2025.06",
