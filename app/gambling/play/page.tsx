@@ -1697,66 +1697,97 @@ function PlayContent() {
 
       {/* ── 자동 사이트 폐쇄 ── */}
       {forceClosed && (
-        <div style={{ position:"fixed", inset:0, zIndex:9999, background:"#000", display:"flex", alignItems:"center", justifyContent:"center", padding:20, flexDirection:"column" }}>
-          <style>{`@keyframes glitch{0%,100%{transform:translate(0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}}`}</style>
+        <div style={{ position:"fixed", inset:0, zIndex:9999, background:"#000", display:"flex", alignItems:"center", justifyContent:"center", padding:20, flexDirection:"column", overflowY:"auto" }}>
+          <style>{`
+            @keyframes glitch{0%,100%{transform:translate(0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}}
+            @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+            @keyframes callPulse{0%,100%{box-shadow:0 0 0 0 #22c55e66}70%{box-shadow:0 0 0 16px transparent}}
+          `}</style>
 
-          {/* 경광등 효과 */}
-          <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 50% 0%,#ef444411,transparent 60%)", animation:"blink 0.8s ease-in-out infinite", pointerEvents:"none" }} />
+          {/* 배경 경광등 */}
+          <div style={{ position:"fixed", inset:0, background:"radial-gradient(ellipse at 50% 0%,#ef444408,transparent 60%)", animation:"blink 1.2s ease-in-out infinite", pointerEvents:"none" }} />
 
-          <div style={{ maxWidth:460, width:"100%", textAlign:"center", position:"relative", zIndex:1 }}>
-            {/* 시스템 종료 아이콘 */}
-            <div style={{ fontSize:64, marginBottom:16, animation:"glitch 0.5s ease-in-out infinite" }}>🚫</div>
+          <div style={{ maxWidth:480, width:"100%", textAlign:"center", position:"relative", zIndex:1, animation:"fadeUp 0.4s ease" }}>
 
-            <div style={{ background:"#ef444422", border:"2px solid #ef4444", borderRadius:4, padding:"6px 16px", display:"inline-block", marginBottom:20 }}>
-              <span style={{ color:"#ef4444", fontSize:11, fontWeight:900, letterSpacing:3 }}>SYSTEM SHUTDOWN</span>
-            </div>
+            {/* 아이콘 */}
+            <div style={{ fontSize:72, marginBottom:20, animation:"glitch 0.6s ease-in-out infinite" }}>🛑</div>
 
-            <h2 style={{ color:"#fff", fontSize:22, fontWeight:900, marginBottom:6, lineHeight:1.4 }}>
-              이 사이트가 자동으로<br/>
-              <span style={{ color:"#ef4444" }}>폐쇄되었습니다</span>
-            </h2>
-            <p style={{ color:"#6b7280", fontSize:13, marginBottom:24 }}>
-              과몰입 방지 시스템이 작동했습니다
-            </p>
-
-            {/* 감지 이유 */}
-            <div style={{ background:"#0f0f0f", border:"1px solid #1f1f1f", borderRadius:16, padding:"18px 20px", marginBottom:24, textAlign:"left" }}>
-              <p style={{ color:"#f59e0b", fontWeight:700, fontSize:12, marginBottom:12 }}>⚠️ 감지된 과몰입 신호</p>
-              {forceCloseReason.map((r, i) => (
-                <div key={i} style={{ display:"flex", gap:10, alignItems:"flex-start", marginBottom:8 }}>
-                  <div style={{ width:6, height:6, borderRadius:"50%", background:"#ef4444", flexShrink:0, marginTop:5 }} />
-                  <p style={{ color:"#fca5a5", fontSize:13, lineHeight:1.6 }}>{r}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* 도박 중독 상담 */}
-            <div style={{ background:"#052e16", border:"1px solid #16a34a44", borderRadius:16, padding:"16px 20px", marginBottom:24 }}>
-              <p style={{ color:"#22c55e", fontWeight:700, fontSize:13, marginBottom:8 }}>💚 도움이 필요하신가요?</p>
-              <p style={{ color:"#86efac", fontSize:12, lineHeight:1.8 }}>
-                한국도박문제예방치유원<br/>
-                <strong style={{ fontSize:22, letterSpacing:2, color:"#22c55e" }}>☎ 1336</strong><br/>
-                <span style={{ color:"#4ade80", fontSize:11 }}>24시간 무료 · 익명 보장</span>
+            {/* 메인 멘트 */}
+            <div style={{ marginBottom:28 }}>
+              <p style={{ color:"#6b7280", fontSize:12, fontWeight:700, letterSpacing:3, marginBottom:14 }}>SIMULATION ENDED</p>
+              <h2 style={{ color:"#fff", fontSize:24, fontWeight:900, lineHeight:1.6, marginBottom:10 }}>
+                도박이 아니라<br/>
+                <span style={{ color:"#22c55e" }}>체험 프로그램</span>입니다.
+              </h2>
+              <p style={{ color:"#e2e8f0", fontSize:17, fontWeight:600, lineHeight:1.8, marginBottom:8 }}>
+                자, 현실로 나올 시간입니다.
+              </p>
+              <p style={{ color:"#f59e0b", fontSize:16, fontWeight:700, lineHeight:1.8 }}>
+                중독 되셨나요?❓
               </p>
             </div>
 
-            {/* 버튼 */}
+            {/* 감지 이유 (작게) */}
+            {forceCloseReason.length > 0 && (
+              <div style={{ background:"#111", border:"1px solid #1f1f1f", borderRadius:12, padding:"12px 16px", marginBottom:24, textAlign:"left" }}>
+                <p style={{ color:"#374151", fontSize:10, fontWeight:700, marginBottom:8, letterSpacing:1 }}>감지된 과몰입 신호</p>
+                {forceCloseReason.map((r, i) => (
+                  <p key={i} style={{ color:"#555", fontSize:11, lineHeight:1.6, paddingLeft:8, borderLeft:"2px solid #ef444444", marginBottom:4 }}>{r}</p>
+                ))}
+              </div>
+            )}
+
+            {/* 1336 전화 연결 버튼 — 핵심 */}
+            <div style={{ background:"linear-gradient(135deg,#052e16,#064e3b)", border:"2px solid #22c55e", borderRadius:20, padding:"24px 20px", marginBottom:20 }}>
+              <p style={{ color:"#86efac", fontSize:13, marginBottom:6 }}>도박 신고 · 중독 상담 번호는 이겁니다</p>
+              <p style={{ color:"#22c55e", fontWeight:900, fontSize:40, letterSpacing:4, marginBottom:4 }}>1336</p>
+              <p style={{ color:"#4ade80", fontSize:12, marginBottom:20 }}>한국도박문제예방치유원 · 24시간 · 무료 · 익명 보장</p>
+              <a
+                href="tel:1336"
+                style={{
+                  display:"flex", alignItems:"center", justifyContent:"center", gap:10,
+                  background:"#22c55e", color:"#fff",
+                  fontWeight:900, fontSize:18, padding:"16px 0",
+                  borderRadius:14, textDecoration:"none",
+                  animation:"callPulse 1.5s infinite",
+                  boxShadow:"0 0 24px #22c55e44",
+                }}
+              >
+                📞 지금 바로 1336 연결
+              </a>
+            </div>
+
+            {/* 추가 신고번호 */}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:24 }}>
+              {[
+                { num:"112", label:"경찰청 신고", icon:"🚔" },
+                { num:"1332", label:"금융감독원", icon:"🏦" },
+              ].map(r => (
+                <a key={r.num} href={`tel:${r.num}`} style={{ background:"#111", border:"1px solid #1f1f1f", borderRadius:12, padding:"14px 10px", textDecoration:"none", display:"flex", flexDirection:"column" as const, alignItems:"center", gap:4 }}>
+                  <span style={{ fontSize:22 }}>{r.icon}</span>
+                  <span style={{ color:"#fff", fontWeight:900, fontSize:18 }}>{r.num}</span>
+                  <span style={{ color:"#6b7280", fontSize:10 }}>{r.label}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* 나가기 / 계속 */}
             <div style={{ display:"flex", gap:10 }}>
               <button
                 onClick={() => router.push("/")}
-                style={{ flex:2, padding:"14px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", border:"none", cursor:"pointer" }}
+                style={{ flex:2, padding:"14px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#1d4ed8,#2563eb)", color:"#fff", border:"none", cursor:"pointer" }}
               >
                 🛡️ 예방센터로 나가기
               </button>
               <button
                 disabled={closeCountdown > 0}
                 onClick={() => { forceCloseRef.current = false; setForceClosed(false); setCloseCountdown(10); sessionStart.current = Date.now(); }}
-                style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:13, background:"#111", border:"1px solid #2a2a2a", color: closeCountdown > 0 ? "#444" : "#888", cursor: closeCountdown > 0 ? "default" : "pointer" }}
+                style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:12, background:"#0a0a0a", border:"1px solid #1a1a1a", color: closeCountdown > 0 ? "#2a2a2a" : "#444", cursor: closeCountdown > 0 ? "default" : "pointer" }}
               >
-                {closeCountdown > 0 ? `${closeCountdown}초 후 가능` : "무시하고 계속"}
+                {closeCountdown > 0 ? `${closeCountdown}초` : "계속하기"}
               </button>
             </div>
-            <p style={{ color:"#1f1f1f", fontSize:10, marginTop:12 }}>본 기능은 과몰입 예방을 위해 자동 작동합니다</p>
+
           </div>
         </div>
       )}
