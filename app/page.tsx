@@ -1229,29 +1229,39 @@ export default function HomePage() {
             borderRadius: 24,
             padding: "48px 40px",
           }}>
-            {/* 손글씨 서약 문구 */}
+            {/* 손글씨 서약 문구 + 개발자 사진 */}
             <div style={{ textAlign: "center", marginBottom: 36 }}>
+              {/* 개발자 사진 */}
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+                <div style={{
+                  width: 110, height: 110, borderRadius: "50%",
+                  overflow: "hidden",
+                  border: "3px solid #9161b2",
+                  boxShadow: "0 0 0 4px #7c3aed33, 0 8px 32px #7c3aed55",
+                  flexShrink: 0,
+                }}>
+                  <img
+                    src="/me.png"
+                    alt="AI개발자 부엉이"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+                  />
+                </div>
+              </div>
               <p style={{
                 fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
-                fontSize: 26,
-                lineHeight: 1.7,
-                color: "#dcc5e8",
+                fontSize: 26, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
-                letterSpacing: 1,
-                margin: 0,
+                letterSpacing: 1, margin: 0,
               }}>
                 범죄를 막을 수 있는 대한민국을
               </p>
               <p style={{
                 fontFamily: "'Caveat', 'Nanum Pen Script', 'Gochi Hand', cursive",
-                fontSize: 26,
-                lineHeight: 1.7,
-                color: "#dcc5e8",
+                fontSize: 26, lineHeight: 1.7, color: "#dcc5e8",
                 textShadow: "0 0 20px #7c3aed88, 0 0 40px #7c3aed44",
-                letterSpacing: 1,
-                margin: 0,
+                letterSpacing: 1, margin: 0,
               }}>
-                저 AI개발자 <span style={{ color: "#fbbf24", textShadow: "0 0 20px #fbbf2488" }}>🦉 부엉이</span>가 만들겠습니다.
+                저 AI개발자 <span style={{ color: "#fbbf24", textShadow: "0 0 20px #fbbf2488" }}>부엉이</span>가 만들겠습니다.
               </p>
               <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#7c3aed55,transparent)", margin: "24px auto", maxWidth: 400 }} />
             </div>
