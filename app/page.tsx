@@ -1018,6 +1018,37 @@ export default function HomePage() {
 
           </div>
 
+          {/* ── 업데이트 영상 그리드 ── */}
+          <div style={{ marginTop: 56 }}>
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>UPDATE CLIPS</p>
+              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>🎬 업데이트 영상</h2>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+              {[
+                { id: "vtWiPIfAeKY", title: "v1.8 업데이트 — 통화 UI · AI 목소리", badge: "NEW", badgeColor: "#f472b6" },
+              ].map((v, i) => (
+                <div key={i}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                    <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 13 }}>{v.title}</p>
+                    {v.badge && (
+                      <span style={{ fontSize: 10, fontWeight: 800, color: v.badgeColor, background: v.badgeColor + "20", border: `1px solid ${v.badgeColor}50`, borderRadius: 20, padding: "2px 8px" }}>{v.badge}</span>
+                    )}
+                  </div>
+                  <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 32px #00000050", border: "1px solid #2a1a3a" }}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${v.id}`}
+                      title={v.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* ── 업데이트 내역 ── */}
           <div style={{ marginTop: 56 }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
