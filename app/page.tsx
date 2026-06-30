@@ -2295,73 +2295,53 @@ export default function HomePage() {
               cursor: "default",
             }}
           >
-            {/* ── 고정 홀로그램 정품 스티커 ── */}
+            {/* ── 유리 홀로그램 전체 오버레이 ── */}
+            {/* 레이어1: 카드 전체에 깔리는 무지개 — 이동 방향으로 각도 회전 */}
             <div style={{
-              position: "absolute",
-              bottom: 24, left: 36,
-              width: 110, height: 110,
-              borderRadius: "50%",
-              pointerEvents: "none",
-              zIndex: 10,
-            }}>
-              {/* 은박 베이스 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                background: "linear-gradient(135deg, #f2f2f6 0%, #d6d6e2 30%, #ededf5 55%, #c4c4d4 80%, #e8e8f0 100%)",
-              }} />
-              {/* 전체 면 무지개 (선명하게) — tilt로 항상 반응 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                background: `linear-gradient(${tilt.x * 5 + mouseDir * 0.4 + 90}deg,
-                  hsl(0,   100%, 60%),
-                  hsl(30,  100%, 58%),
-                  hsl(58,  100%, 56%),
-                  hsl(115,  85%, 52%),
-                  hsl(175,  90%, 52%),
-                  hsl(215,  95%, 58%),
-                  hsl(258,  90%, 62%),
-                  hsl(300,  90%, 60%),
-                  hsl(330,  95%, 58%),
-                  hsl(0,   100%, 60%)
-                )`,
-                mixBlendMode: "multiply",
-                opacity: 0.82,
-              }} />
-              {/* 홀로그램 미세선 — 같은 각도 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                backgroundImage: `repeating-linear-gradient(
-                  ${tilt.x * 5 + mouseDir * 0.4 + 90}deg,
-                  rgba(255,255,255,0)    0px,
-                  rgba(255,255,255,0)    2.5px,
-                  rgba(255,255,255,0.18) 3px,
-                  rgba(255,255,255,0)    3.5px
-                )`,
-                mixBlendMode: "screen",
-              }} />
-              {/* 빛 반짝임 — tilt에 따라 위치 이동 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                background: `radial-gradient(ellipse 60% 52% at
-                  ${50 - tilt.x * 1.8}%
-                  ${50 - tilt.y * 1.4}%,
-                  rgba(255,255,255,0.80) 0%,
-                  rgba(255,255,255,0.30) 28%,
-                  transparent 58%
-                )`,
-              }} />
-              {/* 엣지 어두움 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,0.25) 100%)",
-              }} />
-              {/* 테두리 */}
-              <div style={{
-                position: "absolute", inset: 1, borderRadius: "50%",
-                border: "2px solid rgba(255,255,255,0.60)",
-                boxShadow: "0 3px 14px rgba(0,0,0,0.30), inset 0 0 7px rgba(255,255,255,0.22)",
-              }} />
-            </div>
+              position: "absolute", inset: 0, borderRadius: 24,
+              pointerEvents: "none", zIndex: 3,
+              background: `linear-gradient(${mouseDir + 90}deg,
+                hsla(0,   100%, 65%, 0.20),
+                hsla(32,  100%, 62%, 0.20),
+                hsla(58,  100%, 60%, 0.18),
+                hsla(115,  90%, 58%, 0.18),
+                hsla(180,  95%, 58%, 0.18),
+                hsla(220, 100%, 62%, 0.18),
+                hsla(268,  95%, 63%, 0.20),
+                hsla(310,  95%, 61%, 0.20),
+                hsla(340, 100%, 62%, 0.20),
+                hsla(0,   100%, 65%, 0.20)
+              )`,
+              mixBlendMode: "screen",
+              transition: "background 0.06s linear",
+            }} />
+            {/* 레이어2: 마우스 위치 빛 반사 (유리 느낌) */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              pointerEvents: "none", zIndex: 4,
+              background: `radial-gradient(ellipse 55% 65% at ${holoPos.x}% ${holoPos.y}%,
+                rgba(255, 255, 255, 0.22) 0%,
+                rgba(255, 220, 255, 0.10) 25%,
+                rgba(180, 255, 255, 0.06) 45%,
+                transparent 68%
+              )`,
+              mixBlendMode: "screen",
+              transition: "background 0.03s linear",
+            }} />
+            {/* 레이어3: 미세 홀로그램 결 */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              pointerEvents: "none", zIndex: 3,
+              backgroundImage: `repeating-linear-gradient(
+                ${mouseDir + 90}deg,
+                rgba(255,255,255,0)    0px,
+                rgba(255,255,255,0)    5px,
+                rgba(255,255,255,0.06) 5.5px,
+                rgba(255,255,255,0)    6px
+              )`,
+              mixBlendMode: "screen",
+              transition: "background-image 0.06s linear",
+            }} />
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 28 }}>🏛️</span>
