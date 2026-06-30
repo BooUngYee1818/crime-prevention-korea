@@ -331,7 +331,8 @@ export default function HomePage() {
     { version: "v1.5.2", badgeColor: "#22c55e", items: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"] },
     { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 당근마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
     { version: "v1.7", badgeColor: "#38bdf8", items: ["📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션", "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도", "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크", "✨ 기관 판매 배너 홀로그램 은박 효과"] },
-    { version: "v1.7", badge: "최신", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
+    { version: "v1.7", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
+    { version: "v1.8", badge: "최신", badgeColor: "#f472b6", items: ["🎨 전화 통화 화면 전면 리디자인 — 삼성 One UI 8.5 / iOS 26 Liquid Glass 스타일 적용", "🔇 발신자 번호 '발신자표시제한'으로 변경 (실제 보이스피싱 수법 반영)", "🎙️ AI 목소리 업그레이드 — ElevenLabs 딥보이스 TTS 적용 (기존 로봇음 → 실제 사람 목소리)", "📌 방명록 추천 후기 고정 표시", "✍️ 방명록 1인 1회 작성 제한"] },
   ];
 
   const startChangelogScroll = () => {
