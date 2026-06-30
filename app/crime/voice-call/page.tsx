@@ -318,7 +318,7 @@ const CALL_SCRIPTS: Record<ScenarioId, {
   family: {
     title: "가족 사칭 보이스피싱",
     caller: "아들 (민준)",
-    callerSub: "+82 10-9384-2710 · 모르는 번호",
+    callerSub: "발신자표시제한",
     transferAmount: 1500000,
     transferAccount: "카카오뱅크 3333-04-2819471 김민준",
     turns: FAMILY_TURNS,
@@ -326,7 +326,7 @@ const CALL_SCRIPTS: Record<ScenarioId, {
   prosecutor: {
     title: "검찰·경찰 사칭 보이스피싱",
     caller: "서울중앙지검",
-    callerSub: "02-530-4000 · 서울특별시",
+    callerSub: "발신자표시제한",
     transferAmount: 5000000,
     transferAccount: "우리은행 1002-847-293018 금융범죄수사팀",
     turns: PROSECUTOR_TURNS,
