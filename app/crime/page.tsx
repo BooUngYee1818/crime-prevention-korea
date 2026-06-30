@@ -157,6 +157,33 @@ export default function CrimeCenterPage() {
           <ChevronRight size={18} color="#60a5fa" style={{ flexShrink: 0 }} />
         </button>
 
+        {/* 📱 문자 사기 체험 배너 */}
+        <button
+          onClick={() => router.push("/crime/sms-chat")}
+          style={{
+            width: "100%", marginBottom: 20, padding: "20px 22px", borderRadius: 20,
+            background: "linear-gradient(135deg, #0f0a28, #1e1050)",
+            border: "1px solid #2e1065",
+            cursor: "pointer", textAlign: "left",
+            display: "flex", alignItems: "center", gap: 16,
+            boxShadow: "0 4px 20px #0000001a",
+          }}
+        >
+          <div style={{
+            width: 60, height: 60, borderRadius: 18,
+            background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0,
+          }}>📱</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>문자 사기 체험 (스미싱)</span>
+              <span style={{ background: "#a855f7", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>NEW</span>
+            </div>
+            <p style={{ color: "#c4b5fd", fontSize: 13 }}>택배·건강보험·카드 사기 문자를 3분간 직접 체험</p>
+          </div>
+          <ChevronRight size={18} color="#a78bfa" style={{ flexShrink: 0 }} />
+        </button>
+
         {/* 시나리오 그리드 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginBottom: 40 }}>
           {CRIME_SCENARIOS.map((scenario) => (
