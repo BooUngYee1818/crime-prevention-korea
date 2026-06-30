@@ -333,23 +333,34 @@ const CALL_SCRIPTS: Record<ScenarioId, {
   },
 };
 
-// ─── TTS ──────────────────────────────────────────────────────────────────────
+// ─── TTS (ElevenLabs) ─────────────────────────────────────────────────────────
 
-function speak(text: string, onEnd?: () => void) {
-  if (typeof window === "undefined" || !window.speechSynthesis) { onEnd?.(); return; }
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = "ko-KR";
-  utt.rate = 0.80;
-  utt.pitch = 0.90;
-  utt.volume = 1;
-  const voices = window.speechSynthesis.getVoices();
-  const kor =
-    voices.find(v => v.lang === "ko-KR" && /남성|male|Male/i.test(v.name)) ||
-    voices.find(v => v.lang.startsWith("ko")) || null;
-  if (kor) utt.voice = kor;
-  if (onEnd) utt.onend = onEnd;
-  window.speechSynthesis.speak(utt);
+// 가족 사칭: Adam(남성 중저음), 검찰 사칭: George(권위있는 남성)
+const VOICE_BY_SCENARIO: Record<ScenarioId, string> = {
+  family:     "pNInz6obpgDQGcFmaJgB", // Adam
+  prosecutor: "JBFqnCBsd6RMkjVDRZzb", // George
+};
+
+let currentAudio: HTMLAudioElement | null = null;
+
+function speak(text: string, voiceId: string, onEnd?: () => void) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+  fetch("/api/tts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, voice: voiceId }),
+  })
+    .then(r => r.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudio = audio;
+      audio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; onEnd?.(); };
+      audio.onerror = () => { URL.revokeObjectURL(url); currentAudio = null; onEnd?.(); };
+      audio.play().catch(() => onEnd?.());
+    })
+    .catch(() => onEnd?.());
 }
 
 // ─── 통화 타이머 ──────────────────────────────────────────────────────────────
@@ -1007,6 +1018,7 @@ export default function VoiceCallPage() {
   const callTimer = useCallTimer(timerRunning);
 
   const sc = CALL_SCRIPTS[scenario];
+  const voiceId = VOICE_BY_SCENARIO[scenario];
   const currentTurn = callPhase === "active" ? (sc.turns[turnIdx] ?? null) : null;
 
   // 60초 거절 타이머
@@ -1016,7 +1028,7 @@ export default function VoiceCallPage() {
       const remaining = REFUSE_TIMER_SECONDS - Math.floor((Date.now() - refuseStartedAt) / 1000);
       if (remaining <= 0) {
         clearInterval(id);
-        window.speechSynthesis?.cancel();
+        
         setOutcome("refused");
         setCallPhase("outcome");
       } else {
@@ -1032,7 +1044,7 @@ export default function VoiceCallPage() {
     if (!turn) return;
     const doPlay = () => {
       setSpeaking(true);
-      speak(turn.criminal, () => {
+      speak(turn.criminal, voiceId, () => {
         setSpeaking(false);
         // 포기 턴이면 2초 후 자동 종료
         if (turn.isGiveUp) {
@@ -1049,7 +1061,7 @@ export default function VoiceCallPage() {
     } else {
       doPlay();
     }
-  }, []);
+  }, [voiceId]);
 
   // 통화 시작
   function handlePickUp() {
@@ -1063,13 +1075,13 @@ export default function VoiceCallPage() {
     if (pendingTimeout.current) clearTimeout(pendingTimeout.current);
 
     if (choice.nextTurn === -1) {
-      window.speechSynthesis?.cancel();
+      
       setOutcome("refused");
       setCallPhase("outcome");
       return;
     }
     if (choice.nextTurn === -2) {
-      window.speechSynthesis?.cancel();
+      
       setShowTransfer(true);
       return;
     }
@@ -1088,20 +1100,20 @@ export default function VoiceCallPage() {
   }
 
   function handleTransfer() {
-    window.speechSynthesis?.cancel();
+    
     setOutcome("sent");
     setCallPhase("outcome");
   }
 
   function handleHangUp() {
-    window.speechSynthesis?.cancel();
+    
     if (pendingTimeout.current) clearTimeout(pendingTimeout.current);
     setOutcome("refused");
     setCallPhase("outcome");
   }
 
   function handleRetry() {
-    window.speechSynthesis?.cancel();
+    
     if (pendingTimeout.current) clearTimeout(pendingTimeout.current);
     setCallPhase("select");
     setOutcome(null);
@@ -1114,9 +1126,8 @@ export default function VoiceCallPage() {
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined") window.speechSynthesis?.getVoices();
     return () => {
-      window.speechSynthesis?.cancel();
+      if (currentAudio) { currentAudio.pause(); }
       if (pendingTimeout.current) clearTimeout(pendingTimeout.current);
     };
   }, []);
