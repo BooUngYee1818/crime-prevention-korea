@@ -107,7 +107,7 @@ function ScamSimSection({ lang }: { lang: string }) {
       const t = setTimeout(() => {
         const msg = msgs[shown];
         const voice = scenario.id === "deepvoice" ? "shimmer" : scenario.id === "romance" ? "echo" : "alloy";
-        playTTS(msg.msg, voice);
+        if (msg.msg) playTTS(msg.msg, voice);
         setShown(p => p + 1);
       }, 900);
       return () => clearTimeout(t);
