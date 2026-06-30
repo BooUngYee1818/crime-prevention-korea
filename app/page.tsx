@@ -733,6 +733,7 @@ export default function HomePage() {
           @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
           @keyframes lampFlicker { 0%,100%{opacity:1} 88%{opacity:1} 90%{opacity:0.5} 91%{opacity:1} 95%{opacity:0.7} 97%{opacity:1} }
           @keyframes slowPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+          @keyframes diagBeam { 0%{opacity:0;transform:skewX(-15deg) translateX(-30px)} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0;transform:skewX(-15deg) translateX(30px)} }
           @keyframes crtScan { 0%{background-position:0 0} 100%{background-position:0 100%} }
           @keyframes fogDrift { 0%{transform:translateX(-5%)} 50%{transform:translateX(5%)} 100%{transform:translateX(-5%)} }
         `}</style>
@@ -2237,6 +2238,27 @@ export default function HomePage() {
               pointerEvents: "none", zIndex: 1,
               transition: "background 0.1s ease",
             }} />
+            {/* 대각선 빛 줄기 */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none", zIndex: 1, overflow: "hidden",
+            }}>
+              <div style={{
+                position: "absolute",
+                top: "-40%", left: "-10%",
+                width: "45%", height: "200%",
+                background: "linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.055) 45%, rgba(200,160,255,0.08) 50%, rgba(255,255,255,0.055) 55%, transparent 100%)",
+                transform: "skewX(-15deg)",
+                animation: "diagBeam 6s ease-in-out infinite",
+              }} />
+              <div style={{
+                position: "absolute",
+                top: "-40%", left: "30%",
+                width: "25%", height: "200%",
+                background: "linear-gradient(105deg, transparent 0%, rgba(180,120,255,0.04) 45%, rgba(255,255,255,0.07) 50%, rgba(180,120,255,0.04) 55%, transparent 100%)",
+                transform: "skewX(-15deg)",
+                animation: "diagBeam 6s ease-in-out infinite 1.5s",
+              }} />
+            </div>
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 28 }}>🏛️</span>
