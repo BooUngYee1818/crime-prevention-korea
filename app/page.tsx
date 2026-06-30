@@ -390,6 +390,15 @@ export default function HomePage() {
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
           <a href="#how" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_howto", lang)}</a>
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
+          <a href="#changelog" style={{
+            display: "flex", alignItems: "center", gap: 5,
+            padding: "7px 14px", borderRadius: 20,
+            background: "#1a0a2e", color: "#c58dc6",
+            border: "1px solid #3a1a5e", fontSize: 13, fontWeight: 700,
+            textDecoration: "none",
+          }}>
+            <span style={{ fontSize: 11 }}>📋</span> 업데이트 내역
+          </a>
           <button
             onClick={() => router.push("/stats")}
             style={{
@@ -611,7 +620,7 @@ export default function HomePage() {
           </div>
 
           {/* ── 업데이트 내역 ── */}
-          <div style={{ marginTop: 56, borderTop: "1px solid #2a1a3a", paddingTop: 48 }}>
+          <div id="changelog" style={{ marginTop: 56, borderTop: "1px solid #2a1a3a", paddingTop: 48 }}>
             <div style={{ textAlign: "center", marginBottom: 32 }}>
               <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
               <h3 style={{ color: "#fff", fontWeight: 900, fontSize: 22, letterSpacing: -0.5 }}>업데이트 내역</h3>
