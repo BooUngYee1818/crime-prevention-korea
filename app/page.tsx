@@ -730,46 +730,61 @@ export default function HomePage() {
             </button>
             {/* 팝업 */}
             <div style={{
-              position: "absolute", top: "calc(100% + 8px)", right: 0,
-              width: 300, borderRadius: 16,
-              background: "#120820", border: "1px solid #3a1a5e",
-              boxShadow: "0 8px 32px rgba(100,40,200,0.35)",
+              position: "absolute", top: "calc(100% + 10px)", right: 0,
+              width: 420, borderRadius: 20,
+              background: "linear-gradient(160deg, #180830 0%, #0e051a 100%)",
+              border: "1px solid #5b21b660",
+              boxShadow: "0 12px 48px rgba(100,40,200,0.45), 0 0 0 1px rgba(195,143,214,0.08)",
               overflow: "hidden",
               opacity: showChangelog ? 1 : 0,
-              transform: showChangelog ? "translateY(0)" : "translateY(-8px)",
+              transform: showChangelog ? "translateY(0) scale(1)" : "translateY(-10px) scale(0.97)",
               pointerEvents: showChangelog ? "auto" : "none",
-              transition: "opacity 0.18s, transform 0.18s",
+              transition: "opacity 0.2s, transform 0.2s",
               zIndex: 999,
             }}>
               {/* 제목 */}
-              <div style={{ padding: "12px 16px 8px", borderBottom: "1px solid #2a1a3a" }}>
-                <p style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 2, margin: 0 }}>CHANGELOG</p>
+              <div style={{
+                padding: "16px 20px 12px",
+                borderBottom: "1px solid #2a1a3a",
+                background: "linear-gradient(90deg, #2d1060 0%, #1a0535 100%)",
+                display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span style={{ fontSize: 18 }}>📋</span>
+                <div>
+                  <p style={{ color: "#e9d5ff", fontSize: 15, fontWeight: 800, letterSpacing: 1, margin: 0 }}>업데이트 내역</p>
+                  <p style={{ color: "#9333ea80", fontSize: 11, margin: "2px 0 0", fontWeight: 600 }}>CHANGELOG</p>
+                </div>
+                <div style={{
+                  marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650",
+                  borderRadius: 20, padding: "3px 10px",
+                }}>
+                  <span style={{ color: "#f472b6", fontSize: 12, fontWeight: 800 }}>v1.8 최신</span>
+                </div>
               </div>
               {/* 스크롤 영역 */}
               <div style={{ position: "relative" }}>
-                {/* 하단 그라디언트 fade (v1.1 위 버전들이 숨겨짐) */}
                 <div style={{
-                  position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
-                  background: "linear-gradient(to top, #120820 0%, transparent 100%)",
+                  position: "absolute", bottom: 0, left: 0, right: 0, height: 60,
+                  background: "linear-gradient(to top, #0e051a 0%, transparent 100%)",
                   pointerEvents: "none", zIndex: 2,
                 }} />
                 <div
                   ref={changelogScrollRef}
-                  style={{ maxHeight: 260, overflowY: "scroll", padding: "10px 16px 90px", scrollbarWidth: "none" }}
+                  style={{ maxHeight: 380, overflowY: "scroll", padding: "14px 20px 70px", scrollbarWidth: "none" }}
                 >
-                  {CHANGELOGS.map((log, i) => (
-                    <div key={i} style={{ display: "flex", gap: 10, paddingBottom: 14, alignItems: "flex-start" }}>
+                  {[...CHANGELOGS].reverse().map((log, i) => (
+                    <div key={i} style={{ display: "flex", gap: 14, paddingBottom: 18, alignItems: "flex-start" }}>
                       <div style={{
-                        flexShrink: 0, minWidth: 52,
-                        background: "#1e0a36", border: `1px solid ${log.badgeColor}55`,
-                        borderRadius: 8, padding: "3px 0", textAlign: "center",
+                        flexShrink: 0, minWidth: 64,
+                        background: `${log.badgeColor}18`, border: `1px solid ${log.badgeColor}55`,
+                        borderRadius: 10, padding: "5px 4px", textAlign: "center",
                       }}>
-                        <span style={{ color: log.badgeColor, fontSize: 11, fontWeight: 800 }}>{log.version}</span>
-                        {log.badge && <span style={{ display: "block", color: "#4ade80", fontSize: 9, fontWeight: 700 }}>{log.badge}</span>}
+                        <span style={{ color: log.badgeColor, fontSize: 13, fontWeight: 800, display: "block" }}>{log.version}</span>
+                        {log.badge && <span style={{ display: "block", color: "#4ade80", fontSize: 10, fontWeight: 700, marginTop: 1 }}>{log.badge}</span>}
                       </div>
-                      <div>
+                      <div style={{ flex: 1 }}>
                         {log.items.map((item, j) => (
-                          <p key={j} style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.7, margin: 0 }}>{item}</p>
+                          <p key={j} style={{ color: i === 0 ? "#e9d5ff" : "#9ca3af", fontSize: 13, lineHeight: 1.75, margin: "0 0 2px" }}>{item}</p>
                         ))}
                       </div>
                     </div>
@@ -1001,6 +1016,53 @@ export default function HomePage() {
               </div>
             </div>
 
+          </div>
+
+          {/* ── 업데이트 내역 ── */}
+          <div style={{ marginTop: 56 }}>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
+              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>📋 업데이트 내역</h2>
+            </div>
+            <div style={{ position: "relative", maxWidth: 600, margin: "0 auto" }}>
+              {/* 항목 목록 */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                {[...CHANGELOGS].reverse().map((log, i) => (
+                  <div key={i} style={{
+                    display: "flex", gap: 14, padding: "14px 0",
+                    borderBottom: "1px solid #1e0a36",
+                    filter: i >= 4 ? `blur(${(i - 3) * 2}px)` : "none",
+                    opacity: i >= 4 ? Math.max(0, 1 - (i - 3) * 0.35) : 1,
+                    transition: "filter 0.2s",
+                    pointerEvents: i >= 4 ? "none" : "auto",
+                  }}>
+                    <div style={{
+                      flexShrink: 0, width: 66,
+                      background: `${log.badgeColor}18`, border: `1px solid ${log.badgeColor}55`,
+                      borderRadius: 10, padding: "5px 4px", textAlign: "center", alignSelf: "flex-start",
+                    }}>
+                      <span style={{ color: log.badgeColor, fontSize: 12, fontWeight: 800, display: "block" }}>{log.version}</span>
+                      {log.badge && <span style={{ color: "#f472b6", fontSize: 9, fontWeight: 700, display: "block", marginTop: 1 }}>{log.badge}</span>}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      {log.items.map((item, j) => (
+                        <p key={j} style={{
+                          color: i === 0 ? "#e9d5ff" : "#9ca3af",
+                          fontSize: 13, lineHeight: 1.75, margin: "0 0 1px",
+                          fontWeight: i === 0 ? 600 : 400,
+                        }}>{item}</p>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* 하단 블러 + 페이드 오버레이 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 120,
+                background: "linear-gradient(to top, #0d0520 30%, transparent 100%)",
+                pointerEvents: "none",
+              }} />
+            </div>
           </div>
 
         </div>
