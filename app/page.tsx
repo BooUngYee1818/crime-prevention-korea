@@ -2299,78 +2299,70 @@ export default function HomePage() {
             <div style={{
               position: "absolute",
               bottom: 28, right: 32,
-              width: 90, height: 90,
+              width: 100, height: 100,
               borderRadius: "50%",
               pointerEvents: "none",
               zIndex: 10,
-              flexShrink: 0,
             }}>
-              {/* 은박 베이스 */}
+              {/* 은박 베이스 — 금속 질감 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "linear-gradient(145deg, #e6e6ee 0%, #d4d4e0 40%, #ececf4 65%, #cacad8 100%)",
+                background: "linear-gradient(130deg, #f0f0f6 0%, #d8d8e4 25%, #eeeef8 50%, #c8c8d8 75%, #e4e4ee 100%)",
               }} />
-              {/* 무지개 띠 — 마우스 X위치로 슬라이드 */}
+              {/* 전체 면 무지개 — 커서 이동 방향으로 각도 회전 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                overflow: "hidden",
-              }}>
-                <div style={{
-                  position: "absolute",
-                  top: "-25%", left: "-50%",
-                  width: "200%", height: "150%",
-                  background: `linear-gradient(${92 + (holoPos.x - 50) * 0.08}deg,
-                    transparent                0%,
-                    hsl(300, 52%, 79%)         7%,
-                    hsl(330, 62%, 77%)        15%,
-                    hsl(0,   72%, 77%)        23%,
-                    hsl(22,  80%, 80%)        32%,
-                    hsl(50,  76%, 82%)        42%,
-                    hsl(112, 52%, 76%)        52%,
-                    hsl(176, 58%, 76%)        62%,
-                    hsl(212, 68%, 77%)        71%,
-                    hsl(252, 60%, 77%)        80%,
-                    hsl(282, 52%, 79%)        88%,
-                    transparent              100%
-                  )`,
-                  transform: `translateX(${(holoPos.x - 50) * 0.7}px) translateY(${(holoPos.y - 50) * 0.15}px)`,
-                  mixBlendMode: "multiply",
-                  opacity: 0.95,
-                  transition: "transform 0.06s linear, background 0.06s linear",
-                }} />
-              </div>
-              {/* 미세 광택선 */}
+                background: `linear-gradient(${mouseDir + 90}deg,
+                  hsl(0,   80%, 74%),
+                  hsl(30,  85%, 76%),
+                  hsl(58,  82%, 78%),
+                  hsl(115, 62%, 72%),
+                  hsl(175, 68%, 72%),
+                  hsl(215, 75%, 73%),
+                  hsl(258, 70%, 73%),
+                  hsl(300, 65%, 74%),
+                  hsl(330, 78%, 74%),
+                  hsl(0,   80%, 74%)
+                )`,
+                mixBlendMode: "multiply",
+                opacity: 0.88,
+                transition: "background 0.07s linear",
+              }} />
+              {/* 미세 홀로그램 결 — 이동 방향에 맞춰 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 backgroundImage: `repeating-linear-gradient(
-                  ${88 + (holoPos.x - 50) * 0.05}deg,
+                  ${mouseDir + 90}deg,
                   rgba(255,255,255,0)    0px,
-                  rgba(255,255,255,0)    4.5px,
-                  rgba(255,255,255,0.11) 5px,
-                  rgba(255,255,255,0)    5.5px
+                  rgba(255,255,255,0)    3px,
+                  rgba(255,255,255,0.13) 3.5px,
+                  rgba(255,255,255,0)    4px
                 )`,
                 mixBlendMode: "screen",
+                transition: "background-image 0.07s linear",
               }} />
-              {/* 스펙큘러 */}
+              {/* 이동 방향 반대쪽 스펙큘러 하이라이트 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `radial-gradient(ellipse 52% 44% at ${48 + (holoPos.x - 50) * 0.3}% ${46 + (holoPos.y - 50) * 0.3}%,
-                  rgba(255,255,255,0.65) 0%,
-                  rgba(255,255,255,0.20) 32%,
+                background: `radial-gradient(ellipse 58% 50% at
+                  ${50 - 30 * Math.cos((mouseDir) * Math.PI / 180)}%
+                  ${50 - 30 * Math.sin((mouseDir) * Math.PI / 180)}%,
+                  rgba(255,255,255,0.70) 0%,
+                  rgba(255,255,255,0.25) 30%,
                   transparent 62%
                 )`,
-                transition: "background 0.06s linear",
+                transition: "background 0.07s linear",
               }} />
-              {/* 엣지 그림자 */}
+              {/* 엣지 어두움 (입체감) */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 50% 50%, transparent 52%, rgba(0,0,0,0.20) 100%)",
+                background: "radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.22) 100%)",
               }} />
-              {/* 테두리 */}
+              {/* 은색 테두리 */}
               <div style={{
                 position: "absolute", inset: 1, borderRadius: "50%",
-                border: "1.5px solid rgba(255,255,255,0.5)",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.25), inset 0 0 5px rgba(255,255,255,0.15)",
+                border: "2px solid rgba(255,255,255,0.55)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.28), inset 0 0 6px rgba(255,255,255,0.20)",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
