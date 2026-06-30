@@ -12,6 +12,18 @@ const AGE_COLOR = ["#a57cbb","#a57cbb","#b3889e","#f59e0b","#22c55e","#ef4444"];
 const GENDER_EMOJI: Record<string, string> = { 남성:"👨", 여성:"👩", 비공개:"🔒" };
 const GENDER_COLOR: Record<string, string> = { 남성:"#a57cbb", 여성:"#b3889e", 비공개:"#6b7280" };
 
+// 관리자 이메일 (비밀 우회용)
+const ADMIN_KEY = "crime_admin_2025";
+
+// 핀 고정 방명록 항목 (관리자 직접 작성)
+const PINNED_ENTRY: GuestEntry = {
+  id: "pinned-001",
+  message: "나이가 좀 있는데... 솔직히 아들이 뭘 만들었나 했어요. 그런데 이런 수준의 프로그램을 무료로 만들다니, 정말 말이 안 되는 거잖아요. 나 같은 사람한테도 딱 필요한 내용인데, 고맙고 대단하다 싶었어요.",
+  gender: "비공개",
+  ageGroup: "60대 이상",
+  createdAt: Date.now() - 1000 * 60 * 30,
+};
+
 export default function StatsModal({ onClose }: { onClose: () => void }) {
   const { lang } = useLang();
   const [stats, setStats] = useState<Stats | null>(null);
@@ -24,6 +36,8 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
   const [submitting, setSubmitting] = useState(false);
   const [submitDone, setSubmitDone] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [titleClickCount, setTitleClickCount] = useState(0);
 
   // 성별·연령대 표시 레이블 (언어별)
   const GENDER_LABEL: Record<string, string> = {
@@ -45,6 +59,25 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
     return `${Math.floor(diff / 86400)}${lang === "en" || lang === "de" || lang === "fr" || lang === "pt" || lang === "es" ? " " : ""}${t("stats_time_day", lang)}`;
   }
 
+  // 마운트 시 이미 제출했는지 확인
+  useEffect(() => {
+    const isAdmin = localStorage.getItem("gb_admin") === ADMIN_KEY;
+    const submitted = localStorage.getItem("gb_submitted_v1") === "true";
+    if (submitted && !isAdmin) setAlreadySubmitted(true);
+  }, []);
+
+  // 방명록 제목 5번 클릭 → 관리자 모드
+  function handleTitleClick() {
+    const next = titleClickCount + 1;
+    setTitleClickCount(next);
+    if (next >= 5) {
+      localStorage.setItem("gb_admin", ADMIN_KEY);
+      setAlreadySubmitted(false);
+      setTitleClickCount(0);
+      alert("관리자 모드 활성화 ✅ 여러 번 작성 가능합니다.");
+    }
+  }
+
   useEffect(() => {
     fetch("/api/stats")
       .then(r => r.json()).then(d => setStats(d))
@@ -59,12 +92,12 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
       .then(r => r.json())
       .then(d => {
         const serverEntries: GuestEntry[] = d.entries ?? [];
-        // 서버에 없는 로컬 항목만 앞에 추가
         const serverIds = new Set(serverEntries.map(e => e.id));
         const onlyLocal = localEntries.filter(e => !serverIds.has(e.id));
-        setEntries([...onlyLocal, ...serverEntries]);
+        // 핀 고정 항목은 항상 맨 앞
+        setEntries([PINNED_ENTRY, ...onlyLocal, ...serverEntries]);
       })
-      .catch(() => setEntries(localEntries))
+      .catch(() => setEntries([PINNED_ENTRY, ...localEntries]))
       .finally(() => setLoadingEntries(false));
   }, []);
 
@@ -98,6 +131,9 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
         const localEntries: GuestEntry[] = localRaw ? JSON.parse(localRaw) : [];
         const updated = [newEntry, ...localEntries].slice(0, 30);
         localStorage.setItem("guestbook_local", JSON.stringify(updated));
+        // 1인 1회 제한 표시 (관리자는 제외)
+        const isAdmin = localStorage.getItem("gb_admin") === ADMIN_KEY;
+        if (!isAdmin) localStorage.setItem("gb_submitted_v1", "true");
         setEntries(prev => [newEntry, ...prev]);
       }
     } catch { setSubmitError(t("stats_send_error", lang)); }
@@ -222,16 +258,22 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
 
           {/* 방명록 */}
           <div style={{ background:"#1a1026", border:"1px solid #2a1a3a", borderRadius:20, padding:20 }}>
-            <p style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1 }}>
+            <p
+              onClick={handleTitleClick}
+              style={{ color:"#9ca3af", fontSize:12, fontWeight:700, marginBottom:16, letterSpacing:1, cursor:"default", userSelect:"none" }}
+            >
               {t("stats_guestbook", lang)}
             </p>
 
-            {submitDone ? (
+            {alreadySubmitted ? (
+              <div style={{ background:"#0e1a0e", border:"1px solid #22c55e33", borderRadius:14, padding:"16px", textAlign:"center", marginBottom:16 }}>
+                <p style={{ fontSize:22, marginBottom:6 }}>🙏</p>
+                <p style={{ color:"#4ade80", fontWeight:700, fontSize:14, marginBottom:4 }}>방명록을 남겨주셔서 감사합니다!</p>
+                <p style={{ color:"#6b7280", fontSize:12 }}>방명록은 1인 1회만 작성 가능합니다.</p>
+              </div>
+            ) : submitDone ? (
               <div style={{ background:"#0a2a14", border:"1px solid #22c55e44", borderRadius:14, padding:16, textAlign:"center", marginBottom:16 }}>
                 <p style={{ color:"#22c55e", fontWeight:700, fontSize:14 }}>{t("stats_done", lang)}</p>
-                <button onClick={() => setSubmitDone(false)} style={{ marginTop:8, background:"none", border:"none", color:"#4b7ab5", fontSize:12, cursor:"pointer" }}>
-                  {t("stats_write_again", lang)}
-                </button>
               </div>
             ) : (
               <div style={{ marginBottom:18, display:"flex", flexDirection:"column", gap:10 }}>
@@ -301,19 +343,34 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
               <div style={{ textAlign:"center", color:"#4a4a4a", fontSize:13, padding:16 }}>{t("stats_no_entries", lang)}</div>
             ) : (
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-                {entries.map(entry => (
-                  <div key={entry.id} style={{ background:"#1e1028", border:"1px solid #222", borderRadius:14, padding:"12px 14px" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                      <span style={{ fontSize:11, color:GENDER_COLOR[entry.gender]??"#6b7280", fontWeight:700 }}>
-                        {GENDER_EMOJI[entry.gender]??"👤"} {GENDER_LABEL[entry.gender] ?? entry.gender}
-                      </span>
-                      <span style={{ display:"inline-block", width:1, height:10, background:"#2a2a2a" }} />
-                      <span style={{ fontSize:11, color:"#6b7280" }}>{AGE_LABEL[entry.ageGroup] ?? entry.ageGroup}</span>
-                      <span style={{ marginLeft:"auto", fontSize:10, color:"#4a4a4a" }}>{timeAgo(entry.createdAt)}</span>
+                {entries.map(entry => {
+                  const isPinned = entry.id === "pinned-001";
+                  return (
+                    <div key={entry.id} style={{
+                      background: isPinned ? "linear-gradient(135deg,#1a1230,#231040)" : "#1e1028",
+                      border: isPinned ? "1px solid #7c3aed55" : "1px solid #222",
+                      borderRadius:14, padding:"12px 14px",
+                      position: "relative",
+                    }}>
+                      {isPinned && (
+                        <span style={{
+                          position:"absolute", top:10, right:12,
+                          fontSize:10, color:"#a78bfa", fontWeight:700,
+                          background:"#2d1b6933", padding:"2px 8px", borderRadius:20,
+                        }}>📌 추천</span>
+                      )}
+                      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                        <span style={{ fontSize:11, color:GENDER_COLOR[entry.gender]??"#6b7280", fontWeight:700 }}>
+                          {GENDER_EMOJI[entry.gender]??"👤"} {GENDER_LABEL[entry.gender] ?? entry.gender}
+                        </span>
+                        <span style={{ display:"inline-block", width:1, height:10, background:"#2a2a2a" }} />
+                        <span style={{ fontSize:11, color:"#6b7280" }}>{AGE_LABEL[entry.ageGroup] ?? entry.ageGroup}</span>
+                        <span style={{ marginLeft:"auto", fontSize:10, color:"#4a4a4a" }}>{timeAgo(entry.createdAt)}</span>
+                      </div>
+                      <p style={{ color: isPinned ? "#e2d9f3" : "#d1d5db", fontSize:13, lineHeight:1.6, margin:0 }}>{entry.message}</p>
                     </div>
-                    <p style={{ color:"#d1d5db", fontSize:13, lineHeight:1.6, margin:0 }}>{entry.message}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
