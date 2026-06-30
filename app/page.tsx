@@ -2239,37 +2239,63 @@ export default function HomePage() {
               pointerEvents: "none", zIndex: 1,
               transition: "background 0.1s ease",
             }} />
-            {/* 정품 인증 홀로그램 — 마우스 방향 연동 */}
+            {/* 정품 인증 홀로그램 스티커 효과 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none", zIndex: 1, overflow: "hidden",
             }}>
-              {/* 무지개 그라디언트: tilt에 따라 각도·위치 변화 */}
+              {/* 레이어 1: 전체 스펙트럼 — hue-rotate로 색상 자체가 돌아감 */}
               <div style={{
                 position: "absolute", inset: 0,
-                background: `linear-gradient(${100 + tilt.x * 4}deg,
-                  transparent ${20 + tilt.y * 1.5}%,
-                  rgba(255,60,60,0.18) ${28 + tilt.x * 0.8}%,
-                  rgba(255,150,30,0.22) ${34 + tilt.x * 0.8}%,
-                  rgba(255,230,40,0.20) ${40 + tilt.x * 0.8}%,
-                  rgba(50,210,90,0.20) ${46 + tilt.x * 0.8}%,
-                  rgba(30,170,255,0.22) ${52 + tilt.x * 0.8}%,
-                  rgba(110,60,255,0.20) ${58 + tilt.x * 0.8}%,
-                  rgba(210,50,210,0.18) ${64 + tilt.x * 0.8}%,
-                  transparent ${72 + tilt.y * 1.5}%
+                background: `linear-gradient(${105 + tilt.x * 3}deg,
+                  hsl(0,100%,55%) 0%,
+                  hsl(30,100%,55%) 14%,
+                  hsl(60,100%,52%) 28%,
+                  hsl(120,100%,45%) 42%,
+                  hsl(195,100%,52%) 56%,
+                  hsl(240,100%,60%) 70%,
+                  hsl(280,100%,58%) 84%,
+                  hsl(320,100%,55%) 100%
                 )`,
-                transition: "background 0.08s ease",
+                opacity: 0.38,
+                filter: `hue-rotate(${tilt.x * 18 + tilt.y * 8}deg) saturate(1.8) brightness(1.2)`,
                 mixBlendMode: "screen",
+                transition: "filter 0.07s ease, background 0.07s ease",
               }} />
-              {/* 화이트 글레어: 마우스 위치 따라 이동 */}
+              {/* 레이어 2: 얇은 수평 줄무늬 — 스티커 특유의 결 */}
               <div style={{
                 position: "absolute", inset: 0,
-                background: `linear-gradient(${100 + tilt.x * 4}deg,
-                  transparent ${38 + tilt.x * 1.2 + tilt.y * 0.5}%,
-                  rgba(255,255,255,0.28) ${46 + tilt.x * 1.2 + tilt.y * 0.5}%,
-                  rgba(255,255,255,0.10) ${50 + tilt.x * 1.2 + tilt.y * 0.5}%,
-                  transparent ${58 + tilt.x * 1.2 + tilt.y * 0.5}%
+                backgroundImage: `repeating-linear-gradient(
+                  ${90 + tilt.y * 2}deg,
+                  transparent 0px,
+                  transparent 3px,
+                  rgba(255,255,255,0.04) 3px,
+                  rgba(255,255,255,0.04) 4px
                 )`,
-                transition: "background 0.08s ease",
+                transition: "background-image 0.07s ease",
+              }} />
+              {/* 레이어 3: 이동하는 화이트 글레어 줄기 */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: `linear-gradient(${105 + tilt.x * 3}deg,
+                  transparent ${32 + tilt.x * 2.5 + tilt.y * 1}%,
+                  rgba(255,255,255,0.45) ${44 + tilt.x * 2.5 + tilt.y * 1}%,
+                  rgba(255,255,255,0.15) ${48 + tilt.x * 2.5 + tilt.y * 1}%,
+                  transparent ${56 + tilt.x * 2.5 + tilt.y * 1}%
+                )`,
+                transition: "background 0.07s ease",
+              }} />
+              {/* 레이어 4: 엣지 쪽 은은한 보조 색상 */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: `radial-gradient(ellipse 80% 60% at ${50 + tilt.x * 3}% ${50 + tilt.y * 3}%,
+                  transparent 30%,
+                  rgba(120,80,255,0.12) 60%,
+                  rgba(40,180,255,0.10) 80%,
+                  transparent 100%
+                )`,
+                filter: `hue-rotate(${-tilt.x * 12}deg)`,
+                transition: "background 0.07s ease, filter 0.07s ease",
+                mixBlendMode: "screen",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
