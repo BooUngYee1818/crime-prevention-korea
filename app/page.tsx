@@ -589,7 +589,7 @@ export default function HomePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
                 {
-                  version: "v1.4.1",
+                  version: "v1.5",
                   date: "2025.06",
                   badge: "최신",
                   badgeColor: "#f59e0b",
