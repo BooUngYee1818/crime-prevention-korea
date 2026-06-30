@@ -50,8 +50,50 @@ export default function HomePage() {
   const [guideTab, setGuideTab] = useState("parents");
   const [selectedScenario, setSelectedScenario] = useState<typeof CRIME_SCENARIOS[0] | null>(null);
   const [hoveredLog, setHoveredLog] = useState<number | null>(null);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const changelogScrollRef = useRef<HTMLDivElement>(null);
+  const changelogTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const instCardRef = useRef<HTMLDivElement>(null);
+
+  const CHANGELOGS = [
+    { version: "v1.0", badgeColor: "#6b7280", items: ["🚀 서비스 최초 출시", "📋 8가지 기본 사기 시나리오", "🤖 AI 기반 범인 대화 엔진"] },
+    { version: "v1.0.1", badgeColor: "#6b7280", items: ["🐛 초기 배포 후 긴급 버그 수정", "⚡ 로딩 속도 개선"] },
+    { version: "v1.1", badgeColor: "#c58dc6", items: ["💸 가짜 송금 애니메이션 추가", "🏦 피해 결과 화면 개선", "🏦 은행 앱 UI 추가"] },
+    { version: "v1.1.1", badgeColor: "#c58dc6", items: ["📱 모바일 최적화 (터치 영역·레이아웃 개선)", "🐛 일부 시나리오 AI 응답 오류 수정"] },
+    { version: "v1.2", badgeColor: "#c58dc6", items: ["🎰 불법도박 체험 시나리오 추가", "🌏 10개 언어 다국어 지원"] },
+    { version: "v1.2.1", badgeColor: "#c58dc6", items: ["📊 이용 통계 실시간 표시", "👑 명예의 전당 기능 추가", "🐛 다국어 번역 누락 항목 수정"] },
+    { version: "v1.3", badgeColor: "#4ade80", items: ["📞 전화 사기 체험 — 삼성·아이폰 통화 UI + AI 목소리 (TTS)", "🔗 링크·다운로드 사기 시나리오 추가", "💬 AI 대화 자연스러움 개선"] },
+    { version: "v1.3.1", badgeColor: "#4ade80", items: ["⚙️ 자극 강도 설정 추가 (순화/보통/실전)", "🏆 거절 3회 시 축하 메시지 + 결과 화면 분기", "📋 업데이트 내역 섹션 신설"] },
+    { version: "v1.4", badgeColor: "#f59e0b", items: ["🍼 감성 동정 사기 시나리오 추가 (베이비 피싱)", "🏠 전세·부동산 사기 시나리오 추가", "🤖 AI 딥페이크 협박 사기 시나리오 추가"] },
+    { version: "v1.4.1", badgeColor: "#f59e0b", items: ["👆 모바일 버튼 터치 시 글씨 사라짐 현상 수정", "💰 충전 전 자동입력 사전 안내 문구 추가"] },
+    { version: "v1.4.2", badgeColor: "#f59e0b", items: ["🎢 도박 긴장감 강화 — 연패/연승 심리 확률 조작", "🪜 사다리 게임 경로 오류 수정"] },
+    { version: "v1.5", badgeColor: "#f59e0b", items: ["📱 문자 사기 체험 (스미싱) — 택배·건강보험·카드 3종", "🎰 불법 도박 신규 게임 3종 (홀짝·파워볼·슬롯머신)", "💳 충전 시 카드 자동입력 애니메이션"] },
+    { version: "v1.5.1", badgeColor: "#22c55e", items: ["💡 도박 페이지 전면 네온 사인 UI 적용", "👁️ 모바일 글씨 투명화 버그 전면 수정"] },
+    { version: "v1.5.2", badgeColor: "#22c55e", items: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"] },
+    { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 당근마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
+    { version: "v1.7", badge: "최신", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
+  ];
+
+  const startChangelogScroll = () => {
+    setShowChangelog(true);
+    if (changelogScrollRef.current) changelogScrollRef.current.scrollTop = 0;
+    changelogTimerRef.current = setInterval(() => {
+      if (changelogScrollRef.current) {
+        const el = changelogScrollRef.current;
+        if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+          el.scrollTop = 0;
+        } else {
+          el.scrollTop += 0.8;
+        }
+      }
+    }, 16);
+  };
+
+  const stopChangelogScroll = () => {
+    setShowChangelog(false);
+    if (changelogTimerRef.current) { clearInterval(changelogTimerRef.current); changelogTimerRef.current = null; }
+  };
 
   useEffect(() => {
     // 모바일: 자이로스코프
@@ -390,15 +432,72 @@ export default function HomePage() {
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
           <a href="#how" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_howto", lang)}</a>
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
-          <a href="#changelog" style={{
-            display: "flex", alignItems: "center", gap: 5,
-            padding: "7px 14px", borderRadius: 20,
-            background: "#1a0a2e", color: "#c58dc6",
-            border: "1px solid #3a1a5e", fontSize: 13, fontWeight: 700,
-            textDecoration: "none",
-          }}>
-            <span style={{ fontSize: 11 }}>📋</span> 업데이트 내역
-          </a>
+          <div
+            style={{ position: "relative" }}
+            onMouseEnter={startChangelogScroll}
+            onMouseLeave={stopChangelogScroll}
+            onTouchStart={e => { e.preventDefault(); startChangelogScroll(); }}
+            onTouchEnd={stopChangelogScroll}
+          >
+            <button style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "7px 14px", borderRadius: 20,
+              background: showChangelog ? "#2d1060" : "#1a0a2e", color: "#c58dc6",
+              border: `1px solid ${showChangelog ? "#7c3aed" : "#3a1a5e"}`, fontSize: 13, fontWeight: 700,
+              cursor: "pointer", transition: "all 0.15s",
+            }}>
+              <span style={{ fontSize: 11 }}>📋</span> 업데이트 내역
+            </button>
+            {/* 팝업 */}
+            <div style={{
+              position: "absolute", top: "calc(100% + 8px)", right: 0,
+              width: 300, borderRadius: 16,
+              background: "#120820", border: "1px solid #3a1a5e",
+              boxShadow: "0 8px 32px rgba(100,40,200,0.35)",
+              overflow: "hidden",
+              opacity: showChangelog ? 1 : 0,
+              transform: showChangelog ? "translateY(0)" : "translateY(-8px)",
+              pointerEvents: showChangelog ? "auto" : "none",
+              transition: "opacity 0.18s, transform 0.18s",
+              zIndex: 999,
+            }}>
+              {/* 제목 */}
+              <div style={{ padding: "12px 16px 8px", borderBottom: "1px solid #2a1a3a" }}>
+                <p style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 2, margin: 0 }}>CHANGELOG</p>
+              </div>
+              {/* 스크롤 영역 */}
+              <div style={{ position: "relative" }}>
+                {/* 하단 그라디언트 fade (v1.1 위 버전들이 숨겨짐) */}
+                <div style={{
+                  position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
+                  background: "linear-gradient(to top, #120820 0%, transparent 100%)",
+                  pointerEvents: "none", zIndex: 2,
+                }} />
+                <div
+                  ref={changelogScrollRef}
+                  style={{ maxHeight: 260, overflowY: "scroll", padding: "10px 16px 90px", scrollbarWidth: "none" }}
+                >
+                  {CHANGELOGS.map((log, i) => (
+                    <div key={i} style={{ display: "flex", gap: 10, paddingBottom: 14, alignItems: "flex-start" }}>
+                      <div style={{
+                        flexShrink: 0, minWidth: 52,
+                        background: "#1e0a36", border: `1px solid ${log.badgeColor}55`,
+                        borderRadius: 8, padding: "3px 0", textAlign: "center",
+                      }}>
+                        <span style={{ color: log.badgeColor, fontSize: 11, fontWeight: 800 }}>{log.version}</span>
+                        {log.badge && <span style={{ display: "block", color: "#4ade80", fontSize: 9, fontWeight: 700 }}>{log.badge}</span>}
+                      </div>
+                      <div>
+                        {log.items.map((item, j) => (
+                          <p key={j} style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.7, margin: 0 }}>{item}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
           <button
             onClick={() => router.push("/stats")}
             style={{
@@ -617,267 +716,6 @@ export default function HomePage() {
               </div>
             </div>
 
-          </div>
-
-          {/* ── 업데이트 내역 ── */}
-          <div id="changelog" style={{ marginTop: 56, borderTop: "1px solid #2a1a3a", paddingTop: 48 }}>
-            <div style={{ textAlign: "center", marginBottom: 32 }}>
-              <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
-              <h3 style={{ color: "#fff", fontWeight: 900, fontSize: 22, letterSpacing: -0.5 }}>업데이트 내역</h3>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-              {[
-                {
-                  version: "v1.7",
-                  badge: "최신",
-                  badgeColor: "#c58dc6",
-                  badgeBg: "#1a0a2e",
-                  items: [
-                    "🏛️ 과거 범죄 아카이브 — 1990년대 골목부터 AI 시대까지 시대별 배경 추가",
-                    "😷 우환폐렴(코로나) 시대 빗방울 효과 및 추억 마퀴 적용",
-                    "⚖️ 어린이 법률 안내 — 체험 행위별 처벌 조항 쉬운 말로 추가",
-                    "🥕 당근마켓 사기 체험 역할 표시 개선 및 중복 메시지 버그 수정",
-                  ],
-                },
-                {
-                  version: "v1.6",
-                  badge: null,
-                  badgeColor: "#22c55e",
-                  badgeBg: "#052e16",
-                  items: [
-                    "🕵️ 사기 판별 퀴즈 추가 — 진짜/가짜 문자 10문제 + 취약점 분석 리포트",
-                    "🥕 중고거래 사기 체험 — 당근마켓 UI, 가짜 안전결제 링크 → 해킹 화면 연출",
-                    "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일, 코인 투자 유도 전 과정",
-                  ],
-                },
-                {
-                  version: "v1.5.2",
-                  badge: null,
-                  badgeColor: "#22c55e",
-                  badgeBg: "#052e16",
-                  items: [
-                    "🚫 도박 과몰입 자동 폐쇄 시스템 (8분 연속/2회 충전/25판 기준, 10초 강제 대기)",
-                    "🎯 도박 초반 당첨 확률 1~2판 97%로 강화 → 이후 급락 (미끼 심화)",
-                  ],
-                },
-                {
-                  version: "v1.5.1",
-                  badge: null,
-                  badgeColor: "#22c55e",
-                  badgeBg: "#052e16",
-                  items: [
-                    "💡 도박 페이지 전면 네온 사인 UI 적용",
-                    "👁️ 모바일 글씨 투명화 버그 전면 수정 (WebkitTextFillColor 제거)",
-                    "🎮 도박 탭 비활성 글씨 가시성 개선",
-                  ],
-                },
-                {
-                  version: "v1.5",
-                  badge: null,
-                  badgeColor: "#f59e0b",
-                  badgeBg: "#1c1002",
-                  items: [
-                    "📱 문자 사기 체험 (스미싱) — 택배·건강보험·카드 3종 3분 AI 대화",
-                    "🎰 불법 도박 신규 게임 3종 (홀짝·파워볼·슬롯머신)",
-                    "📚 도박 게임별 튜토리얼 팝업",
-                    "💳 충전 시 카드 자동입력 애니메이션",
-                  ],
-                },
-                {
-                  version: "v1.4.2",
-                  badge: null,
-                  badgeColor: "#f59e0b",
-                  badgeBg: "#1c1002",
-                  items: [
-                    "🎢 도박 긴장감 강화 — 연패/연승 심리 확률 조작 + 결승 직전 서스펜스 연출",
-                    "🪜 사다리 게임 경로 오류 수정 (공이 좌우 이동하지 않던 버그 해결)",
-                  ],
-                },
-                {
-                  version: "v1.4.1",
-                  badge: null,
-                  badgeColor: "#f59e0b",
-                  badgeBg: "#1c1002",
-                  items: [
-                    "👆 모바일 버튼 터치 시 글씨 사라짐 현상 수정",
-                    "💰 충전 전 자동입력 사전 안내 문구 추가",
-                  ],
-                },
-                {
-                  version: "v1.4",
-                  badge: null,
-                  badgeColor: "#f59e0b",
-                  badgeBg: "#1c1002",
-                  items: [
-                    "🍼 감성 동정 사기 시나리오 추가 (베이비 피싱)",
-                    "🏠 전세·부동산 사기 시나리오 추가",
-                    "🤖 AI 딥페이크 협박 사기 시나리오 추가",
-                    "📜 과거 범죄 내역 회상 기능 추가",
-                  ],
-                },
-                {
-                  version: "v1.3.1",
-                  badge: null,
-                  badgeColor: "#4ade80",
-                  badgeBg: "#052e16",
-                  items: [
-                    "⚙️ 자극 강도 설정 추가 (순화 / 보통 / 실전)",
-                    "🏆 거절 3회 시 축하 메시지 + 결과 화면 분기",
-                    "✏️ 전체 폰트 Spoqa Han Sans Neo 적용",
-                    "📋 업데이트 내역 섹션 신설",
-                  ],
-                },
-                {
-                  version: "v1.3",
-                  badge: null,
-                  badgeColor: "#4ade80",
-                  badgeBg: "#052e16",
-                  items: [
-                    "📞 전화 사기 체험 — 삼성·아이폰 통화 UI + AI 목소리 (TTS)",
-                    "🔗 링크·다운로드 사기 시나리오 추가 (해킹 애니메이션)",
-                    "💬 AI 대화 자연스러움 개선 (ZETA 앱 스타일)",
-                  ],
-                },
-                {
-                  version: "v1.2.1",
-                  badge: null,
-                  badgeColor: "#c58dc6",
-                  badgeBg: "#160a26",
-                  items: [
-                    "📊 이용 통계 실시간 표시",
-                    "👑 명예의 전당 기능 추가",
-                    "🐛 다국어 번역 누락 항목 수정",
-                  ],
-                },
-                {
-                  version: "v1.2",
-                  badge: null,
-                  badgeColor: "#c58dc6",
-                  badgeBg: "#160a26",
-                  items: [
-                    "🎰 불법도박 체험 시나리오 추가",
-                    "🌏 10개 언어 다국어 지원",
-                  ],
-                },
-                {
-                  version: "v1.1.1",
-                  badge: null,
-                  badgeColor: "#c58dc6",
-                  badgeBg: "#1e1b4b",
-                  items: [
-                    "📱 모바일 최적화 (터치 영역·레이아웃 개선)",
-                    "🐛 일부 시나리오 AI 응답 오류 수정",
-                  ],
-                },
-                {
-                  version: "v1.1",
-                  badge: null,
-                  badgeColor: "#c58dc6",
-                  badgeBg: "#1e1b4b",
-                  items: [
-                    "💸 가짜 송금 애니메이션 추가",
-                    "🏦 피해 결과 화면 개선",
-                    "🏦 은행 앱 UI 추가",
-                  ],
-                },
-                {
-                  version: "v1.0.1",
-                  badge: null,
-                  badgeColor: "#6b7280",
-                  badgeBg: "#111",
-                  items: [
-                    "🐛 초기 배포 후 긴급 버그 수정",
-                    "⚡ 로딩 속도 개선",
-                  ],
-                },
-                {
-                  version: "v1.0",
-                  badge: null,
-                  badgeColor: "#6b7280",
-                  badgeBg: "#111",
-                  items: [
-                    "🚀 서비스 최초 출시",
-                    "📋 8가지 기본 사기 시나리오",
-                    "🤖 AI 기반 범인 대화 엔진",
-                  ],
-                },
-              ].map((log, i) => (
-                <div
-                  key={i}
-                  style={{ display: "flex", gap: 20, paddingBottom: 20, position: "relative" }}
-                >
-                  {/* 타임라인 선 */}
-                  {i < 13 && (
-                    <div style={{
-                      position: "absolute", left: 39, top: 32, bottom: 0,
-                      width: 1, background: "#2a1a3a",
-                    }} />
-                  )}
-                  {/* 버전 배지 */}
-                  <div style={{ flexShrink: 0, width: 80, textAlign: "center" }}>
-                    <div style={{
-                      background: hoveredLog === i ? log.badgeBg : "#111",
-                      border: `1px solid ${hoveredLog === i ? log.badgeColor : "#222"}`,
-                      borderRadius: 10, padding: "6px 0", marginBottom: 4,
-                      transition: "all 0.2s",
-                    }}>
-                      <p style={{ color: hoveredLog === i ? log.badgeColor : "#4b5563", fontWeight: 900, fontSize: 13, transition: "color 0.2s" }}>{log.version}</p>
-                    </div>
-                    {log.badge && (
-                      <span style={{
-                        display: "inline-block", marginTop: 4,
-                        background: "#052e16", color: "#4ade80",
-                        fontSize: 10, fontWeight: 700,
-                        padding: "2px 8px", borderRadius: 20,
-                        border: "1px solid #4ade8044",
-                      }}>{log.badge}</span>
-                    )}
-                  </div>
-                  {/* 항목들 — 누르고 있는 동안만 팝업 */}
-                  <div style={{ flex: 1, paddingTop: 4, position: "relative" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                      <p style={{ color: "#4b5563", fontSize: 12, lineHeight: 1.6, flex: 1 }}>
-                        {log.items[0]?.slice(0, 32)}{log.items[0]?.length > 32 ? "…" : ""}
-                        {log.items.length > 1 && <span style={{ color: "#374151", marginLeft: 6 }}>외 {log.items.length - 1}건</span>}
-                      </p>
-                      <button
-                        style={{
-                          flexShrink: 0,
-                          background: hoveredLog === i ? log.badgeBg : "#111",
-                          border: `1px solid ${hoveredLog === i ? log.badgeColor : "#333"}`,
-                          borderRadius: 8, padding: "3px 10px",
-                          color: hoveredLog === i ? log.badgeColor : "#4b5563",
-                          fontSize: 10, fontWeight: 700, cursor: "pointer",
-                          transition: "all 0.15s", userSelect: "none" as const,
-                          WebkitUserSelect: "none" as const,
-                        }}
-                        onMouseDown={() => setHoveredLog(i)}
-                        onMouseUp={() => setHoveredLog(null)}
-                        onMouseLeave={() => setHoveredLog(null)}
-                        onTouchStart={e => { e.preventDefault(); setHoveredLog(i); }}
-                        onTouchEnd={() => setHoveredLog(null)}
-                      >
-                        자세히 보기
-                      </button>
-                    </div>
-                    {hoveredLog === i && (
-                      <div style={{
-                        background: "#1a1026", border: `1px solid ${log.badgeColor}44`,
-                        borderRadius: 14, padding: "14px 16px",
-                        animation: "slideUpLog 0.15s ease",
-                        position: "absolute", top: "100%", left: 0, right: 0, zIndex: 20,
-                        boxShadow: `0 8px 24px ${log.badgeColor}22`,
-                        marginTop: 4,
-                      }}>
-                        {log.items.map((item, j) => (
-                          <p key={j} style={{ color: "#d1d5db", fontSize: 13, lineHeight: 1.9, margin: 0 }}>{item}</p>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
         </div>
