@@ -2328,17 +2328,22 @@ export default function HomePage() {
               mixBlendMode: "multiply",
               transition: "background 0.10s ease",
             }} />
-            {/* 마우스 위치 반짝임 */}
+            {/* 커서 위치에서 무지개 빛 퍼짐 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 4,
-              background: `radial-gradient(ellipse 50% 60% at ${holoPos.x}% ${holoPos.y}%,
-                rgba(255,255,255,0.09) 0%,
-                rgba(210,200,255,0.05) 40%,
-                transparent 68%
-              )`,
+              background: isHoveringCard ? `radial-gradient(ellipse 38% 42% at ${holoPos.x}% ${holoPos.y}%,
+                rgba(255,255,255,0.55)      0%,
+                hsla(0,   100%, 65%, 0.28) 10%,
+                hsla(40,  100%, 62%, 0.22) 20%,
+                hsla(90,  90%,  60%, 0.18) 32%,
+                hsla(180, 95%,  60%, 0.14) 44%,
+                hsla(240, 90%,  65%, 0.10) 56%,
+                hsla(290, 85%,  65%, 0.06) 68%,
+                transparent                80%
+              )` : "none",
               mixBlendMode: "screen",
-              transition: "background 0.04s linear",
+              transition: "background 0.03s linear",
             }} />
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
