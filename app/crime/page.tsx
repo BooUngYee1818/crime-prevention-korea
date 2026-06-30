@@ -185,11 +185,12 @@ export default function CrimeCenterPage() {
         </button>
 
         {/* 새 체험 3종 그리드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
           {[
             { path: "/crime/quiz", icon: "🕵️", label: "사기 판별 퀴즈", sub: "진짜 vs 가짜 맞추기", bg: "linear-gradient(135deg,#1e3a5f,#1d4ed8)", border: "#1d4ed8" },
             { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "당근마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
             { path: "/crime/sns-invest", icon: "📸", label: "SNS 투자 사기", sub: "인스타 DM 사기 체험", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
+            { path: "/crime/deepfake", icon: "🎭", label: "AI 딥페이크 사기", sub: "가족 사칭 영상통화", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed" },
           ].map((item) => (
             <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 16, padding: "16px 12px", cursor: "pointer", textAlign: "center", transition: "transform 0.15s", position: "relative" }}
               onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}

@@ -1076,11 +1076,146 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* ── 2024~현재: AI·딥페이크 시대 ── */}
+            <div style={{ marginTop: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
+                <span style={{ color: "#a78bfa", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2024년 ~ 현재 ──</span>
+                <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { tag: "DEEPFAKE", glow: "#a78bfa", name: "AI 딥페이크 협박 사기", visual: "👤 → 🤖 → 🎭", desc: "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작." },
+                  { tag: "GPT SCAM", glow: "#f472b6", name: "AI 자동 문자 폭탄", visual: "🤖 → 📱 × 10,000", desc: "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화." },
+                  { tag: "VOICE AI", glow: "#34d399", name: "실시간 목소리 복제 통화", visual: "☎️ → AI → 가족목소리", desc: "3초 샘플로 가족 목소리 실시간 복제 통화. 납치 당했다며 송금 요구. 목소리로는 더 이상 진위 구분 불가." },
+                ].map((c, j) => (
+                  <div key={j} style={{
+                    background: "#09090b",
+                    border: `1px solid ${c.glow}33`,
+                    borderRadius: 12,
+                    padding: "16px",
+                    boxShadow: `0 0 24px ${c.glow}18`,
+                    position: "relative",
+                    overflow: "hidden",
+                  }}>
+                    <div style={{
+                      position: "absolute", top: 0, right: 0, width: 60, height: 60,
+                      background: `radial-gradient(circle at top right, ${c.glow}22, transparent)`,
+                    }} />
+                    <div style={{
+                      display: "inline-block",
+                      background: `${c.glow}22`,
+                      border: `1px solid ${c.glow}55`,
+                      borderRadius: 20, padding: "2px 10px", marginBottom: 10,
+                    }}>
+                      <span style={{ color: c.glow, fontSize: 9, fontWeight: 700, letterSpacing: 2, fontFamily: "monospace" }}>{c.tag}</span>
+                    </div>
+                    <p style={{ color: "#f4f4f5", fontWeight: 700, fontSize: 13, marginBottom: 8, lineHeight: 1.3 }}>{c.name}</p>
+                    <div style={{
+                      background: "#18181b", borderRadius: 6, padding: "6px 10px", marginBottom: 10,
+                      fontFamily: "monospace", fontSize: 11, color: c.glow, letterSpacing: 1,
+                    }}>{c.visual}</div>
+                    <p style={{ color: "#71717a", fontSize: 11, lineHeight: 1.6 }}>{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
 
-          <p style={{ textAlign: "center", color: "#374151", fontSize: 11, marginTop: 40, lineHeight: 1.7, fontFamily: "monospace" }}>
-            ── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──
-          </p>
+          {/* 마무리 인용 + AI 전환 문구 */}
+          <div style={{ textAlign: "center", marginTop: 48 }}>
+            <p style={{ color: "#374151", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", marginBottom: 32 }}>
+              ── 수법은 달라졌지만, 사람의 심리를 노린다는 본질은 변하지 않았습니다 ──
+            </p>
+            <div style={{
+              background: "linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 100%)",
+              border: "1px solid #7c3aed44",
+              borderRadius: 20,
+              padding: "32px 40px",
+              maxWidth: 720,
+              margin: "0 auto",
+              boxShadow: "0 0 40px #7c3aed22",
+            }}>
+              <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 700, letterSpacing: 2, marginBottom: 16, fontFamily: "monospace" }}>AI TIME</p>
+              <p style={{ color: "#e2e8f0", fontSize: 15, lineHeight: 1.9, marginBottom: 20 }}>
+                옛날의 수법이랑 지금의 수법은 시대가 변하면서 많이 달라졌습니다.<br />
+                <span style={{ color: "#a78bfa" }}>AI의 증가에 따른 수법을 이용하여 만드는 사기</span>도 이에 한몫을 하죠.
+              </p>
+              <div style={{ height: 1, background: "#7c3aed33", margin: "20px 0" }} />
+              <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.8 }}>
+                이제 사기는 <strong style={{ color: "#f472b6" }}>AI가 당신의 얼굴을 만들고</strong>,&nbsp;
+                <strong style={{ color: "#34d399" }}>가족의 목소리로 전화하며</strong>,&nbsp;
+                <strong style={{ color: "#fbbf24" }}>완벽한 문법으로 문자를 보냅니다.</strong><br />
+                오타 하나, 어색한 말투 하나로 구별하던 시대는 끝났습니다.
+              </p>
+            </div>
+          </div>
+
+          {/* ── 이 프로그램이 필요한 이유 ── */}
+          <div style={{
+            marginTop: 56,
+            background: "linear-gradient(180deg, #0a0a0f 0%, #0f0a1a 100%)",
+            border: "1px solid #1e1e2e",
+            borderRadius: 24,
+            padding: "48px 40px",
+          }}>
+            <div style={{ textAlign: "center", marginBottom: 40 }}>
+              <span style={{ color: "#f472b6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>WHY THIS EXISTS</span>
+              <h3 style={{ color: "#f4f4f5", fontSize: 26, fontWeight: 900, marginTop: 12, marginBottom: 0, letterSpacing: -0.5 }}>
+                그래서 이 프로그램이 필요합니다
+              </h3>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+              {[
+                {
+                  icon: "🧠",
+                  color: "#a78bfa",
+                  title: "직접 겪어야 안 속는다",
+                  body: "경고 문자 100번보다 한 번 직접 당해보는 경험이 훨씬 강력합니다. 이 앱은 안전하게 '한 번 당해볼 수 있는' 공간입니다.",
+                },
+                {
+                  icon: "🤖",
+                  color: "#34d399",
+                  title: "AI 사기는 기존 방법으로 못 막는다",
+                  body: "눈으로 봐도, 귀로 들어도 진짜와 구별이 안 됩니다. AI가 만든 사기를 AI로 체험하고 패턴을 익혀야 합니다.",
+                },
+                {
+                  icon: "🛡️",
+                  color: "#f59e0b",
+                  title: "당신 주변 사람을 지킬 수 있다",
+                  body: "나만 아는 게 아니라 부모님, 친구, 동생에게 공유하세요. 한 명이 알면 열 명이 안 속습니다.",
+                },
+              ].map((r, i) => (
+                <div key={i} style={{
+                  background: "#111118",
+                  border: `1px solid ${r.color}33`,
+                  borderRadius: 16,
+                  padding: "24px 20px",
+                  textAlign: "center",
+                }}>
+                  <div style={{ fontSize: 36, marginBottom: 14 }}>{r.icon}</div>
+                  <p style={{ color: r.color, fontWeight: 700, fontSize: 14, marginBottom: 10 }}>{r.title}</p>
+                  <p style={{ color: "#71717a", fontSize: 12, lineHeight: 1.7 }}>{r.body}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 36 }}>
+              <a href="/crime" style={{
+                display: "inline-block",
+                background: "linear-gradient(135deg, #7c3aed, #f472b6)",
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: 15,
+                padding: "14px 36px",
+                borderRadius: 50,
+                textDecoration: "none",
+                boxShadow: "0 0 24px #7c3aed55",
+                letterSpacing: 0.5,
+              }}>지금 바로 체험해보기 →</a>
+            </div>
+          </div>
+
         </div>
       </section>
 
