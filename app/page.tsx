@@ -2239,45 +2239,37 @@ export default function HomePage() {
               pointerEvents: "none", zIndex: 1,
               transition: "background 0.1s ease",
             }} />
-            {/* 정품 인증 홀로그램 무지개 빛 */}
+            {/* 정품 인증 홀로그램 — 마우스 방향 연동 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none", zIndex: 1, overflow: "hidden",
             }}>
-              {/* 무지개 스윕 레이어 */}
+              {/* 무지개 그라디언트: tilt에 따라 각도·위치 변화 */}
               <div style={{
-                position: "absolute",
-                top: "-50%", left: "-60%",
-                width: "220%", height: "200%",
-                background: [
-                  "linear-gradient(105deg,",
-                  "transparent 0%,",
-                  "rgba(255,80,80,0.13) 10%,",
-                  "rgba(255,160,40,0.16) 18%,",
-                  "rgba(255,240,60,0.14) 26%,",
-                  "rgba(60,220,100,0.15) 34%,",
-                  "rgba(40,180,255,0.16) 42%,",
-                  "rgba(120,80,255,0.15) 50%,",
-                  "rgba(220,60,220,0.14) 58%,",
-                  "rgba(255,100,150,0.13) 66%,",
-                  "rgba(255,255,255,0.18) 74%,",
-                  "transparent 85%",
-                  ")"
-                ].join(" "),
-                animation: "holoSweep 4s ease-in-out infinite",
-              }} />
-              {/* 보조 화이트 글로우 줄기 */}
-              <div style={{
-                position: "absolute",
-                top: "-50%", left: "-60%",
-                width: "220%", height: "200%",
-                background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.22) 48%, rgba(255,255,255,0.08) 52%, transparent 65%)",
-                animation: "holoSweep 4s ease-in-out infinite 0.1s",
-              }} />
-              {/* 엣지 무지개 반사 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: 24,
-                background: "linear-gradient(135deg, rgba(255,120,120,0.06) 0%, rgba(120,80,255,0.08) 25%, rgba(40,200,255,0.07) 50%, rgba(60,220,120,0.06) 75%, rgba(255,200,60,0.08) 100%)",
+                position: "absolute", inset: 0,
+                background: `linear-gradient(${100 + tilt.x * 4}deg,
+                  transparent ${20 + tilt.y * 1.5}%,
+                  rgba(255,60,60,0.18) ${28 + tilt.x * 0.8}%,
+                  rgba(255,150,30,0.22) ${34 + tilt.x * 0.8}%,
+                  rgba(255,230,40,0.20) ${40 + tilt.x * 0.8}%,
+                  rgba(50,210,90,0.20) ${46 + tilt.x * 0.8}%,
+                  rgba(30,170,255,0.22) ${52 + tilt.x * 0.8}%,
+                  rgba(110,60,255,0.20) ${58 + tilt.x * 0.8}%,
+                  rgba(210,50,210,0.18) ${64 + tilt.x * 0.8}%,
+                  transparent ${72 + tilt.y * 1.5}%
+                )`,
+                transition: "background 0.08s ease",
                 mixBlendMode: "screen",
+              }} />
+              {/* 화이트 글레어: 마우스 위치 따라 이동 */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: `linear-gradient(${100 + tilt.x * 4}deg,
+                  transparent ${38 + tilt.x * 1.2 + tilt.y * 0.5}%,
+                  rgba(255,255,255,0.28) ${46 + tilt.x * 1.2 + tilt.y * 0.5}%,
+                  rgba(255,255,255,0.10) ${50 + tilt.x * 1.2 + tilt.y * 0.5}%,
+                  transparent ${58 + tilt.x * 1.2 + tilt.y * 0.5}%
+                )`,
+                transition: "background 0.08s ease",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
