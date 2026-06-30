@@ -2285,7 +2285,7 @@ export default function HomePage() {
             onMouseEnter={() => setIsHoveringCard(true)}
             onMouseLeave={() => setIsHoveringCard(false)}
             style={{
-              background: "linear-gradient(135deg, #1c0d2e 0%, #4a2478 50%, #1c0d2e 100%)",
+              background: "linear-gradient(135deg, #b8b8c8 0%, #d4d4e4 30%, #c0c0d0 55%, #d8d8e8 80%, #b4b4c4 100%)",
               borderRadius: 24, padding: "40px 44px",
               display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center",
               position: "relative", overflow: "hidden",
@@ -2315,18 +2315,18 @@ export default function HomePage() {
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 3,
               background: `linear-gradient(${mouseDir + 90}deg,
-                hsla(0,   100%, 75%, 0.06),
-                hsla(40,  100%, 72%, 0.06),
-                hsla(65,  95%, 70%, 0.05),
-                hsla(120, 85%, 68%, 0.05),
-                hsla(180, 90%, 68%, 0.05),
-                hsla(220, 95%, 72%, 0.06),
-                hsla(270, 90%, 72%, 0.06),
-                hsla(310, 90%, 72%, 0.06),
-                hsla(0,   100%, 75%, 0.06)
+                hsla(0,   100%, 60%, 0.30),
+                hsla(40,  100%, 58%, 0.30),
+                hsla(65,  95%, 56%, 0.28),
+                hsla(120, 85%, 54%, 0.28),
+                hsla(180, 90%, 54%, 0.28),
+                hsla(220, 95%, 58%, 0.30),
+                hsla(270, 90%, 58%, 0.30),
+                hsla(310, 90%, 58%, 0.30),
+                hsla(0,   100%, 60%, 0.30)
               )`,
-              mixBlendMode: "screen",
-              transition: "background 0.12s ease",
+              mixBlendMode: "multiply",
+              transition: "background 0.10s ease",
             }} />
             {/* 마우스 위치 반짝임 */}
             <div style={{
@@ -2343,17 +2343,17 @@ export default function HomePage() {
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 28 }}>🏛️</span>
-                <p style={{ color: "#dcc5e8", fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>INSTITUTIONAL SALES</p>
+                <p style={{ color: "#444460", fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>INSTITUTIONAL SALES</p>
               </div>
-              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 26, letterSpacing: -0.5, marginBottom: 14, lineHeight: 1.4 }}>
+              <h2 style={{ color: "#1a1a2e", fontWeight: 900, fontSize: 26, letterSpacing: -0.5, marginBottom: 14, lineHeight: 1.4 }}>
                 {lang === "ko" ? <>교육부·경찰청·지자체·학교 등<br />국가 교육기관에 납품 가능합니다</> : lang === "ja" ? <>教育部・警察庁・地方自治体・学校等<br />国家教育機関への提供が可能です</> : lang === "zh" ? <>可向教育部、警察局、地方政府、<br />学校等国家教育机构供应</> : lang === "vi" ? <>Có thể cung cấp cho Bộ Giáo dục, Cảnh sát,<br />Chính quyền địa phương, Trường học, v.v.</> : lang === "es" ? <>Disponible para Ministerio de Educación, Policía,<br />Gobiernos Locales, Escuelas y más</> : <>Available for Ministry of Education, Police,<br />Local Governments, Schools &amp; More</>}
               </h2>
-              <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.9, marginBottom: 20 }}>
-                {lang === "ko" ? <>범죄 예방 교육 콘텐츠로 공공기관·교육청·복지관·기업 등에 도입을 원하시면 이메일로 연락 주세요.<br /><strong style={{ color: "#c58dc6" }}>비영리·공익 목적 기관은 무료 제공을 우선합니다.</strong></> : lang === "ja" ? <>犯罪予防教育コンテンツとして公共機関・教育委員会・福祉館・企業等への導入を希望される方はメールでご連絡ください。<br /><strong style={{ color: "#c58dc6" }}>非営利・公益目的機関は無料提供を優先します。</strong></> : lang === "zh" ? <>如需将犯罪预防教育内容引入公共机构、教育局、福利中心或企业，请通过电子邮件联系我们。<br /><strong style={{ color: "#c58dc6" }}>非营利及公益目的机构优先免费提供。</strong></> : lang === "vi" ? <>Liên hệ qua email để áp dụng cho cơ quan công cộng, trường học, trung tâm phúc lợi hoặc công ty.<br /><strong style={{ color: "#c58dc6" }}>Các tổ chức phi lợi nhuận và công ích được ưu tiên miễn phí.</strong></> : lang === "es" ? <>Contáctanos por email para adoptar esto en agencias públicas, escuelas, centros de bienestar o empresas.<br /><strong style={{ color: "#c58dc6" }}>Las instituciones sin fines de lucro tienen acceso gratuito primero.</strong></> : <>Contact us via email to adopt this for public agencies, schools, welfare centers, or companies.<br /><strong style={{ color: "#c58dc6" }}>Non-profit and public interest institutions are given free access first.</strong></>}
+              <p style={{ color: "#3a3a5a", fontSize: 14, lineHeight: 1.9, marginBottom: 20 }}>
+                {lang === "ko" ? <>범죄 예방 교육 콘텐츠로 공공기관·교육청·복지관·기업 등에 도입을 원하시면 이메일로 연락 주세요.<br /><strong style={{ color: "#6a3d9a" }}>비영리·공익 목적 기관은 무료 제공을 우선합니다.</strong></> : lang === "ja" ? <>犯罪予防教育コンテンツとして公共機関・教育委員会・福祉館・企業等への導入を希望される方はメールでご連絡ください。<br /><strong style={{ color: "#c58dc6" }}>非営利・公益目的機関は無料提供を優先します。</strong></> : lang === "zh" ? <>如需将犯罪预防教育内容引入公共机构、教育局、福利中心或企业，请通过电子邮件联系我们。<br /><strong style={{ color: "#c58dc6" }}>非营利及公益目的机构优先免费提供。</strong></> : lang === "vi" ? <>Liên hệ qua email để áp dụng cho cơ quan công cộng, trường học, trung tâm phúc lợi hoặc công ty.<br /><strong style={{ color: "#c58dc6" }}>Các tổ chức phi lợi nhuận và công ích được ưu tiên miễn phí.</strong></> : lang === "es" ? <>Contáctanos por email para adoptar esto en agencias públicas, escuelas, centros de bienestar o empresas.<br /><strong style={{ color: "#c58dc6" }}>Las instituciones sin fines de lucro tienen acceso gratuito primero.</strong></> : <>Contact us via email to adopt this for public agencies, schools, welfare centers, or companies.<br /><strong style={{ color: "#c58dc6" }}>Non-profit and public interest institutions are given free access first.</strong></>}
               </p>
             </div>
             <div style={{
-              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
+              background: "rgba(255,255,255,0.45)", border: "1px solid rgba(180,180,200,0.5)",
               borderRadius: 20, padding: "28px 32px", minWidth: 260, flexShrink: 0,
               position: "relative", zIndex: 2,
             }}>
