@@ -2303,12 +2303,42 @@ export default function HomePage() {
               animation: "diagBeam 4s ease-in-out infinite",
               pointerEvents: "none", zIndex: 2,
             }} />
-            {/* 은색빛 오버레이 */}
+            {/* 은박 베이스 광택 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 3,
-              background: "linear-gradient(135deg, rgba(220,220,255,0.08) 0%, rgba(180,180,220,0.05) 50%, rgba(200,200,255,0.08) 100%)",
+              background: "linear-gradient(135deg, rgba(230,225,255,0.10) 0%, rgba(200,195,240,0.06) 50%, rgba(220,215,255,0.10) 100%)",
               mixBlendMode: "screen",
+            }} />
+            {/* 마우스 방향따라 은은한 무지개 */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              pointerEvents: "none", zIndex: 3,
+              background: `linear-gradient(${mouseDir + 90}deg,
+                hsla(0,   100%, 75%, 0.06),
+                hsla(40,  100%, 72%, 0.06),
+                hsla(65,  95%, 70%, 0.05),
+                hsla(120, 85%, 68%, 0.05),
+                hsla(180, 90%, 68%, 0.05),
+                hsla(220, 95%, 72%, 0.06),
+                hsla(270, 90%, 72%, 0.06),
+                hsla(310, 90%, 72%, 0.06),
+                hsla(0,   100%, 75%, 0.06)
+              )`,
+              mixBlendMode: "screen",
+              transition: "background 0.12s ease",
+            }} />
+            {/* 마우스 위치 반짝임 */}
+            <div style={{
+              position: "absolute", inset: 0, borderRadius: 24,
+              pointerEvents: "none", zIndex: 4,
+              background: `radial-gradient(ellipse 50% 60% at ${holoPos.x}% ${holoPos.y}%,
+                rgba(255,255,255,0.09) 0%,
+                rgba(210,200,255,0.05) 40%,
+                transparent 68%
+              )`,
+              mixBlendMode: "screen",
+              transition: "background 0.04s linear",
             }} />
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
