@@ -57,6 +57,8 @@ export default function HomePage() {
   const instCardRef = useRef<HTMLDivElement>(null);
   const [holoPos, setHoloPos] = useState({ x: 50, y: 50 });
   const [isHoveringCard, setIsHoveringCard] = useState(false);
+  const [mouseDir, setMouseDir] = useState(45);
+  const lastHoloPosRef = useRef({ x: 50, y: 50 });
 
   // 통계 카운터
   const statsRef = useRef<HTMLDivElement>(null);
@@ -2268,10 +2270,17 @@ export default function HomePage() {
             ref={instCardRef}
             onMouseMove={(e) => {
               const rect = instCardRef.current?.getBoundingClientRect();
-              if (rect) setHoloPos({
-                x: ((e.clientX - rect.left) / rect.width) * 100,
-                y: ((e.clientY - rect.top) / rect.height) * 100,
-              });
+              if (rect) {
+                const nx = ((e.clientX - rect.left) / rect.width) * 100;
+                const ny = ((e.clientY - rect.top) / rect.height) * 100;
+                const dx = nx - lastHoloPosRef.current.x;
+                const dy = ny - lastHoloPosRef.current.y;
+                if (Math.abs(dx) + Math.abs(dy) > 0.3) {
+                  setMouseDir(Math.atan2(dy, dx) * (180 / Math.PI));
+                }
+                lastHoloPosRef.current = { x: nx, y: ny };
+                setHoloPos({ x: nx, y: ny });
+              }
             }}
             onMouseEnter={() => setIsHoveringCard(true)}
             onMouseLeave={() => setIsHoveringCard(false)}
@@ -2299,48 +2308,62 @@ export default function HomePage() {
               opacity: isHoveringCard ? 1 : 0,
               transition: "opacity 0.25s ease, left 0.04s linear, top 0.04s linear",
             }}>
-              {/* 레이어 1: conic 무지개 스펙트럼 */}
+              {/* 레이어 1: 은박 베이스 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `conic-gradient(from ${tilt.x * 8 + tilt.y * 4}deg,
-                  hsl(0,100%,60%),
-                  hsl(45,100%,58%),
-                  hsl(60,100%,55%),
-                  hsl(120,100%,48%),
-                  hsl(180,100%,50%),
-                  hsl(220,100%,62%),
-                  hsl(270,100%,62%),
-                  hsl(310,100%,58%),
-                  hsl(360,100%,60%)
+                background: "radial-gradient(circle at 50% 50%, #e8e8ee, #c8c8d8 40%, #a8a8c0 100%)",
+              }} />
+              {/* 레이어 2: 파스텔 무지개 — 마우스 이동 방향으로 회전 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: "50%",
+                background: `linear-gradient(${mouseDir + 90}deg,
+                  hsl(0,   75%, 82%) 0%,
+                  hsl(22,  80%, 83%) 12%,
+                  hsl(48,  80%, 85%) 22%,
+                  hsl(100, 55%, 80%) 34%,
+                  hsl(175, 60%, 80%) 46%,
+                  hsl(210, 70%, 80%) 58%,
+                  hsl(255, 65%, 80%) 70%,
+                  hsl(300, 60%, 82%) 82%,
+                  hsl(340, 70%, 82%) 92%,
+                  hsl(0,   75%, 82%) 100%
                 )`,
-                filter: `hue-rotate(${tilt.x * 15 + tilt.y * 7}deg) saturate(2) brightness(1.1)`,
-                opacity: 0.85,
+                opacity: 0.88,
+                mixBlendMode: "multiply",
+                transition: "background 0.08s ease",
+              }} />
+              {/* 레이어 3: 프리즘 광택선 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: "50%",
+                backgroundImage: `repeating-linear-gradient(
+                  ${mouseDir + 90}deg,
+                  rgba(255,255,255,0.0) 0px,
+                  rgba(255,255,255,0.0) 6px,
+                  rgba(255,255,255,0.12) 7px,
+                  rgba(255,255,255,0.0) 8px
+                )`,
                 mixBlendMode: "screen",
-                transition: "filter 0.06s ease",
               }} />
-              {/* 레이어 2: 미세 방사형 줄무늬 (결) */}
+              {/* 레이어 4: 이동 방향 반대쪽 스펙큘러 하이라이트 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                backgroundImage: `repeating-conic-gradient(
-                  rgba(255,255,255,0.06) 0deg 1deg,
-                  transparent 1deg 3deg
+                background: `radial-gradient(circle at ${50 - 28 * Math.cos((mouseDir + 180) * Math.PI / 180)}% ${50 - 28 * Math.sin((mouseDir + 180) * Math.PI / 180)}%,
+                  rgba(255,255,255,0.75) 0%,
+                  rgba(255,255,255,0.30) 22%,
+                  transparent 55%
                 )`,
+                transition: "background 0.08s ease",
               }} />
-              {/* 레이어 3: 돔 하이라이트 */}
+              {/* 레이어 5: 엣지 그림자 (입체감) */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `radial-gradient(circle at ${38 - tilt.x * 0.8}% ${32 - tilt.y * 0.8}%,
-                  rgba(255,255,255,0.55) 0%,
-                  rgba(255,255,255,0.15) 30%,
-                  transparent 65%
-                )`,
-                transition: "background 0.06s ease",
+                background: "radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.18) 100%)",
               }} />
-              {/* 레이어 4: 테두리 링 */}
+              {/* 레이어 6: 테두리 링 */}
               <div style={{
-                position: "absolute", inset: 2, borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.35)",
-                boxShadow: "0 0 12px 2px rgba(180,120,255,0.4), inset 0 0 8px rgba(255,255,255,0.1)",
+                position: "absolute", inset: 1, borderRadius: "50%",
+                border: "1.5px solid rgba(255,255,255,0.5)",
+                boxShadow: "0 0 10px 2px rgba(200,160,255,0.35), inset 0 0 6px rgba(255,255,255,0.2)",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
