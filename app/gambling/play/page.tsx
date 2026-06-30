@@ -86,6 +86,18 @@ const TUTORIAL_DATA = {
     rule:"💡 동행복권 파워볼을 흉내낸 불법 미니게임\n결과가 서버에서 조작될 수 있어 절대 신뢰 금지",
     odds:"당첨 시 1.9배 / 불법사이트는 실제론 1.8배 이하도 많음",
   },
+  poker: {
+    icon:"♠️", name:"텍사스 홀덤 포커", color:"#a78bfa",
+    summary:"2장 핸드 + 커뮤니티 5장으로 최선의 패를 만드는 게임",
+    steps:[
+      { title:"베팅", desc:"베팅 금액을 고르거나 '올인'을 선택합니다.\n올인하면 잔액 전부가 팟에 들어갑니다.", icon:"💰" },
+      { title:"플롭 (3장)", desc:"커뮤니티 카드 3장이 공개됩니다.\n내 2장 + 이 3장으로 패를 구성하기 시작합니다.", icon:"🃏" },
+      { title:"턴 · 리버", desc:"4번째, 5번째 카드가 순서대로 공개됩니다.\n패를 강화할 기회 — 폴드도 선택지입니다.", icon:"🎯" },
+      { title:"쇼다운", desc:"AI와 최종 패를 비교합니다.\n로얄 플러시 > 스트레이트 플러시 > 포카드 > 풀하우스 > 플러시 > 스트레이트 > 트리플 > 투페어 > 원페어 순", icon:"🏆" },
+    ],
+    rule:"💡 실제 도박 사이트 포커는 AI(딜러) 확률이 조작됩니다\n원페어 이상이 자주 나오는 것처럼 보이지만 장기적으로 하우스가 유리하게 설계됨",
+    odds:"팟의 100% 획득 (상대 베팅 포함) / 폴드 시 베팅액 전액 손실",
+  },
   slot: {
     icon:"🎰", name:"슬롯머신", color:"#ec4899",
     summary:"3개 릴을 돌려 같은 심볼 3개가 나오면 대당첨!",
@@ -225,7 +237,7 @@ function AutoFillNotice({ onDone }: { onDone: () => void }) {
 }
 
 // ── 충전 결제 팝업 ────────────────────────────────────────────────────────────
-function ChargePopup({ onClose, onCharge, onReveal }: { onClose: () => void; onCharge: (amount: number) => void; onReveal: () => void }) {
+function ChargePopup({ onClose, onCharge, onReveal, onForceClose }: { onClose: () => void; onCharge: (amount: number) => void; onReveal: () => void; onForceClose?: (reasons: string[]) => void }) {
   const [selected, setSelected] = useState<number|null>(null);
   const [step, setStep] = useState<"select"|"payment"|"done">("select");
   const [cardNum, setCardNum] = useState("");
@@ -233,6 +245,20 @@ function ChargePopup({ onClose, onCharge, onReveal }: { onClose: () => void; onC
   const [cvc, setCvc] = useState("");
   const [processing, setProcessing] = useState(false);
   const [autoFilling, setAutoFilling] = useState(false);
+
+  // 결제 단계 진입 시 강제폐쇄 트리거
+  useEffect(() => {
+    if (step !== "payment") return;
+    // 3초 후 — 카드 자동입력 보여준 뒤 강제 폐쇄
+    const t = setTimeout(() => {
+      onForceClose?.([
+        "💳 실제 결제 정보 입력 화면 감지",
+        "카드번호·유효기간·CVC 입력 단계에 도달했습니다.",
+        "도박 사이트의 결제 과정에서 카드 정보가 탈취될 수 있습니다.",
+      ]);
+    }, 3500);
+    return () => clearTimeout(t);
+  }, [step, onForceClose]);
 
   // 결제 단계 진입 시 자동입력 시연
   useEffect(() => {
@@ -1108,6 +1134,392 @@ function SlotGame({ balance, onResult, round, streak }: { balance:number; onResu
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// ── 효과음 (Web Audio API) ────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function useSound() {
+  const ctxRef = useRef<AudioContext | null>(null);
+  const getCtx = () => {
+    if (!ctxRef.current) {
+      ctxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return ctxRef.current;
+  };
+
+  const playTone = (freq: number, type: OscillatorType, dur: number, vol = 0.3, delay = 0) => {
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + delay + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + dur);
+    } catch { /* 음소거 */ }
+  };
+
+  return {
+    // 두구두구 (드럼롤) — 카드 뽑기 전
+    drumroll: () => {
+      for (let i = 0; i < 12; i++) {
+        const t = i * 0.07;
+        playTone(120, "square", 0.05, 0.15 + i * 0.02, t);
+      }
+    },
+    // 슬롯 릴 돌아가는 소리
+    slotSpin: () => {
+      for (let i = 0; i < 20; i++) {
+        playTone(200 + Math.random() * 400, "sawtooth", 0.04, 0.08, i * 0.05);
+      }
+    },
+    // 당첨 팡파레
+    win: () => {
+      [523, 659, 784, 1047].forEach((f, i) => playTone(f, "triangle", 0.25, 0.4, i * 0.1));
+      setTimeout(() => [1047, 1319, 1568].forEach((f, i) => playTone(f, "sine", 0.3, 0.5, i * 0.08)), 500);
+    },
+    // 잭팟
+    jackpot: () => {
+      [262, 330, 392, 523, 659, 784, 1047].forEach((f, i) => {
+        playTone(f, "triangle", 0.4, 0.5, i * 0.1);
+        playTone(f * 2, "sine", 0.3, 0.3, i * 0.1 + 0.05);
+      });
+    },
+    // 패배
+    lose: () => {
+      playTone(300, "sawtooth", 0.15, 0.3, 0);
+      playTone(200, "sawtooth", 0.2, 0.3, 0.15);
+      playTone(150, "square", 0.25, 0.4, 0.3);
+    },
+    // 칩 베팅 소리
+    chip: () => {
+      playTone(800, "sine", 0.05, 0.2, 0);
+      playTone(1000, "sine", 0.04, 0.05, 0.04);
+    },
+    // 카드 넘기기
+    cardFlip: () => {
+      playTone(1200, "sawtooth", 0.03, 0.12, 0);
+      playTone(900, "sawtooth", 0.03, 0.08, 0.03);
+    },
+    // 경고 / 강제폐쇄
+    alarm: () => {
+      for (let i = 0; i < 6; i++) {
+        playTone(880, "square", 0.1, 0.4, i * 0.2);
+        playTone(660, "square", 0.1, 0.1, i * 0.2 + 0.1);
+      }
+    },
+    // 포커 올인
+    allin: () => {
+      playTone(150, "sawtooth", 0.3, 0.5, 0);
+      playTone(200, "square", 0.2, 0.4, 0.1);
+      playTone(400, "triangle", 0.4, 0.6, 0.3);
+    },
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 포커 게임 (텍사스 홀덤 스타일) ───────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+const CARD_SUITS_P = ["♠","♥","♦","♣"];
+const CARD_RANKS_P = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+const RED_SUITS = new Set(["♥","♦"]);
+
+function makePokerDeck() {
+  const deck: {suit:string;rank:string}[] = [];
+  for (const s of CARD_SUITS_P) for (const r of CARD_RANKS_P) deck.push({suit:s,rank:r});
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
+function pokerHandRank(cards: {suit:string;rank:string}[]): {rank:number;name:string} {
+  const rankOrder = "23456789TJQKA";
+  const vals = cards.map(c => rankOrder.indexOf(c.rank === "10" ? "T" : c.rank)).sort((a,b)=>b-a);
+  const suits = cards.map(c => c.suit);
+  const flush = suits.every(s => s === suits[0]);
+  const straight = vals.length === 5 && vals[0] - vals[4] === 4 && new Set(vals).size === 5;
+  const freq: Record<number,number> = {};
+  vals.forEach(v => { freq[v] = (freq[v]||0)+1; });
+  const counts = Object.values(freq).sort((a,b)=>b-a);
+  if (flush && straight) return {rank:8,name:"스트레이트 플러시"};
+  if (counts[0]===4) return {rank:7,name:"포카드"};
+  if (counts[0]===3&&counts[1]===2) return {rank:6,name:"풀하우스"};
+  if (flush) return {rank:5,name:"플러시"};
+  if (straight) return {rank:4,name:"스트레이트"};
+  if (counts[0]===3) return {rank:3,name:"트리플"};
+  if (counts[0]===2&&counts[1]===2) return {rank:2,name:"투페어"};
+  if (counts[0]===2) return {rank:1,name:"원페어"};
+  return {rank:0,name:"하이카드"};
+}
+
+function CardFace({card,hidden=false}:{card:{suit:string;rank:string};hidden?:boolean}) {
+  const isRed = !hidden && RED_SUITS.has(card.suit);
+  return (
+    <div style={{
+      width:48,height:66,borderRadius:7,
+      background: hidden ? "linear-gradient(135deg,#1e1e3a,#2d2d5e)" : "#fff",
+      border: hidden ? "1px solid #374151" : "1px solid #ccc",
+      display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+      fontSize:hidden?18:12,fontWeight:700,flexShrink:0,
+      boxShadow:"0 2px 8px #00000044",
+      color: hidden ? "#7c3aed" : isRed ? "#dc2626" : "#111",
+    }}>
+      {hidden ? "🂠" : (
+        <>
+          <span style={{fontSize:10,lineHeight:1}}>{card.rank}</span>
+          <span style={{fontSize:16,lineHeight:1}}>{card.suit}</span>
+        </>
+      )}
+    </div>
+  );
+}
+
+function PokerGame({ balance, onResult, round, streak }: {
+  balance:number; onResult:(d:number)=>void; round:number; streak:{wins:number;losses:number};
+}) {
+  const snd = useSound();
+  const BET_OPTS = [5000,10000,30000,50000];
+  type Phase = "bet"|"deal"|"flop"|"turn"|"river"|"showdown";
+
+  const [phase, setPhase] = useState<Phase>("bet");
+  const [betAmount, setBetAmount] = useState(10000);
+  const [pot, setPot] = useState(0);
+  const [deck, setDeck] = useState<{suit:string;rank:string}[]>([]);
+  const [playerHand, setPlayerHand] = useState<{suit:string;rank:string}[]>([]);
+  const [aiHand, setAiHand] = useState<{suit:string;rank:string}[]>([]);
+  const [community, setCommunity] = useState<{suit:string;rank:string}[]>([]);
+  const [result, setResult] = useState<null|"win"|"lose"|"tie">(null);
+  const [playerHandName, setPlayerHandName] = useState("");
+  const [aiHandName, setAiHandName] = useState("");
+  const [allIn, setAllIn] = useState(false);
+  const [aiAction, setAiAction] = useState("");
+  const [animCard, setAnimCard] = useState(false);
+
+  const reset = () => {
+    setPhase("bet"); setResult(null); setPlayerHand([]); setAiHand([]);
+    setCommunity([]); setPot(0); setAiAction(""); setAllIn(false);
+  };
+
+  const startDeal = (bet: number, isAllIn = false) => {
+    if (bet > balance) return;
+    snd.chip();
+    const d = makePokerDeck();
+    const ph = [d[0], d[1]];
+    const ah = [d[2], d[3]];
+    const com = [d[4], d[5], d[6], d[7], d[8]];
+    setDeck(d);
+    setPlayerHand(ph);
+    setAiHand(ah);
+    setCommunity(com);
+    setPot(bet * 2);
+    setAllIn(isAllIn);
+    setAnimCard(true);
+    setTimeout(() => setAnimCard(false), 600);
+    setTimeout(() => { snd.drumroll(); }, 300);
+    setTimeout(() => {
+      snd.cardFlip();
+      setPhase("flop");
+    }, 1200);
+  };
+
+  const nextPhase = () => {
+    snd.cardFlip();
+    setAnimCard(true);
+    setTimeout(() => setAnimCard(false), 400);
+    if (phase === "flop") {
+      const willRaise = Math.random() < 0.5;
+      setAiAction(willRaise ? "AI가 레이즈합니다 (+₩" + (pot * 0.5).toLocaleString() + ")" : "AI가 콜합니다");
+      setPhase("turn");
+    } else if (phase === "turn") {
+      setAiAction(Math.random() < 0.3 ? "AI가 체크합니다" : "AI가 베팅합니다");
+      setPhase("river");
+    } else if (phase === "river") {
+      doShowdown();
+    }
+  };
+
+  const doShowdown = () => {
+    snd.drumroll();
+    setTimeout(() => {
+      const comCards = community.slice(0, 5);
+      const playerBest = pokerHandRank([...playerHand, ...comCards]);
+      const aiBest = pokerHandRank([...aiHand, ...comCards]);
+      setPlayerHandName(playerBest.name);
+      setAiHandName(aiBest.name);
+
+      // 조작된 승률 적용
+      const winRate = getWinRate(round, streak);
+      const playerWins = Math.random() < winRate
+        ? playerBest.rank >= aiBest.rank
+        : playerBest.rank > aiBest.rank + 1; // 플레이어가 압도적으로 좋을 때만 승리
+
+      const outcome = playerWins ? "win" : aiBest.rank === playerBest.rank ? "tie" : "lose";
+      setResult(outcome);
+      setPhase("showdown");
+
+      if (outcome === "win") {
+        snd.win();
+        onResult(pot / 2);
+      } else if (outcome === "tie") {
+        snd.chip();
+        onResult(0);
+      } else {
+        snd.lose();
+        onResult(-pot / 2);
+      }
+    }, 1000);
+  };
+
+  const PHASE_LABEL: Record<Phase,string> = {
+    bet:"베팅", deal:"카드 배분 중", flop:"플롭 (공개 3장)", turn:"턴 (4번째 카드)", river:"리버 (5번째 카드)", showdown:"쇼다운"
+  };
+
+  const comCount = phase === "flop" ? 3 : phase === "turn" ? 4 : (phase === "river" || phase === "showdown") ? 5 : 0;
+
+  return (
+    <div style={{ color:"#fff" }}>
+      <style>{`
+        @keyframes cardDeal { from{opacity:0;transform:translateY(-20px) scale(0.8)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+      `}</style>
+
+      {/* 페이즈 인디케이터 */}
+      <div style={{ display:"flex", gap:6, marginBottom:14, justifyContent:"center" }}>
+        {(["bet","flop","turn","river","showdown"] as Phase[]).map(p => (
+          <div key={p} style={{
+            height:4, flex:1, borderRadius:2,
+            background: (["bet","flop","turn","river","showdown"] as Phase[]).indexOf(phase) >=
+              (["bet","flop","turn","river","showdown"] as Phase[]).indexOf(p) ? "#7c3aed" : "#1e1e2e",
+            transition:"background 0.3s",
+          }} />
+        ))}
+      </div>
+      <p style={{ color:"#6b7280", fontSize:11, textAlign:"center", marginBottom:16 }}>{PHASE_LABEL[phase]}</p>
+
+      {/* 베팅 화면 */}
+      {phase === "bet" && (
+        <div style={{ textAlign:"center" }}>
+          <div style={{ fontSize:40, marginBottom:12 }}>🃏</div>
+          <p style={{ color:"#a78bfa", fontWeight:800, fontSize:16, marginBottom:6 }}>텍사스 홀덤 포커</p>
+          <p style={{ color:"#555", fontSize:12, marginBottom:20 }}>2장을 받고 커뮤니티 카드 5장으로 최선의 패를 만드세요</p>
+          <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap", marginBottom:16 }}>
+            {BET_OPTS.map(b => (
+              <button key={b} onClick={() => { setBetAmount(b); snd.chip(); }} style={{
+                padding:"10px 16px", borderRadius:10, fontWeight:700, fontSize:13, cursor:"pointer",
+                background: betAmount===b ? "#7c3aed" : "#1e1e2e",
+                color: betAmount===b ? "#fff" : "#aaa",
+                border: betAmount===b ? "1px solid #7c3aed" : "1px solid #2d2d2d",
+              }}>₩{b.toLocaleString()}</button>
+            ))}
+          </div>
+          <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
+            <button
+              onClick={() => startDeal(betAmount)}
+              disabled={betAmount > balance}
+              style={{ padding:"13px 32px", borderRadius:12, fontWeight:900, fontSize:15, cursor:"pointer", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", border:"none", boxShadow:"0 4px 20px #7c3aed44" }}
+            >
+              ₩{betAmount.toLocaleString()} 베팅 🃏
+            </button>
+            <button
+              onClick={() => { snd.allin(); startDeal(balance, true); }}
+              disabled={balance <= 0}
+              style={{ padding:"13px 20px", borderRadius:12, fontWeight:900, fontSize:14, cursor:"pointer", background:"linear-gradient(135deg,#dc2626,#ef4444)", color:"#fff", border:"none", boxShadow:"0 4px 20px #ef444444" }}
+            >
+              올인 ⚡
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 게임 진행 화면 */}
+      {phase !== "bet" && (
+        <div>
+          {/* AI 패 */}
+          <div style={{ marginBottom:14 }}>
+            <p style={{ color:"#6b7280", fontSize:11, marginBottom:6 }}>딜러 (AI) {phase==="showdown"?`— ${aiHandName}`:""}</p>
+            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+              {aiHand.map((c,i) => (
+                <div key={i} style={{ animation: animCard ? `cardDeal 0.3s ease ${i*0.1}s both` : "none" }}>
+                  <CardFace card={c} hidden={phase!=="showdown"} />
+                </div>
+              ))}
+            </div>
+            {aiAction && phase !== "showdown" && (
+              <p style={{ color:"#f59e0b", fontSize:12, marginTop:6 }}>{aiAction}</p>
+            )}
+          </div>
+
+          {/* 커뮤니티 카드 */}
+          <div style={{ background:"#0d1117", borderRadius:12, padding:"12px 14px", marginBottom:14 }}>
+            <p style={{ color:"#374151", fontSize:10, marginBottom:8 }}>커뮤니티 카드 · 팟 ₩{pot.toLocaleString()}</p>
+            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+              {community.slice(0, comCount).map((c,i) => (
+                <div key={i} style={{ animation: animCard ? `cardDeal 0.35s ease ${i*0.12}s both` : "none" }}>
+                  <CardFace card={c} />
+                </div>
+              ))}
+              {Array.from({length: 5 - comCount}).map((_,i) => (
+                <div key={i} style={{ width:48,height:66,borderRadius:7,background:"#1a1a2e",border:"1px dashed #2d2d44" }} />
+              ))}
+            </div>
+          </div>
+
+          {/* 내 패 */}
+          <div style={{ marginBottom:14 }}>
+            <p style={{ color:"#a78bfa", fontSize:11, marginBottom:6 }}>내 패 {phase==="showdown"?`— ${playerHandName}`:""}</p>
+            <div style={{ display:"flex", gap:6 }}>
+              {playerHand.map((c,i) => (
+                <div key={i} style={{ animation: animCard ? `cardDeal 0.3s ease ${i*0.1+0.2}s both` : "none" }}>
+                  <CardFace card={c} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 쇼다운 결과 */}
+          {phase === "showdown" && result && (
+            <div style={{
+              textAlign:"center", padding:"18px", borderRadius:14, marginBottom:14,
+              background: result==="win"?"#052e16":result==="tie"?"#1c1002":"#1a0000",
+              border: `1px solid ${result==="win"?"#22c55e":result==="tie"?"#f59e0b":"#dc2626"}`,
+              animation: "shake 0.3s ease",
+            }}>
+              <p style={{ fontSize:28, marginBottom:6 }}>{result==="win"?"🏆":result==="tie"?"🤝":"💸"}</p>
+              <p style={{ color: result==="win"?"#22c55e":result==="tie"?"#f59e0b":"#ef4444", fontWeight:900, fontSize:18, marginBottom:4 }}>
+                {result==="win" ? `+₩${(pot/2).toLocaleString()} 획득!` : result==="tie" ? "타이 — 환불" : `-₩${(pot/2).toLocaleString()} 손실`}
+              </p>
+              <p style={{ color:"#555", fontSize:12 }}>
+                내: {playerHandName} vs AI: {aiHandName}
+              </p>
+              <button onClick={reset} style={{ marginTop:14, padding:"11px 28px", borderRadius:10, fontWeight:700, fontSize:14, background:"#7c3aed", color:"#fff", border:"none", cursor:"pointer" }}>
+                다음 판 →
+              </button>
+            </div>
+          )}
+
+          {/* 액션 버튼 */}
+          {(phase === "flop" || phase === "turn" || phase === "river") && (
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={nextPhase} style={{ flex:2, padding:"13px", borderRadius:12, fontWeight:900, fontSize:14, background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", border:"none", cursor:"pointer" }}>
+                {phase==="river" ? "쇼다운 ▶" : "다음 카드 ▶"}
+              </button>
+              <button onClick={() => { snd.lose(); onResult(-pot/2); reset(); }} style={{ flex:1, padding:"13px", borderRadius:12, fontWeight:700, fontSize:13, background:"#1e1e2e", color:"#888", border:"1px solid #2d2d2d", cursor:"pointer" }}>
+                폴드
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // ── 메인 페이지 ──────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
 function PlayContent() {
@@ -1120,7 +1532,8 @@ function PlayContent() {
   const [round, setRound] = useState(0);
   const [totalDelta, setTotalDelta] = useState(0);
   const [totalCharged, setTotalCharged] = useState(0);
-  const [activeGame, setActiveGame] = useState<"baccarat"|"snail"|"ladder"|"holzak"|"powerball"|"slot">("baccarat");
+  const [activeGame, setActiveGame] = useState<"baccarat"|"snail"|"ladder"|"holzak"|"powerball"|"slot"|"poker">("baccarat");
+  const snd = useSound();
   const [history, setHistory] = useState<{game:string;delta:number;bal:number}[]>([]);
 
   // 오버레이 상태
@@ -1146,6 +1559,18 @@ function PlayContent() {
     setForceCloseReason(reasons);
     setForceClosed(true);
     setCloseCountdown(10);
+    // 경고음은 snd 대신 직접 Web Audio로 — dep 순환 방지
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      for (let i = 0; i < 5; i++) {
+        const osc = ctx.createOscillator(); const g = ctx.createGain();
+        osc.connect(g); g.connect(ctx.destination);
+        osc.type = "square"; osc.frequency.value = i % 2 === 0 ? 880 : 660;
+        g.gain.setValueAtTime(0.35, ctx.currentTime + i * 0.22);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.22 + 0.18);
+        osc.start(ctx.currentTime + i * 0.22); osc.stop(ctx.currentTime + i * 0.22 + 0.2);
+      }
+    } catch { /* 음소거 환경 */ }
   }, []);
 
   // 시간 감시 (8분 연속 플레이)
@@ -1255,6 +1680,7 @@ function PlayContent() {
     { id:"holzak" as const, label:"홀짝", icon:"⚡", color:"#3b82f6" },
     { id:"powerball" as const, label:"파워볼", icon:"🔮", color:"#f59e0b" },
     { id:"slot" as const, label:"슬롯", icon:"🎰", color:"#ec4899" },
+    { id:"poker" as const, label:"포커", icon:"♠️", color:"#a78bfa" },
   ];
 
   const winRate = Math.round(getWinRate(round) * 100);
@@ -1342,7 +1768,7 @@ function PlayContent() {
       {!showDisclaimer && showFreeCoin && <FreeCoinPopup siteName={siteName} onClaim={() => setShowFreeCoin(false)} />}
 
       {/* ── 충전 팝업 ── */}
-      {showCharge && <ChargePopup onClose={() => setShowCharge(false)} onCharge={handleCharge} onReveal={() => { setShowCharge(false); setShowReveal(true); }} />}
+      {showCharge && <ChargePopup onClose={() => setShowCharge(false)} onCharge={handleCharge} onReveal={() => { setShowCharge(false); setShowReveal(true); }} onForceClose={(reasons) => { setShowCharge(false); triggerForceClose(reasons); snd.alarm(); }} />}
 
       {/* ── 중독 경고 ── */}
       {showAddiction && !showReveal && (
@@ -1425,7 +1851,7 @@ function PlayContent() {
             {/* 탭 */}
             <div style={{ display:"flex", gap:0, borderTop:"1px solid #1a1a1a" }}>
               {TABS.map(tab => (
-                <button key={tab.id} onClick={() => setActiveGame(tab.id)} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom: activeGame===tab.id?`2px solid ${tab.color}`:"2px solid transparent", color: activeGame===tab.id?tab.color:"#aaa", fontWeight:700, fontSize:13, cursor:"pointer", transition:"all 0.2s", display:"flex", alignItems:"center", gap:6, textShadow: activeGame===tab.id?`0 0 8px ${tab.color}88`:"none" }}>
+                <button key={tab.id} onClick={() => { snd.chip(); setActiveGame(tab.id); }} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom: activeGame===tab.id?`2px solid ${tab.color}`:"2px solid transparent", color: activeGame===tab.id?tab.color:"#aaa", fontWeight:700, fontSize:13, cursor:"pointer", transition:"all 0.2s", display:"flex", alignItems:"center", gap:6, textShadow: activeGame===tab.id?`0 0 8px ${tab.color}88`:"none" }}>
                   {tab.icon} {tab.label}
                 </button>
               ))}
@@ -1478,6 +1904,7 @@ function PlayContent() {
               {activeGame==="holzak"   && <HoljakGame    balance={balance} onResult={handleResult} round={round} streak={streak} />}
               {activeGame==="powerball" && <PowerballGame balance={balance} onResult={handleResult} round={round} streak={streak} />}
               {activeGame==="slot"      && <SlotGame      balance={balance} onResult={handleResult} round={round} streak={streak} />}
+              {activeGame==="poker"     && <PokerGame     balance={balance} onResult={handleResult} round={round} streak={streak} />}
             </div>
 
             {/* 잔액 0 */}
