@@ -59,9 +59,45 @@ const TUTORIAL_DATA = {
     rule:"💡 4개 중 1개 맞추기 → 순수 확률 25%\n가로줄 때문에 예측하기 어렵지만 결과는 정해져 있습니다.",
     odds:"당첨 시 베팅액의 3.5배 지급",
   },
-} as const;
+  holzak: {
+    icon:"⚡", name:"홀짝", color:"#3b82f6",
+    summary:"1~45 중 숫자 하나가 홀수인지 짝수인지 맞추는 게임",
+    steps:[
+      { title:"홀/짝 선택", desc:"홀(1,3,5...) 또는 짝(2,4,6...) 버튼을 누르세요.\n50%에 가까운 확률처럼 보이지만 하우스엣지가 있습니다.", icon:"👆" },
+      { title:"금액 선택", desc:"베팅할 금액을 고르세요. 처음엔 소액으로 시작하세요.", icon:"💰" },
+      { title:"추첨 시작", desc:"베팅 버튼을 누르면 1~45 중 숫자가 빠르게 돌다가 멈춥니다.", icon:"🎯" },
+      { title:"결과 확인", desc:"나온 숫자가 내 선택과 같으면 1.95배!\n예: ₩10,000 베팅 → 당첨 시 ₩19,500", icon:"🏆" },
+    ],
+    rule:"💡 이론 확률은 50%지만 실제론 2.5% 하우스엣지로 장기적으로 반드시 잃게 됩니다\n가장 단순해 보이지만 중독성이 가장 강한 게임 중 하나입니다",
+    odds:"당첨 시 베팅액의 1.95배 지급",
+  },
+  powerball: {
+    icon:"🔮", name:"파워볼", color:"#f59e0b",
+    summary:"일반볼·파워볼의 홀짝·언더오버를 맞추는 미니게임",
+    steps:[
+      { title:"베팅 유형 선택", desc:"일반볼(1-28) 홀짝·언더오버 또는\n파워볼(0-9) 홀짝·언더오버 중 하나를 선택하세요.", icon:"👆" },
+      { title:"언더/오버 기준", desc:"일반볼 언더=1~14 / 오버=15~28\n파워볼 언더=0~4 / 오버=5~9", icon:"📊" },
+      { title:"금액 베팅", desc:"원하는 금액을 선택하고 베팅 버튼을 누릅니다.", icon:"💰" },
+      { title:"결과 확인", desc:"두 공이 추첨되고 내 선택이 맞으면 1.9배!\n실제 불법사이트에서 가장 많이 쓰는 미니게임입니다.", icon:"🏆" },
+    ],
+    rule:"💡 동행복권 파워볼을 흉내낸 불법 미니게임\n결과가 서버에서 조작될 수 있어 절대 신뢰 금지",
+    odds:"당첨 시 1.9배 / 불법사이트는 실제론 1.8배 이하도 많음",
+  },
+  slot: {
+    icon:"🎰", name:"슬롯머신", color:"#ec4899",
+    summary:"3개 릴을 돌려 같은 심볼 3개가 나오면 대당첨!",
+    steps:[
+      { title:"베팅 금액 선택", desc:"스핀할 금액을 고르세요. 슬롯은 빠른 속도로 잔액을 소진합니다.", icon:"💰" },
+      { title:"SPIN!", desc:"SPIN 버튼을 누르면 3개 릴이 순서대로 멈춥니다.\n마지막 릴이 멈추는 순간 심장이 두근거립니다.", icon:"🎰" },
+      { title:"심볼 확인", desc:"가운데 줄에 같은 심볼 3개 = 대당첨!\n2개 일치도 소액 당첨 있음.", icon:"📊" },
+      { title:"배당 확인", desc:"💎💎💎=15배 / 🔔🔔🔔=10배 / 🍒🍒🍒=2배\n당첨 확률은 낮지만 화려한 연출로 계속 돌리게 만듭니다.", icon:"🏆" },
+    ],
+    rule:"💡 슬롯머신은 RTP(환수율) 95%라 광고하지만\n실제 불법 슬롯은 70% 이하인 경우도 많고 검증 불가\n수백 번 돌려야 하는 구조로 단기 손실 필연적",
+    odds:"💎💎💎=15배 / 7️⃣7️⃣7️⃣=20배 / 🔔🔔🔔=10배 / ⭐⭐⭐=7배 / 🍒🍒=0.5배",
+  },
+};
 
-function TutorialPopup({ game, onClose }: { game:"baccarat"|"snail"|"ladder"; onClose:()=>void }) {
+function TutorialPopup({ game, onClose }: { game:keyof typeof TUTORIAL_DATA; onClose:()=>void }) {
   const d = TUTORIAL_DATA[game];
   return (
     <div style={{ position:"fixed", inset:0, zIndex:400, background:"rgba(0,0,0,0.92)", backdropFilter:"blur(12px)", display:"flex", alignItems:"center", justifyContent:"center", padding:20 }} onClick={onClose}>
@@ -632,6 +668,305 @@ function LadderGame({ balance, onResult, round }: { balance:number; onResult:(d:
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// ── 홀짝 ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+function HoljakGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+  const [pick, setPick] = useState<"홀"|"짝"|null>(null);
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet"|"spinning"|"result">("bet");
+  const [finalNum, setFinalNum] = useState<number|null>(null);
+  const [dispNum, setDispNum] = useState(0);
+  const ivRef = useRef<ReturnType<typeof setInterval>|null>(null);
+
+  const spin = useCallback(() => {
+    if (!pick || betAmount > balance) return;
+    setPhase("spinning"); setFinalNum(null);
+    const shouldWin = Math.random() < getWinRate(round);
+    const isOdd = pick === "홀";
+    const oddPool = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45];
+    const evenPool = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44];
+    const winPool = isOdd ? oddPool : evenPool;
+    const losePool = isOdd ? evenPool : oddPool;
+    const n = shouldWin
+      ? winPool[Math.floor(Math.random()*winPool.length)]
+      : losePool[Math.floor(Math.random()*losePool.length)];
+    let ticks = 0;
+    ivRef.current = setInterval(() => {
+      ticks++;
+      setDispNum(Math.floor(Math.random()*45)+1);
+      if (ticks >= 22) {
+        clearInterval(ivRef.current!);
+        setFinalNum(n); setDispNum(n); setPhase("result");
+        const won = (pick==="홀" && n%2===1) || (pick==="짝" && n%2===0);
+        onResult(won ? Math.floor(betAmount*1.95) : -betAmount);
+      }
+    }, 55);
+  }, [pick, betAmount, balance, round, onResult]);
+
+  useEffect(() => () => { if(ivRef.current) clearInterval(ivRef.current); }, []);
+  const reset = () => { setPhase("bet"); setPick(null); setFinalNum(null); setDispNum(0); };
+  const isWin = finalNum!==null && ((pick==="홀"&&finalNum%2===1)||(pick==="짝"&&finalNum%2===0));
+
+  return (
+    <div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:16 }}>
+        {(["홀","짝"] as const).map(side => (
+          <button key={side} onClick={() => phase==="bet"&&setPick(side)} style={{
+            padding:"22px 0", borderRadius:14, border:"2px solid",
+            borderColor: pick===side?(side==="홀"?"#3b82f6":"#ec4899"):"#2a2a2a",
+            background: pick===side?(side==="홀"?"#1e3a5f":"#3b0a2e"):"#111",
+            color: pick===side?"#fff":"#555", fontWeight:900, fontSize:18, cursor:"pointer", transition:"all 0.2s",
+          }}>
+            {side==="홀"?"홀 (ODD)":"짝 (EVEN)"}
+            <div style={{ fontSize:11, marginTop:4, color:pick===side?"#aaa":"#333", fontWeight:400 }}>
+              {side==="홀"?"1,3,5,7...":"2,4,6,8..."}
+            </div>
+          </button>
+        ))}
+      </div>
+      <div style={{ display:"flex", gap:6, marginBottom:16, flexWrap:"wrap" }}>
+        {[5000,10000,30000,50000,100000].map(a=>(
+          <button key={a} onClick={()=>phase==="bet"&&setBetAmount(a)} style={{ padding:"6px 12px", borderRadius:20, border:"1px solid", borderColor:betAmount===a?"#f59e0b":"#2a2a2a", background:betAmount===a?"#3b2a00":"#111", color:betAmount===a?"#f59e0b":"#555", fontSize:11, fontWeight:700, cursor:"pointer" }}>₩{a.toLocaleString()}</button>
+        ))}
+      </div>
+      <div style={{ background:"linear-gradient(135deg,#0a0a1a,#111124)", border:"1px solid #1a1a3a", borderRadius:16, padding:"32px 16px", marginBottom:16, textAlign:"center" }}>
+        <div style={{ width:110, height:110, borderRadius:"50%", margin:"0 auto 14px", background:phase==="result"?(isWin?"linear-gradient(135deg,#22c55e,#16a34a)":"linear-gradient(135deg,#ef4444,#dc2626)"):"linear-gradient(135deg,#1a1a3a,#2a2a5a)", border:`4px solid ${phase==="result"?(isWin?"#22c55e":"#ef4444"):"#3b82f6"}`, display:"flex", alignItems:"center", justifyContent:"center", boxShadow:phase==="spinning"?"0 0 24px #3b82f688":"none", transition:"all 0.3s" }}>
+          <span style={{ color:"#fff", fontWeight:900, fontSize:40 }}>{phase==="bet"?"?":dispNum}</span>
+        </div>
+        {phase==="result"&&finalNum!==null&&(
+          <div style={{ color:isWin?"#22c55e":"#ef4444", fontWeight:900, fontSize:17 }}>
+            {finalNum}은(는) <strong>{finalNum%2===1?"홀수":"짝수"}</strong> — {isWin?"적중!":"미적중"}
+          </div>
+        )}
+        {phase==="spinning"&&<div style={{ color:"#3b82f6", fontWeight:700, fontSize:14 }}>⚡ 추첨 중...</div>}
+        {phase==="bet"&&<div style={{ color:"#374151", fontSize:12 }}>1 ~ 45 중 하나가 추첨됩니다</div>}
+      </div>
+      {phase==="bet"&&<button onClick={spin} disabled={!pick||betAmount>balance} style={{ width:"100%", padding:"15px 0", borderRadius:12, fontSize:15, fontWeight:900, background:pick&&betAmount<=balance?"linear-gradient(135deg,#3b82f6,#2563eb)":"#1a1a1a", color:pick?"#fff":"#444", border:"none", cursor:pick?"pointer":"default", transition:"all 0.2s" }}>{!pick?"홀 또는 짝을 선택하세요":`${pick} 선택 — ₩${betAmount.toLocaleString()} 베팅`}</button>}
+      {phase==="result"&&(
+        <div style={{ display:"flex", gap:10 }}>
+          <div style={{ flex:1, textAlign:"center", padding:"14px 0", borderRadius:12, background:isWin?"#052e16":"#1a0808", border:`1px solid ${isWin?"#16a34a":"#dc2626"}` }}>
+            <span style={{ color:isWin?"#22c55e":"#ef4444", fontWeight:900, fontSize:15 }}>{isWin?`+₩${Math.floor(betAmount*1.95).toLocaleString()}`:`-₩${betAmount.toLocaleString()}`}</span>
+          </div>
+          <button onClick={reset} style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#3b82f6,#2563eb)", color:"#fff", border:"none", cursor:"pointer" }}>다시 하기</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 파워볼 ──────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+type PwBet = "normal_odd"|"normal_even"|"normal_under"|"normal_over"|"power_odd"|"power_even"|"power_under"|"power_over";
+const PW_OPTIONS: { id:PwBet; label:string; color:string; group:string }[] = [
+  { id:"normal_odd",   label:"일반볼 홀",   color:"#3b82f6", group:"normal" },
+  { id:"normal_even",  label:"일반볼 짝",   color:"#ec4899", group:"normal" },
+  { id:"normal_under", label:"언더 (1-14)", color:"#06b6d4", group:"normal" },
+  { id:"normal_over",  label:"오버 (15-28)",color:"#f59e0b", group:"normal" },
+  { id:"power_odd",    label:"파워볼 홀",   color:"#a855f7", group:"power"  },
+  { id:"power_even",   label:"파워볼 짝",   color:"#ef4444", group:"power"  },
+  { id:"power_under",  label:"언더 (0-4)",  color:"#22c55e", group:"power"  },
+  { id:"power_over",   label:"오버 (5-9)",  color:"#fbbf24", group:"power"  },
+];
+function checkPwWin(b:PwBet, n:number, p:number) {
+  if(b==="normal_odd") return n%2===1;
+  if(b==="normal_even") return n%2===0;
+  if(b==="normal_under") return n<=14;
+  if(b==="normal_over") return n>=15;
+  if(b==="power_odd") return p%2===1;
+  if(b==="power_even") return p%2===0;
+  if(b==="power_under") return p<=4;
+  return p>=5;
+}
+function PowerballGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+  const [bet, setBet] = useState<PwBet|null>(null);
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet"|"drawing"|"result">("bet");
+  const [nb, setNb] = useState<number|null>(null);
+  const [pb, setPb] = useState<number|null>(null);
+  const [dn, setDn] = useState(0);
+  const [dp, setDp] = useState(0);
+  const ivRef = useRef<ReturnType<typeof setInterval>|null>(null);
+
+  const rn = (arr:number[]) => arr[Math.floor(Math.random()*arr.length)];
+  const oddN=[1,3,5,7,9,11,13,15,17,19,21,23,25,27], evenN=[2,4,6,8,10,12,14,16,18,20,22,24,26,28];
+  const underN=Array.from({length:14},(_,i)=>i+1), overN=Array.from({length:14},(_,i)=>i+15);
+  const oddP=[1,3,5,7,9], evenP=[0,2,4,6,8], underP=[0,1,2,3,4], overP=[5,6,7,8,9];
+
+  const draw = useCallback(() => {
+    if (!bet||betAmount>balance) return;
+    setPhase("drawing"); setNb(null); setPb(null);
+    const shouldWin = Math.random()<getWinRate(round);
+    let n:number, p:number;
+    if (shouldWin) {
+      if(bet==="normal_odd"){n=rn(oddN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_even"){n=rn(evenN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_under"){n=rn(underN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_over"){n=rn(overN);p=rn([...oddP,...evenP]);}
+      else if(bet==="power_odd"){n=rn([...oddN,...evenN]);p=rn(oddP);}
+      else if(bet==="power_even"){n=rn([...oddN,...evenN]);p=rn(evenP);}
+      else if(bet==="power_under"){n=rn([...oddN,...evenN]);p=rn(underP);}
+      else{n=rn([...oddN,...evenN]);p=rn(overP);}
+    } else {
+      if(bet==="normal_odd"){n=rn(evenN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_even"){n=rn(oddN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_under"){n=rn(overN);p=rn([...oddP,...evenP]);}
+      else if(bet==="normal_over"){n=rn(underN);p=rn([...oddP,...evenP]);}
+      else if(bet==="power_odd"){n=rn([...oddN,...evenN]);p=rn(evenP);}
+      else if(bet==="power_even"){n=rn([...oddN,...evenN]);p=rn(oddP);}
+      else if(bet==="power_under"){n=rn([...oddN,...evenN]);p=rn(overP);}
+      else{n=rn([...oddN,...evenN]);p=rn(underP);}
+    }
+    let ticks=0;
+    ivRef.current=setInterval(()=>{
+      ticks++; setDn(Math.floor(Math.random()*28)+1); setDp(Math.floor(Math.random()*10));
+      if(ticks>=26){clearInterval(ivRef.current!); setNb(n); setPb(p); setDn(n); setDp(p); setPhase("result"); onResult(checkPwWin(bet,n,p)?Math.floor(betAmount*1.9):-betAmount);}
+    },60);
+  },[bet,betAmount,balance,round,onResult]);
+
+  useEffect(()=>()=>{if(ivRef.current)clearInterval(ivRef.current);},[]);
+  const reset=()=>{setPhase("bet");setBet(null);setNb(null);setPb(null);};
+  const isWin=nb!==null&&pb!==null&&bet!==null&&checkPwWin(bet,nb,pb);
+
+  return (
+    <div>
+      <div style={{ color:"#6b7280", fontSize:11, marginBottom:6, fontWeight:700 }}>일반볼 (1~28)</div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:6, marginBottom:12 }}>
+        {PW_OPTIONS.filter(o=>o.group==="normal").map(opt=>(
+          <button key={opt.id} onClick={()=>phase==="bet"&&setBet(opt.id)} style={{ padding:"10px 4px", borderRadius:10, border:"2px solid", borderColor:bet===opt.id?opt.color:"#2a2a2a", background:bet===opt.id?`${opt.color}22`:"#111", color:bet===opt.id?opt.color:"#555", fontWeight:700, fontSize:11, cursor:"pointer", transition:"all 0.2s" }}>{opt.label}</button>
+        ))}
+      </div>
+      <div style={{ color:"#6b7280", fontSize:11, marginBottom:6, fontWeight:700 }}>파워볼 (0~9)</div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:6, marginBottom:14 }}>
+        {PW_OPTIONS.filter(o=>o.group==="power").map(opt=>(
+          <button key={opt.id} onClick={()=>phase==="bet"&&setBet(opt.id)} style={{ padding:"10px 4px", borderRadius:10, border:"2px solid", borderColor:bet===opt.id?opt.color:"#2a2a2a", background:bet===opt.id?`${opt.color}22`:"#111", color:bet===opt.id?opt.color:"#555", fontWeight:700, fontSize:11, cursor:"pointer", transition:"all 0.2s" }}>{opt.label}</button>
+        ))}
+      </div>
+      <div style={{ display:"flex", gap:6, marginBottom:14, flexWrap:"wrap" }}>
+        {[5000,10000,30000,50000].map(a=>(
+          <button key={a} onClick={()=>phase==="bet"&&setBetAmount(a)} style={{ padding:"6px 12px", borderRadius:20, border:"1px solid", borderColor:betAmount===a?"#f59e0b":"#2a2a2a", background:betAmount===a?"#3b2a00":"#111", color:betAmount===a?"#f59e0b":"#555", fontSize:11, fontWeight:700, cursor:"pointer" }}>₩{a.toLocaleString()}</button>
+        ))}
+        <span style={{ color:"#555", fontSize:11, padding:"6px 4px" }}>당첨 1.9배</span>
+      </div>
+      <div style={{ background:"linear-gradient(135deg,#0a0a18,#111124)", border:"1px solid #1a1a3a", borderRadius:16, padding:"20px", marginBottom:14, textAlign:"center" }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:24 }}>
+          {[{label:"일반볼",val:dn,color:"#3b82f6"},{label:"파워볼",val:dp,color:"#a855f7"}].map((b,i)=>(
+            <div key={i}>
+              <div style={{ color:"#6b7280", fontSize:10, marginBottom:8 }}>{b.label}</div>
+              <div style={{ width:72, height:72, borderRadius:"50%", background:"#1a1a3a", border:`3px solid ${b.color}`, display:"flex", alignItems:"center", justifyContent:"center", boxShadow:phase==="drawing"?`0 0 14px ${b.color}88`:"none" }}>
+                <span style={{ color:"#fff", fontWeight:900, fontSize:26 }}>{phase==="bet"?"?":b.val}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        {phase==="result"&&nb!==null&&pb!==null&&(
+          <div style={{ marginTop:12, color:isWin?"#22c55e":"#ef4444", fontWeight:700, fontSize:13 }}>
+            일반볼 <strong>{nb}</strong> ({nb%2===1?"홀":"짝"}/{nb<=14?"언더":"오버"}) · 파워볼 <strong>{pb}</strong> ({pb%2===1?"홀":"짝"}/{pb<=4?"언더":"오버"})<br/>
+            <span style={{ fontSize:16 }}>{isWin?"✅ 적중!":"❌ 미적중"}</span>
+          </div>
+        )}
+        {phase==="drawing"&&<div style={{ color:"#a855f7", fontWeight:700, marginTop:10 }}>🔮 추첨 중...</div>}
+      </div>
+      {phase==="bet"&&<button onClick={draw} disabled={!bet||betAmount>balance} style={{ width:"100%", padding:"15px 0", borderRadius:12, fontSize:15, fontWeight:900, background:bet&&betAmount<=balance?"linear-gradient(135deg,#f59e0b,#d97706)":"#1a1a1a", color:bet?"#000":"#444", border:"none", cursor:bet?"pointer":"default" }}>{!bet?"베팅 유형을 선택하세요":`₩${betAmount.toLocaleString()} 베팅 → 당첨 시 ₩${Math.floor(betAmount*1.9).toLocaleString()}`}</button>}
+      {phase==="result"&&(
+        <div style={{ display:"flex", gap:10 }}>
+          <div style={{ flex:1, textAlign:"center", padding:"14px 0", borderRadius:12, background:isWin?"#052e16":"#1a0808", border:`1px solid ${isWin?"#16a34a":"#dc2626"}` }}>
+            <span style={{ color:isWin?"#22c55e":"#ef4444", fontWeight:900 }}>{isWin?`+₩${Math.floor(betAmount*1.9).toLocaleString()}`:`-₩${betAmount.toLocaleString()}`}</span>
+          </div>
+          <button onClick={reset} style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:13, fontWeight:700, background:"linear-gradient(135deg,#f59e0b,#d97706)", color:"#000", border:"none", cursor:"pointer" }}>다시 하기</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── 슬롯머신 ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+const SLOT_SYMS = ["🍒","🍋","🍇","🔔","⭐","💎","7️⃣"];
+const SLOT_PAY: Record<string,number> = { "7️⃣":20,"💎":15,"🔔":10,"⭐":7,"🍇":5,"🍋":3,"🍒":2 };
+function calcSlotWin(r:string[]): number {
+  if(r[0]===r[1]&&r[1]===r[2]) return SLOT_PAY[r[0]]??2;
+  if(r[0]===r[1]||r[1]===r[2]||r[0]===r[2]) return 0.5;
+  return 0;
+}
+function SlotGame({ balance, onResult, round }: { balance:number; onResult:(d:number)=>void; round:number }) {
+  const [betAmount, setBetAmount] = useState(10000);
+  const [phase, setPhase] = useState<"bet"|"spinning"|"result">("bet");
+  const [disp, setDisp] = useState<string[]>(["❓","❓","❓"]);
+  const [mult, setMult] = useState(0);
+  const ivsRef = useRef<ReturnType<typeof setInterval>[]>([]);
+
+  const spin = useCallback(() => {
+    if(betAmount>balance) return;
+    setPhase("spinning"); setMult(0);
+    const shouldWin = Math.random()<getWinRate(round);
+    let final:string[];
+    if(shouldWin){
+      const r=Math.random();
+      if(r<0.55){
+        const s=SLOT_SYMS[Math.floor(Math.random()*SLOT_SYMS.length)];
+        const other=SLOT_SYMS.filter(x=>x!==s)[Math.floor(Math.random()*6)];
+        final=[s,s,other].sort(()=>Math.random()-0.5);
+      } else {
+        const s=SLOT_SYMS[Math.floor(Math.random()*SLOT_SYMS.length)];
+        final=[s,s,s];
+      }
+    } else {
+      do{ final=Array.from({length:3},()=>SLOT_SYMS[Math.floor(Math.random()*7)]); }
+      while(final[0]===final[1]||final[1]===final[2]||final[0]===final[2]);
+    }
+    ivsRef.current.forEach(clearInterval); ivsRef.current=[];
+    const cur=["❓","❓","❓"];
+    [0,1,2].forEach(i=>{
+      const stopMs=600+i*500;
+      const iv=setInterval(()=>{ cur[i]=SLOT_SYMS[Math.floor(Math.random()*7)]; setDisp([...cur]); },80);
+      ivsRef.current.push(iv);
+      setTimeout(()=>{
+        clearInterval(iv); cur[i]=final[i]; setDisp([...cur]);
+        if(i===2){ const m=calcSlotWin(final); setMult(m); setPhase("result"); onResult(m>0?Math.floor(betAmount*m):-betAmount); }
+      },stopMs);
+    });
+  },[betAmount,balance,round,onResult]);
+
+  useEffect(()=>()=>{ivsRef.current.forEach(clearInterval);},[]);
+  const reset=()=>{setPhase("bet");setDisp(["❓","❓","❓"]);setMult(0);};
+
+  return (
+    <div>
+      <div style={{ display:"flex", gap:6, marginBottom:16, flexWrap:"wrap" }}>
+        {[5000,10000,30000,50000,100000].map(a=>(
+          <button key={a} onClick={()=>phase==="bet"&&setBetAmount(a)} style={{ padding:"6px 12px", borderRadius:20, border:"1px solid", borderColor:betAmount===a?"#ec4899":"#2a2a2a", background:betAmount===a?"#3b0a2e":"#111", color:betAmount===a?"#ec4899":"#555", fontSize:11, fontWeight:700, cursor:"pointer" }}>₩{a.toLocaleString()}</button>
+        ))}
+      </div>
+      <div style={{ background:"linear-gradient(135deg,#0a0a18,#1a0a28)", border:"2px solid #ec489944", borderRadius:20, padding:"24px 16px", marginBottom:16, textAlign:"center" }}>
+        <div style={{ display:"flex", gap:8, justifyContent:"center", marginBottom:14 }}>
+          {disp.map((sym,i)=>(
+            <div key={i} style={{ width:82, height:92, borderRadius:14, background:"#1a1a2a", border:`2px solid ${phase==="spinning"?"#ec489966":"#2a2a4a"}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:42, boxShadow:phase==="spinning"?"0 0 10px #ec489944":"none", transition:"border-color 0.2s" }}>{sym}</div>
+          ))}
+        </div>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:5, justifyContent:"center", marginBottom:12 }}>
+          {[["7️⃣","20배"],["💎","15배"],["🔔","10배"],["⭐","7배"],["🍇","5배"],["🍒","2배"],["2개일치","0.5배"]].map(([s,p])=>(
+            <div key={s} style={{ background:"#0a0a18", borderRadius:7, padding:"3px 8px", fontSize:10, color:"#555" }}>{s} = <span style={{ color:"#f59e0b" }}>{p}</span></div>
+          ))}
+        </div>
+        {phase==="result"&&<div style={{ color:mult>0?"#22c55e":"#ef4444", fontWeight:900, fontSize:17 }}>{mult>=10?"🎊 대당첨!":mult>=2?"🎉 당첨!":mult>0?"✨ 소당첨":"❌ 꽝"}{mult>0&&<span style={{ fontSize:13, marginLeft:6 }}>({mult}배)</span>}</div>}
+        {phase==="spinning"&&<div style={{ color:"#ec4899", fontWeight:700 }}>🎰 스핀 중...</div>}
+      </div>
+      {phase==="bet"&&<button onClick={spin} disabled={betAmount>balance} style={{ width:"100%", padding:"18px 0", borderRadius:12, fontSize:18, fontWeight:900, background:betAmount<=balance?"linear-gradient(135deg,#ec4899,#db2777)":"#1a1a1a", color:betAmount<=balance?"#fff":"#444", border:"none", cursor:betAmount<=balance?"pointer":"default", boxShadow:betAmount<=balance?"0 0 20px #ec489944":"none" }}>🎰 SPIN — ₩{betAmount.toLocaleString()}</button>}
+      {phase==="result"&&(
+        <div style={{ display:"flex", gap:10 }}>
+          <div style={{ flex:1, textAlign:"center", padding:"14px 0", borderRadius:12, background:mult>0?"#052e16":"#1a0808", border:`1px solid ${mult>0?"#16a34a":"#dc2626"}` }}>
+            <span style={{ color:mult>0?"#22c55e":"#ef4444", fontWeight:900 }}>{mult>0?`+₩${Math.floor(betAmount*mult).toLocaleString()}`:`-₩${betAmount.toLocaleString()}`}</span>
+          </div>
+          <button onClick={reset} style={{ flex:1, padding:"14px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#ec4899,#db2777)", color:"#fff", border:"none", cursor:"pointer" }}>다시 하기</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // ── 메인 페이지 ──────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
 function PlayContent() {
@@ -644,7 +979,7 @@ function PlayContent() {
   const [round, setRound] = useState(0);
   const [totalDelta, setTotalDelta] = useState(0);
   const [totalCharged, setTotalCharged] = useState(0);
-  const [activeGame, setActiveGame] = useState<"baccarat"|"snail"|"ladder">("baccarat");
+  const [activeGame, setActiveGame] = useState<"baccarat"|"snail"|"ladder"|"holzak"|"powerball"|"slot">("baccarat");
   const [history, setHistory] = useState<{game:string;delta:number;bal:number}[]>([]);
 
   // 오버레이 상태
@@ -713,6 +1048,9 @@ function PlayContent() {
     { id:"baccarat" as const, label:"바카라", icon:"🃏", color:"#ef4444" },
     { id:"snail" as const, label:"달팽이", icon:"🐌", color:"#22c55e" },
     { id:"ladder" as const, label:"사다리", icon:"🪜", color:"#a855f7" },
+    { id:"holzak" as const, label:"홀짝", icon:"⚡", color:"#3b82f6" },
+    { id:"powerball" as const, label:"파워볼", icon:"🔮", color:"#f59e0b" },
+    { id:"slot" as const, label:"슬롯", icon:"🎰", color:"#ec4899" },
   ];
 
   const winRate = Math.round(getWinRate(round) * 100);
@@ -858,9 +1196,12 @@ function PlayContent() {
                   ❓ 처음이에요
                 </button>
               </div>
-              {activeGame==="baccarat" && <BaccaratGame balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="snail" && <SnailGame balance={balance} onResult={handleResult} round={round} />}
-              {activeGame==="ladder" && <LadderGame balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="baccarat"  && <BaccaratGame  balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="snail"     && <SnailGame     balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="ladder"    && <LadderGame    balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="holzak"   && <HoljakGame    balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="powerball" && <PowerballGame balance={balance} onResult={handleResult} round={round} />}
+              {activeGame==="slot"      && <SlotGame      balance={balance} onResult={handleResult} round={round} />}
             </div>
 
             {/* 잔액 0 */}

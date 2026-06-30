@@ -79,6 +79,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             padding: "8px 16px", cursor: "pointer",
             boxShadow: "0 2px 16px #00000040",
             transition: "border-color 0.2s",
+            WebkitTapHighlightColor: "transparent",
+            outline: "none",
+            color: "inherit",
           }}
           onMouseEnter={e => (e.currentTarget.style.borderColor = "#6366f1")}
           onMouseLeave={e => (e.currentTarget.style.borderColor = "#334155")}
