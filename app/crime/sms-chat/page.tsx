@@ -394,7 +394,8 @@ export default function SmsChatPage() {
   // ── 채팅 화면 ──────────────────────────────────────────────────────────────
   return (
     <div style={{
-      height: "100dvh", display: "flex", flexDirection: "column",
+      position: "fixed", inset: 0,
+      display: "flex", flexDirection: "column",
       background: "#0a0a14",
       fontFamily: "'Pretendard', 'Apple SD Gothic Neo', sans-serif",
     }}>
