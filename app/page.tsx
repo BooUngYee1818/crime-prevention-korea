@@ -2308,62 +2308,73 @@ export default function HomePage() {
               opacity: isHoveringCard ? 1 : 0,
               transition: "opacity 0.25s ease, left 0.04s linear, top 0.04s linear",
             }}>
-              {/* 레이어 1: 은박 베이스 */}
+              {/* 은박 베이스 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 50% 50%, #e8e8ee, #c8c8d8 40%, #a8a8c0 100%)",
+                background: "linear-gradient(145deg, #e4e4ec 0%, #d2d2de 35%, #eaeaf4 60%, #c8c8d8 100%)",
               }} />
-              {/* 레이어 2: 파스텔 무지개 — 마우스 이동 방향으로 회전 */}
+              {/* 무지개 띠 — 슬라이드 클립 컨테이너 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `linear-gradient(${mouseDir + 90}deg,
-                  hsl(0,   75%, 82%) 0%,
-                  hsl(22,  80%, 83%) 12%,
-                  hsl(48,  80%, 85%) 22%,
-                  hsl(100, 55%, 80%) 34%,
-                  hsl(175, 60%, 80%) 46%,
-                  hsl(210, 70%, 80%) 58%,
-                  hsl(255, 65%, 80%) 70%,
-                  hsl(300, 60%, 82%) 82%,
-                  hsl(340, 70%, 82%) 92%,
-                  hsl(0,   75%, 82%) 100%
-                )`,
-                opacity: 0.88,
-                mixBlendMode: "multiply",
-                transition: "background 0.08s ease",
-              }} />
-              {/* 레이어 3: 프리즘 광택선 */}
+                overflow: "hidden",
+              }}>
+                {/* 실제 무지개 띠 (oversized → translateX로 좌우 슬라이드) */}
+                <div style={{
+                  position: "absolute",
+                  top: "-30%", left: "-40%",
+                  width: "180%", height: "160%",
+                  background: `linear-gradient(${90 + mouseDir * 0.06}deg,
+                    transparent                    0%,
+                    hsl(300, 55%, 80%)             8%,
+                    hsl(330, 65%, 78%)            16%,
+                    hsl(0,   75%, 78%)            24%,
+                    hsl(22,  82%, 80%)            32%,
+                    hsl(48,  78%, 82%)            42%,
+                    hsl(110, 55%, 77%)            52%,
+                    hsl(175, 62%, 77%)            62%,
+                    hsl(210, 70%, 78%)            71%,
+                    hsl(255, 62%, 78%)            80%,
+                    hsl(280, 55%, 80%)            88%,
+                    transparent                   100%
+                  )`,
+                  transform: `translateX(${(holoPos.x - 50) * 1.2}px) translateY(${(holoPos.y - 50) * 0.25}px)`,
+                  mixBlendMode: "multiply",
+                  opacity: 0.92,
+                  transition: "transform 0.04s linear",
+                }} />
+              </div>
+              {/* 미세 수평 광택선 (은박 질감) */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 backgroundImage: `repeating-linear-gradient(
-                  ${mouseDir + 90}deg,
-                  rgba(255,255,255,0.0) 0px,
-                  rgba(255,255,255,0.0) 6px,
-                  rgba(255,255,255,0.12) 7px,
-                  rgba(255,255,255,0.0) 8px
+                  ${90 + mouseDir * 0.04}deg,
+                  rgba(255,255,255,0) 0px,
+                  rgba(255,255,255,0) 4px,
+                  rgba(255,255,255,0.10) 4.5px,
+                  rgba(255,255,255,0) 5px
                 )`,
                 mixBlendMode: "screen",
               }} />
-              {/* 레이어 4: 이동 방향 반대쪽 스펙큘러 하이라이트 */}
+              {/* 스펙큘러 하이라이트 — 커서 위치 따라 이동 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: `radial-gradient(circle at ${50 - 28 * Math.cos((mouseDir + 180) * Math.PI / 180)}% ${50 - 28 * Math.sin((mouseDir + 180) * Math.PI / 180)}%,
-                  rgba(255,255,255,0.75) 0%,
-                  rgba(255,255,255,0.30) 22%,
-                  transparent 55%
+                background: `radial-gradient(ellipse 55% 45% at ${50 + (holoPos.x - 50) * 0.28}% ${50 + (holoPos.y - 50) * 0.28}%,
+                  rgba(255,255,255,0.62) 0%,
+                  rgba(255,255,255,0.22) 30%,
+                  transparent 65%
                 )`,
-                transition: "background 0.08s ease",
+                transition: "background 0.05s linear",
               }} />
-              {/* 레이어 5: 엣지 그림자 (입체감) */}
+              {/* 엣지 그림자 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.18) 100%)",
+                background: "radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.22) 100%)",
               }} />
-              {/* 레이어 6: 테두리 링 */}
+              {/* 테두리 링 */}
               <div style={{
                 position: "absolute", inset: 1, borderRadius: "50%",
-                border: "1.5px solid rgba(255,255,255,0.5)",
-                boxShadow: "0 0 10px 2px rgba(200,160,255,0.35), inset 0 0 6px rgba(255,255,255,0.2)",
+                border: "1.5px solid rgba(255,255,255,0.55)",
+                boxShadow: "0 0 8px 2px rgba(180,160,220,0.3), inset 0 0 5px rgba(255,255,255,0.15)",
               }} />
             </div>
             <div style={{ position: "relative", zIndex: 2 }}>
