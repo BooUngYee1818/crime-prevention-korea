@@ -86,11 +86,30 @@ function ScamSimSection({ lang }: { lang: string }) {
     setStep(0); setResult(null); setShown(0);
   }, [active]);
 
+  const playTTS = async (text: string, voice: string) => {
+    try {
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, voice }),
+      });
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.play();
+    } catch {}
+  };
+
   useEffect(() => {
     if (!scenario) return;
     const msgs = scenario.steps.filter(s => s.type !== "choice");
     if (shown < msgs.length) {
-      const t = setTimeout(() => setShown(p => p + 1), 900);
+      const t = setTimeout(() => {
+        const msg = msgs[shown];
+        const voice = scenario.id === "deepvoice" ? "shimmer" : scenario.id === "romance" ? "echo" : "alloy";
+        playTTS(msg.msg, voice);
+        setShown(p => p + 1);
+      }, 900);
       return () => clearTimeout(t);
     }
   }, [shown, scenario]);
