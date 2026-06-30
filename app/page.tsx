@@ -2295,35 +2295,20 @@ export default function HomePage() {
               cursor: "default",
             }}
           >
-            {/* 은박 홀로그램 — 마우스 위치/방향 따라 은은하게 */}
+            {/* 대각선 빛 줄기 (스크린샷 그대로) */}
             <div style={{
-              position: "absolute", inset: 0, borderRadius: 24,
-              pointerEvents: "none", zIndex: 3,
-              background: `radial-gradient(ellipse 60% 70% at ${holoPos.x}% ${holoPos.y}%,
-                rgba(255,255,255,0.10) 0%,
-                rgba(200,180,255,0.06) 35%,
-                rgba(180,240,255,0.04) 55%,
-                transparent 72%
-              )`,
-              mixBlendMode: "screen",
-              transition: "background 0.05s linear",
+              position: "absolute", top: 0, left: "-10%", width: "45%", height: "100%",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)",
+              transform: "skewX(-15deg)",
+              animation: "diagBeam 4s ease-in-out infinite",
+              pointerEvents: "none", zIndex: 2,
             }} />
+            {/* 은색빛 오버레이 */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: 24,
               pointerEvents: "none", zIndex: 3,
-              background: `linear-gradient(${mouseDir + 90}deg,
-                hsla(0,   85%, 72%, 0.07),
-                hsla(40,  90%, 70%, 0.07),
-                hsla(65,  88%, 68%, 0.06),
-                hsla(120, 75%, 65%, 0.06),
-                hsla(180, 82%, 65%, 0.06),
-                hsla(220, 88%, 70%, 0.07),
-                hsla(270, 82%, 70%, 0.07),
-                hsla(310, 85%, 70%, 0.07),
-                hsla(0,   85%, 72%, 0.07)
-              )`,
+              background: "linear-gradient(135deg, rgba(220,220,255,0.08) 0%, rgba(180,180,220,0.05) 50%, rgba(200,200,255,0.08) 100%)",
               mixBlendMode: "screen",
-              transition: "background 0.10s linear",
             }} />
             <div style={{ position: "relative", zIndex: 2 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
