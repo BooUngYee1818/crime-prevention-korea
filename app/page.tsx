@@ -884,6 +884,10 @@ export default function HomePage() {
           @keyframes neonBlink { 0%,100%{opacity:1;text-shadow:0 0 8px #f59e0b,0 0 20px #f59e0b} 45%{opacity:0.7;text-shadow:none} 50%{opacity:1;text-shadow:0 0 8px #f59e0b} }
           @keyframes glitchEra { 0%,100%{clip-path:inset(0 0 98% 0)} 10%{clip-path:inset(30% 0 50% 0)} 30%{clip-path:inset(70% 0 10% 0)} 60%{clip-path:inset(10% 0 80% 0)} }
           @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+          @keyframes lampFlicker { 0%,100%{opacity:1} 88%{opacity:1} 90%{opacity:0.5} 91%{opacity:1} 95%{opacity:0.7} 97%{opacity:1} }
+          @keyframes slowPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+          @keyframes crtScan { 0%{background-position:0 0} 100%{background-position:0 100%} }
+          @keyframes fogDrift { 0%{transform:translateX(-5%)} 50%{transform:translateX(5%)} 100%{transform:translateX(-5%)} }
         `}</style>
         <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 40px" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -914,34 +918,86 @@ export default function HomePage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
-            {/* ══ 1990년대 배경: 옛날 한국 골목 느낌 ══ */}
+            {/* ══ 1990년대: 쌍문동 골목 밤거리 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(160deg, #3d1f00 0%, #5c2e00 40%, #2a1500 100%)",
-              boxShadow: "0 4px 40px rgba(180,100,0,0.25)",
+              /* 골목 기본색: 짙은 갈색 벽돌 + 바닥 */
+              background: `
+                radial-gradient(ellipse 60% 180px at 18% -10%, rgba(255,170,30,0.55) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 180px at 82% -10%, rgba(255,160,20,0.40) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 60% at 50% 105%, rgba(30,15,0,0.9) 0%, transparent 100%),
+                linear-gradient(180deg, #0d0600 0%, #1c0c00 20%, #2a1400 55%, #1a0a00 100%)
+              `,
             }}>
-              {/* 골목 벽돌 패턴 */}
-              <div style={{
-                position: "absolute", inset: 0, borderRadius: 24,
-                backgroundImage: `
-                  repeating-linear-gradient(90deg, rgba(139,90,43,0.08) 0px, rgba(139,90,43,0.08) 60px, transparent 60px, transparent 62px),
-                  repeating-linear-gradient(0deg, rgba(100,60,20,0.12) 0px, rgba(100,60,20,0.12) 28px, transparent 28px, transparent 30px)
-                `,
-                pointerEvents: "none",
-              }} />
-              {/* TV 잡음 오버레이 */}
+              {/* 벽돌 질감 - 가로 줄눈 */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
-                background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
-                animation: "flickerTV 8s infinite",
+                backgroundImage: `
+                  repeating-linear-gradient(0deg,
+                    transparent 0px, transparent 18px,
+                    rgba(0,0,0,0.35) 18px, rgba(0,0,0,0.35) 20px
+                  ),
+                  repeating-linear-gradient(90deg,
+                    transparent 0px, transparent 58px,
+                    rgba(0,0,0,0.25) 58px, rgba(0,0,0,0.25) 60px
+                  )
+                `,
               }} />
-              {/* 노란 가로등 빛 효과 */}
+              {/* 벽돌 색감 오버레이 */}
               <div style={{
-                position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)",
-                width: 300, height: 200,
-                background: "radial-gradient(ellipse, rgba(255,200,80,0.18) 0%, transparent 70%)",
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: `
+                  repeating-linear-gradient(0deg,
+                    rgba(120,50,10,0.12) 0px, rgba(120,50,10,0.12) 9px,
+                    rgba(80,30,5,0.06) 9px, rgba(80,30,5,0.06) 20px
+                  )
+                `,
+              }} />
+              {/* 골목 양쪽 그림자 (좁은 느낌) */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.6) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.6) 100%)",
+              }} />
+              {/* 가로등 1 - 왼쪽 */}
+              <div style={{
+                position: "absolute", top: 0, left: "15%", width: 2, height: 60,
+                background: "linear-gradient(180deg, #888 0%, #555 100%)",
                 pointerEvents: "none",
+              }} />
+              <div style={{
+                position: "absolute", top: 55, left: "calc(15% - 30px)", width: 64, height: 16,
+                background: "rgba(255,190,40,0.9)", borderRadius: 4,
+                boxShadow: "0 0 20px 8px rgba(255,180,20,0.6), 0 0 60px 20px rgba(255,150,0,0.3)",
+                animation: "lampFlicker 6s infinite",
+                pointerEvents: "none",
+              }} />
+              {/* 가로등 2 - 오른쪽 */}
+              <div style={{
+                position: "absolute", top: 0, right: "12%", width: 2, height: 50,
+                background: "linear-gradient(180deg, #888 0%, #555 100%)",
+                pointerEvents: "none",
+              }} />
+              <div style={{
+                position: "absolute", top: 45, right: "calc(12% - 28px)", width: 58, height: 14,
+                background: "rgba(255,185,35,0.85)", borderRadius: 4,
+                boxShadow: "0 0 18px 7px rgba(255,170,15,0.5), 0 0 50px 18px rgba(255,140,0,0.25)",
+                animation: "lampFlicker 7s infinite",
+                animationDelay: "0.8s",
+                pointerEvents: "none",
+              }} />
+              {/* 바닥 반사 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 60,
+                background: "linear-gradient(0deg, rgba(180,90,0,0.15) 0%, transparent 100%)",
+                borderRadius: "0 0 24px 24px", pointerEvents: "none",
+              }} />
+              {/* 필름 입자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E\")",
+                opacity: 0.5,
+                animation: "flickerTV 12s infinite",
               }} />
               {/* 시대 텍스트 */}
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, position: "relative", zIndex: 1 }}>
@@ -1007,23 +1063,50 @@ export default function HomePage() {
             </div>
             </div> {/* ══ 1990년대 배경 래퍼 끝 ══ */}
 
-            {/* ══ 2000년대 배경: Windows XP / PC방 ══ */}
+            {/* ══ 2000년대: PC방 골목 + 형광등 간판 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(160deg, #003366 0%, #1a5276 40%, #0d2b45 100%)",
-              boxShadow: "0 4px 40px rgba(0,100,200,0.25)",
+              background: `
+                radial-gradient(ellipse 70% 120px at 50% -5%, rgba(80,160,255,0.35) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 200px at 5% 50%, rgba(0,80,180,0.2) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 200px at 95% 50%, rgba(0,60,160,0.2) 0%, transparent 100%),
+                linear-gradient(180deg, #020d1f 0%, #051428 40%, #030a18 100%)
+              `,
             }}>
-              {/* XP 하늘빛 글로우 */}
+              {/* 콘크리트 벽 텍스처 */}
               <div style={{
-                position: "absolute", top: 0, left: 0, right: 0, height: 160,
-                background: "linear-gradient(180deg, rgba(60,140,240,0.18) 0%, transparent 100%)",
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                backgroundImage: `
+                  repeating-linear-gradient(0deg, transparent 0px, transparent 22px, rgba(255,255,255,0.03) 22px, rgba(255,255,255,0.03) 23px),
+                  repeating-linear-gradient(90deg, transparent 0px, transparent 80px, rgba(255,255,255,0.02) 80px, rgba(255,255,255,0.02) 81px)
+                `,
+              }} />
+              {/* 골목 양쪽 그림자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.7) 100%)",
+              }} />
+              {/* PC방 간판 형광등 */}
+              <div style={{
+                position: "absolute", top: 0, left: "30%", right: "30%", height: 6,
+                background: "linear-gradient(90deg, transparent, rgba(100,180,255,0.9), rgba(120,200,255,1), rgba(100,180,255,0.9), transparent)",
+                boxShadow: "0 0 20px 6px rgba(80,160,255,0.7), 0 0 60px 15px rgba(40,120,220,0.4)",
+                animation: "lampFlicker 4s infinite",
+                borderRadius: 3,
                 pointerEvents: "none",
               }} />
-              {/* 스캔라인 */}
+              {/* 바닥 형광 반사 */}
               <div style={{
-                position: "absolute", inset: 0, pointerEvents: "none",
-                background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 6px)",
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
+                background: "linear-gradient(0deg, rgba(30,80,180,0.15) 0%, transparent 100%)",
+                borderRadius: "0 0 24px 24px", pointerEvents: "none",
+              }} />
+              {/* CRT 스캔라인 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.12) 6px)",
+                animation: "flickerTV 9s infinite",
               }} />
               {/* 흘러가는 마퀴 */}
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
@@ -1103,13 +1186,41 @@ export default function HomePage() {
             </div>
             </div> {/* ══ 2000년대 배경 래퍼 끝 ══ */}
 
-            {/* ══ 2010년대 초: 스마트폰 시대 배경 ══ */}
+            {/* ══ 2010년대 초: 스마트폰 불빛 쏟아지는 도시 골목 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(160deg, #003d20 0%, #0a5c2e 40%, #012a15 100%)",
-              boxShadow: "0 4px 40px rgba(0,150,80,0.2)",
+              background: `
+                radial-gradient(ellipse 50% 150px at 25% 0%, rgba(255,230,50,0.2) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 200px at 75% 30%, rgba(0,200,80,0.18) 0%, transparent 100%),
+                linear-gradient(180deg, #030d06 0%, #071508 40%, #040a05 100%)
+              `,
             }}>
+              {/* 야간 콘크리트 벽 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                backgroundImage: `
+                  repeating-linear-gradient(0deg, transparent 0px, transparent 30px, rgba(255,255,255,0.025) 30px, rgba(255,255,255,0.025) 31px)
+                `,
+              }} />
+              {/* 골목 양쪽 그림자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.65) 0%, transparent 22%, transparent 78%, rgba(0,0,0,0.65) 100%)",
+              }} />
+              {/* 편의점 간판 형광빛 (초록/흰색) */}
+              <div style={{
+                position: "absolute", top: 8, left: "10%", width: 100, height: 8,
+                background: "linear-gradient(90deg, rgba(0,220,80,0.8), rgba(100,255,140,0.9), rgba(0,220,80,0.8))",
+                boxShadow: "0 0 16px 5px rgba(0,200,60,0.5), 0 0 40px 12px rgba(0,160,40,0.25)",
+                borderRadius: 3, animation: "slowPulse 3s infinite", pointerEvents: "none",
+              }} />
+              {/* 스마트폰 화면 반사광 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 60,
+                background: "linear-gradient(0deg, rgba(0,80,30,0.2) 0%, transparent 100%)",
+                borderRadius: "0 0 24px 24px", pointerEvents: "none",
+              }} />
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
@@ -1181,13 +1292,43 @@ export default function HomePage() {
             </div>
             </div> {/* ══ 2010년대 초 래퍼 끝 ══ */}
 
-            {/* ══ 2015~2018: SNS 시대 배경 ══ */}
+            {/* ══ 2015~2018: 카페·SNS 골목 핑크무드 야경 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(135deg, #3d006b 0%, #6b0057 50%, #2a003d 100%)",
-              boxShadow: "0 4px 40px rgba(150,0,150,0.25)",
+              background: `
+                radial-gradient(ellipse 55% 160px at 30% -5%, rgba(220,80,180,0.45) 0%, transparent 100%),
+                radial-gradient(ellipse 45% 160px at 75% 10%, rgba(180,60,240,0.3) 0%, transparent 100%),
+                radial-gradient(ellipse 60% 80% at 50% 110%, rgba(20,0,30,0.85) 0%, transparent 100%),
+                linear-gradient(160deg, #100018 0%, #1a0028 45%, #0d0018 100%)
+              `,
             }}>
+              {/* 벽 타일 패턴 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                backgroundImage: `
+                  repeating-linear-gradient(0deg, transparent 0px, transparent 24px, rgba(255,255,255,0.03) 24px, rgba(255,255,255,0.03) 25px),
+                  repeating-linear-gradient(90deg, transparent 0px, transparent 48px, rgba(255,255,255,0.02) 48px, rgba(255,255,255,0.02) 49px)
+                `,
+              }} />
+              {/* 골목 그림자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.6) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.6) 100%)",
+              }} />
+              {/* 카페 핑크 간판 빛 */}
+              <div style={{
+                position: "absolute", top: 0, left: "20%", width: 140, height: 8,
+                background: "linear-gradient(90deg, transparent, rgba(255,80,180,0.9), rgba(255,120,200,1), rgba(255,80,180,0.9), transparent)",
+                boxShadow: "0 0 20px 8px rgba(220,60,180,0.6), 0 0 60px 20px rgba(180,0,160,0.3)",
+                borderRadius: 4, animation: "slowPulse 4s infinite", pointerEvents: "none",
+              }} />
+              {/* 하단 빛 반사 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 70,
+                background: "linear-gradient(0deg, rgba(120,0,120,0.18) 0%, transparent 100%)",
+                borderRadius: "0 0 24px 24px", pointerEvents: "none",
+              }} />
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
                   display: "flex", gap: 28, whiteSpace: "nowrap",
@@ -1253,13 +1394,42 @@ export default function HomePage() {
             </div>
             </div> {/* ══ SNS 시대 래퍼 끝 ══ */}
 
-            {/* ══ 2019~2021: 우환폐렴(코로나) 시대 배경 ══ */}
+            {/* ══ 2019~2021: 텅 빈 골목 — 우환폐렴 봉쇄 분위기 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(160deg, #1a2a3a 0%, #0d2233 50%, #0a1820 100%)",
-              boxShadow: "0 4px 40px rgba(20,100,150,0.2)",
+              background: `
+                radial-gradient(ellipse 80% 140px at 50% -5%, rgba(100,150,180,0.25) 0%, transparent 100%),
+                linear-gradient(180deg, #050a10 0%, #080f18 40%, #040810 100%)
+              `,
             }}>
+              {/* 빗길 아스팔트 텍스처 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                backgroundImage: `
+                  repeating-linear-gradient(175deg, transparent 0px, transparent 3px, rgba(80,120,160,0.06) 3px, rgba(80,120,160,0.06) 4px)
+                `,
+              }} />
+              {/* 골목 그림자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.7) 100%)",
+              }} />
+              {/* 흐릿한 가로등 (우중충) */}
+              <div style={{
+                position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                width: 180, height: 10,
+                background: "rgba(180,200,220,0.4)",
+                boxShadow: "0 0 30px 10px rgba(140,170,200,0.25), 0 0 80px 30px rgba(100,130,170,0.12)",
+                borderRadius: 5, animation: "slowPulse 6s infinite", pointerEvents: "none",
+              }} />
+              {/* 안개/수증기 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: "-10%", right: "-10%", height: 100,
+                background: "linear-gradient(0deg, rgba(60,90,120,0.2) 0%, transparent 100%)",
+                animation: "fogDrift 12s ease-in-out infinite",
+                pointerEvents: "none",
+              }} />
               {/* 빗방울 효과 */}
               {[...Array(8)].map((_,i) => (
                 <div key={i} style={{
@@ -1331,18 +1501,48 @@ export default function HomePage() {
             </div>
             </div> {/* ══ 우환폐렴 시대 래퍼 끝 ══ */}
 
-            {/* ══ 2022~2023: 다크 도시 / AI 전야 배경 ══ */}
+            {/* ══ 2022~2023: 홍대 네온 골목 / AI 시대 전야 ══ */}
             <div style={{
               position: "relative", borderRadius: 24, overflow: "hidden",
               marginBottom: 24, padding: "32px 28px",
-              background: "linear-gradient(135deg, #2d0050 0%, #4a0080 40%, #1a0035 100%)",
-              boxShadow: "0 4px 40px rgba(120,0,200,0.3)",
+              background: `
+                radial-gradient(ellipse 50% 180px at 20% 0%, rgba(180,0,255,0.4) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 180px at 80% 0%, rgba(0,200,255,0.25) 0%, transparent 100%),
+                radial-gradient(ellipse 60% 80% at 50% 110%, rgba(10,0,20,0.9) 0%, transparent 100%),
+                linear-gradient(180deg, #050008 0%, #0a000f 40%, #050008 100%)
+              `,
             }}>
-              {/* 네온 글로우 */}
+              {/* 콘크리트 벽 */}
               <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: 120,
-                background: "linear-gradient(0deg, rgba(140,60,200,0.12) 0%, transparent 100%)",
-                pointerEvents: "none",
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                backgroundImage: `
+                  repeating-linear-gradient(0deg, transparent 0px, transparent 28px, rgba(255,255,255,0.025) 28px, rgba(255,255,255,0.025) 29px)
+                `,
+              }} />
+              {/* 골목 그림자 */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 24, pointerEvents: "none",
+                background: "linear-gradient(90deg, rgba(0,0,0,0.65) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.65) 100%)",
+              }} />
+              {/* 네온 보라 간판 */}
+              <div style={{
+                position: "absolute", top: 0, left: "15%", width: 120, height: 7,
+                background: "linear-gradient(90deg, transparent, rgba(180,0,255,0.95), rgba(220,80,255,1), rgba(180,0,255,0.95), transparent)",
+                boxShadow: "0 0 20px 8px rgba(160,0,240,0.7), 0 0 60px 20px rgba(120,0,200,0.4)",
+                borderRadius: 4, animation: "lampFlicker 5s infinite", pointerEvents: "none",
+              }} />
+              {/* 네온 파랑 간판 */}
+              <div style={{
+                position: "absolute", top: 12, right: "15%", width: 90, height: 6,
+                background: "linear-gradient(90deg, transparent, rgba(0,180,255,0.9), rgba(40,220,255,1), rgba(0,180,255,0.9), transparent)",
+                boxShadow: "0 0 16px 6px rgba(0,160,240,0.6), 0 0 45px 14px rgba(0,120,200,0.3)",
+                borderRadius: 4, animation: "slowPulse 3.5s infinite", pointerEvents: "none",
+              }} />
+              {/* 바닥 네온 반사 */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
+                background: "linear-gradient(0deg, rgba(100,0,180,0.2) 0%, transparent 100%)",
+                borderRadius: "0 0 24px 24px", pointerEvents: "none",
               }} />
               <div style={{ overflow: "hidden", marginBottom: 16, position: "relative", zIndex: 1 }}>
                 <div style={{
