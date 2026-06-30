@@ -302,6 +302,7 @@ export default function HomePage() {
     { version: "v1.5.1", badgeColor: "#22c55e", items: ["💡 도박 페이지 전면 네온 사인 UI 적용", "👁️ 모바일 글씨 투명화 버그 전면 수정"] },
     { version: "v1.5.2", badgeColor: "#22c55e", items: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"] },
     { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 당근마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
+    { version: "v1.7", badgeColor: "#38bdf8", items: ["📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션", "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도", "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크", "✨ 기관 판매 배너 홀로그램 은박 효과"] },
     { version: "v1.7", badge: "최신", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
   ];
 
