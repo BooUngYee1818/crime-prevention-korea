@@ -7,6 +7,205 @@ import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 import HallOfFame from "@/components/HallOfFame";
 
+// ══ 사기 체험 시뮬레이션 컴포넌트 ══
+const SCAM_SCENARIOS = [
+  {
+    id: "deepvoice",
+    emoji: "📞",
+    tag: "AI 딥보이스",
+    tagColor: "#ef4444",
+    title: "엄마한테 전화가 왔어요",
+    desc: "목소리까지 똑같은 AI 사기. 2024년 가장 빠르게 증가 중.",
+    preview: "엄마: 야 나야, 지금 급한데 200만원만 빌려줄 수 있어?",
+    steps: [
+      { type: "call", from: "엄마 ❤️", msg: "야 나야. 지금 급한데 잠깐만 얘기해도 돼?" },
+      { type: "call", from: "엄마 ❤️", msg: "나 지금 교통사고가 났어. 상대방이 합의금 요구하는데 200만원만 지금 당장 보내줄 수 있어? 나중에 꼭 갚을게." },
+      { type: "choice", question: "어떻게 할까요?", choices: [
+        { label: "바로 200만원 송금", result: "lose" },
+        { label: "일단 끊고 엄마한테 직접 전화", result: "win" },
+        { label: "계좌번호 물어봄", result: "lose" },
+      ]},
+    ],
+    winMsg: "✅ 정답! 전화를 끊고 직접 확인하는 게 정답입니다. AI는 목소리를 복제하지만 실제 상황은 모릅니다.",
+    loseMsg: "💸 당신은 200만원을 잃었습니다. AI가 엄마 목소리를 완벽히 복제한 딥보이스 사기였습니다.",
+  },
+  {
+    id: "usedtrade",
+    emoji: "🥕",
+    tag: "중고거래 사기",
+    tagColor: "#f97316",
+    title: "당근에서 아이패드를 팔아요",
+    desc: "안전결제 링크 위조. 중고거래 사기 피해 연 5만 건 이상.",
+    preview: "구매자: 안전결제로 할게요~ 링크 보내드릴게요 ㅎㅎ",
+    steps: [
+      { type: "chat", from: "구매자김철수", msg: "안녕하세요! 아이패드 아직 있나요? 바로 살게요 ㅎㅎ" },
+      { type: "chat", from: "구매자김철수", msg: "저 직거래는 좀 어렵고요, 안전결제로 하면 될까요? 제가 링크 보내드릴게요~" },
+      { type: "chat", from: "구매자김철수", msg: "https://safe-pay-kr.shop/deal/28471 ← 여기서 판매자 등록하시면 바로 입금돼요!" },
+      { type: "choice", question: "어떻게 할까요?", choices: [
+        { label: "링크 눌러서 계좌 입력", result: "lose" },
+        { label: "당근페이 공식 안전결제로 요청", result: "win" },
+        { label: "그냥 계좌이체로 먼저 보내달라 함", result: "lose" },
+      ]},
+    ],
+    winMsg: "✅ 정답! 외부 링크는 절대 금물. 당근마켓 앱 내 공식 안전결제만 사용해야 합니다.",
+    loseMsg: "💸 개인정보와 계좌가 털렸습니다. 저 링크는 가짜 피싱 사이트였습니다.",
+  },
+  {
+    id: "romance",
+    emoji: "💕",
+    tag: "로맨스 스캠",
+    tagColor: "#ec4899",
+    title: "인스타에서 연락이 왔어요",
+    desc: "친해진 뒤 코인 투자 유도. 출금 불가 → 잠적. 피해액 수억.",
+    preview: "다니엘: 안녕하세요 :) 맞팔해도 될까요?",
+    steps: [
+      { type: "dm", from: "다니엘🇺🇸", avatar: "🧑‍💼", msg: "안녕하세요 :) 한국 팔로워 분들이랑 소통하고 싶어서요. 맞팔 해도 될까요?" },
+      { type: "dm", from: "다니엘🇺🇸", avatar: "🧑‍💼", msg: "저 미국에서 금융 일 하는데요, 요즘 한국 분들이랑 투자 얘기 많이 해요 ㅎㅎ 혹시 코인 투자 관심 있으세요? 지난달에 저 3천만원 벌었어요" },
+      { type: "dm", from: "다니엘🇺🇸", avatar: "🧑‍💼", msg: "제가 쓰는 거래소 초대링크예요. 첫 입금 50만원하면 수익률 보장해드릴 수 있어요 😊" },
+      { type: "choice", question: "어떻게 할까요?", choices: [
+        { label: "50만원 입금해봄", result: "lose" },
+        { label: "더 얘기해보고 나중에 결정", result: "lose" },
+        { label: "차단 + 신고", result: "win" },
+      ]},
+    ],
+    winMsg: "✅ 정답! SNS 모르는 사람의 투자 권유는 100% 사기입니다. 즉시 차단하세요.",
+    loseMsg: "💸 수백만원을 잃었습니다. '다니엘'은 AI가 만든 가짜 프로필이었습니다. 출금 요청하자 잠적.",
+  },
+];
+
+function ScamSimSection({ lang }: { lang: string }) {
+  const [active, setActive] = useState<string | null>(null);
+  const [step, setStep] = useState(0);
+  const [result, setResult] = useState<"win" | "lose" | null>(null);
+  const [shown, setShown] = useState(0);
+
+  const scenario = SCAM_SCENARIOS.find(s => s.id === active);
+
+  useEffect(() => {
+    if (!active) { setStep(0); setResult(null); setShown(0); return; }
+    setStep(0); setResult(null); setShown(0);
+  }, [active]);
+
+  useEffect(() => {
+    if (!scenario) return;
+    const msgs = scenario.steps.filter(s => s.type !== "choice");
+    if (shown < msgs.length) {
+      const t = setTimeout(() => setShown(p => p + 1), 900);
+      return () => clearTimeout(t);
+    }
+  }, [shown, scenario]);
+
+  if (active && scenario) {
+    const msgSteps = scenario.steps.filter(s => s.type !== "choice");
+    const choiceStep = scenario.steps.find(s => s.type === "choice") as any;
+    const allShown = shown >= msgSteps.length;
+
+    return (
+      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+        <div style={{ width: "100%", maxWidth: 420, background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.5)" }}>
+          {/* 헤더 */}
+          <div style={{ background: scenario.id === "deepvoice" ? "#1a1a1a" : scenario.id === "usedtrade" ? "#ff6f0f" : "#833ab4", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{scenario.emoji}</div>
+              <div>
+                <p style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>{scenario.steps[0].from}</p>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 11 }}>{scenario.tag}</p>
+              </div>
+            </div>
+            <button onClick={() => setActive(null)} style={{ background: "none", border: "none", color: "#fff", fontSize: 20, cursor: "pointer" }}>✕</button>
+          </div>
+
+          {/* 채팅창 */}
+          <div style={{ background: scenario.id === "usedtrade" ? "#b2c7d9" : scenario.id === "romance" ? "#f8f0ff" : "#1a1a1a", minHeight: 300, padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+            {msgSteps.slice(0, shown).map((s: any, i: number) => (
+              <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#ddd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>{s.avatar || scenario.emoji}</div>
+                <div style={{ background: scenario.id === "deepvoice" ? "#2a2a2a" : "#fff", borderRadius: "0 12px 12px 12px", padding: "10px 14px", maxWidth: "78%", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+                  <p style={{ fontSize: 13, lineHeight: 1.6, color: scenario.id === "deepvoice" ? "#fff" : "#1a1a1a" }}>{s.msg}</p>
+                </div>
+              </div>
+            ))}
+            {shown < msgSteps.length && (
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#ddd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{scenario.emoji}</div>
+                <div style={{ background: "#fff", borderRadius: "0 12px 12px 12px", padding: "10px 14px" }}>
+                  <p style={{ fontSize: 13, color: "#999" }}>입력 중...</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 선택지 or 결과 */}
+          <div style={{ padding: 16, background: "#f8f8f8", borderTop: "1px solid #eee" }}>
+            {!result && allShown && (
+              <>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 10 }}>👆 {choiceStep.question}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {choiceStep.choices.map((c: any, i: number) => (
+                    <button key={i} onClick={() => setResult(c.result)} style={{
+                      padding: "11px 16px", borderRadius: 10, border: "1.5px solid #e5e7eb",
+                      background: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600,
+                      color: "#1a1a2e", textAlign: "left", transition: "all 0.15s",
+                    }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#f3f0ff")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "#fff")}
+                    >{c.label}</button>
+                  ))}
+                </div>
+              </>
+            )}
+            {result && (
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 40, marginBottom: 8 }}>{result === "win" ? "🛡️" : "😱"}</div>
+                <p style={{ fontSize: 13, lineHeight: 1.7, color: result === "win" ? "#166534" : "#991b1b", fontWeight: 700, marginBottom: 12 }}>
+                  {result === "win" ? scenario.winMsg : scenario.loseMsg}
+                </p>
+                <button onClick={() => setActive(null)} style={{
+                  padding: "10px 24px", borderRadius: 10, border: "none",
+                  background: result === "win" ? "#16a34a" : "#dc2626",
+                  color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer",
+                }}>다른 사기 체험하기</button>
+              </div>
+            )}
+            {!allShown && !result && (
+              <p style={{ textAlign: "center", color: "#9ca3af", fontSize: 12 }}>메시지 수신 중...</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+      {SCAM_SCENARIOS.map(s => (
+        <div key={s.id} onClick={() => setActive(s.id)} style={{
+          background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 16, padding: 24, cursor: "pointer",
+          transition: "all 0.2s ease",
+        }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = s.tagColor + "66"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+            <span style={{ fontSize: 28 }}>{s.emoji}</span>
+            <span style={{ background: s.tagColor + "22", color: s.tagColor, fontSize: 10, fontWeight: 800, padding: "3px 8px", borderRadius: 20, letterSpacing: 1 }}>{s.tag}</span>
+          </div>
+          <h3 style={{ color: "#fff", fontWeight: 800, fontSize: 16, marginBottom: 8 }}>{s.title}</h3>
+          <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.6, marginBottom: 16 }}>{s.desc}</p>
+          <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 12px", marginBottom: 16 }}>
+            <p style={{ color: "#9ca3af", fontSize: 11, fontStyle: "italic" }}>"{s.preview}"</p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: s.tagColor, fontSize: 12, fontWeight: 700 }}>
+            <span>체험해보기</span>
+            <span>→</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ── 무지개 글로우 keyframe ──
 const RAINBOW_STYLE = `
 @keyframes rainbow-glow {
@@ -2075,6 +2274,28 @@ export default function HomePage() {
               )}
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* ══ 사기 체험 시뮬레이션 섹션 ══ */}
+      <section style={{ background: "linear-gradient(180deg, #0a0a0f 0%, #0f0a1a 100%)", padding: "80px 40px", overflow: "hidden", position: "relative" }}>
+        {/* 배경 글로우 */}
+        <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 300, background: "radial-gradient(ellipse, rgba(220,38,38,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 900, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          {/* 헤더 */}
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ color: "#ef4444", fontSize: 11, fontWeight: 900, letterSpacing: 4, marginBottom: 12 }}>⚠️ SCAM SIMULATION</p>
+            <h2 style={{ color: "#fff", fontSize: 34, fontWeight: 900, letterSpacing: -1, marginBottom: 14, lineHeight: 1.3 }}>
+              당신은 사기를 구별할 수 있나요?
+            </h2>
+            <p style={{ color: "#94a3b8", fontSize: 15, lineHeight: 1.8 }}>
+              지금 이 순간도 수천 명이 당하고 있습니다.<br />
+              <strong style={{ color: "#fbbf24" }}>직접 체험해보고</strong> 수법을 뇌에 새기세요.
+            </p>
+          </div>
+
+          {/* 3개 체험 카드 */}
+          <ScamSimSection lang={lang} />
         </div>
       </section>
 
