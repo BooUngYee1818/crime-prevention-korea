@@ -2766,9 +2766,10 @@ export default function HomePage() {
               </p>
             </div>
             <div style={{
-              background: "rgba(255,255,255,0.45)", border: "1px solid rgba(180,180,200,0.5)",
-              borderRadius: 20, padding: "28px 32px", minWidth: 260, flexShrink: 0,
+              background: "#3a3a4a", border: "1px solid #52526a",
+              borderRadius: 16, padding: "28px 32px", minWidth: 260, flexShrink: 0,
               position: "relative", zIndex: 2,
+              boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
             }}>
               <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 16 }}>
                 {lang === "ko" ? "문의 · 도입 연락처" : lang === "en" ? "Contact & Inquiry" : lang === "ja" ? "お問い合わせ" : lang === "zh" ? "联系方式" : lang === "vi" ? "Liên hệ" : lang === "es" ? "Contacto" : "Contact & Inquiry"}
