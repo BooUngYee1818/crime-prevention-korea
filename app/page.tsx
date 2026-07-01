@@ -2246,7 +2246,7 @@ export default function HomePage() {
 
           {/* 자살 통계 강조 배너 */}
           <div style={{
-            background: "linear-gradient(135deg, #1c0d2e, #2a1a3a)",
+            background: "linear-gradient(135deg, #2a1645, #3a2550)",
             borderRadius: 20, padding: "28px 36px",
             display: "flex", alignItems: "center", gap: 32, marginBottom: 40,
             flexWrap: "wrap",
@@ -3251,8 +3251,8 @@ export default function HomePage() {
         {/* ── 브랜드 팔레트 ── */}
         <div style={{ borderBottom: "1px solid #1e3028", padding: "40px 40px 32px" }}>
           <div style={{ maxWidth: 1140, margin: "0 auto" }}>
-            <p style={{ color: "#4a6a55", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 14, fontFamily: "monospace" }}>BRAND COLORS</p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <p style={{ color: "#4a6a55", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 6, fontFamily: "monospace" }}>BRAND COLORS — 푸터 팔레트</p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
               {[
                 { hex: "#D7E3DF", label: "Mist" },
                 { hex: "#C7DCD4", label: "Sage" },
@@ -3267,6 +3267,27 @@ export default function HomePage() {
                   <div style={{ width: 56, height: 56, borderRadius: 12, background: c.hex, marginBottom: 5, boxShadow: `0 2px 8px ${c.hex}44` }} />
                   <p style={{ color: "#4a6a55", fontSize: 9, fontFamily: "monospace", marginBottom: 2 }}>{c.label}</p>
                   <p style={{ color: "#6b8a75", fontSize: 8.5, fontFamily: "monospace", letterSpacing: 0.5 }}>{c.hex.toUpperCase()}</p>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ color: "#534AB7", fontSize: 10, fontWeight: 700, letterSpacing: 2, marginBottom: 6, fontFamily: "monospace" }}>PERSONAL COLORS — 사이트 대표 컬러</p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {[
+                { hex: "#534AB7", label: "Main", desc: "메인 퍼플" },
+                { hex: "#7c3aed", label: "Accent", desc: "강조 바이올렛" },
+                { hex: "#22c55e", label: "Safe", desc: "안전·예방 그린" },
+                { hex: "#ef4444", label: "Danger", desc: "위험·범죄 레드" },
+                { hex: "#f59e0b", label: "Warning", desc: "경고 앰버" },
+                { hex: "#f472b6", label: "New", desc: "최신 뱃지 핑크" },
+                { hex: "#38bdf8", label: "Info", desc: "정보 스카이블루" },
+                { hex: "#0d0520", label: "BG", desc: "메인 배경색" },
+              ].map((c) => (
+                <div key={c.hex} style={{ textAlign: "center" }}>
+                  <div style={{ width: 56, height: 56, borderRadius: 12, background: c.hex, marginBottom: 5, boxShadow: `0 2px 10px ${c.hex}55`, border: c.hex === "#0d0520" ? "1px solid #2a2a4a" : "none" }} />
+                  <p style={{ color: "#9161b2", fontSize: 9, fontFamily: "monospace", marginBottom: 1, fontWeight: 700 }}>{c.label}</p>
+                  <p style={{ color: "#6b6b9a", fontSize: 7.5, fontFamily: "monospace", letterSpacing: 0.3, marginBottom: 1 }}>{c.hex.toUpperCase()}</p>
+                  <p style={{ color: "#4a4a7a", fontSize: 7, fontFamily: "monospace" }}>{c.desc}</p>
                 </div>
               ))}
             </div>
