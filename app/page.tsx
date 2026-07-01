@@ -3249,8 +3249,9 @@ export default function HomePage() {
                 { hex: "#c58dc6", label: "Orchid" },
               ].map((c) => (
                 <div key={c.hex} style={{ textAlign: "center" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: c.hex, marginBottom: 4, boxShadow: `0 2px 8px ${c.hex}44` }} />
-                  <p style={{ color: "#4a6a55", fontSize: 9, fontFamily: "monospace" }}>{c.label}</p>
+                  <div style={{ width: 56, height: 56, borderRadius: 12, background: c.hex, marginBottom: 5, boxShadow: `0 2px 8px ${c.hex}44` }} />
+                  <p style={{ color: "#4a6a55", fontSize: 9, fontFamily: "monospace", marginBottom: 2 }}>{c.label}</p>
+                  <p style={{ color: "#6b8a75", fontSize: 8.5, fontFamily: "monospace", letterSpacing: 0.5 }}>{c.hex.toUpperCase()}</p>
                 </div>
               ))}
             </div>
