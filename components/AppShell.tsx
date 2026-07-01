@@ -34,17 +34,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // 모바일 유저에게 PC 권장 토스트 (팝업 끝난 후 약 4.5초 뒤)
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
-    if (!isMobile) return;
-    const timer = setTimeout(() => {
-      setShowMobileToast(true);
-      setTimeout(() => setShowMobileToast(false), 2500);
-    }, 4500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
     function onKey(e: KeyboardEvent) {
       setEggStep(prev => {
         const next = prev + 1;
@@ -62,34 +51,44 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   function handleProfileComplete(_profile: UserProfile) {
     setShowProfile(false);
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (!isMobile) return;
+    setTimeout(() => {
+      setShowMobileToast(true);
+      setTimeout(() => setShowMobileToast(false), 2800);
+    }, 300);
   }
 
   return (
     <>
       {children}
 
-      {/* 모바일 PC 권장 토스트 */}
+      {/* 모바일 PC 권장 팝업 */}
       <style>{`
-        @keyframes toast-in  { from { opacity:0; transform:translateY(16px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
-        @keyframes toast-out { from { opacity:1; transform:translateY(0) scale(1); } to { opacity:0; transform:translateY(-10px) scale(0.95); } }
+        @keyframes mob-in  { 0%{opacity:0;transform:translate(-50%,-50%) scale(0.7)} 100%{opacity:1;transform:translate(-50%,-50%) scale(1)} }
+        @keyframes mob-out { 0%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.08)} }
       `}</style>
       {showMobileToast && (
         <div style={{
-          position: "fixed", top: 72, left: "50%", transform: "translateX(-50%)",
-          zIndex: 99999, pointerEvents: "none",
-          animation: "toast-in 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards",
+          position: "fixed", inset: 0, zIndex: 99999,
+          background: "rgba(0,0,0,0.65)", backdropFilter: "blur(6px)",
+          animation: "mob-in 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards",
         }}>
           <div style={{
-            background: "rgba(15,5,30,0.96)", backdropFilter: "blur(16px)",
-            border: "1px solid #7c3aed60",
-            borderRadius: 16, padding: "12px 20px",
-            display: "flex", alignItems: "center", gap: 10,
-            boxShadow: "0 8px 32px rgba(100,40,200,0.35)",
-            whiteSpace: "nowrap",
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            background: "linear-gradient(135deg,#1a0535,#2d1060)",
+            border: "1.5px solid #7c3aed80",
+            borderRadius: 24, padding: "36px 32px",
+            textAlign: "center", width: "82vw", maxWidth: 340,
+            boxShadow: "0 24px 80px rgba(100,40,200,0.5)",
           }}>
-            <span style={{ fontSize: 20 }}>💻</span>
-            <p style={{ color: "#e9d5ff", fontSize: 13, fontWeight: 700, margin: 0 }}>
-              더 나은 체험을 위해 <span style={{ color: "#c084fc" }}>PC 버전</span>을 이용해 주세요!
+            <div style={{ fontSize: 52, marginBottom: 16 }}>💻</div>
+            <p style={{ color: "#e9d5ff", fontSize: 18, fontWeight: 900, lineHeight: 1.5, margin: "0 0 10px" }}>
+              데스크톱 버전으로<br/>변경해 주세요!
+            </p>
+            <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 500, lineHeight: 1.7, margin: 0 }}>
+              모바일에서는 일부 체험이<br/>불편할 수 있어요.
             </p>
           </div>
         </div>
