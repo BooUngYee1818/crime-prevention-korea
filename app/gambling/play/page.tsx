@@ -609,6 +609,7 @@ function SnailGame({ balance, onResult, round, streak }: { balance:number; onRes
   const [winner, setWinner] = useState<number|null>(null);
   const [nearFinish, setNearFinish] = useState(false);
   const animRef = useRef<ReturnType<typeof setInterval>|null>(null);
+  const snd = useSound();
 
   const startRace = useCallback(() => {
     if (pick===null||betAmount>balance) return;
@@ -627,6 +628,9 @@ function SnailGame({ balance, onResult, round, streak }: { balance:number; onRes
       if(pos[winnerIdx]>=100){
         clearInterval(animRef.current!);
         setNearFinish(false); setWinner(winnerIdx); setPhase("result");
+        snd.finish();
+        if(winnerIdx===pick) setTimeout(()=>snd.win(), 200);
+        else setTimeout(()=>snd.lose(), 100);
         onResult(winnerIdx===pick ? Math.floor(betAmount*5) : -betAmount);
       }
     },80);
@@ -1063,10 +1067,12 @@ function SlotGame({ balance, onResult, round, streak }: { balance:number; onResu
   const [disp, setDisp] = useState<string[]>(["❓","❓","❓"]);
   const [mult, setMult] = useState(0);
   const ivsRef = useRef<ReturnType<typeof setInterval>[]>([]);
+  const snd = useSound();
 
   const spin = useCallback(() => {
     if(betAmount>balance) return;
     setPhase("spinning"); setMult(0);
+    snd.slotSpin();
     const shouldWin = Math.random()<getWinRate(round, streak);
     let final:string[];
     if(shouldWin){
@@ -1091,7 +1097,14 @@ function SlotGame({ balance, onResult, round, streak }: { balance:number; onResu
       ivsRef.current.push(iv);
       setTimeout(()=>{
         clearInterval(iv); cur[i]=final[i]; setDisp([...cur]);
-        if(i===2){ const m=calcSlotWin(final); setMult(m); setPhase("result"); onResult(m>0?Math.floor(betAmount*m):-betAmount); }
+        snd.reelStop();
+        if(i===2){
+          const m=calcSlotWin(final); setMult(m); setPhase("result");
+          if(m>=3) { setTimeout(()=>snd.jackpot(), 100); setTimeout(()=>snd.coinDrop(), 400); }
+          else if(m>0) { setTimeout(()=>snd.win(), 100); setTimeout(()=>snd.coinDrop(), 300); }
+          else snd.lose();
+          onResult(m>0?Math.floor(betAmount*m):-betAmount);
+        }
       },stopMs);
     });
   },[betAmount,balance,round,onResult]);
@@ -1216,6 +1229,26 @@ function useSound() {
       playTone(150, "sawtooth", 0.3, 0.5, 0);
       playTone(200, "square", 0.2, 0.4, 0.1);
       playTone(400, "triangle", 0.4, 0.6, 0.3);
+    },
+    // 코인 떨어지는 소리 (잭팟 당첨 후)
+    coinDrop: () => {
+      for (let i = 0; i < 18; i++) {
+        const freq = 600 + Math.random() * 800;
+        playTone(freq, "triangle", 0.06, 0.18, i * 0.06 + Math.random() * 0.02);
+      }
+    },
+    // 릴 잠기는 소리 (슬롯 각 릴 멈출 때)
+    reelStop: () => {
+      playTone(280, "square", 0.04, 0.25, 0);
+      playTone(420, "sine",   0.06, 0.12, 0.03);
+    },
+    // 버튼 클릭 (가벼운 틱)
+    tick: () => {
+      playTone(1400, "sine", 0.02, 0.08, 0);
+    },
+    // 달팽이 결승선 통과
+    finish: () => {
+      [660, 880, 1100, 1320].forEach((f, i) => playTone(f, "triangle", 0.18, 0.3, i * 0.07));
     },
   };
 }
@@ -1686,7 +1719,7 @@ function PlayContent() {
   const winRate = Math.round(getWinRate(round) * 100);
 
   return (
-    <div style={{ minHeight:"100vh", background:"#130c1c", color:"#fff", position:"relative" }}>
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0b2a17 0%,#0f3d1e 35%,#1a3000 65%,#2a1a00 100%)", color:"#fff", position:"relative" }}>
       <style>{`
         @keyframes streakIn { from { opacity:0; transform:scale(0.8) translateY(-10px); } to { opacity:1; transform:scale(1) translateY(0); } }
         @keyframes gold-shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
