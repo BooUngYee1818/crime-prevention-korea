@@ -26,10 +26,22 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [statsOpen, setStatsOpen] = useState(false);
   const [hofOpen, setHofOpen] = useState(false);
   const [showExpMenu, setShowExpMenu] = useState(false);
+  const [showMobileToast, setShowMobileToast] = useState(false);
 
   useEffect(() => {
     // 매 방문마다 성별/나이 입력창 표시 (통계에 반영)
     setShowProfile(true);
+  }, []);
+
+  useEffect(() => {
+    // 모바일 유저에게 PC 권장 토스트 (팝업 끝난 후 약 4.5초 뒤)
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (!isMobile) return;
+    const timer = setTimeout(() => {
+      setShowMobileToast(true);
+      setTimeout(() => setShowMobileToast(false), 2500);
+    }, 4500);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -55,6 +67,33 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
+
+      {/* 모바일 PC 권장 토스트 */}
+      <style>{`
+        @keyframes toast-in  { from { opacity:0; transform:translateY(16px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+        @keyframes toast-out { from { opacity:1; transform:translateY(0) scale(1); } to { opacity:0; transform:translateY(-10px) scale(0.95); } }
+      `}</style>
+      {showMobileToast && (
+        <div style={{
+          position: "fixed", top: 72, left: "50%", transform: "translateX(-50%)",
+          zIndex: 99999, pointerEvents: "none",
+          animation: "toast-in 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards",
+        }}>
+          <div style={{
+            background: "rgba(15,5,30,0.96)", backdropFilter: "blur(16px)",
+            border: "1px solid #7c3aed60",
+            borderRadius: 16, padding: "12px 20px",
+            display: "flex", alignItems: "center", gap: 10,
+            boxShadow: "0 8px 32px rgba(100,40,200,0.35)",
+            whiteSpace: "nowrap",
+          }}>
+            <span style={{ fontSize: 20 }}>💻</span>
+            <p style={{ color: "#e9d5ff", fontSize: 13, fontWeight: 700, margin: 0 }}>
+              더 나은 체험을 위해 <span style={{ color: "#c084fc" }}>PC 버전</span>을 이용해 주세요!
+            </p>
+          </div>
+        </div>
+      )}
 
       {showProfile && (
         <ProfileModal onComplete={handleProfileComplete} />
