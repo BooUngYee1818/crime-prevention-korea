@@ -280,6 +280,8 @@ export default function HomePage() {
   const [showChangelog, setShowChangelog] = useState(false);
   const changelogScrollRef = useRef<HTMLDivElement>(null);
   const changelogTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const changelogSectionRef = useRef<HTMLDivElement>(null);
+  const [changelogBounce, setChangelogBounce] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const instCardRef = useRef<HTMLDivElement>(null);
   const [holoPos, setHoloPos] = useState({ x: 50, y: 50 });
@@ -354,6 +356,21 @@ export default function HomePage() {
     setShowChangelog(false);
     if (changelogTimerRef.current) { clearInterval(changelogTimerRef.current); changelogTimerRef.current = null; }
   };
+
+  useEffect(() => {
+    if (!changelogSectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setChangelogBounce(true);
+          setTimeout(() => setChangelogBounce(false), 900);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(changelogSectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     // 모바일: 자이로스코프
@@ -725,9 +742,20 @@ export default function HomePage() {
               background: showChangelog ? "#2d1060" : "#1a0a2e", color: "#c58dc6",
               border: `1px solid ${showChangelog ? "#7c3aed" : "#3a1a5e"}`, fontSize: 13, fontWeight: 700,
               cursor: "pointer", transition: "all 0.15s",
+              animation: changelogBounce ? "cl-bounce 0.9s cubic-bezier(0.36,0.07,0.19,0.97)" : "none",
             }}>
               <span style={{ fontSize: 11 }}>📋</span> 업데이트 내역
             </button>
+            <style>{`
+              @keyframes cl-bounce {
+                0%   { transform: translateY(0); }
+                20%  { transform: translateY(10px); box-shadow: 0 8px 24px #7c3aed55; }
+                40%  { transform: translateY(-4px); }
+                60%  { transform: translateY(6px); }
+                80%  { transform: translateY(-2px); }
+                100% { transform: translateY(0); }
+              }
+            `}</style>
             {/* 팝업 */}
             <div style={{
               position: "absolute", top: "calc(100% + 10px)", right: 0,
@@ -1050,7 +1078,7 @@ export default function HomePage() {
           </div>
 
           {/* ── 업데이트 내역 ── */}
-          <div style={{ marginTop: 56 }}>
+          <div ref={changelogSectionRef} style={{ marginTop: 56 }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
               <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>📋 업데이트 내역</h2>
