@@ -1083,44 +1083,80 @@ export default function HomePage() {
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
               <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>📋 업데이트 내역</h2>
             </div>
-            <div style={{ position: "relative", maxWidth: 600, margin: "0 auto", overflow: "hidden", maxHeight: 420 }}>
-              {/* 항목 목록 */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                {[...CHANGELOGS].reverse().map((log, i) => (
-                  <div key={i} style={{
-                    display: "flex", gap: 14, padding: "14px 0",
-                    borderBottom: "1px solid #1e0a36",
-                    filter: i >= 4 ? `blur(${(i - 3) * 2}px)` : "none",
-                    opacity: i >= 4 ? Math.max(0, 1 - (i - 3) * 0.35) : 1,
-                    transition: "filter 0.2s",
-                    pointerEvents: i >= 4 ? "none" : "auto",
-                  }}>
-                    <div style={{
-                      flexShrink: 0, width: 66,
-                      background: `${log.badgeColor}18`, border: `1px solid ${log.badgeColor}55`,
-                      borderRadius: 10, padding: "5px 4px", textAlign: "center", alignSelf: "flex-start",
-                    }}>
-                      <span style={{ color: log.badgeColor, fontSize: 12, fontWeight: 800, display: "block" }}>{log.version}</span>
-                      {log.badge && <span style={{ color: "#f472b6", fontSize: 9, fontWeight: 700, display: "block", marginTop: 1 }}>{log.badge}</span>}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      {log.items.map((item, j) => (
-                        <p key={j} style={{
-                          color: i === 0 ? "#e9d5ff" : "#9ca3af",
-                          fontSize: 13, lineHeight: 1.75, margin: "0 0 1px",
-                          fontWeight: i === 0 ? 600 : 400,
-                        }}>{item}</p>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* 하단 블러 + 페이드 오버레이 */}
+            <style>{`
+              @keyframes cl-bounce {
+                0%{transform:translateY(0)} 20%{transform:translateY(10px);box-shadow:0 8px 24px #7c3aed55}
+                40%{transform:translateY(-4px)} 60%{transform:translateY(6px)} 80%{transform:translateY(-2px)} 100%{transform:translateY(0)}
+              }
+              .cl-btn:hover { background: linear-gradient(135deg,#3b0764,#6d28d9) !important; transform: translateY(-2px); box-shadow: 0 12px 40px #7c3aed60 !important; }
+            `}</style>
+            <div
+              style={{ position: "relative", maxWidth: 600, margin: "0 auto" }}
+              onMouseEnter={() => setChangelogBounce(true)}
+              onMouseLeave={() => setChangelogBounce(false)}
+            >
+              {/* 항목 목록 — 호버 시 maxHeight 확장 */}
               <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: 120,
-                background: "linear-gradient(to top, #0d0520 30%, transparent 100%)",
-                pointerEvents: "none",
-              }} />
+                overflow: "hidden",
+                maxHeight: changelogBounce ? 2000 : 420,
+                transition: "max-height 0.7s cubic-bezier(0.4,0,0.2,1)",
+              }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                  {[...CHANGELOGS].reverse().map((log, i) => (
+                    <div key={i} style={{
+                      display: "flex", gap: 14, padding: "14px 0",
+                      borderBottom: "1px solid #1e0a36",
+                    }}>
+                      <div style={{
+                        flexShrink: 0, width: 66,
+                        background: `${log.badgeColor}18`, border: `1px solid ${log.badgeColor}55`,
+                        borderRadius: 10, padding: "5px 4px", textAlign: "center", alignSelf: "flex-start",
+                      }}>
+                        <span style={{ color: log.badgeColor, fontSize: 12, fontWeight: 800, display: "block" }}>{log.version}</span>
+                        {log.badge && <span style={{ color: "#f472b6", fontSize: 9, fontWeight: 700, display: "block", marginTop: 1 }}>{log.badge}</span>}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        {log.items.map((item, j) => (
+                          <p key={j} style={{
+                            color: i === 0 ? "#e9d5ff" : "#9ca3af",
+                            fontSize: 13, lineHeight: 1.75, margin: "0 0 1px",
+                            fontWeight: i === 0 ? 600 : 400,
+                          }}>{item}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 하단 페이드 + 큰 버튼 */}
+              <div style={{
+                position: "relative", marginTop: 0,
+                background: "linear-gradient(to top, #0d0520 40%, transparent 100%)",
+                paddingTop: changelogBounce ? 0 : 60,
+                height: changelogBounce ? 0 : "auto",
+                overflow: "hidden",
+                transition: "height 0.5s, padding 0.5s",
+                pointerEvents: changelogBounce ? "none" : "auto",
+              }}>
+                <button
+                  className="cl-btn"
+                  onMouseEnter={() => setChangelogBounce(true)}
+                  style={{
+                    display: "block", width: "100%",
+                    padding: "18px 0",
+                    background: "linear-gradient(135deg,#2d1060,#4c1d95)",
+                    border: "1px solid #7c3aed55",
+                    borderRadius: 18,
+                    color: "#c4b5fd", fontSize: 15, fontWeight: 800,
+                    cursor: "pointer", letterSpacing: 0.5,
+                    boxShadow: "0 4px 24px #7c3aed30",
+                    transition: "all 0.25s",
+                  }}
+                >
+                  📋 전체 업데이트 내역 보기 &nbsp;↑
+                </button>
+              </div>
             </div>
           </div>
 
