@@ -2693,7 +2693,7 @@ export default function HomePage() {
             onMouseEnter={() => setIsHoveringCard(true)}
             onMouseLeave={() => setIsHoveringCard(false)}
             style={{
-              background: "linear-gradient(135deg, #b8b8c8 0%, #d4d4e4 30%, #c0c0d0 55%, #d8d8e8 80%, #b4b4c4 100%)",
+              background: "linear-gradient(135deg, #c2c2d6 0%, #dddded 30%, #cacacf 55%, #e2e2f2 80%, #bebebd 100%)",
               borderRadius: 24, padding: "40px 44px",
               display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center",
               position: "relative", overflow: "hidden",

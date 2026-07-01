@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import ProfileModal from "./ProfileModal";
 import StatsModal from "./StatsModal";
 import GratitudeCard from "./GratitudeCard";
@@ -19,6 +19,8 @@ const KONAMI = [
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { lang } = useLang();
   const router = useRouter();
+  const pathname = usePathname();
+  const isMainPage = pathname === "/";
   const [showProfile, setShowProfile] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showEgg, setShowEgg] = useState(false);
@@ -246,30 +248,34 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           .hof-pill.open, .hof-pill:hover { width: 130px; }
         }
       `}</style>
-      <button
-        className={`stats-pill${statsOpen ? " open" : ""}`}
-        onClick={() => { setShowStats(true); setStatsOpen(false); }}
-        onMouseEnter={() => setStatsOpen(true)}
-        onMouseLeave={() => setStatsOpen(false)}
-        onTouchStart={() => setStatsOpen(true)}
-        onTouchEnd={() => setTimeout(() => setStatsOpen(false), 600)}
-      >
-        <span className="stats-pill-text">{t("appshell_stats", lang)}</span>
-        <span className="stats-pill-icon">📊</span>
-      </button>
+      {isMainPage && (
+        <>
+          <button
+            className={`stats-pill${statsOpen ? " open" : ""}`}
+            onClick={() => { setShowStats(true); setStatsOpen(false); }}
+            onMouseEnter={() => setStatsOpen(true)}
+            onMouseLeave={() => setStatsOpen(false)}
+            onTouchStart={() => setStatsOpen(true)}
+            onTouchEnd={() => setTimeout(() => setStatsOpen(false), 600)}
+          >
+            <span className="stats-pill-text">{t("appshell_stats", lang)}</span>
+            <span className="stats-pill-icon">📊</span>
+          </button>
 
-      {/* 왕관 버튼 — 명예의 전당으로 스크롤 */}
-      <button
-        className={`hof-pill${hofOpen ? " open" : ""}`}
-        onClick={() => { document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" }); setHofOpen(false); }}
-        onMouseEnter={() => setHofOpen(true)}
-        onMouseLeave={() => setHofOpen(false)}
-        onTouchStart={() => setHofOpen(true)}
-        onTouchEnd={() => setTimeout(() => setHofOpen(false), 600)}
-      >
-        <span className="hof-pill-icon">👑</span>
-        <span className="hof-pill-text">{t("appshell_hof", lang)}</span>
-      </button>
+          {/* 왕관 버튼 — 명예의 전당으로 스크롤 */}
+          <button
+            className={`hof-pill${hofOpen ? " open" : ""}`}
+            onClick={() => { document.getElementById("hall-of-fame")?.scrollIntoView({ behavior: "smooth" }); setHofOpen(false); }}
+            onMouseEnter={() => setHofOpen(true)}
+            onMouseLeave={() => setHofOpen(false)}
+            onTouchStart={() => setHofOpen(true)}
+            onTouchEnd={() => setTimeout(() => setHofOpen(false), 600)}
+          >
+            <span className="hof-pill-icon">👑</span>
+            <span className="hof-pill-text">{t("appshell_hof", lang)}</span>
+          </button>
+        </>
+      )}
 
       {/* 🥚 이스터에그 — Konami 코드(↑↑↓↓←→←→BA) 입력 시 등장 */}
       {showEgg && (
