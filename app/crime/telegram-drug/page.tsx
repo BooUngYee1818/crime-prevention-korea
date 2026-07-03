@@ -103,7 +103,6 @@ export default function TelegramDrugPage() {
       openingMessage="안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊"
       header={{ icon:"👤", name:"딜러", sub:"● 온라인", badge:"🔒 암호화됨", badgeColor:"#c4b5fd", bg:"#120020" }}
       userBubbleColor="#4c1d95"
-      scamBubbleColor="#120020"
       placeholder="메시지를 입력하세요..."
       maxTurns={5}
       onComplete={() => setPhase("deal")}

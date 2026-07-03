@@ -113,7 +113,6 @@ export default function DnaScamPage() {
       openingMessage="🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!"
       header={{ icon:"🧬", name:"GenAI Lab Assistant", sub:"● 온라인", bg:"#0a1628" }}
       userBubbleColor="#1d4ed8"
-      scamBubbleColor="#0f2040"
       placeholder="메시지를 입력하세요..."
       maxTurns={5}
       onComplete={() => setPhase("blackmail")}

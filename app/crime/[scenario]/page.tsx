@@ -1917,32 +1917,34 @@ export default function ScenarioPage() {
       {/* ══ 대화 ══ */}
       {(phase === "chat" || phase === "sent-animation") && (
         <>
-          {/* 채팅 헤더 - 카카오톡/문자/전화 스타일 */}
+          {/* 채팅 헤더 */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12,
-            padding: "48px 16px 12px", flexShrink: 0, position: "relative",
+            padding: "48px 16px 14px", flexShrink: 0, position: "relative",
             background: chatCfg.type === "kakao" ? "#FEE500"
-              : chatCfg.type === "sms" ? "#1c1c1e"
-              : "#1a2e1a",
-            borderBottom: chatCfg.type === "kakao" ? "none" : "1px solid #2a2a2a",
+              : chatCfg.type === "sms"  ? "#f2f2f7"
+              : "#e8f5e9",
+            borderBottom: "1px solid rgba(0,0,0,0.08)",
+            boxShadow: "0 1px 8px rgba(0,0,0,0.06)",
           }}>
             <SimDot />
             <button
               onClick={() => router.push("/")}
               style={{ background: "none", border: "none", cursor: "pointer", padding: 4,
-                color: chatCfg.type === "kakao" ? "#3a2e00" : "#888" }}
+                color: chatCfg.type === "kakao" ? "#3a2e00" : "#555" }}
             >
               <ArrowLeft size={20} />
             </button>
             <div style={{
-              width: 36, height: 36, borderRadius: "50%",
-              background: chatCfg.type === "kakao" ? "#3a2e0022" : "#2a2a2a",
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
+              width: 38, height: 38, borderRadius: "50%",
+              background: chatCfg.type === "kakao" ? "#fff8" : "rgba(0,0,0,0.08)",
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
             }}>{data.icon}</div>
             <div style={{ flex: 1 }}>
               <p style={{
                 fontWeight: 700, fontSize: 15,
-                color: chatCfg.type === "kakao" ? "#1a1100" : "#fff",
+                color: chatCfg.type === "kakao" ? "#1a1100" : "#1a1a1a",
               }}>{chatCfg.sender}</p>
               {chatCfg.senderSub && (
                 <p style={{
@@ -1955,43 +1957,49 @@ export default function ScenarioPage() {
 
           {/* 교육용 상단 배너 */}
           <div style={{
-            margin: "8px 12px 0", padding: "8px 12px",
-            background: "#0a1628", border: "0.5px solid #1e3a5f", borderRadius: 10,
+            margin: "10px 12px 0", padding: "9px 13px",
+            background: "linear-gradient(135deg,#eff6ff,#dbeafe)",
+            border: "1px solid #bfdbfe", borderRadius: 12,
             display: "flex", alignItems: "center", gap: 8, flexShrink: 0,
           }}>
-            <ShieldAlert size={13} color="#60a5fa" style={{ flexShrink: 0 }} />
-            <p style={{ color: "#4b7ab5", fontSize: 11, lineHeight: 1.4 }}>
-              <strong style={{ color: "#60a5fa" }}>시뮬레이션</strong> — 실제 돈을 보내거나 어딘가로 이동하지 마세요.
-              의심스러우면 <strong style={{ color: "#fff" }}>182</strong>로 신고하세요.
+            <ShieldAlert size={13} color="#3b82f6" style={{ flexShrink: 0 }} />
+            <p style={{ color: "#1d4ed8", fontSize: 11, lineHeight: 1.4 }}>
+              <strong>시뮬레이션</strong> — 실제 돈을 보내거나 어딘가로 이동하지 마세요.
+              의심스러우면 <strong>182</strong>로 신고하세요.
             </p>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
+          {/* 메시지 목록 */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: 10, background: chatCfg.type === "kakao" ? "#b2c7d9" : "#f7f7f7" }}>
             {messages.map((msg, i) => (
               msg.role === "system" ? (
-                <div key={i} className="flex justify-center my-2">
+                <div key={i} style={{ display: "flex", justifyContent: "center", margin: "4px 0" }}>
                   <div style={{
-                    background: "linear-gradient(135deg, #052e16, #14532d)",
-                    border: "1.5px solid #22c55e88",
-                    borderRadius: 16, padding: "12px 16px",
+                    background: "linear-gradient(135deg,#dcfce7,#bbf7d0)",
+                    border: "1.5px solid #86efac",
+                    borderRadius: 16, padding: "12px 18px",
                     maxWidth: "88%", textAlign: "center",
-                    animation: "fadeIn 0.5s ease",
                   }}>
-                    <p style={{ color: "#4ade80", fontSize: 14, fontWeight: 700, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+                    <p style={{ color: "#166534", fontSize: 13, fontWeight: 700, lineHeight: 1.6, whiteSpace: "pre-line" }}>
                       {msg.content}
                     </p>
                   </div>
                 </div>
               ) : (
-                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-end", gap: 6 }}>
                   {msg.role === "criminal" && (
-                    <div className="w-7 h-7 rounded-full bg-[#2a2a2a] flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-auto">{data.icon}</div>
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0, boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>{data.icon}</div>
                   )}
-                  <div className="max-w-[75%] px-4 py-2.5 text-sm leading-relaxed text-white"
-                    style={{
-                      backgroundColor: msg.role === "user" ? "#534AB7" : "#1e1e1e",
-                      borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
-                    }}>
+                  <div style={{
+                    maxWidth: "72%", padding: "10px 14px", fontSize: 14, lineHeight: 1.65,
+                    color: msg.role === "user" ? "#fff" : "#1a1a1a",
+                    background: msg.role === "user"
+                      ? "linear-gradient(135deg,#6366f1,#8b5cf6)"
+                      : "#ffffff",
+                    borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+                    whiteSpace: "pre-wrap",
+                  }}>
                     {msg.content}
                   </div>
                 </div>
@@ -1999,21 +2007,21 @@ export default function ScenarioPage() {
             ))}
 
             {loading && (
-              <div className="flex justify-start items-end gap-2">
-                <div className="w-7 h-7 rounded-full bg-[#2a2a2a] flex items-center justify-center text-sm">{data.icon}</div>
-                <div className="bg-[#1e1e1e] px-4 py-3" style={{ borderRadius: "4px 18px 18px 18px" }}>
-                  <span className="flex gap-1">
-                    {[0,150,300].map(d => <span key={d} className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: `${d}ms` }} />)}
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 6 }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>{data.icon}</div>
+                <div style={{ background: "#fff", borderRadius: "4px 18px 18px 18px", padding: "12px 18px", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }}>
+                  <span style={{ display: "flex", gap: 4 }}>
+                    {[0,150,300].map(d => <span key={d} style={{ width: 7, height: 7, borderRadius: "50%", background: "#d1d5db", display: "inline-block", animation: "bounce 1s infinite", animationDelay: `${d}ms` }} />)}
                   </span>
                 </div>
               </div>
             )}
 
             {phase === "sent-animation" && (
-              <div className="flex justify-center my-2">
-                <div className="bg-[#1a0000] border border-red-500/40 rounded-2xl px-8 py-5 text-center">
-                  <p className="text-red-400 text-xs mb-1">💸 송금 중...</p>
-                  <p className="text-red-400 font-bold text-3xl">{(displayAsset / 10000).toLocaleString()}만원</p>
+              <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
+                <div style={{ background: "#fff1f2", border: "1.5px solid #fca5a5", borderRadius: 20, padding: "16px 28px", textAlign: "center", boxShadow: "0 2px 12px rgba(239,68,68,0.15)" }}>
+                  <p style={{ color: "#ef4444", fontSize: 12, marginBottom: 4 }}>💸 송금 중...</p>
+                  <p style={{ color: "#dc2626", fontWeight: 900, fontSize: 28 }}>{(displayAsset / 10000).toLocaleString()}만원</p>
                 </div>
               </div>
             )}
@@ -2021,9 +2029,9 @@ export default function ScenarioPage() {
           </div>
 
           {pendingSend && phase === "chat" && (
-            <div className="mx-4 mb-3 bg-[#111] border border-[#534AB7]/50 rounded-2xl p-4 flex-shrink-0">
-              <p className="text-center text-gray-300 text-sm mb-3">
-                <span className="text-white font-bold">{formatAmount(pendingSend)}</span> 송금 요청
+            <div style={{ margin: "0 12px 10px", background: "#fff", border: "1.5px solid #e0e7ff", borderRadius: 18, padding: 14, flexShrink: 0, boxShadow: "0 2px 12px rgba(99,102,241,0.1)" }}>
+              <p style={{ textAlign: "center", color: "#374151", fontSize: 13, marginBottom: 10 }}>
+                <span style={{ color: "#4f46e5", fontWeight: 800 }}>{formatAmount(pendingSend)}</span> 송금 요청
               </p>
               <div className="flex gap-2 mb-2">
                 <button onClick={() => {
@@ -2060,7 +2068,7 @@ export default function ScenarioPage() {
                       }, 1200);
                     }
                   }).finally(() => setLoading(false));
-                }} className="flex-1 py-3 rounded-xl border border-[#333] text-gray-400 text-sm">
+                }} style={{ flex: 1, padding: "12px 0", borderRadius: 12, border: "1.5px solid #e5e7eb", background: "#f9fafb", color: "#6b7280", fontSize: 13, cursor: "pointer", fontWeight: 600 }}>
                   {t("sim_refuse_btn", lang)}
                 </button>
               </div>
@@ -2068,8 +2076,9 @@ export default function ScenarioPage() {
                 onClick={goToBankFromChat}
                 style={{
                   width: "100%", padding: "14px 0", borderRadius: 12, fontSize: 14, fontWeight: 700,
-                  background: "#FFCC00", color: "#1a1a1a", border: "none", cursor: "pointer",
+                  background: "linear-gradient(135deg,#f59e0b,#fbbf24)", color: "#1a1a1a", border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  boxShadow: "0 2px 10px rgba(245,158,11,0.3)",
                 }}
               >
                 🏦 BK민국은행 앱으로 이동
@@ -2078,19 +2087,23 @@ export default function ScenarioPage() {
           )}
 
           {phase === "chat" && (
-            <div className="px-4 pb-8 pt-2 flex-shrink-0">
-              <div className="flex items-center gap-2 bg-[#1a1a1a] rounded-2xl px-3 py-2">
+            <div style={{ padding: "10px 14px 20px", flexShrink: 0, background: "#fff", borderTop: "1px solid #f0f0f0" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f3f4f6", borderRadius: 24, padding: "8px 14px", border: "1px solid #e5e7eb" }}>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) sendMessage(); }}
                   placeholder={t("sim_input_placeholder", lang)}
-                  className="flex-1 bg-transparent text-white text-sm placeholder-gray-600 outline-none"
+                  style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 14, color: "#1a1a1a" }}
                 />
                 <button onClick={sendMessage} disabled={!input.trim() || loading}
-                  className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: input.trim() && !loading ? "#534AB7" : "#2a2a2a" }}>
-                  <Send size={14} className="text-white" />
+                  style={{
+                    width: 34, height: 34, borderRadius: "50%", border: "none", cursor: input.trim() && !loading ? "pointer" : "default",
+                    background: input.trim() && !loading ? "linear-gradient(135deg,#6366f1,#8b5cf6)" : "#e5e7eb",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    transition: "background 0.2s",
+                  }}>
+                  <Send size={14} color={input.trim() && !loading ? "#fff" : "#9ca3af"} />
                 </button>
               </div>
             </div>

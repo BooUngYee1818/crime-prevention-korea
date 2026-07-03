@@ -145,7 +145,6 @@ export default function JobScamPage() {
       openingMessage="안녕하세요! 공고 보고 지원하셨군요 😊 지원해주셔서 감사합니다! 간단한 확인만 하면 바로 시작하실 수 있어요."
       header={{ icon: job.icon, name: job.company, sub: "채용 담당자", badge: "⚠️ 교육용 시뮬레이션", badgeColor: "#ef4444", bg: "#1e293b" }}
       userBubbleColor={job.color}
-      scamBubbleColor="#1e293b"
       placeholder="메시지를 입력하세요..."
       maxTurns={5}
       onComplete={() => setPhase("trap")}

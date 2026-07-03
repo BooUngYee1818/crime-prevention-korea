@@ -103,7 +103,6 @@ export default function IllegalGunTradePage() {
       openingMessage="오셨어요? 어떤 거 보셨어요?"
       header={{ icon:"🔫", name:"판매자", sub:"● 온라인", badge:"🔒 암호화 채팅", badgeColor:"#f59e0b", bg:"#120a00" }}
       userBubbleColor="#92400e"
-      scamBubbleColor="#120a00"
       placeholder="메시지를 입력하세요..."
       maxTurns={4}
       onComplete={() => setPhase("deal")}

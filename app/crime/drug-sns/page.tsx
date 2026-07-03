@@ -135,7 +135,6 @@ export default function DrugSnsPage() {
       openingMessage={scenario.intro}
       header={{ icon: scenario.avatar, name: scenario.handle, sub: "DM", badge: "⚠️ 교육용", badgeColor: "#ef4444", bg: "#111111" }}
       userBubbleColor={scenario.color}
-      scamBubbleColor="#1f1f1f"
       placeholder="메시지를 입력하세요..."
       maxTurns={4}
       onComplete={() => setPhase("hook")}
