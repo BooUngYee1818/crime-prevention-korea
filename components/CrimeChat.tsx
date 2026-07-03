@@ -95,7 +95,7 @@ export default function CrimeChat({
   const isUserTurn = !done && cursor < script.length && script[cursor]?.from === "user" && !typing;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#080808" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", flexDirection: "column", background: "#080808" }}>
 
       {/* 헤더 */}
       <div style={{
