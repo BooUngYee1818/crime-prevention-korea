@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const FAKE_ACCOUNTS: Record<string, string> = {
   "family-impersonation":    "카카오뱅크 3333-04-2819471 김민준",
@@ -597,52 +600,30 @@ const LANG_INSTRUCTION: Record<string, string> = {
   es: "IMPORTANTE: Responde solo en español.",
 };
 
-const GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"];
-
-async function callGemini(
-  apiKey: string,
+async function callAI(
   systemPrompt: string,
-  history: object[],
+  history: { role: string; content: string }[],
   userMessage: string,
 ): Promise<string | null> {
-  for (const model of GEMINI_MODELS) {
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 8000); // 8초 타임아웃
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: systemPrompt }] },
-            contents: [...history, { role: "user", parts: [{ text: userMessage }] }],
-            generationConfig: { maxOutputTokens: 300, temperature: 1.0 },
-          }),
-          signal: controller.signal,
-        }
-      );
-      clearTimeout(timer);
-
-      if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        console.error(`[${model}] HTTP ${res.status}:`, errText.slice(0, 150));
-        continue;
-      }
-
-      const data = await res.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) {
-        console.error(`[${model}] empty text. blockReason:`, data.promptFeedback?.blockReason);
-        continue;
-      }
-      return text;
-    } catch (e) {
-      console.error(`[${model}] error:`, String(e).slice(0, 100));
-      continue;
-    }
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...history.map(m => ({
+          role: m.role === "criminal" ? "assistant" as const : "user" as const,
+          content: m.content,
+        })),
+        { role: "user", content: userMessage },
+      ],
+      max_tokens: 200,
+      temperature: 1.0,
+    });
+    return completion.choices[0]?.message?.content ?? null;
+  } catch (e) {
+    console.error("[OpenAI] error:", String(e).slice(0, 150));
+    return null;
   }
-  return null;
 }
 
 // 강도별 프롬프트 수정자
@@ -700,20 +681,6 @@ export async function POST(req: NextRequest) {
       (m: { role: string }) => m.role === "user"
     ).length;
 
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    // API 키 없으면 즉시 스크립트 폴백
-    if (!apiKey) {
-      const scripted = getScriptedReply(scenarioId, userMsgCount, lang ?? "ko");
-      if (scripted) {
-        const sendMatch = scripted.text.match(/\[SEND_REQUEST:(\d+)\]/);
-        const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
-        const cleanReply = scripted.text.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
-        return NextResponse.json({ reply: cleanReply, sendAmount, _scripted: true });
-      }
-      return NextResponse.json({ reply: "...", sendAmount: null });
-    }
-
     const isStart = userMessage === "__START__";
     const startMsg =
       lang === "en" ? "Start the conversation naturally in character." :
@@ -725,18 +692,22 @@ export async function POST(req: NextRequest) {
 
     const actualMessage = isStart ? startMsg : userMessage;
     const langNote = lang && lang !== "ko" ? `\n\n${LANG_INSTRUCTION[lang] ?? ""}` : "";
-    const fullPrompt = applyIntensity(CRIMINAL_PROMPTS[scenarioId], intensityLevel) + langNote;
+    const fullPrompt = applyIntensity(CRIMINAL_PROMPTS[scenarioId], intensityLevel) + langNote + `
 
-    const history = (messages || []).slice(-16).map((m: { role: string; content: string }) => ({
-      role: m.role === "criminal" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
+[필수 대화 규칙]
+- 사용자가 한 말에 직접 반응하세요. 절대 무시하고 다음 스크립트로 넘어가지 마세요.
+- 사용자 말의 핵심을 받아서 자연스럽게 이어가세요.
+- 이전 대화와 똑같은 표현을 반복하지 마세요.
+- 주제와 무관한 말(임신, 날씨 등)엔 짧게 받아치고 본 주제로 돌아오세요.
+- "AI야?" 물으면 자연스럽게 부정하고 대화를 이어가세요.
+- 1~3문장, 구어체로 답하세요.`;
 
-    const geminiText = await callGemini(apiKey, fullPrompt, history, actualMessage);
+    const history = (messages || []).slice(-16) as { role: string; content: string }[];
 
-    if (!geminiText) {
-      // Gemini 실패 → 스크립트 폴백
-      console.warn(`Gemini all models failed for ${scenarioId}. Falling back to script.`);
+    const aiText = await callAI(fullPrompt, history, actualMessage);
+
+    if (!aiText) {
+      console.warn(`OpenAI failed for ${scenarioId}. Falling back to script.`);
       const scripted = getScriptedReply(scenarioId, userMsgCount, lang ?? "ko");
       if (scripted) {
         const sendMatch = scripted.text.match(/\[SEND_REQUEST:(\d+)\]/);
@@ -747,9 +718,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply: "잠시 후 다시 입력해주세요.", sendAmount: null });
     }
 
-    const sendMatch = geminiText.match(/\[SEND_REQUEST:(\d+)\]/);
+    const sendMatch = aiText.match(/\[SEND_REQUEST:(\d+)\]/);
     const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
-    const cleanReply = geminiText.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
+    const cleanReply = aiText.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
 
     return NextResponse.json({ reply: cleanReply, sendAmount });
 
