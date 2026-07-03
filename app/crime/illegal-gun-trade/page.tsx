@@ -14,12 +14,12 @@ const LISTINGS = [
 
 const CHAT_SCRIPT: ChatMsg[] = [
   { from:"scammer", text:"오셨어요? 어떤 거 보셨어요?" },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["글록 17 보고 연락드렸는데요", "가격 문의 드리려고요", "목록 보고 왔는데요"] },
   { from:"scammer", text:"아 네~ 정품 맞아요. 해외 루트로 들어온 거예요. 일련번호 지워진 거라 추적 안 돼요 😊" },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["근데 이게 국내에서 불법 아닌가요?", "진짜 실탄 들어가나요?", "어떻게 배송받아요?"] },
   { from:"scammer", text:"당연히 신고 같은 거 없으니까 걱정 마세요ㅋㅋ 저희가 10년째 거래하고 있어요. 단속된 적 없어요. 코인으로 보내시면 돼요" },
   { from:"scammer", text:"암호화 택배로 보내드리고요, 추적 불가 라우팅이라 안전해요. 비트코인 지갑 있으세요?" },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["코인은 있는데... 정말 안 잡히나요?", "10년 동안 진짜 안 잡혔어요?", "얼마나 걸려요?"] },
   { from:"scammer", text:"당연하죠~ 저희 단골만 200명이에요. 걱정 마시고 입금 먼저 하시면 3일 내 출고해드려요 💪" },
 ];
 
@@ -104,17 +104,10 @@ export default function IllegalGunTradePage() {
   if (phase === "chat") return (
     <CrimeChat
       script={CHAT_SCRIPT}
-      header={{
-        icon: "🔫",
-        name: "판매자",
-        sub: "● 온라인",
-        badge: "🔒 암호화 채팅",
-        badgeColor: "#f59e0b",
-        bg: "#120a00",
-      }}
+      header={{ icon:"🔫", name:"판매자", sub:"● 온라인", badge:"🔒 암호화 채팅", badgeColor:"#f59e0b", bg:"#120a00" }}
       userBubbleColor="#92400e"
       scamBubbleColor="#120a00"
-      placeholder="메시지를 입력하세요..."
+      placeholder="직접 입력하거나 아래 답변을 선택하세요"
       onComplete={() => setPhase("deal")}
     />
   );
@@ -127,7 +120,7 @@ export default function IllegalGunTradePage() {
           <p style={{ color:"#6b7280", fontSize:11 }}>VPN 접속 중 · 익명 보장</p>
         </div>
         {LISTINGS.map((item) => (
-          <button key={item.id} onClick={() => { setSelected(item); setPhase("chat"); }} style={{ width:"100%", background: selected?.id === item.id ? "#1a0f00" : "#120a00", border:`1px solid ${selected?.id === item.id ? "#f59e0b" : "#2a1800"}`, borderRadius:0, padding:"18px", textAlign:"left" as const, cursor:"pointer", borderBottom:"1px solid #1a0f00" }}>
+          <button key={item.id} onClick={() => { setSelected(item); setPhase("chat"); }} style={{ width:"100%", background:"#120a00", border:"1px solid #2a1800", borderRadius:0, padding:"18px", textAlign:"left" as const, cursor:"pointer", borderBottom:"1px solid #1a0f00" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
               <p style={{ color:"#e2e8f0", fontWeight:700, fontSize:14, margin:0 }}>🔫 {item.name}</p>
               <span style={{ background:"#1a0f00", border:"1px solid #f59e0b66", borderRadius:20, padding:"2px 8px", color:"#f59e0b", fontSize:10, fontWeight:700 }}>{item.badge}</span>
@@ -152,10 +145,7 @@ export default function IllegalGunTradePage() {
             <span style={{ color:"#fbbf24", fontSize:11, fontWeight:800, letterSpacing:2 }}>⚠️ 실제 범죄 수법 재현 — 교육 목적</span>
           </div>
           <h1 style={{ color:"#fff", fontSize:26, fontWeight:900, marginBottom:10 }}>🔫 불법 총기 거래</h1>
-          <p style={{ color:"#64748b", fontSize:14, lineHeight:1.7 }}>
-            다크웹·텔레그램을 통한 불법 총기 거래.<br/>
-            구매 시도만으로도 중범죄입니다.
-          </p>
+          <p style={{ color:"#64748b", fontSize:14, lineHeight:1.7 }}>다크웹·텔레그램을 통한 불법 총기 거래.<br/>구매 시도만으로도 중범죄입니다.</p>
         </div>
         <div style={{ background:"#0f0800", border:"1px solid #2a1800", borderRadius:20, padding:24, marginBottom:20 }}>
           <p style={{ color:"#f59e0b", fontSize:11, fontWeight:800, letterSpacing:2, marginBottom:14 }}>📊 국내 불법 총기 현황</p>

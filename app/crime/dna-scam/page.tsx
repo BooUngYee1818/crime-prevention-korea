@@ -8,14 +8,14 @@ type Phase = "intro" | "chat" | "blackmail" | "choice" | "reveal";
 
 const CHAT_SCRIPT: ChatMsg[] = [
   { from:"scammer", text:"🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!" },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["감사합니다. 기대되네요!", "언제쯤 도착하나요?", "알겠습니다 🙂"] },
   { from:"scammer", text:"📦 키트가 도착했군요! 면봉으로 구강 상피를 채취해 제공된 봉투에 넣어 발송하세요." },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["네, 방금 보냈어요 🧫", "샘플 발송 완료했습니다", "보내는 방법 다시 알려주세요"] },
   { from:"scammer", text:"✅ 샘플 수령 완료. 분석에 약 7일 소요됩니다. 분석 결과는 앱 내에서 확인 가능합니다." },
   { from:"scammer", text:"📊 분석 완료! 결과를 앱에서 확인하세요. 일부 민감한 정보가 포함되어 있습니다." },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["앱 열었는데 결과가 안 보여요?", "어디서 확인하나요?", "로그인했는데 비어 있어요"] },
   { from:"scammer", text:"⚠️ 프리미엄 해석 서비스(₩99,000)를 구매하셔야 전체 결과를 보실 수 있습니다." },
-  { from:"user",    text:"..." },
+  { from:"user", text:"...", suggestions:["그런 약관은 없었는데요...", "처음 듣는 얘기인데요?", "환불해주세요"] },
 ];
 
 const BLACKMAIL_MSG = `📩 [긴급] 귀하의 유전 정보 관련 중요 통보
@@ -114,15 +114,10 @@ export default function DnaScamPage() {
   if (phase === "chat") return (
     <CrimeChat
       script={CHAT_SCRIPT}
-      header={{
-        icon: "🧬",
-        name: "GenAI Lab Assistant",
-        sub: "● 온라인",
-        bg: "#0a1628",
-      }}
+      header={{ icon:"🧬", name:"GenAI Lab Assistant", sub:"● 온라인", bg:"#0a1628" }}
       userBubbleColor="#1d4ed8"
       scamBubbleColor="#0f2040"
-      placeholder="메시지를 입력하세요..."
+      placeholder="직접 입력하거나 아래 답변을 선택하세요"
       onComplete={() => setPhase("blackmail")}
     />
   );
@@ -147,7 +142,7 @@ export default function DnaScamPage() {
               </div>
             ))}
           </div>
-          <div style={{ background:"#060e1a", borderRadius:12, padding:"12px 16px", marginBottom:16 }}>
+          <div style={{ background:"#060e1a", borderRadius:12, padding:"12px 16px" }}>
             <p style={{ color:"#475569", fontSize:11, margin:0, lineHeight:1.7 }}>
               ⚠️ 실제 국내 피해 사례: 미국 23andMe 2023년 해킹으로 690만 명 유전 데이터 유출 (실제 사건). 국내도 동일 수법 확산 예상.
             </p>

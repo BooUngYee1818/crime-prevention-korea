@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from "react";
 export interface ChatMsg {
   from: "scammer" | "user";
   text: string;
+  suggestions?: string[];   // 사용자 차례일 때 보여줄 추천 답변 칩
 }
 
 interface Props {
-  script: ChatMsg[];           // 전체 대화 스크립트
-  header: {                    // 채팅방 헤더
+  script: ChatMsg[];
+  header: {
     icon: string;
     name: string;
     sub?: string;
@@ -16,10 +17,10 @@ interface Props {
     badgeColor?: string;
     bg?: string;
   };
-  userBubbleColor?: string;    // 내 말풍선 색
-  scamBubbleColor?: string;    // 상대방 말풍선 색
-  placeholder?: string;        // 입력창 힌트
-  onComplete: () => void;      // 스크립트 끝나면 호출
+  userBubbleColor?: string;
+  scamBubbleColor?: string;
+  placeholder?: string;
+  onComplete: () => void;
 }
 
 export default function CrimeChat({
@@ -30,69 +31,55 @@ export default function CrimeChat({
   placeholder      = "메시지 입력...",
   onComplete,
 }: Props) {
-  // 화면에 보여진 메시지들
-  const [shown, setShown]       = useState<ChatMsg[]>([]);
-  // 스크립트 커서 (다음에 처리할 index)
-  const [cursor, setCursor]     = useState(0);
-  // 상대방 타이핑 중
-  const [typing, setTyping]     = useState(false);
-  // 사용자 입력값
-  const [input, setInput]       = useState("");
-  // 완료 여부
-  const [done, setDone]         = useState(false);
+  const [shown, setShown]   = useState<ChatMsg[]>([]);
+  const [cursor, setCursor] = useState(0);
+  const [typing, setTyping] = useState(false);
+  const [input, setInput]   = useState("");
+  const [done, setDone]     = useState(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
 
-  // 자동으로 scammer 메시지 보여주기
+  // 스캐머 메시지 자동 표시
   useEffect(() => {
     if (done || cursor >= script.length) return;
-
     const msg = script[cursor];
-
-    // 사용자 차례면 자동 진행 안 함 — 입력 기다림
     if (msg.from === "user") return;
 
-    // scammer 메시지: 타이핑 딜레이 후 표시
     setTyping(true);
-    const delay = 900 + msg.text.length * 18;
+    const delay = 800 + msg.text.length * 15;
     const t = setTimeout(() => {
       setTyping(false);
       setShown(prev => [...prev, msg]);
       setCursor(c => c + 1);
     }, delay);
-
     return () => clearTimeout(t);
   }, [cursor, done, script]);
 
-  // 스크롤 맨 아래
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [shown, typing]);
 
-  // 사용자 메시지 전송
-  function send() {
-    const text = input.trim();
+  function send(overrideText?: string) {
+    const text = (overrideText ?? input).trim();
     if (!text || typing || done) return;
 
     const expected = script[cursor];
     if (!expected || expected.from !== "user") return;
 
-    // 사용자 메시지 표시
     setShown(prev => [...prev, { from: "user", text }]);
     setInput("");
     const next = cursor + 1;
     setCursor(next);
     inputRef.current?.focus();
 
-    // 스크립트 끝이면 완료
     if (next >= script.length) {
       setTimeout(() => { setDone(true); onComplete(); }, 600);
     }
   }
 
-  // 현재 사용자 차례인지
   const isUserTurn = !done && cursor < script.length && script[cursor]?.from === "user" && !typing;
+  const suggestions = isUserTurn ? (script[cursor]?.suggestions ?? []) : [];
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", flexDirection: "column", background: "#080808" }}>
@@ -152,7 +139,6 @@ export default function CrimeChat({
           </div>
         ))}
 
-        {/* 타이핑 인디케이터 */}
         {typing && (
           <div style={{ display: "flex" }}>
             <div style={{
@@ -169,6 +155,40 @@ export default function CrimeChat({
         <div ref={bottomRef} />
       </div>
 
+      {/* 추천 답변 칩 */}
+      {suggestions.length > 0 && (
+        <div style={{
+          display: "flex", gap: 8, overflowX: "auto",
+          padding: "10px 14px 0",
+          flexShrink: 0,
+          scrollbarWidth: "none",
+        }}>
+          <style>{`.chip-row::-webkit-scrollbar { display: none; }`}</style>
+          {suggestions.map((s, i) => (
+            <button
+              key={i}
+              onClick={() => send(s)}
+              style={{
+                flexShrink: 0,
+                background: "transparent",
+                border: `1.5px solid ${userBubbleColor}`,
+                borderRadius: 20,
+                padding: "7px 14px",
+                color: "#e2e8f0",
+                fontSize: 13,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = userBubbleColor + "55")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* 입력창 */}
       <div style={{
         background: "#111827",
@@ -176,6 +196,7 @@ export default function CrimeChat({
         padding: "10px 12px",
         display: "flex", gap: 8, alignItems: "flex-end",
         flexShrink: 0,
+        marginTop: suggestions.length > 0 ? 8 : 0,
       }}>
         <input
           ref={inputRef}
@@ -198,11 +219,11 @@ export default function CrimeChat({
           }}
         />
         <button
-          onClick={send}
+          onClick={() => send()}
           disabled={!isUserTurn || !input.trim()}
           style={{
             width: 42, height: 42, borderRadius: "50%",
-            background: isUserTurn && input.trim() ? "#534AB7" : "#1f2937",
+            background: isUserTurn && input.trim() ? userBubbleColor : "#1f2937",
             border: "none", cursor: isUserTurn && input.trim() ? "pointer" : "default",
             color: "#fff", fontSize: 18,
             display: "flex", alignItems: "center", justifyContent: "center",

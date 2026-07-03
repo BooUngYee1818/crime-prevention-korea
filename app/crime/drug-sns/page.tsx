@@ -17,10 +17,10 @@ const SCENARIOS = [
     desc: "\"부작용 없는 천연 다이어트약\"으로 접근 후 향정신성 의약품 판매",
     intro: "안녕하세요💕 팔로우 감사해요! 저도 6개월 전엔 68kg이었는데 지금은 51kg이에요. 비결 궁금하지 않으세요?",
     scripts: [
-      "해외직구 다이어트 보조제예요 🌿 FDA 승인받은 천연 성분이고 부작용 전혀 없어요! 저도 3개월째 먹는 중인데 진짜 신기할 정도로 효과 좋아요",
-      "가격은 1개월치 ₩89,000인데 지금 이벤트 중이라 3개월치 ₩198,000이에요! 택배로 보내드리고요, 계좌이체만 돼요 (세금 문제로 카드 안 받아요)",
-      "후기 보실래요? 💕 저희 단톡방에 실제 후기 엄청 많아요. 초대해드릴게요! 입금하시면 바로 배송 출발이에요~",
-      "걱정 마세요ㅎㅎ 저도 처음엔 반신반의했어요. 근데 진짜예요! 병원 처방도 필요 없고 그냥 드시면 돼요. 오늘까지만 이 가격이에요!",
+      { text:"해외직구 다이어트 보조제예요 🌿 FDA 승인받은 천연 성분이고 부작용 전혀 없어요! 저도 3개월째 먹는 중인데 진짜 신기할 정도로 효과 좋아요", sug:["어떤 제품인가요?", "진짜 효과 있어요?", "얼마예요?"] },
+      { text:"가격은 1개월치 ₩89,000인데 지금 이벤트 중이라 3개월치 ₩198,000이에요! 택배로 보내드리고요, 계좌이체만 돼요 (세금 문제로 카드 안 받아요)", sug:["왜 카드는 안 돼요?", "처방전 없이 살 수 있어요?", "부작용은요?"] },
+      { text:"후기 보실래요? 💕 저희 단톡방에 실제 후기 엄청 많아요. 초대해드릴게요! 입금하시면 바로 배송 출발이에요~", sug:["계좌 번호 알려주세요", "혹시 불법 아닌가요?", "환불 가능한가요?"] },
+      { text:"걱정 마세요ㅎㅎ 저도 처음엔 반신반의했어요. 근데 진짜예요! 병원 처방도 필요 없고 그냥 드시면 돼요. 오늘까지만 이 가격이에요!", sug:["알겠어요, 입금할게요", "좀 더 생각해볼게요", "믿을 수 있는 건가요?"] },
     ],
   },
   {
@@ -33,10 +33,10 @@ const SCENARIOS = [
     desc: "\"천연 허브\" \"아로마\" 명목으로 대마 성분 제품 판매",
     intro: "직장생활 힘드시죠? 저도 번아웃 왔었는데, 지금은 완전 달라졌어요. 천연 힐링 허브로 회복했거든요 🌿",
     scripts: [
-      "해외 합법 허브예요. 국내에선 잘 모르는데 유럽에서는 스트레스 치료제로 쓰이는 거예요. 아로마 오일 형태라 향기 맡는 것만으로도 돼요",
-      "가격은 소량 ₩120,000, 한달치 ₩350,000이에요. 직접 흡입하는 방법도 알려드리고 처음이라 걱정되시면 소량부터 드릴게요",
-      "법적으로 문제없어요. 해외에서 합법이고 저도 2년째 쓰는 중이에요. 단, 세관 통과 문제로 포장을 아로마 오일로 해서 보내드려요",
-      "후기 보내드릴게요. 근데 이건 카카오톡으로만 거래해요, SNS에 올리면 경쟁사들이 신고를 해서요. 카톡 ID 알려주세요!",
+      { text:"해외 합법 허브예요. 국내에선 잘 모르는데 유럽에서는 스트레스 치료제로 쓰이는 거예요. 아로마 오일 형태라 향기 맡는 것만으로도 돼요", sug:["어떤 허브예요?", "국내 합법인가요?", "얼마예요?"] },
+      { text:"가격은 소량 ₩120,000, 한달치 ₩350,000이에요. 직접 흡입하는 방법도 알려드리고 처음이라 걱정되시면 소량부터 드릴게요", sug:["직접 흡입이요?", "대마 아닌가요?", "소량으로 주문할게요"] },
+      { text:"법적으로 문제없어요. 해외에서 합법이고 저도 2년째 쓰는 중이에요. 단, 세관 통과 문제로 포장을 아로마 오일로 해서 보내드려요", sug:["국내에서도 합법인가요?", "세관에서 걸리면요?", "믿을 수 있어요?"] },
+      { text:"후기 보내드릴게요. 근데 이건 카카오톡으로만 거래해요, SNS에 올리면 경쟁사들이 신고를 해서요. 카톡 ID 알려주세요!", sug:["카톡으로 연락할게요", "왜 숨겨서 거래해요?", "좀 더 생각해볼게요"] },
     ],
   },
   {
@@ -49,18 +49,18 @@ const SCENARIOS = [
     desc: "\"합법\" \"안전\" 강조하며 MDMA·케타민 등 향정신성 물질 판매",
     intro: "클럽 가시나요? 요즘 외국에서 다들 쓰는 합법 파티 서플리먼트 아세요? 에너지드링크보다 효과 좋고 부작용도 없어요",
     scripts: [
-      "미국·네덜란드에서는 합법이에요. 그냥 에너지 보충제 같은 거예요. 클럽에서 한 번 써보면 왜 다들 찾는지 알 거예요",
-      "처음엔 소량인 ₩50,000짜리로 해보세요. 효과 없으면 환불 가능해요. 단 현금이나 코인으로만 결제 받아요",
-      "텔레그램으로 오세요, 거기서 주문 받아요. SNS는 차단당할 수 있어서요. @party_supply_kr 추가해주세요",
-      "걱정 마요 진짜 안전해요ㅋㅋ 우리 단골들도 다 학생이랑 직장인이에요. 중독성도 없고 다음날 멀쩡해요",
+      { text:"미국·네덜란드에서는 합법이에요. 그냥 에너지 보충제 같은 거예요. 클럽에서 한 번 써보면 왜 다들 찾는지 알 거예요", sug:["한국에서도 합법이에요?", "뭔지 좀 더 알려주세요", "MDMA 같은 거 아닌가요?"] },
+      { text:"처음엔 소량인 ₩50,000짜리로 해보세요. 효과 없으면 환불 가능해요. 단 현금이나 코인으로만 결제 받아요", sug:["왜 현금만 받아요?", "소량 주문할게요", "위험하지 않아요?"] },
+      { text:"텔레그램으로 오세요, 거기서 주문 받아요. SNS는 차단당할 수 있어서요. @party_supply_kr 추가해주세요", sug:["왜 텔레그램으로 해요?", "추가했어요", "좀 이상한데요?"] },
+      { text:"걱정 마요 진짜 안전해요ㅋㅋ 우리 단골들도 다 학생이랑 직장인이에요. 중독성도 없고 다음날 멀쩡해요", sug:["그럼 시켜볼게요", "정말 중독 없어요?", "역시 좀 무서워요"] },
     ],
   },
 ];
 
 function buildScript(s: typeof SCENARIOS[0]): ChatMsg[] {
-  const msgs: ChatMsg[] = [{ from: "scammer", text: s.intro }];
-  s.scripts.forEach(text => {
-    msgs.push({ from: "user", text: "..." });
+  const msgs: ChatMsg[] = [{ from: "scammer", text: s.intro, suggestions: ["궁금한데 뭔가요?", "저도 살 빼고 싶어요", "좀 더 알려주세요"] }];
+  s.scripts.forEach(({ text, sug }) => {
+    msgs.push({ from: "user", text: "...", suggestions: sug });
     msgs.push({ from: "scammer", text });
   });
   return msgs;
@@ -72,7 +72,7 @@ export default function DrugSnsPage() {
   const [scenario, setScenario] = useState(SCENARIOS[0]);
 
   if (phase === "reveal") return (
-    <div style={{ minHeight: "100vh", background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ maxWidth: 520, width: "100%" }}>
         <div style={{ background: "linear-gradient(135deg,#1a0000,#2a0808)", border: "2px solid #ef4444", borderRadius: 24, padding: "32px 28px", marginBottom: 16 }}>
           <div style={{ fontSize: 52, textAlign: "center", marginBottom: 16 }}>🚔</div>
@@ -101,7 +101,7 @@ export default function DrugSnsPage() {
   );
 
   if (phase === "hook") return (
-    <div style={{ minHeight: "100vh", background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ maxWidth: 480, width: "100%" }}>
         <div style={{ background: "#1a0000", border: "2px solid #ef4444", borderRadius: 20, padding: "28px 24px", marginBottom: 16 }}>
           <div style={{ fontSize: 48, textAlign: "center", marginBottom: 12 }}>🚨</div>
@@ -125,17 +125,10 @@ export default function DrugSnsPage() {
   if (phase === "chat") return (
     <CrimeChat
       script={buildScript(scenario)}
-      header={{
-        icon: scenario.avatar,
-        name: scenario.handle,
-        sub: "DM",
-        badge: "⚠️ 교육용",
-        badgeColor: "#ef4444",
-        bg: "#111111",
-      }}
+      header={{ icon: scenario.avatar, name: scenario.handle, sub: "DM", badge: "⚠️ 교육용", badgeColor: "#ef4444", bg: "#111111" }}
       userBubbleColor={scenario.color}
       scamBubbleColor="#1f1f1f"
-      placeholder="메시지를 입력하세요..."
+      placeholder="직접 입력하거나 아래 답변을 선택하세요"
       onComplete={() => setPhase("hook")}
     />
   );
