@@ -4,7 +4,7 @@ export interface CrimeScenario {
   subtitle: string;
   icon: string;
   color: string;
-  targetAge: "all" | "senior" | "20s" | "teens";
+  targetAge: "all" | "senior" | "20s" | "teens" | "future";
   reveal: RevealInfo;
 }
 
@@ -334,6 +334,66 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
         "이미 이체했다면 즉시 112 + 해당 은행 지급정지 요청",
       ],
       stats: "2024년 검찰·금감원 사칭 피해 1인당 평균 ₩3,200만원 · 40~70대 피해자 85%",
+      reportNumber: "1332",
+    },
+  },
+  {
+    id: "smarthome-ransomware",
+    title: "스마트홈 랜섬웨어",
+    subtitle: "집의 모든 기기가 해킹돼 암호화폐를 요구해요",
+    icon: "🏠",
+    color: "#22c55e",
+    targetAge: "future",
+    reveal: {
+      crimeName: "IoT 스마트홈 랜섬웨어 (2027년 예상)",
+      description: "가정 내 모든 IoT 기기(현관문·가스·카메라·차량)를 해킹해 암호화한 뒤 암호화폐를 요구합니다. 기본 비밀번호를 유지한 기기가 주요 타깃이며, 이미 산업시설 IoT 랜섬웨어는 현실입니다.",
+      howToAvoid: [
+        "IoT 기기 설치 즉시 기본 비밀번호 변경 필수",
+        "스마트홈 기기는 별도 네트워크(게스트 Wi-Fi)에 분리",
+        "가스·현관 물리 차단 장치를 디지털 장치와 병행 사용",
+        "사이버 침해 신고: KISA 118",
+      ],
+      stats: "2023년 글로벌 IoT 기기 랜섬웨어 공격 전년 대비 400% 급증 · 국내 스마트홈 보급률 68%",
+      reportNumber: "118",
+    },
+  },
+  {
+    id: "dna-scam",
+    title: "AI 유전자 분석 사기",
+    subtitle: "DNA 키트로 유전 정보를 탈취해 협박해요",
+    icon: "🧬",
+    color: "#38bdf8",
+    targetAge: "future",
+    reveal: {
+      crimeName: "AI 유전자 분석 사기 (2025~2028년 예상)",
+      description: "저렴한 'AI DNA 분석 키트'로 유전 정보를 탈취한 뒤, 유전 질환·가족 관계 폭로를 협박 수단으로 삼아 금전을 요구합니다. 실제 미국 23andMe 2023년 해킹(690만 명 유출)으로 이미 현실화된 위협입니다.",
+      howToAvoid: [
+        "국내 식약처 허가 기관 외의 유전자 검사 서비스 이용 주의",
+        "해외 저가 키트의 데이터 활용 약관 반드시 확인",
+        "유전 정보 협박 메시지 즉시 118·개인정보위 신고",
+        "DNA 정보는 평생 바꿀 수 없는 고유 개인정보임을 인식",
+      ],
+      stats: "23andMe 2023년 해킹 690만 명 유전 데이터 유출 (실제 사건) · 국내 유전자 검사 서비스 이용자 연 200만 명",
+      reportNumber: "118",
+    },
+  },
+  {
+    id: "metaverse-fraud",
+    title: "메타버스 가상부동산 사기",
+    subtitle: "가상 땅을 팔고 개발팀이 잠적했어요 (러그풀)",
+    icon: "🥽",
+    color: "#a855f7",
+    targetAge: "future",
+    reveal: {
+      crimeName: "메타버스 가상부동산 러그풀 (2024~2027년 예상)",
+      description: "가상 세계의 토지·건물을 판매해 투자금을 모은 뒤 개발팀이 사라지는 '러그풀(Rug Pull)' 사기. 해외에서 이미 2.8조 원 이상 피해 발생. 국내는 관련 규제가 없어 법적 보호가 취약합니다.",
+      howToAvoid: [
+        "개발팀 법인 등록·실명 공개 여부 반드시 확인",
+        "'확정 수익률' 보장 메타버스 = 100% 위험 신호",
+        "유명인 추천은 딥페이크 가능 — 본인 확인 필수",
+        "가상자산 피해 신고: 금융감독원 1332",
+      ],
+      stats: "글로벌 메타버스·NFT 러그풀 피해 2021~2024년 약 $2.8B(약 3.7조원) · 국내 가상자산 사기 신고 연 4만 건",
       reportNumber: "1332",
     },
   },
