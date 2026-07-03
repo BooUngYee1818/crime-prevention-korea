@@ -1,7 +1,8 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
+import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
 
 type Phase = "intro" | "browse" | "chat" | "deal" | "choice" | "reveal";
 
@@ -11,36 +12,22 @@ const LISTINGS = [
   { id:"C", name:"공기권총 개조형", cal:".22", price:"₩980,000", stock:"재고 5", badge:"인기" },
 ];
 
-const CHAT_SCRIPT = [
-  { from:"seller", text:"오셨어요? 어떤 거 보셨어요?" },
-  { from:"user", text:"글록 17 보고 연락드렸는데요..." },
-  { from:"seller", text:"아 네~ 정품 맞아요. 해외 루트로 들어온 거예요. 일련번호 지워진 거라 추적 안 돼요 😊" },
-  { from:"user", text:"근데 이게 국내에서 불법 아닌가요?" },
-  { from:"seller", text:"당연히 신고 같은 거 없으니까 걱정 마세요ㅋㅋ 저희가 10년째 거래하고 있어요. 단속된 적 없어요. 코인으로 보내시면 돼요" },
-  { from:"seller", text:"암호화 택배로 보내드리고요, 추적 불가 라우팅이라 안전해요. 비트코인 지갑 있으세요?" },
-  { from:"user", text:"코인은 있는데... 정말 안 잡히나요?" },
-  { from:"seller", text:"당연하죠~ 저희 단골만 200명이에요. 걱정 마시고 입금 먼저 하시면 3일 내 출고해드려요 💪" },
+const CHAT_SCRIPT: ChatMsg[] = [
+  { from:"scammer", text:"오셨어요? 어떤 거 보셨어요?" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"아 네~ 정품 맞아요. 해외 루트로 들어온 거예요. 일련번호 지워진 거라 추적 안 돼요 😊" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"당연히 신고 같은 거 없으니까 걱정 마세요ㅋㅋ 저희가 10년째 거래하고 있어요. 단속된 적 없어요. 코인으로 보내시면 돼요" },
+  { from:"scammer", text:"암호화 택배로 보내드리고요, 추적 불가 라우팅이라 안전해요. 비트코인 지갑 있으세요?" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"당연하죠~ 저희 단골만 200명이에요. 걱정 마시고 입금 먼저 하시면 3일 내 출고해드려요 💪" },
 ];
 
 export default function IllegalGunTradePage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("intro");
-  const [chatIdx, setChatIdx] = useState(0);
-  const [typing, setTyping] = useState(false);
   const [choice, setChoice] = useState<"buy" | "report" | null>(null);
   const [selected, setSelected] = useState<typeof LISTINGS[0] | null>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (phase !== "chat") return;
-    if (chatIdx >= CHAT_SCRIPT.length) { setTimeout(() => setPhase("deal"), 800); return; }
-    setTyping(true);
-    const delay = CHAT_SCRIPT[chatIdx].from === "seller" ? 1400 : 700;
-    const t = setTimeout(() => { setTyping(false); setChatIdx(i => i + 1); }, delay);
-    return () => clearTimeout(t);
-  }, [phase, chatIdx]);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior:"smooth" }); }, [chatIdx, typing]);
 
   if (phase === "reveal") return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#0a0808,#1a0a00)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
@@ -49,7 +36,6 @@ export default function IllegalGunTradePage() {
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>🔫</div>
           <h2 style={{ color:"#f59e0b", fontSize:22, fontWeight:900, textAlign:"center", marginBottom:6 }}>불법 총기 거래 해설</h2>
           <p style={{ color:"#6b7280", fontSize:12, textAlign:"center", marginBottom:20 }}>총기 불법 소지만으로도 최대 무기징역입니다</p>
-
           {choice === "buy" && (
             <div style={{ background:"#1a0808", border:"1px solid #ef444455", borderRadius:14, padding:"14px 18px", marginBottom:20 }}>
               <p style={{ color:"#f87171", fontSize:13, fontWeight:700, marginBottom:4 }}>⚠️ 실제라면 지금 당신은:</p>
@@ -59,7 +45,6 @@ export default function IllegalGunTradePage() {
               </p>
             </div>
           )}
-
           <div style={{ background:"#0a0600", borderRadius:14, padding:"18px 20px", marginBottom:20 }}>
             {[
               { icon:"⚖️", t:"국내 총기 규정", d:"총포·도검·화약류 등의 안전관리에 관한 법률 — 불법 소지·취득·수수는 모두 중범죄. 모의총기도 개조 시 처벌 대상입니다." },
@@ -76,7 +61,6 @@ export default function IllegalGunTradePage() {
               </div>
             ))}
           </div>
-
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
             <ReportNumber number="112" label="🚔 경찰청" bg="#1a0f00" color="#fbbf24" />
             <div style={{ marginTop:8 }}>
@@ -118,35 +102,21 @@ export default function IllegalGunTradePage() {
   );
 
   if (phase === "chat") return (
-    <div style={{ minHeight:"100vh", background:"#0a0600", display:"flex", flexDirection:"column" as const }}>
-      <div style={{ background:"#120a00", borderBottom:"1px solid #2a1800", padding:"14px 20px", display:"flex", alignItems:"center", gap:12 }}>
-        <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#92400e,#b45309)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>🔫</div>
-        <div>
-          <p style={{ color:"#e2e8f0", fontWeight:700, fontSize:14, margin:0 }}>판매자</p>
-          <p style={{ color:"#22c55e", fontSize:11, margin:0 }}>● 온라인</p>
-        </div>
-        <div style={{ marginLeft:"auto", background:"#1a0f00", borderRadius:20, padding:"4px 10px" }}>
-          <span style={{ color:"#f59e0b", fontSize:10, fontWeight:700 }}>🔒 암호화 채팅</span>
-        </div>
-      </div>
-      <div style={{ flex:1, padding:"20px 16px", display:"flex", flexDirection:"column" as const, gap:10, overflowY:"auto" as const }}>
-        {CHAT_SCRIPT.slice(0, chatIdx).map((msg, i) => (
-          <div key={i} style={{ display:"flex", justifyContent: msg.from === "user" ? "flex-end" : "flex-start" }}>
-            <div style={{ maxWidth:"78%", background: msg.from === "user" ? "#92400e" : "#120a00", border: msg.from === "seller" ? "1px solid #2a1800" : "none", borderRadius: msg.from === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding:"10px 14px" }}>
-              <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.6, margin:0 }}>{msg.text}</p>
-            </div>
-          </div>
-        ))}
-        {typing && (
-          <div style={{ display:"flex" }}>
-            <div style={{ background:"#120a00", border:"1px solid #2a1800", borderRadius:"18px 18px 18px 4px", padding:"10px 16px" }}>
-              <span style={{ color:"#64748b", fontSize:18 }}>•••</span>
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-    </div>
+    <CrimeChat
+      script={CHAT_SCRIPT}
+      header={{
+        icon: "🔫",
+        name: "판매자",
+        sub: "● 온라인",
+        badge: "🔒 암호화 채팅",
+        badgeColor: "#f59e0b",
+        bg: "#120a00",
+      }}
+      userBubbleColor="#92400e"
+      scamBubbleColor="#120a00"
+      placeholder="메시지를 입력하세요..."
+      onComplete={() => setPhase("deal")}
+    />
   );
 
   if (phase === "browse") return (

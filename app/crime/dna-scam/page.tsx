@@ -1,20 +1,21 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
+import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
 
-type Phase = "intro" | "order" | "chat" | "blackmail" | "choice" | "reveal";
+type Phase = "intro" | "chat" | "blackmail" | "choice" | "reveal";
 
-const CHAT_SCRIPT = [
-  { from:"bot", text:"🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!" },
-  { from:"user", text:"감사합니다. 기대되네요!" },
-  { from:"bot", text:"📦 키트가 도착했군요! 면봉으로 구강 상피를 채취해 제공된 봉투에 넣어 발송하세요." },
-  { from:"user", text:"네, 보냈어요 🧫" },
-  { from:"bot", text:"✅ 샘플 수령 완료. 분석에 약 7일 소요됩니다. 분석 결과는 앱 내에서 확인 가능합니다." },
-  { from:"bot", text:"📊 분석 완료! 결과를 앱에서 확인하세요. 일부 민감한 정보가 포함되어 있습니다." },
-  { from:"user", text:"앱을 열었는데 결과가 안 보여요?" },
-  { from:"bot", text:"⚠️ 프리미엄 해석 서비스(₩99,000)를 구매하셔야 전체 결과를 보실 수 있습니다." },
-  { from:"user", text:"그런 약관은 없었는데요..." },
+const CHAT_SCRIPT: ChatMsg[] = [
+  { from:"scammer", text:"🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"📦 키트가 도착했군요! 면봉으로 구강 상피를 채취해 제공된 봉투에 넣어 발송하세요." },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"✅ 샘플 수령 완료. 분석에 약 7일 소요됩니다. 분석 결과는 앱 내에서 확인 가능합니다." },
+  { from:"scammer", text:"📊 분석 완료! 결과를 앱에서 확인하세요. 일부 민감한 정보가 포함되어 있습니다." },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"⚠️ 프리미엄 해석 서비스(₩99,000)를 구매하셔야 전체 결과를 보실 수 있습니다." },
+  { from:"user",    text:"..." },
 ];
 
 const BLACKMAIL_MSG = `📩 [긴급] 귀하의 유전 정보 관련 중요 통보
@@ -38,24 +39,7 @@ const BLACKMAIL_MSG = `📩 [긴급] 귀하의 유전 정보 관련 중요 통�
 export default function DnaScamPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("intro");
-  const [chatIdx, setChatIdx] = useState(0);
-  const [typing, setTyping] = useState(false);
   const [choice, setChoice] = useState<"pay" | "report" | null>(null);
-
-  useEffect(() => {
-    if (phase !== "chat") return;
-    if (chatIdx >= CHAT_SCRIPT.length) {
-      setTimeout(() => setPhase("blackmail"), 800);
-      return;
-    }
-    setTyping(true);
-    const delay = CHAT_SCRIPT[chatIdx].from === "bot" ? 1200 : 600;
-    const t = setTimeout(() => {
-      setTyping(false);
-      setChatIdx(i => i + 1);
-    }, delay);
-    return () => clearTimeout(t);
-  }, [phase, chatIdx]);
 
   if (phase === "reveal") return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#030d14,#001524)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
@@ -127,39 +111,20 @@ export default function DnaScamPage() {
     </div>
   );
 
-  if (phase === "chat" || phase === "order") return (
-    <div style={{ minHeight:"100vh", background:"#030d14", display:"flex", flexDirection:"column" as const }}>
-      {/* 앱 헤더 */}
-      <div style={{ background:"#0a1628", borderBottom:"1px solid #1e3a5f", padding:"14px 20px", display:"flex", alignItems:"center", gap:12 }}>
-        <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#0ea5e9,#6366f1)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>🧬</div>
-        <div>
-          <p style={{ color:"#e2e8f0", fontWeight:700, fontSize:14, margin:0 }}>GenAI Lab Assistant</p>
-          <p style={{ color:"#22c55e", fontSize:11, margin:0 }}>● 온라인</p>
-        </div>
-      </div>
-      {/* 채팅 */}
-      <div style={{ flex:1, padding:"20px 16px", display:"flex", flexDirection:"column" as const, gap:10, overflowY:"auto" as const }}>
-        {CHAT_SCRIPT.slice(0, chatIdx).map((msg, i) => (
-          <div key={i} style={{ display:"flex", justifyContent: msg.from === "user" ? "flex-end" : "flex-start" }}>
-            <div style={{
-              maxWidth:"75%", background: msg.from === "user" ? "#1d4ed8" : "#0f2040",
-              border: msg.from === "bot" ? "1px solid #1e3a5f" : "none",
-              borderRadius: msg.from === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-              padding:"10px 14px",
-            }}>
-              <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.6, margin:0 }}>{msg.text}</p>
-            </div>
-          </div>
-        ))}
-        {typing && (
-          <div style={{ display:"flex" }}>
-            <div style={{ background:"#0f2040", border:"1px solid #1e3a5f", borderRadius:"18px 18px 18px 4px", padding:"10px 16px" }}>
-              <span style={{ color:"#64748b", fontSize:18 }}>•••</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+  if (phase === "chat") return (
+    <CrimeChat
+      script={CHAT_SCRIPT}
+      header={{
+        icon: "🧬",
+        name: "GenAI Lab Assistant",
+        sub: "● 온라인",
+        bg: "#0a1628",
+      }}
+      userBubbleColor="#1d4ed8"
+      scamBubbleColor="#0f2040"
+      placeholder="메시지를 입력하세요..."
+      onComplete={() => setPhase("blackmail")}
+    />
   );
 
   return (

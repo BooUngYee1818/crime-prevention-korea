@@ -1,7 +1,8 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
+import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
 
 type Phase = "intro" | "channel" | "chat" | "deal" | "choice" | "reveal";
 
@@ -11,35 +12,21 @@ const CHANNEL_POSTS = [
   { time:"오전 3:02", text:"⚡ 스트레스 해소 / 수면 문제 해결\n천연 성분 해외 직구 / 합법 국가 원산지\nDM으로 문의하세요 🙏", reactions:"😮 12  👆 29" },
 ];
 
-const CHAT_SCRIPT = [
-  { from:"dealer", name:"딜러", text:"안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊" },
-  { from:"user", text:"저 그냥 다이어트약 찾고 있는데요..." },
-  { from:"dealer", name:"딜러", text:"아 네~ 요즘 제일 잘 나가는 거 있어요. 해외에서 직수입한 거라 국내엔 없는 성분이에요 💊" },
-  { from:"user", text:"그게 뭔가요?" },
-  { from:"dealer", name:"딜러", text:"펜터민 계열 식욕억제제인데... 미국선 처방약이긴 한데 저희가 루트 있어서요. 효과 완전 보장이에요 👍" },
-  { from:"user", text:"불법 아닌가요?" },
-  { from:"dealer", name:"딜러", text:"아 그건 걱정 마세요! 향정신성의약품이긴 한데 개인 복용은 괜찮아요~ 경찰도 소량은 안 잡아요 ㅋㅋ 후기 보여드릴까요?" },
-  { from:"dealer", name:"딜러", text:"💊 1개월분 ₩120,000\n📦 무지 박스 새벽 배송\n🔒 암호화 채팅 거래\n코인 또는 계좌 둘 다 돼요~" },
+const CHAT_SCRIPT: ChatMsg[] = [
+  { from:"scammer", text:"안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"아 네~ 요즘 제일 잘 나가는 거 있어요. 해외에서 직수입한 거라 국내엔 없는 성분이에요 💊" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"펜터민 계열 식욕억제제인데... 미국선 처방약이긴 한데 저희가 루트 있어서요. 효과 완전 보장이에요 👍" },
+  { from:"user",    text:"..." },
+  { from:"scammer", text:"아 그건 걱정 마세요! 향정신성의약품이긴 한데 개인 복용은 괜찮아요~ 경찰도 소량은 안 잡아요 ㅋㅋ 후기 보여드릴까요?" },
+  { from:"scammer", text:"💊 1개월분 ₩120,000\n📦 무지 박스 새벽 배송\n🔒 암호화 채팅 거래\n코인 또는 계좌 둘 다 돼요~" },
 ];
 
 export default function TelegramDrugPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("intro");
-  const [chatIdx, setChatIdx] = useState(0);
-  const [typing, setTyping] = useState(false);
   const [choice, setChoice] = useState<"buy" | "report" | null>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (phase !== "chat") return;
-    if (chatIdx >= CHAT_SCRIPT.length) { setTimeout(() => setPhase("deal"), 800); return; }
-    setTyping(true);
-    const delay = CHAT_SCRIPT[chatIdx].from === "dealer" ? 1400 : 700;
-    const t = setTimeout(() => { setTyping(false); setChatIdx(i => i + 1); }, delay);
-    return () => clearTimeout(t);
-  }, [phase, chatIdx]);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior:"smooth" }); }, [chatIdx, typing]);
 
   if (phase === "reveal") return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#020814,#0a0218)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
@@ -48,7 +35,6 @@ export default function TelegramDrugPage() {
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>💊</div>
           <h2 style={{ color:"#a855f7", fontSize:22, fontWeight:900, textAlign:"center", marginBottom:6 }}>텔레그램 마약 거래 해설</h2>
           <p style={{ color:"#6b7280", fontSize:12, textAlign:"center", marginBottom:20 }}>구매자도 예외 없이 형사처벌 대상입니다</p>
-
           {choice === "buy" && (
             <div style={{ background:"#1a0808", border:"1px solid #ef444455", borderRadius:14, padding:"14px 18px", marginBottom:20 }}>
               <p style={{ color:"#f87171", fontSize:13, fontWeight:700, marginBottom:4 }}>⚠️ 실제라면 지금 당신은:</p>
@@ -58,7 +44,6 @@ export default function TelegramDrugPage() {
               </p>
             </div>
           )}
-
           <div style={{ background:"#060312", borderRadius:14, padding:"18px 20px", marginBottom:20 }}>
             {[
               { icon:"📱", t:"텔레그램이 안전하다는 거짓말", d:"텔레그램은 2023년부터 각국 수사기관에 계정 정보를 제공합니다. '암호화 채팅'도 서버 메타데이터는 남습니다." },
@@ -76,7 +61,6 @@ export default function TelegramDrugPage() {
               </div>
             ))}
           </div>
-
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
             <ReportNumber number="182" label="📞 경찰청 마약수사대" bg="#12003a" color="#c4b5fd" />
             <div style={{ marginTop:8 }}>
@@ -118,35 +102,21 @@ export default function TelegramDrugPage() {
   );
 
   if (phase === "chat") return (
-    <div style={{ minHeight:"100vh", background:"#0d0014", display:"flex", flexDirection:"column" as const }}>
-      <div style={{ background:"#120020", borderBottom:"1px solid #1a0030", padding:"14px 20px", display:"flex", alignItems:"center", gap:12 }}>
-        <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#7c3aed,#a855f7)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>👤</div>
-        <div>
-          <p style={{ color:"#e2e8f0", fontWeight:700, fontSize:14, margin:0 }}>딜러</p>
-          <p style={{ color:"#22c55e", fontSize:11, margin:0 }}>● 온라인</p>
-        </div>
-        <div style={{ marginLeft:"auto", background:"#2d0050", borderRadius:20, padding:"4px 10px" }}>
-          <span style={{ color:"#c4b5fd", fontSize:10, fontWeight:700 }}>🔒 암호화됨</span>
-        </div>
-      </div>
-      <div style={{ flex:1, padding:"20px 16px", display:"flex", flexDirection:"column" as const, gap:10, overflowY:"auto" as const }}>
-        {CHAT_SCRIPT.slice(0, chatIdx).map((msg, i) => (
-          <div key={i} style={{ display:"flex", justifyContent: msg.from === "user" ? "flex-end" : "flex-start" }}>
-            <div style={{ maxWidth:"78%", background: msg.from === "user" ? "#4c1d95" : "#120020", border: msg.from === "dealer" ? "1px solid #2d0050" : "none", borderRadius: msg.from === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding:"10px 14px" }}>
-              <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.6, margin:0, whiteSpace:"pre-wrap" }}>{msg.text}</p>
-            </div>
-          </div>
-        ))}
-        {typing && (
-          <div style={{ display:"flex" }}>
-            <div style={{ background:"#120020", border:"1px solid #2d0050", borderRadius:"18px 18px 18px 4px", padding:"10px 16px" }}>
-              <span style={{ color:"#64748b", fontSize:18 }}>•••</span>
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-    </div>
+    <CrimeChat
+      script={CHAT_SCRIPT}
+      header={{
+        icon: "👤",
+        name: "딜러",
+        sub: "● 온라인",
+        badge: "🔒 암호화됨",
+        badgeColor: "#c4b5fd",
+        bg: "#120020",
+      }}
+      userBubbleColor="#4c1d95"
+      scamBubbleColor="#120020"
+      placeholder="메시지를 입력하세요..."
+      onComplete={() => setPhase("deal")}
+    />
   );
 
   if (phase === "channel") return (

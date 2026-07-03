@@ -1,9 +1,9 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
+import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
 
-type Msg = { role: "dealer" | "user"; text: string; time: string };
 type Phase = "intro" | "chat" | "hook" | "reveal";
 
 const SCENARIOS = [
@@ -57,62 +57,19 @@ const SCENARIOS = [
   },
 ];
 
-function now() { return new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }); }
+function buildScript(s: typeof SCENARIOS[0]): ChatMsg[] {
+  const msgs: ChatMsg[] = [{ from: "scammer", text: s.intro }];
+  s.scripts.forEach(text => {
+    msgs.push({ from: "user", text: "..." });
+    msgs.push({ from: "scammer", text });
+  });
+  return msgs;
+}
 
 export default function DrugSnsPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("intro");
   const [scenario, setScenario] = useState(SCENARIOS[0]);
-  const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
-  const [scriptIdx, setScriptIdx] = useState(0);
-  const scriptIdxRef = useRef(0);
-  const [typing, setTyping] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, typing]);
-
-  const addDealer = useCallback((text: string) => {
-    setMsgs(p => [...p, { role: "dealer", text, time: now() }]);
-  }, []);
-
-  function startChat(s: typeof SCENARIOS[0]) {
-    setScenario(s);
-    setMsgs([]);
-    setScriptIdx(0);
-    scriptIdxRef.current = 0;
-    setPhase("chat");
-    setTimeout(() => {
-      setTyping(true);
-      setTimeout(() => {
-        setTyping(false);
-        addDealer(s.intro);
-        scriptIdxRef.current = 0;
-      }, 1200);
-    }, 500);
-  }
-
-  function sendMsg() {
-    const text = input.trim();
-    if (!text) return;
-    setInput("");
-    setMsgs(p => [...p, { role: "user", text, time: now() }]);
-    const idx = scriptIdxRef.current;
-    if (idx >= scenario.scripts.length) {
-      setTimeout(() => setPhase("hook"), 800);
-      return;
-    }
-    setTimeout(() => {
-      setTyping(true);
-      setTimeout(() => {
-        setTyping(false);
-        addDealer(scenario.scripts[idx]);
-        scriptIdxRef.current = idx + 1;
-        setScriptIdx(idx + 1);
-        if (idx + 1 >= scenario.scripts.length) setTimeout(() => setPhase("hook"), 1000);
-      }, 1000 + Math.random() * 700);
-    }, 400);
-  }
 
   if (phase === "reveal") return (
     <div style={{ minHeight: "100vh", background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
@@ -155,8 +112,8 @@ export default function DrugSnsPage() {
           </p>
           <div style={{ background: "#111", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
             <p style={{ color: "#ef4444", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>🔴 이 대화에서 감지된 수법</p>
-            {["\"천연\" \"합법\" 강조로 경계심 낮추기", "후기·SNS 커뮤니티로 신뢰 조작", "현금·코인 요구 (추적 불가)", "텔레그램 등 비공개 채널로 유도", "\"한정 수량\" \"오늘까지\" 압박"].map((t, i) => (
-              <p key={i} style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.7, margin: 0 }}>⚠️ {t}</p>
+            {["\"천연\" \"합법\" 강조로 경계심 낮추기", "후기·SNS 커뮤니티로 신뢰 조작", "현금·코인 요구 (추적 불가)", "텔레그램 등 비공개 채널로 유도", "\"한정 수량\" \"오늘까지\" 압박"].map((txt, i) => (
+              <p key={i} style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.7, margin: 0 }}>⚠️ {txt}</p>
             ))}
           </div>
           <button onClick={() => setPhase("reveal")} style={{ width: "100%", background: "linear-gradient(135deg,#7c3aed,#4c1d95)", border: "none", borderRadius: 14, padding: "14px 0", color: "#fff", fontWeight: 900, fontSize: 15, cursor: "pointer" }}>수법 전체 해설 보기 →</button>
@@ -166,42 +123,21 @@ export default function DrugSnsPage() {
   );
 
   if (phase === "chat") return (
-    <div style={{ position: "fixed", inset: 0, background: "#0a0a0a", display: "flex", flexDirection: "column" as const }}>
-      <div style={{ background: "#111", borderBottom: "1px solid #1f1f1f", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-        <button onClick={() => router.push("/")} style={{ background: "none", border: "none", color: "#555", fontSize: 18, cursor: "pointer" }}>←</button>
-        <div style={{ width: 38, height: 38, borderRadius: "50%", background: scenario.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{scenario.avatar}</div>
-        <div>
-          <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, margin: 0 }}>{scenario.handle}</p>
-          <p style={{ color: scenario.color, fontSize: 11, margin: 0 }}>DM</p>
-        </div>
-        <div style={{ marginLeft: "auto", background: "#ef444422", border: "1px solid #ef444444", borderRadius: 20, padding: "3px 10px" }}>
-          <span style={{ color: "#ef4444", fontSize: 10, fontWeight: 700 }}>⚠️ 교육용</span>
-        </div>
-      </div>
-      <div style={{ flex: 1, overflowY: "auto" as const, padding: 16, display: "flex", flexDirection: "column" as const, gap: 10 }}>
-        {msgs.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: "80%" }}>
-            <div style={{ background: m.role === "user" ? scenario.color : "#1f1f1f", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "10px 14px" }}>
-              <p style={{ color: "#fff", fontSize: 13, margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{m.text}</p>
-            </div>
-            <p style={{ color: "#374151", fontSize: 9, margin: "2px 4px 0", textAlign: m.role === "user" ? "right" : "left" }}>{m.time}</p>
-          </div>
-        ))}
-        {typing && (
-          <div style={{ alignSelf: "flex-start", background: "#1f1f1f", borderRadius: "18px 18px 18px 4px", padding: "12px 16px" }}>
-            <div style={{ display: "flex", gap: 4 }}>
-              {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: "#555", animation: `dot 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-      <style>{`@keyframes dot{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}`}</style>
-      <div style={{ background: "#111", borderTop: "1px solid #1f1f1f", padding: "12px 16px", display: "flex", gap: 10 }}>
-        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && sendMsg()} placeholder="메시지 입력..." style={{ flex: 1, background: "#1f1f1f", border: "1px solid #333", borderRadius: 22, padding: "10px 16px", color: "#fff", fontSize: 14, outline: "none" }} />
-        <button onClick={sendMsg} style={{ width: 44, height: 44, borderRadius: "50%", background: scenario.color, border: "none", color: "#fff", fontSize: 18, cursor: "pointer" }}>↑</button>
-      </div>
-    </div>
+    <CrimeChat
+      script={buildScript(scenario)}
+      header={{
+        icon: scenario.avatar,
+        name: scenario.handle,
+        sub: "DM",
+        badge: "⚠️ 교육용",
+        badgeColor: "#ef4444",
+        bg: "#111111",
+      }}
+      userBubbleColor={scenario.color}
+      scamBubbleColor="#1f1f1f"
+      placeholder="메시지를 입력하세요..."
+      onComplete={() => setPhase("hook")}
+    />
   );
 
   return (
@@ -215,7 +151,7 @@ export default function DrugSnsPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" as const, gap: 14 }}>
           {SCENARIOS.map(s => (
-            <button key={s.id} onClick={() => startChat(s)} style={{ background: "#111", border: `1px solid ${s.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer" }}>
+            <button key={s.id} onClick={() => { setScenario(s); setPhase("chat"); }} style={{ background: "#111", border: `1px solid ${s.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
                 <span style={{ fontSize: 26 }}>{s.avatar}</span>
                 <div>

@@ -1,9 +1,9 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
+import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
 
-type Msg = { role: "scammer" | "user"; text: string; time: string };
 type Phase = "intro" | "chat" | "trap" | "reveal";
 
 const JOBS = [
@@ -64,72 +64,27 @@ const SCRIPTS: Record<string, string[]> = {
   ],
 };
 
-function now() { return new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }); }
+function buildScript(jobId: string): ChatMsg[] {
+  const scripts = SCRIPTS[jobId];
+  const msgs: ChatMsg[] = [{ from: "scammer", text: scripts[0] }];
+  for (let i = 1; i < scripts.length; i++) {
+    msgs.push({ from: "user", text: "..." });
+    msgs.push({ from: "scammer", text: scripts[i] });
+  }
+  return msgs;
+}
+
+const TRAP_STEPS = [
+  { icon: "📋", title: "1단계 — 지원서 작성", desc: "이름·나이·연락처 등 기본 정보를 요구합니다.", color: "#f59e0b" },
+  { icon: "📱", title: "2단계 — 악성 앱 설치 유도", desc: "\"업무용 앱\"이라며 공식 스토어 외 링크로 악성코드 설치를 유도합니다.", color: "#ef4444" },
+  { icon: "🪪", title: "3단계 — 신분증 촬영 요구", desc: "\"본인 확인\"이라며 신분증 앞·뒷면 사진을 요구합니다. → 명의도용·대포폰 개설에 사용됩니다.", color: "#ef4444" },
+  { icon: "💸", title: "4단계 — 보증금·선입금 요구", desc: "\"업무 보증금\" \"보험\" 명목으로 입금을 요구하고, 입금 후 잠적합니다.", color: "#dc2626" },
+];
 
 export default function JobScamPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("intro");
   const [job, setJob] = useState(JOBS[0]);
-  const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
-  const [scriptIdx, setScriptIdx] = useState(0);
-  const scriptIdxRef = useRef(0);
-  const [typing, setTyping] = useState(false);
-  const [trapStep, setTrapStep] = useState(0);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, typing]);
-
-  const addScammer = useCallback((text: string) => {
-    setMsgs(p => [...p, { role: "scammer", text, time: now() }]);
-  }, []);
-
-  function startChat(j: typeof JOBS[0]) {
-    setJob(j);
-    setMsgs([]);
-    setScriptIdx(0);
-    scriptIdxRef.current = 0;
-    setPhase("chat");
-    setTimeout(() => {
-      setTyping(true);
-      setTimeout(() => {
-        setTyping(false);
-        addScammer(SCRIPTS[j.id][0]);
-        scriptIdxRef.current = 1;
-        setScriptIdx(1);
-      }, 1400);
-    }, 600);
-  }
-
-  function sendMsg() {
-    const text = input.trim();
-    if (!text) return;
-    setInput("");
-    setMsgs(p => [...p, { role: "user", text, time: now() }]);
-    const scripts = SCRIPTS[job.id];
-    const idx = scriptIdxRef.current;
-    if (idx >= scripts.length) {
-      setTimeout(() => setPhase("trap"), 800);
-      return;
-    }
-    setTimeout(() => {
-      setTyping(true);
-      setTimeout(() => {
-        setTyping(false);
-        addScammer(scripts[idx]);
-        scriptIdxRef.current = idx + 1;
-        setScriptIdx(idx + 1);
-        if (idx + 1 >= scripts.length) setTimeout(() => setPhase("trap"), 1200);
-      }, 1200 + Math.random() * 800);
-    }, 400);
-  }
-
-  const TRAP_STEPS = [
-    { icon: "📋", title: "1단계 — 지원서 작성", desc: "이름·나이·연락처 등 기본 정보를 요구합니다.", color: "#f59e0b" },
-    { icon: "📱", title: "2단계 — 악성 앱 설치 유도", desc: "\"업무용 앱\"이라며 공식 스토어 외 링크로 악성코드 설치를 유도합니다.", color: "#ef4444" },
-    { icon: "🪪", title: "3단계 — 신분증 촬영 요구", desc: "\"본인 확인\"이라며 신분증 앞·뒷면 사진을 요구합니다. → 명의도용·대포폰 개설에 사용됩니다.", color: "#ef4444" },
-    { icon: "💸", title: "4단계 — 보증금·선입금 요구", desc: "\"업무 보증금\" \"보험\" 명목으로 입금을 요구하고, 입금 후 잠적합니다.", color: "#dc2626" },
-  ];
 
   if (phase === "reveal") return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg,#0a0a1a,#1a0a2e)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
@@ -143,8 +98,8 @@ export default function JobScamPage() {
           </p>
           <div style={{ background: "#041a0e", borderRadius: 14, padding: "16px 20px", textAlign: "left", marginBottom: 20 }}>
             <p style={{ color: "#4ade80", fontSize: 12, fontWeight: 700, marginBottom: 10 }}>✅ 취업 사기 예방 체크리스트</p>
-            {["공식 사이트(잡코리아·사람인·워크넷) 외 채용공고 주의", "\"보증금\" \"선납금\" 요구하는 회사는 100% 사기", "업무 전 신분증 촬영 요구하는 회사 없음", "공식 앱스토어 외 앱 설치 절대 금지", "의심스러우면 고용노동부 ☎1350 신고"].map((t, i) => (
-              <p key={i} style={{ color: "#6b8c78", fontSize: 12, lineHeight: 1.8, margin: 0 }}>• {t}</p>
+            {["공식 사이트(잡코리아·사람인·워크넷) 외 채용공고 주의", "\"보증금\" \"선납금\" 요구하는 회사는 100% 사기", "업무 전 신분증 촬영 요구하는 회사 없음", "공식 앱스토어 외 앱 설치 절대 금지", "의심스러우면 고용노동부 ☎1350 신고"].map((txt, i) => (
+              <p key={i} style={{ color: "#6b8c78", fontSize: 12, lineHeight: 1.8, margin: 0 }}>• {txt}</p>
             ))}
           </div>
           <ReportNumber number="1350" label="📞 고용노동부 신고" bg="#052e16" color="#22c55e" />
@@ -179,55 +134,21 @@ export default function JobScamPage() {
   );
 
   if (phase === "chat") return (
-    <div style={{ position: "fixed", inset: 0, background: "#0f172a", display: "flex", flexDirection: "column" as const }}>
-      {/* 헤더 */}
-      <div style={{ background: "#1e293b", borderBottom: "1px solid #334155", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-        <button onClick={() => router.push("/")} style={{ background: "none", border: "none", color: "#64748b", fontSize: 18, cursor: "pointer" }}>←</button>
-        <div style={{ width: 38, height: 38, borderRadius: "50%", background: job.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{job.icon}</div>
-        <div>
-          <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 14, margin: 0 }}>{job.company}</p>
-          <p style={{ color: "#22c55e", fontSize: 11, margin: 0 }}>채용 담당자</p>
-        </div>
-        <div style={{ marginLeft: "auto", background: "#ef444422", border: "1px solid #ef444455", borderRadius: 20, padding: "3px 10px" }}>
-          <span style={{ color: "#ef4444", fontSize: 10, fontWeight: 700 }}>⚠️ 교육용 시뮬레이션</span>
-        </div>
-      </div>
-      {/* 메시지 */}
-      <div style={{ flex: 1, overflowY: "auto" as const, padding: "16px", display: "flex", flexDirection: "column" as const, gap: 10 }}>
-        <div style={{ background: "#1e293b", borderRadius: 12, padding: "10px 14px", maxWidth: "85%", alignSelf: "flex-start" }}>
-          <p style={{ color: "#94a3b8", fontSize: 11, margin: "0 0 4px" }}>{job.company} 채용팀</p>
-          <p style={{ color: "#e2e8f0", fontSize: 13, margin: 0, lineHeight: 1.6 }}>안녕하세요! <strong style={{ color: job.color }}>{job.title}</strong> 공고에 관심 가져주셔서 감사합니다. 채용 관련 상담을 도와드릴게요 😊</p>
-        </div>
-        {msgs.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: "85%" }}>
-            {m.role === "scammer" && <p style={{ color: "#64748b", fontSize: 10, margin: "0 0 3px" }}>{job.company}</p>}
-            <div style={{ background: m.role === "user" ? job.color : "#1e293b", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", padding: "10px 14px" }}>
-              <p style={{ color: "#f1f5f9", fontSize: 13, margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{m.text}</p>
-            </div>
-            <p style={{ color: "#374151", fontSize: 9, margin: "2px 4px 0", textAlign: m.role === "user" ? "right" : "left" }}>{m.time}</p>
-          </div>
-        ))}
-        {typing && (
-          <div style={{ alignSelf: "flex-start", background: "#1e293b", borderRadius: "18px 18px 18px 4px", padding: "12px 16px" }}>
-            <div style={{ display: "flex", gap: 4 }}>
-              {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: "#64748b", animation: `dot-bounce 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-      <style>{`@keyframes dot-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}`}</style>
-      {/* 입력 */}
-      <div style={{ background: "#1e293b", borderTop: "1px solid #334155", padding: "12px 16px", display: "flex", gap: 10 }}>
-        <input
-          value={input} onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && sendMsg()}
-          placeholder="메시지 입력..."
-          style={{ flex: 1, background: "#0f172a", border: "1px solid #334155", borderRadius: 22, padding: "10px 16px", color: "#f1f5f9", fontSize: 14, outline: "none" }}
-        />
-        <button onClick={sendMsg} style={{ width: 44, height: 44, borderRadius: "50%", background: job.color, border: "none", color: "#fff", fontSize: 18, cursor: "pointer" }}>↑</button>
-      </div>
-    </div>
+    <CrimeChat
+      script={buildScript(job.id)}
+      header={{
+        icon: job.icon,
+        name: job.company,
+        sub: "채용 담당자",
+        badge: "⚠️ 교육용 시뮬레이션",
+        badgeColor: "#ef4444",
+        bg: "#1e293b",
+      }}
+      userBubbleColor={job.color}
+      scamBubbleColor="#1e293b"
+      placeholder="메시지를 입력하세요..."
+      onComplete={() => setPhase("trap")}
+    />
   );
 
   return (
@@ -241,7 +162,7 @@ export default function JobScamPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" as const, gap: 14 }}>
           {JOBS.map(j => (
-            <button key={j.id} onClick={() => startChat(j)} style={{ background: "#1e293b", border: `1px solid ${j.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer", transition: "all 0.2s" }}>
+            <button key={j.id} onClick={() => { setJob(j); setPhase("chat"); }} style={{ background: "#1e293b", border: `1px solid ${j.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer", transition: "all 0.2s" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 10 }}>
                 <span style={{ fontSize: 28 }}>{j.icon}</span>
                 <div>
