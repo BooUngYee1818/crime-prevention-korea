@@ -43,6 +43,11 @@ export default function FssImpersonationPage() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [callState]);
 
+  useEffect(() => {
+    const isPlaying = phase === "call" || phase === "transfer";
+    window.dispatchEvent(new CustomEvent(isPlaying ? "crime-play-start" : "crime-play-end"));
+  }, [phase]);
+
   function acceptCall() {
     setCallState("talking");
     setShowText(true);

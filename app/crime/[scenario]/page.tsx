@@ -1100,6 +1100,12 @@ export default function ScenarioPage() {
     }
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // 채팅 중 BGM 버튼 숨기기
+  useEffect(() => {
+    const isChat = phase === "chat" || phase === "sent-animation";
+    window.dispatchEvent(new CustomEvent(isChat ? "crime-play-start" : "crime-play-end"));
+  }, [phase]);
+
   // police-call 대화 라인 (TTS, 타이머 공유)
   const POLICE_LINES = [
     { from: "system", text: "📞 112에 신고 중..." },

@@ -44,6 +44,11 @@ export default function AiCrimeChat({
   const inputRef  = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    window.dispatchEvent(new CustomEvent("crime-play-start"));
+    return () => { window.dispatchEvent(new CustomEvent("crime-play-end")); };
+  }, []);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 

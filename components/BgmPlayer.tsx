@@ -26,10 +26,23 @@ export default function BgmPlayer() {
   const [muted,    setMuted]    = useState(false);
   const [volume,   setVolume]   = useState(getBaseVolume(pathname));
   const [open,     setOpen]     = useState(false);
+  const [chatMode, setChatMode] = useState(false); // 채팅 중엔 미니 버튼만
   const startedRef  = useRef(false);
   const pulseRef    = useRef<NodeJS.Timeout | null>(null);
   const pulsePhase  = useRef(0);
   const isSimulation = pathname.startsWith("/crime/");
+
+  // 채팅 플레이 중 미니모드 이벤트
+  useEffect(() => {
+    const on  = () => setChatMode(true);
+    const off = () => setChatMode(false);
+    window.addEventListener("crime-play-start", on);
+    window.addEventListener("crime-play-end",   off);
+    return () => {
+      window.removeEventListener("crime-play-start", on);
+      window.removeEventListener("crime-play-end",   off);
+    };
+  }, []);
 
   // 시뮬레이션 효과: 볼륨이 물결처럼 오르내림
   function startPulse(base: number) {
@@ -150,6 +163,28 @@ export default function BgmPlayer() {
   }
 
   const pct = Math.round(volume * 100 / 0.4 * 100); // 0~0.4 → 0~100%
+
+  // ── 채팅 플레이 중: 상단 미니 버튼만 표시 ──────────────────────────────
+  if (chatMode) return (
+    <>
+      <audio ref={audioRef} src={getSrc(pathname)} data-src={getSrc(pathname)} preload="auto" />
+      <button
+        onClick={toggle}
+        style={{
+          position: "fixed", top: 10, right: 14, zIndex: 10000,
+          width: 30, height: 30, borderRadius: "50%",
+          background: "rgba(0,0,0,0.45)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          color: "#fff", fontSize: 14,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer",
+        }}
+        title={playing ? "음악 끄기" : "음악 켜기"}
+      >
+        {playing ? "🔊" : "🔇"}
+      </button>
+    </>
+  );
 
   return (
     <>
