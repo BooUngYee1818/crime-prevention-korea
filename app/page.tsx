@@ -397,6 +397,9 @@ const SC_CAT_KEY: Record<string, Parameters<typeof t>[0]> = {
   "job-scam":                "cat_fraud",
   "drug-sns":                "cat_drug",
   "fss-impersonation":       "cat_agency",
+  "telegram-drug":           "cat_illegal",
+  "illegal-gun-trade":       "cat_illegal",
+  "gun-purchase-scam":       "cat_illegal",
   "smarthome-ransomware":    "cat_future",
   "dna-scam":                "cat_future",
   "metaverse-fraud":         "cat_future",
@@ -469,7 +472,8 @@ export default function HomePage() {
     { version: "v1.7", badgeColor: "#38bdf8", items: ["📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션", "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도", "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크", "✨ 기관 판매 배너 홀로그램 은박 효과"] },
     { version: "v1.7", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
     { version: "v1.8", badgeColor: "#f472b6", items: ["🎨 전화 통화 화면 전면 리디자인 — 삼성 One UI 8.5 / iOS 26 Liquid Glass 스타일 적용", "🔇 발신자 번호 '발신자표시제한'으로 변경 (실제 보이스피싱 수법 반영)", "🎙️ AI 목소리 업그레이드 — ElevenLabs 딥보이스 TTS 적용 (기존 로봇음 → 실제 사람 목소리)", "📌 방명록 추천 후기 고정 표시", "✍️ 방명록 1인 1회 작성 제한"] },
-    { version: "v1.9", badge: "최신", badgeColor: "#22c55e", items: ["🎵 카지노 피아노 BGM 추가 — 도박 페이지 전용 배경음악", "🔊 도박 효과음 추가 — 슬롯 스핀·릴 정지·코인 드롭·잭팟 사운드", "💼 취업 사기 시나리오 추가 — 재택알바 보증금 사기", "💊 마약 SNS 유인 시나리오 추가 — 다이어트약·힐링템 위장", "🏛️ 금융감독원 사칭 시나리오 추가 — 보이스피싱 전화 체험", "🔮 미래형 범죄 3종 추가 — 스마트홈 랜섬웨어·AI 유전자 분석 사기·메타버스 가상부동산 사기", "❓ FAQ 섹션 신설 — 11가지 자주 묻는 질문", "📊 통계·명예의전당 버튼 메인 페이지 전용으로 변경", "🎨 업데이트 내역 버튼 호버 시에만 확장되도록 수정"] },
+    { version: "v1.9.1", badge: "최신", badgeColor: "#ef4444", items: ["💊 텔레그램 마약 거래 시나리오 추가 — 채널 구독부터 딜러 DM 체험", "🔫 불법 총기 거래 시나리오 추가 — 다크마켓 목록 조회 및 거래 체험", "😱 총기 구매 사기 대처법 추가 — 이중 피해 상황에서 선택지 탐색"] },
+    { version: "v1.9", badgeColor: "#22c55e", items: ["🎵 카지노 피아노 BGM 추가 — 도박 페이지 전용 배경음악", "🔊 도박 효과음 추가 — 슬롯 스핀·릴 정지·코인 드롭·잭팟 사운드", "💼 취업 사기 시나리오 추가 — 재택알바 보증금 사기", "💊 마약 SNS 유인 시나리오 추가 — 다이어트약·힐링템 위장", "🏛️ 금융감독원 사칭 시나리오 추가 — 보이스피싱 전화 체험", "🔮 미래형 범죄 3종 추가 — 스마트홈 랜섬웨어·AI 유전자 분석 사기·메타버스 가상부동산 사기", "❓ FAQ 섹션 신설 — 11가지 자주 묻는 질문", "📊 통계·명예의전당 버튼 메인 페이지 전용으로 변경", "🎨 업데이트 내역 버튼 호버 시에만 확장되도록 수정"] },
   ];
 
   const startChangelogScroll = () => {
@@ -922,7 +926,7 @@ export default function HomePage() {
                   marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650",
                   borderRadius: 20, padding: "3px 10px",
                 }}>
-                  <span style={{ color: "#22c55e", fontSize: 12, fontWeight: 800 }}>v1.9 최신</span>
+                  <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.9.1 최신</span>
                 </div>
               </div>
               {/* 스크롤 영역 */}
