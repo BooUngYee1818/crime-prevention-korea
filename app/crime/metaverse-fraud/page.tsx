@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "browse" | "invest" | "watch" | "rugpull" | "choice" | "reveal";
 
@@ -73,7 +74,7 @@ export default function MetaverseFraudPage() {
               </div>
             ))}
           </div>
-          <a href="tel:1332" style={{ display:"block", background:"#7c3aed", color:"#fff", fontWeight:900, fontSize:16, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center", marginBottom:10 }}>📞 금융감독원 가상자산 피해 1332</a>
+          <ReportNumber number="1332" label="📞 금융감독원 가상자산 피해" bg="#130a28" color="#c4b5fd" />
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #1a0a40", borderRadius:14, padding:"12px 0", color:"#4a3060", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
         </div>
       </div>

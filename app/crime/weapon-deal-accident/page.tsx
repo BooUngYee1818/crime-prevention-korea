@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type ScenarioId = "robbery" | "courier" | "raid";
 type ChoiceKey = string;
@@ -300,8 +301,10 @@ export default function WeaponDealAccidentPage() {
             </p>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-            <a href="tel:132" style={{ display:"block", background:"#1d4ed8", color:"#fff", fontWeight:900, fontSize:14, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>⚖️ 법률구조 132</a>
-            <a href="tel:112" style={{ display:"block", background:"#374151", color:"#fff", fontWeight:900, fontSize:14, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>🚔 경찰 112</a>
+            <ReportNumber number="132" label="⚖️ 대한법률구조공단 (무료 상담)" bg="#0d1a30" color="#93c5fd" />
+            <div style={{ marginTop:8 }}>
+              <ReportNumber number="112" label="🚔 경찰청" bg="#1a1a2a" color="#94a3b8" />
+            </div>
           </div>
           <button onClick={reset} style={{ width:"100%", background:"none", border:"1px solid #1a1a2a", borderRadius:14, padding:"12px 0", color:"#4a4a6a", fontSize:13, cursor:"pointer", marginBottom:10 }}>← 다른 시나리오 보기</button>
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"none", color:"#2a2a3a", fontSize:12, cursor:"pointer" }}>메인으로</button>

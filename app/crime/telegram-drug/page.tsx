@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "channel" | "chat" | "deal" | "choice" | "reveal";
 
@@ -77,8 +78,10 @@ export default function TelegramDrugPage() {
           </div>
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-            <a href="tel:182" style={{ display:"block", background:"#7c3aed", color:"#fff", fontWeight:900, fontSize:15, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>📞 경찰청 182</a>
-            <a href="tel:1301" style={{ display:"block", background:"#4c1d95", color:"#fff", fontWeight:900, fontSize:15, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>🏛️ 검찰청 1301</a>
+            <ReportNumber number="182" label="📞 경찰청 마약수사대" bg="#12003a" color="#c4b5fd" />
+            <div style={{ marginTop:8 }}>
+              <ReportNumber number="1301" label="🏛️ 검찰청" bg="#0a0020" color="#a78bfa" />
+            </div>
           </div>
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #1a1030", borderRadius:14, padding:"12px 0", color:"#4a3060", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
         </div>

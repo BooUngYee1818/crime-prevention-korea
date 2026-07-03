@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "call" | "transfer" | "reveal";
 type CallState = "ringing" | "talking" | "hold";
@@ -86,8 +87,10 @@ export default function FssImpersonationPage() {
           ))}
         </div>
         <div style={{ display: "flex", flexDirection: "column" as const, gap: 10 }}>
-          <a href="tel:1332" style={{ display: "block", background: "linear-gradient(135deg,#1d4ed8,#2563eb)", color: "#fff", fontWeight: 900, fontSize: 15, borderRadius: 14, padding: "14px 0", textDecoration: "none", textAlign: "center" }}>🏦 금융감독원 신고 1332</a>
-          <a href="tel:112" style={{ display: "block", background: "linear-gradient(135deg,#dc2626,#ef4444)", color: "#fff", fontWeight: 900, fontSize: 15, borderRadius: 14, padding: "14px 0", textDecoration: "none", textAlign: "center" }}>🚔 경찰청 112 — 즉시 지급정지 요청</a>
+          <ReportNumber number="1332" label="🏦 금융감독원 신고" bg="#0f1e3a" color="#60a5fa" />
+          <div style={{ marginTop: 8 }}>
+            <ReportNumber number="112" label="🚔 경찰청 — 즉시 지급정지 요청" bg="#1a0808" color="#f87171" />
+          </div>
           <button onClick={() => router.push("/")} style={{ background: "none", border: "1px solid #1e293b", borderRadius: 14, padding: "12px 0", color: "#4b5563", fontSize: 13, cursor: "pointer" }}>← 메인으로 돌아가기</button>
         </div>
       </div>

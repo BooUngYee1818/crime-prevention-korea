@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Msg = { role: "scammer" | "user"; text: string; time: string };
 type Phase = "intro" | "chat" | "trap" | "reveal";
@@ -146,7 +147,7 @@ export default function JobScamPage() {
               <p key={i} style={{ color: "#6b8c78", fontSize: 12, lineHeight: 1.8, margin: 0 }}>• {t}</p>
             ))}
           </div>
-          <a href="tel:1350" style={{ display: "block", background: "#22c55e", color: "#fff", fontWeight: 900, fontSize: 16, borderRadius: 14, padding: "14px 0", textDecoration: "none", marginBottom: 10 }}>📞 고용노동부 신고 1350</a>
+          <ReportNumber number="1350" label="📞 고용노동부 신고" bg="#052e16" color="#22c55e" />
           <button onClick={() => router.push("/")} style={{ width: "100%", background: "none", border: "1px solid #1e3028", borderRadius: 14, padding: "12px 0", color: "#4a6a55", fontSize: 13, cursor: "pointer" }}>← 메인으로 돌아가기</button>
         </div>
       </div>

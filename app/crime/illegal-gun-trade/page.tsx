@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "browse" | "chat" | "deal" | "choice" | "reveal";
 
@@ -77,8 +78,10 @@ export default function IllegalGunTradePage() {
           </div>
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-            <a href="tel:112" style={{ display:"block", background:"#b45309", color:"#fff", fontWeight:900, fontSize:15, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>📞 경찰 112</a>
-            <a href="tel:182" style={{ display:"block", background:"#92400e", color:"#fff", fontWeight:900, fontSize:15, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>🕵️ 사이버수사대 182</a>
+            <ReportNumber number="112" label="🚔 경찰청" bg="#1a0f00" color="#fbbf24" />
+            <div style={{ marginTop:8 }}>
+              <ReportNumber number="182" label="🕵️ 사이버수사대" bg="#120a00" color="#f59e0b" />
+            </div>
           </div>
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #2a1a00", borderRadius:14, padding:"12px 0", color:"#5a4020", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
         </div>

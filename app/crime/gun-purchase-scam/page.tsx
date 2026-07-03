@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "situation" | "options" | "choice" | "reveal";
 
@@ -125,7 +126,7 @@ export default function GunPurchaseScamPage() {
           </div>
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-            <a href="tel:132" style={{ display:"block", background:"#78350f", color:"#fff", fontWeight:900, fontSize:14, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center" }}>⚖️ 법률구조공단 132</a>
+            <ReportNumber number="132" label="⚖️ 대한법률구조공단 (무료 상담)" bg="#1a0a00" color="#fbbf24" />
             <button onClick={() => setPhase("options")} style={{ background:"#1a1000", border:"1px solid #2a1800", borderRadius:14, padding:"14px 0", color:"#6b7280", fontSize:14, cursor:"pointer" }}>← 다시 선택</button>
           </div>
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #1a0f00", borderRadius:14, padding:"12px 0", color:"#5a4020", fontSize:13, cursor:"pointer" }}>← 메인으로</button>

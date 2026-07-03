@@ -102,3 +102,66 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* ── 범죄 시뮬레이션 페이지 반응형 ─────────────────────────── */
+.crime-page-wrap {
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+.crime-card {
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+.crime-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+/* 교육 배너 — 공공장소에서도 명확히 표시 */
+.edu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(234,179,8,0.12);
+  border: 1px solid rgba(234,179,8,0.4);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fbbf24;
+  letter-spacing: 0.5px;
+}
+
+/* 모바일 (≤480px) */
+@media (max-width: 480px) {
+  .crime-page-wrap { padding: 20px 12px; }
+  .crime-grid-2 { grid-template-columns: 1fr; }
+
+  /* 채팅 버블 폰트 */
+  .crime-chat-bubble { font-size: 13px !important; }
+
+  /* 교육 뱃지 항상 상단 고정 */
+  .edu-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0d0520ee;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(251,191,36,0.2);
+  }
+
+  /* 신고번호 컴포넌트 */
+  .report-number-wrap { flex-direction: column; gap: 6px; }
+  .report-number-wrap button { width: 100%; }
+}
+
+/* PC (≥1024px) */
+@media (min-width: 1024px) {
+  .crime-card { max-width: 680px; }
+  .crime-page-wrap { padding: 56px 40px; }
+  .crime-grid-2 { gap: 14px; }
+}
+

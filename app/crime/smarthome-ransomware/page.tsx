@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "normal" | "hacked" | "negotiation" | "reveal";
 
@@ -88,7 +89,7 @@ export default function SmarthomeRansomwarePage() {
           {choice === "pay" && <div style={{ background:"#1a0808", border:"1px solid #ef444444", borderRadius:12, padding:"12px 16px", marginBottom:16 }}>
             <p style={{ color:"#fca5a5", fontSize:13, margin:0 }}>💸 실제로 돈을 보냈다면: 해커는 돈을 받고 잠적하거나 추가 요구를 합니다. <strong style={{ color:"#ef4444" }}>절대 송금하지 마세요.</strong></p>
           </div>}
-          <a href="tel:118" style={{ display:"block", background:"#22c55e", color:"#fff", fontWeight:900, fontSize:16, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center", marginBottom:10 }}>🛡️ 사이버범죄 신고 118 (KISA)</a>
+          <ReportNumber number="118" label="🛡️ 사이버범죄 신고 (KISA)" bg="#052e16" color="#22c55e" />
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #1e3028", borderRadius:14, padding:"12px 0", color:"#4a6a55", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
         </div>
       </div>

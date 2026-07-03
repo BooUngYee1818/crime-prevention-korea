@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Phase = "intro" | "order" | "chat" | "blackmail" | "choice" | "reveal";
 
@@ -83,7 +84,7 @@ export default function DnaScamPage() {
               </div>
             ))}
           </div>
-          <a href="tel:118" style={{ display:"block", background:"#0284c7", color:"#fff", fontWeight:900, fontSize:16, borderRadius:14, padding:"14px 0", textDecoration:"none", textAlign:"center", marginBottom:10 }}>📞 개인정보 침해 신고 118</a>
+          <ReportNumber number="118" label="📞 개인정보 침해 신고" bg="#0a1e2e" color="#38bdf8" />
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #0c2040", borderRadius:14, padding:"12px 0", color:"#334155", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
         </div>
       </div>

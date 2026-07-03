@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import ReportNumber from "@/components/ReportNumber";
 
 type Msg = { role: "dealer" | "user"; text: string; time: string };
 type Phase = "intro" | "chat" | "hook" | "reveal";
@@ -135,7 +136,7 @@ export default function DrugSnsPage() {
               </div>
             ))}
           </div>
-          <a href="tel:182" style={{ display: "block", background: "#ef4444", color: "#fff", fontWeight: 900, fontSize: 16, borderRadius: 14, padding: "14px 0", textDecoration: "none", textAlign: "center", marginBottom: 10 }}>📞 마약 신고 182 (경찰청 마약수사대)</a>
+          <ReportNumber number="182" label="📞 마약 신고 (경찰청 마약수사대)" bg="#1a0820" color="#f472b6" />
           <button onClick={() => router.push("/")} style={{ width: "100%", background: "none", border: "1px solid #2a1a1a", borderRadius: 14, padding: "12px 0", color: "#6b7280", fontSize: 13, cursor: "pointer" }}>← 메인으로 돌아가기</button>
         </div>
       </div>
