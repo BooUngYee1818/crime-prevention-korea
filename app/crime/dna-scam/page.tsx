@@ -42,7 +42,7 @@ export default function DnaScamPage() {
   const [choice, setChoice] = useState<"pay" | "report" | null>(null);
 
   if (phase === "reveal") return (
-    <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#030d14,#001524)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"linear-gradient(135deg,#030d14,#001524)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:540, width:"100%" }}>
         <div style={{ background:"linear-gradient(135deg,#0c1a2e,#122040)", border:"2px solid #38bdf8", borderRadius:24, padding:"32px 28px", marginBottom:20 }}>
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>🧬</div>
@@ -76,7 +76,7 @@ export default function DnaScamPage() {
   );
 
   if (phase === "choice") return (
-    <div style={{ minHeight:"100vh", background:"#030d14", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"#030d14", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:440, width:"100%" }}>
         <div style={{ background:"#070f1a", border:"2px solid #f59e0b", borderRadius:20, padding:"28px 24px", marginBottom:16 }}>
           <div style={{ fontSize:40, textAlign:"center", marginBottom:12 }}>⚠️</div>
@@ -98,7 +98,7 @@ export default function DnaScamPage() {
   );
 
   if (phase === "blackmail") return (
-    <div style={{ minHeight:"100vh", background:"#030d14", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"#030d14", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:460, width:"100%" }}>
         <div style={{ background:"#0a0808", border:"2px solid #ef4444", borderRadius:20, padding:"24px", marginBottom:16 }}>
           <p style={{ color:"#ef4444", fontSize:11, fontWeight:800, letterSpacing:2, marginBottom:16 }}>📩 수신된 협박 이메일</p>

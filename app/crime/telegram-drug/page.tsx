@@ -29,7 +29,7 @@ export default function TelegramDrugPage() {
   const [choice, setChoice] = useState<"buy" | "report" | null>(null);
 
   if (phase === "reveal") return (
-    <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#020814,#0a0218)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"linear-gradient(135deg,#020814,#0a0218)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:560, width:"100%" }}>
         <div style={{ background:"linear-gradient(135deg,#0a0218,#12063a)", border:"2px solid #a855f7", borderRadius:24, padding:"32px 28px" }}>
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>💊</div>
@@ -74,7 +74,7 @@ export default function TelegramDrugPage() {
   );
 
   if (phase === "deal") return (
-    <div style={{ minHeight:"100vh", background:"#0d0014", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"#0d0014", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:440, width:"100%" }}>
         <div style={{ background:"#120020", border:"2px solid #7c3aed", borderRadius:20, padding:"24px", marginBottom:16 }}>
           <p style={{ color:"#a855f7", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>💊 구매 제안</p>

@@ -30,7 +30,7 @@ export default function IllegalGunTradePage() {
   const [selected, setSelected] = useState<typeof LISTINGS[0] | null>(null);
 
   if (phase === "reveal") return (
-    <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#0a0808,#1a0a00)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"linear-gradient(135deg,#0a0808,#1a0a00)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:560, width:"100%" }}>
         <div style={{ background:"linear-gradient(135deg,#120808,#1a0f00)", border:"2px solid #f59e0b", borderRadius:24, padding:"32px 28px" }}>
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>🔫</div>
@@ -74,7 +74,7 @@ export default function IllegalGunTradePage() {
   );
 
   if (phase === "deal") return (
-    <div style={{ minHeight:"100vh", background:"#0a0600", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"#0a0600", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:440, width:"100%" }}>
         <div style={{ background:"#120a00", border:"2px solid #f59e0b", borderRadius:20, padding:"24px", marginBottom:16 }}>
           <p style={{ color:"#f59e0b", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>🔫 최종 거래 제안</p>
