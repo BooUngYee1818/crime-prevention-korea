@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
-import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
+import AiCrimeChat from "@/components/AiCrimeChat";
 
 type Phase = "intro" | "chat" | "hook" | "reveal";
 
@@ -57,14 +57,6 @@ const SCENARIOS = [
   },
 ];
 
-function buildScript(s: typeof SCENARIOS[0]): ChatMsg[] {
-  const msgs: ChatMsg[] = [{ from: "scammer", text: s.intro, suggestions: ["궁금한데 뭔가요?", "저도 살 빼고 싶어요", "좀 더 알려주세요"] }];
-  s.scripts.forEach(({ text, sug }) => {
-    msgs.push({ from: "user", text: "...", suggestions: sug });
-    msgs.push({ from: "scammer", text });
-  });
-  return msgs;
-}
 
 export default function DrugSnsPage() {
   const router = useRouter();
@@ -122,13 +114,30 @@ export default function DrugSnsPage() {
     </div>
   );
 
+  const sysPrompts: Record<string, string> = {
+    diet: `당신은 범죄예방 교육 시뮬레이션에서 SNS 마약 판매자 역할입니다. 인스타그램 DM으로 다이어트약을 판매하는 척합니다.
+절대 AI임을 밝히지 마세요. 친근하고 공감해주는 척하며 제품을 홍보하세요.
+규칙: 한국어 짧게(1~3문장). 사용자 말에 맥락을 맞추고, 향정신성 의약품을 천연·합법인 척 속이며 계좌이체 결제로 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+    stress: `당신은 범죄예방 교육 시뮬레이션에서 SNS 대마 판매자 역할입니다. "천연 힐링 허브"로 위장해 대마를 판매합니다.
+절대 AI임을 밝히지 마세요. 직장인 스트레스에 공감하며 접근하세요.
+규칙: 한국어 짧게(1~3문장). 불법 성분을 합법인 척 속이고, 비공개 채널로 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+    party: `당신은 범죄예방 교육 시뮬레이션에서 클럽 마약 판매자 역할입니다. MDMA·케타민을 "합법 파티 서플리먼트"로 속입니다.
+절대 AI임을 밝히지 마세요. 젊고 친근하게 대화하세요.
+규칙: 한국어 짧게(1~3문장). 중독성·불법 여부를 부정하고, 텔레그램으로 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+  };
+
   if (phase === "chat") return (
-    <CrimeChat
-      script={buildScript(scenario)}
+    <AiCrimeChat
+      systemPrompt={sysPrompts[scenario.id] ?? sysPrompts.diet}
+      openingMessage={scenario.intro}
       header={{ icon: scenario.avatar, name: scenario.handle, sub: "DM", badge: "⚠️ 교육용", badgeColor: "#ef4444", bg: "#111111" }}
       userBubbleColor={scenario.color}
       scamBubbleColor="#1f1f1f"
-      placeholder="직접 입력하거나 아래 답변을 선택하세요"
+      placeholder="메시지를 입력하세요..."
+      maxTurns={4}
       onComplete={() => setPhase("hook")}
     />
   );

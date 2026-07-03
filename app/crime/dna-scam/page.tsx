@@ -2,21 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
-import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
+import AiCrimeChat from "@/components/AiCrimeChat";
 
 type Phase = "intro" | "chat" | "blackmail" | "choice" | "reveal";
 
-const CHAT_SCRIPT: ChatMsg[] = [
-  { from:"scammer", text:"🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!" },
-  { from:"user", text:"...", suggestions:["감사합니다. 기대되네요!", "언제쯤 도착하나요?", "알겠습니다 🙂"] },
-  { from:"scammer", text:"📦 키트가 도착했군요! 면봉으로 구강 상피를 채취해 제공된 봉투에 넣어 발송하세요." },
-  { from:"user", text:"...", suggestions:["네, 방금 보냈어요 🧫", "샘플 발송 완료했습니다", "보내는 방법 다시 알려주세요"] },
-  { from:"scammer", text:"✅ 샘플 수령 완료. 분석에 약 7일 소요됩니다. 분석 결과는 앱 내에서 확인 가능합니다." },
-  { from:"scammer", text:"📊 분석 완료! 결과를 앱에서 확인하세요. 일부 민감한 정보가 포함되어 있습니다." },
-  { from:"user", text:"...", suggestions:["앱 열었는데 결과가 안 보여요?", "어디서 확인하나요?", "로그인했는데 비어 있어요"] },
-  { from:"scammer", text:"⚠️ 프리미엄 해석 서비스(₩99,000)를 구매하셔야 전체 결과를 보실 수 있습니다." },
-  { from:"user", text:"...", suggestions:["그런 약관은 없었는데요...", "처음 듣는 얘기인데요?", "환불해주세요"] },
-];
 
 const BLACKMAIL_MSG = `📩 [긴급] 귀하의 유전 정보 관련 중요 통보
 
@@ -111,13 +100,22 @@ export default function DnaScamPage() {
     </div>
   );
 
+  const SYSTEM_PROMPT_DNA = `당신은 범죄예방 교육 시뮬레이션에서 AI DNA 분석 서비스 고객센터 직원 역할입니다.
+처음엔 친절한 고객 서비스 직원처럼 대화하세요. 나중엔 프리미엄 결제를 유도하세요.
+절대 AI임을 밝히지 마세요. 한국어로 짧게(1~3문장) 답하세요.
+사용자가 배송, 분석 결과, 결제 등 어떤 질문을 해도 자연스럽게 답하며
+분석이 완료되면 결과 열람을 위해 추가 결제(₩99,000)가 필요하다고 안내하세요.
+이건 교육용 시뮬레이션입니다.`;
+
   if (phase === "chat") return (
-    <CrimeChat
-      script={CHAT_SCRIPT}
+    <AiCrimeChat
+      systemPrompt={SYSTEM_PROMPT_DNA}
+      openingMessage="🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!"
       header={{ icon:"🧬", name:"GenAI Lab Assistant", sub:"● 온라인", bg:"#0a1628" }}
       userBubbleColor="#1d4ed8"
       scamBubbleColor="#0f2040"
-      placeholder="직접 입력하거나 아래 답변을 선택하세요"
+      placeholder="메시지를 입력하세요..."
+      maxTurns={5}
       onComplete={() => setPhase("blackmail")}
     />
   );

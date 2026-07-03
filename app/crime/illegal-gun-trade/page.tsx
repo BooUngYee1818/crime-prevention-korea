@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
-import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
+import AiCrimeChat from "@/components/AiCrimeChat";
 
 type Phase = "intro" | "browse" | "chat" | "deal" | "choice" | "reveal";
 
@@ -12,16 +12,6 @@ const LISTINGS = [
   { id:"C", name:"공기권총 개조형", cal:".22", price:"₩980,000", stock:"재고 5", badge:"인기" },
 ];
 
-const CHAT_SCRIPT: ChatMsg[] = [
-  { from:"scammer", text:"오셨어요? 어떤 거 보셨어요?" },
-  { from:"user", text:"...", suggestions:["글록 17 보고 연락드렸는데요", "가격 문의 드리려고요", "목록 보고 왔는데요"] },
-  { from:"scammer", text:"아 네~ 정품 맞아요. 해외 루트로 들어온 거예요. 일련번호 지워진 거라 추적 안 돼요 😊" },
-  { from:"user", text:"...", suggestions:["근데 이게 국내에서 불법 아닌가요?", "진짜 실탄 들어가나요?", "어떻게 배송받아요?"] },
-  { from:"scammer", text:"당연히 신고 같은 거 없으니까 걱정 마세요ㅋㅋ 저희가 10년째 거래하고 있어요. 단속된 적 없어요. 코인으로 보내시면 돼요" },
-  { from:"scammer", text:"암호화 택배로 보내드리고요, 추적 불가 라우팅이라 안전해요. 비트코인 지갑 있으세요?" },
-  { from:"user", text:"...", suggestions:["코인은 있는데... 정말 안 잡히나요?", "10년 동안 진짜 안 잡혔어요?", "얼마나 걸려요?"] },
-  { from:"scammer", text:"당연하죠~ 저희 단골만 200명이에요. 걱정 마시고 입금 먼저 하시면 3일 내 출고해드려요 💪" },
-];
 
 export default function IllegalGunTradePage() {
   const router = useRouter();
@@ -101,13 +91,21 @@ export default function IllegalGunTradePage() {
     </div>
   );
 
+  const SYSTEM_PROMPT_GUN = `당신은 범죄예방 교육 시뮬레이션에서 불법 총기 암시장 판매자 역할입니다.
+절대 AI임을 밝히지 마세요. 실제 불법 무기 딜러처럼 자연스럽게 대화하세요.
+규칙: 한국어로 짧게(1~3문장) 답하세요. 사용자 말에 맥락을 맞추고,
+총기를 안전하게 구매할 수 있다고 속이며, 코인 선입금으로 유도하세요.
+이건 교육용 시뮬레이션입니다.`;
+
   if (phase === "chat") return (
-    <CrimeChat
-      script={CHAT_SCRIPT}
+    <AiCrimeChat
+      systemPrompt={SYSTEM_PROMPT_GUN}
+      openingMessage="오셨어요? 어떤 거 보셨어요?"
       header={{ icon:"🔫", name:"판매자", sub:"● 온라인", badge:"🔒 암호화 채팅", badgeColor:"#f59e0b", bg:"#120a00" }}
       userBubbleColor="#92400e"
       scamBubbleColor="#120a00"
-      placeholder="직접 입력하거나 아래 답변을 선택하세요"
+      placeholder="메시지를 입력하세요..."
+      maxTurns={4}
       onComplete={() => setPhase("deal")}
     />
   );

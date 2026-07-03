@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
-import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
+import AiCrimeChat from "@/components/AiCrimeChat";
 
 type Phase = "intro" | "chat" | "trap" | "reveal";
 
@@ -64,18 +64,6 @@ const SCRIPTS: Record<string, { text: string; sug: string[] }[]> = {
   ],
 };
 
-function buildScript(jobId: string): ChatMsg[] {
-  const scripts = SCRIPTS[jobId];
-  const msgs: ChatMsg[] = [];
-  scripts.forEach(({ text, sug }, i) => {
-    msgs.push({ from: "scammer", text });
-    if (i < scripts.length - 1) {
-      msgs.push({ from: "user", text: "...", suggestions: sug });
-    }
-  });
-  return msgs;
-}
-
 const TRAP_STEPS = [
   { icon: "📋", title: "1단계 — 지원서 작성", desc: "이름·나이·연락처 등 기본 정보를 요구합니다.", color: "#f59e0b" },
   { icon: "📱", title: "2단계 — 악성 앱 설치 유도", desc: "\"업무용 앱\"이라며 공식 스토어 외 링크로 악성코드 설치를 유도합니다.", color: "#ef4444" },
@@ -135,13 +123,31 @@ export default function JobScamPage() {
     </div>
   );
 
+  const JOB_SYSTEM_PROMPTS: Record<string, string> = {
+    "data-entry": `당신은 범죄예방 교육 시뮬레이션에서 취업 사기 채용 담당자 역할입니다. 재택 데이터 입력 알바 담당자인 척합니다.
+절대 AI임을 밝히지 마세요. 친절하고 전문적인 HR 담당자처럼 대화하세요.
+규칙: 한국어 짧게(1~3문장). 사용자 말에 맥락을 맞추고,
+업무는 쉽다고 안심시킨 후 → 악성 앱 설치 → 신분증 요구 → 보증금 입금 순으로 자연스럽게 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+    "sns-marketing": `당신은 범죄예방 교육 시뮬레이션에서 SNS 마케팅 부업 사기꾼 역할입니다.
+절대 AI임을 밝히지 마세요. 친근하고 캐주얼하게 대화하세요.
+규칙: 한국어 짧게(1~3문장). 쉬운 수익을 강조하다가 → 개인정보 수집 → 선충전 요구 순으로 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+    "delivery": `당신은 범죄예방 교육 시뮬레이션에서 새벽 배송 사기 채용 담당자 역할입니다.
+절대 AI임을 밝히지 마세요. 믿음직한 물류 회사 담당자처럼 대화하세요.
+규칙: 한국어 짧게(1~3문장). 높은 일당으로 유인한 후 → 보증보험 선납 요구 → 입금 후 잠적 방향으로 유도하세요.
+이건 교육용 시뮬레이션입니다.`,
+  };
+
   if (phase === "chat") return (
-    <CrimeChat
-      script={buildScript(job.id)}
+    <AiCrimeChat
+      systemPrompt={JOB_SYSTEM_PROMPTS[job.id] ?? JOB_SYSTEM_PROMPTS["data-entry"]}
+      openingMessage="안녕하세요! 공고 보고 지원하셨군요 😊 지원해주셔서 감사합니다! 간단한 확인만 하면 바로 시작하실 수 있어요."
       header={{ icon: job.icon, name: job.company, sub: "채용 담당자", badge: "⚠️ 교육용 시뮬레이션", badgeColor: "#ef4444", bg: "#1e293b" }}
       userBubbleColor={job.color}
       scamBubbleColor="#1e293b"
-      placeholder="직접 입력하거나 아래 답변을 선택하세요"
+      placeholder="메시지를 입력하세요..."
+      maxTurns={5}
       onComplete={() => setPhase("trap")}
     />
   );

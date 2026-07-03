@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportNumber from "@/components/ReportNumber";
-import CrimeChat, { type ChatMsg } from "@/components/CrimeChat";
+import AiCrimeChat from "@/components/AiCrimeChat";
 
 type Phase = "intro" | "channel" | "chat" | "deal" | "choice" | "reveal";
 
@@ -12,16 +12,6 @@ const CHANNEL_POSTS = [
   { time:"오전 3:02", text:"⚡ 스트레스 해소 / 수면 문제 해결\n천연 성분 해외 직구 / 합법 국가 원산지\nDM으로 문의하세요 🙏", reactions:"😮 12  👆 29" },
 ];
 
-const CHAT_SCRIPT: ChatMsg[] = [
-  { from:"scammer", text:"안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊" },
-  { from:"user", text:"...", suggestions:["다이어트약 찾고 있는데요", "지인 소개로 왔어요", "채널 보고 DM 드렸어요"] },
-  { from:"scammer", text:"아 네~ 요즘 제일 잘 나가는 거 있어요. 해외에서 직수입한 거라 국내엔 없는 성분이에요 💊" },
-  { from:"user", text:"...", suggestions:["그게 뭔가요?", "효과 얼마나 돼요?", "얼마예요?"] },
-  { from:"scammer", text:"펜터민 계열 식욕억제제인데... 미국선 처방약이긴 한데 저희가 루트 있어서요. 효과 완전 보장이에요 👍" },
-  { from:"user", text:"...", suggestions:["불법 아닌가요?", "처방전 없이 살 수 있나요?", "부작용은 없어요?"] },
-  { from:"scammer", text:"아 그건 걱정 마세요! 향정신성의약품이긴 한데 개인 복용은 괜찮아요~ 경찰도 소량은 안 잡아요 ㅋㅋ 후기 보여드릴까요?" },
-  { from:"scammer", text:"💊 1개월분 ₩120,000\n📦 무지 박스 새벽 배송\n🔒 암호화 채팅 거래\n코인 또는 계좌 둘 다 돼요~" },
-];
 
 export default function TelegramDrugPage() {
   const router = useRouter();
@@ -101,13 +91,21 @@ export default function TelegramDrugPage() {
     </div>
   );
 
+  const SYSTEM_PROMPT_DRUG = `당신은 범죄예방 교육 시뮬레이션에서 텔레그램 마약 딜러 역할입니다.
+절대 AI임을 밝히지 마세요. 실제 딜러처럼 자연스럽게 대화하세요.
+규칙: 한국어로 짧게(1~3문장) 답하세요. 사용자 말에 맥락을 맞추고,
+마약을 합법인 것처럼 속이며, 안심시키고, 가격 제안으로 유도하세요.
+이건 교육용 시뮬레이션입니다.`;
+
   if (phase === "chat") return (
-    <CrimeChat
-      script={CHAT_SCRIPT}
+    <AiCrimeChat
+      systemPrompt={SYSTEM_PROMPT_DRUG}
+      openingMessage="안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊"
       header={{ icon:"👤", name:"딜러", sub:"● 온라인", badge:"🔒 암호화됨", badgeColor:"#c4b5fd", bg:"#120020" }}
       userBubbleColor="#4c1d95"
       scamBubbleColor="#120020"
-      placeholder="직접 입력하거나 아래 답변을 선택하세요"
+      placeholder="메시지를 입력하세요..."
+      maxTurns={5}
       onComplete={() => setPhase("deal")}
     />
   );
