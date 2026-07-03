@@ -394,6 +394,9 @@ const SC_CAT_KEY: Record<string, Parameters<typeof t>[0]> = {
   "kakaotalk-impersonation": "cat_messenger",
   "used-goods-scam":         "cat_used",
   "illegal-gambling":        "cat_gambling",
+  "job-scam":                "cat_fraud",
+  "drug-sns":                "cat_drug",
+  "fss-impersonation":       "cat_agency",
 };
 
 export default function HomePage() {
