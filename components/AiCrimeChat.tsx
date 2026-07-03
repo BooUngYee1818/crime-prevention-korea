@@ -181,7 +181,7 @@ export default function AiCrimeChat({
           ref={inputRef}
           value={input}
           onChange={e => setInput(e.target.value)}
-          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); } }}
           placeholder={loading ? "상대방이 답하는 중..." : placeholder}
           disabled={loading}
           style={{
