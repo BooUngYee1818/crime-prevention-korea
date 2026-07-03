@@ -72,6 +72,9 @@ export default function BgmPlayer() {
   }, []);
 
   // 경로 변경 → 음악 전환
+  // ⚠️ fadeOut 제거: setInterval 딜레이 후 play()를 부르면 브라우저가
+  //    "사용자 제스처 없음"으로 판단해 자동재생을 차단함.
+  //    클릭(네비게이션) 직후 즉시 play()를 호출해야 모바일에서 작동.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !startedRef.current || muted) return;
@@ -84,29 +87,35 @@ export default function BgmPlayer() {
     stopPulse();
     setVolume(newBase);
 
-    let v = audio.volume;
-    const fadeOut = setInterval(() => {
-      v = Math.max(0, v - 0.025);
-      audio.volume = v;
-      if (v <= 0) {
-        clearInterval(fadeOut);
-        audio.pause();
-        audio.src = newSrc;
-        audio.load();
+    // 즉시 전환 (fadeOut 없이 바로 새 트랙 재생)
+    audio.pause();
+    audio.volume = 0;
+    audio.src = newSrc;
+    audio.load();
+    audio.play().then(() => {
+      setPlaying(true);
+      // 페이드인
+      let fv = 0;
+      const fadeIn = setInterval(() => {
+        fv = Math.min(newBase, fv + 0.025);
+        audio.volume = fv;
+        if (fv >= newBase) {
+          clearInterval(fadeIn);
+          if (pathname.startsWith("/crime/")) startPulse(newBase);
+        }
+      }, 50);
+    }).catch(() => {
+      // 자동재생 실패 시 — 다음 사용자 인터랙션 때 재시도
+      const retry = () => {
         audio.play().then(() => {
-          audio.volume = 0;
-          let fv = 0;
-          const fadeIn = setInterval(() => {
-            fv = Math.min(newBase, fv + 0.02);
-            audio.volume = fv;
-            if (fv >= newBase) {
-              clearInterval(fadeIn);
-              if (pathname.startsWith("/crime/")) startPulse(newBase);
-            }
-          }, 60);
+          setPlaying(true);
+          audio.volume = newBase;
+          if (pathname.startsWith("/crime/")) startPulse(newBase);
         }).catch(() => {});
-      }
-    }, 50);
+      };
+      document.addEventListener("click",      retry, { once: true });
+      document.addEventListener("touchstart", retry, { once: true });
+    });
   }, [pathname]);
 
   // 볼륨 슬라이더 변경
