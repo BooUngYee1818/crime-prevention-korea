@@ -7,6 +7,133 @@ import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 import HallOfFame from "@/components/HallOfFame";
 
+// ══ FAQ 컴포넌트 ══
+const FAQ_LIST = [
+  {
+    q: "이 프로그램을 왜 해야 하나요?",
+    a: "날로 늘어가는 보이스피싱·로맨스스캠·불법도박 등의 범죄에 우리 모두는 노출되어 있습니다. 직접 체험해보는 것이 가장 강력한 예방법입니다.",
+    icon: "❓",
+    color: "#534AB7",
+  },
+  {
+    q: "이 프로그램을 개발하게 된 계기가 무엇인가요?",
+    a: "한 드라마에서 9살 아이가 도박을 한다는 내용을 보고 충격을 받아 개발을 시작했습니다. 나이와 상관없이 누구나 범죄에 노출될 수 있다는 것을 알렸고 싶었습니다.",
+    icon: "💡",
+    color: "#f59e0b",
+  },
+  {
+    q: "이용 요금은 얼마인가요?",
+    a: "일반 사용자는 완전 무료(₩0)입니다. 기업·국가기관 단체 납품은 향후 논의를 통해 결정되며, 비영리·공익 목적 기관은 무료 제공을 우선합니다.",
+    icon: "💰",
+    color: "#22c55e",
+  },
+  {
+    q: "누가 이용할 수 있나요?",
+    a: "대한민국 국민 및 재외국인 5세~50세 이상 누구나 이용 가능합니다. 어린이부터 어르신까지 모든 연령층을 위해 설계했습니다.",
+    icon: "👥",
+    color: "#38bdf8",
+  },
+  {
+    q: "모바일에서도 이용할 수 있나요?",
+    a: "모바일에서는 일부 기능이 정상 작동하지 않을 수 있습니다. PC 웹사이트 이용을 권장하며, 모바일 이용 시 브라우저의 '데스크톱 모드'로 접속하시면 더 원활하게 사용하실 수 있습니다.",
+    icon: "📱",
+    color: "#f472b6",
+  },
+  {
+    q: "어떤 사양의 기기가 필요한가요?",
+    a: "Windows 10 이하 구형 기기에서도 사용 가능합니다. 최신 Windows·macOS 환경에서 최적화되어 있으며, 크롬(Chrome) 또는 엣지(Edge) 브라우저를 권장합니다.",
+    icon: "💻",
+    color: "#a78bfa",
+  },
+  {
+    q: "최신 OS를 사용해야 하는 이유가 있나요?",
+    a: "본 프로그램은 개인정보를 수집하지 않지만, 혹시 모를 정보 유출 예방과 보안 최적화를 위해 운영체제를 최신 상태로 유지하는 것을 권장합니다.",
+    icon: "🔒",
+    color: "#6ee7b7",
+  },
+  {
+    q: "이 프로그램이 오히려 범죄를 가르치는 건 아닌가요?",
+    a: "수법을 '체험'하는 것과 '악용'하는 것은 다릅니다. 예방 목적의 시뮬레이션은 피해자 시점에서 경험하는 것이며, 실제 범죄 도구·계좌·자금은 일절 사용되지 않습니다. 또한 모든 체험 종료 후 수법 해설과 신고 방법을 안내합니다.",
+    icon: "⚠️",
+    color: "#ef4444",
+  },
+  {
+    q: "이 프로그램은 어떻게 개발되었나요?",
+    a: "AI(Claude, Anthropic)를 활용해 기획부터 개발까지 진행했습니다. AI와 인간 기획자가 협력하여 실제 범죄 수법을 분석하고, 교육적 시뮬레이션으로 재구성했습니다.",
+    icon: "🤖",
+    color: "#c58dc6",
+  },
+  {
+    q: "향후 어떤 방향으로 발전할 예정인가요?",
+    a: "범죄 예방률 100%를 목표로 지속적으로 업데이트됩니다. 신종 범죄 수법 추가, 다국어 지원 확대, 교육기관 납품 확대 등을 계획 중입니다.",
+    icon: "🚀",
+    color: "#fbbf24",
+  },
+];
+
+function FaqSection() {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <style>{`
+        @keyframes faq-open { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
+      {FAQ_LIST.map((item, i) => {
+        const isOpen = openIdx === i;
+        return (
+          <div
+            key={i}
+            onClick={() => setOpenIdx(isOpen ? null : i)}
+            style={{
+              background: isOpen ? `${item.color}12` : "rgba(255,255,255,0.04)",
+              border: `1px solid ${isOpen ? item.color + "55" : "#ffffff12"}`,
+              borderRadius: 16,
+              cursor: "pointer",
+              transition: "all 0.25s ease",
+              overflow: "hidden",
+            }}
+          >
+            {/* 질문 행 */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 22px" }}>
+              <span style={{
+                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                background: `${item.color}22`, border: `1px solid ${item.color}44`,
+                display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
+              }}>{item.icon}</span>
+              <p style={{
+                flex: 1, color: isOpen ? "#fff" : "#cbd5e1",
+                fontSize: 15, fontWeight: isOpen ? 700 : 500, margin: 0, lineHeight: 1.5,
+                transition: "color 0.2s",
+              }}>
+                {item.q}
+              </p>
+              <span style={{
+                color: isOpen ? item.color : "#475569",
+                fontSize: 18, fontWeight: 900, flexShrink: 0,
+                transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                transition: "transform 0.25s ease, color 0.2s",
+                display: "inline-block",
+              }}>+</span>
+            </div>
+            {/* 답변 */}
+            {isOpen && (
+              <div style={{
+                padding: "0 22px 20px 72px",
+                animation: "faq-open 0.25s ease",
+              }}>
+                <div style={{ width: 32, height: 2, background: `${item.color}66`, borderRadius: 2, marginBottom: 12 }} />
+                <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.85, margin: 0, fontWeight: 400 }}>
+                  {item.a}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ══ 사기 체험 시뮬레이션 컴포넌트 ══
 const SCAM_SCENARIOS = [
   {
@@ -730,6 +857,7 @@ export default function HomePage() {
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
           <a href="#how" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_howto", lang)}</a>
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
+          <a href="#faq" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>FAQ</a>
           <div
             style={{ position: "relative" }}
             onMouseEnter={startChangelogScroll}
@@ -2921,6 +3049,21 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" style={{ background: "linear-gradient(160deg, #1e0a3c 0%, #0d1f3c 50%, #0a2a1a 100%)", padding: "88px 40px", position: "relative", overflow: "hidden" }}>
+        {/* 배경 장식 */}
+        <div style={{ position: "absolute", top: -80, right: -80, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, #534AB722 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, #22c55e18 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 860, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <p style={{ color: "#534AB7", fontSize: 11, fontWeight: 800, letterSpacing: 3, marginBottom: 10, textTransform: "uppercase" }}>FAQ</p>
+            <h2 style={{ fontSize: 32, fontWeight: 900, color: "#fff", marginBottom: 12, letterSpacing: -0.5 }}>자주 묻는 질문</h2>
+            <p style={{ color: "#94a3b8", fontSize: 15 }}>궁금한 점을 모았습니다</p>
+          </div>
+          <FaqSection />
         </div>
       </section>
 
