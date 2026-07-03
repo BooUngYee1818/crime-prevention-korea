@@ -93,7 +93,7 @@ export default function DnaScamPage() {
           <p style={{ color:"#ef4444", fontSize:11, fontWeight:800, letterSpacing:2, marginBottom:16 }}>📩 수신된 협박 이메일</p>
           <pre style={{ color:"#fca5a5", fontSize:12, lineHeight:1.8, whiteSpace:"pre-wrap", margin:0, fontFamily:"monospace" }}>{BLACKMAIL_MSG}</pre>
         </div>
-        <button onClick={() => setPhase("choice")} style={{ width:"100%", background:"linear-gradient(135deg,#7c3aed,#1d4ed8)", border:"none", borderRadius:14, padding:"16px 0", color:"#fff", fontWeight:900, fontSize:15, cursor:"pointer" }}>
+        <button onClick={() => setPhase("choice")} style={{ width:"100%", background:"linear-gradient(135deg,#f97316,#ea580c)", border:"none", borderRadius:14, padding:"16px 0", color:"#fff", fontWeight:900, fontSize:15, cursor:"pointer" }}>
           → 어떻게 할지 선택하기
         </button>
       </div>
@@ -112,7 +112,7 @@ export default function DnaScamPage() {
       systemPrompt={SYSTEM_PROMPT_DNA}
       openingMessage="🧬 AI DNA 분석 키트 주문이 완료되었습니다. 3~5일 내 배송됩니다!"
       header={{ icon:"🧬", name:"GenAI Lab Assistant", sub:"● 온라인", bg:"#0a1628" }}
-      userBubbleColor="#1d4ed8"
+      userBubbleColor="#ea580c"
       placeholder="메시지를 입력하세요..."
       maxTurns={5}
       onComplete={() => setPhase("blackmail")}
@@ -145,7 +145,7 @@ export default function DnaScamPage() {
             </p>
           </div>
         </div>
-        <button onClick={() => setPhase("chat")} style={{ width:"100%", background:"linear-gradient(135deg,#0ea5e9,#6366f1)", border:"none", borderRadius:18, padding:"18px 0", color:"#fff", fontWeight:900, fontSize:16, cursor:"pointer", boxShadow:"0 4px 24px #0ea5e944" }}>
+        <button onClick={() => setPhase("chat")} style={{ width:"100%", background:"linear-gradient(135deg,#f97316,#ea580c)", border:"none", borderRadius:18, padding:"18px 0", color:"#fff", fontWeight:900, fontSize:16, cursor:"pointer", boxShadow:"0 4px 24px #0ea5e944" }}>
           🧬 DNA 키트 주문 체험 시작
         </button>
       </div>

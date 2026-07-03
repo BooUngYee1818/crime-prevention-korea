@@ -21,9 +21,9 @@ export default function TelegramDrugPage() {
   if (phase === "reveal") return (
     <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"linear-gradient(135deg,#020814,#0a0218)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:560, width:"100%" }}>
-        <div style={{ background:"linear-gradient(135deg,#0a0218,#12063a)", border:"2px solid #a855f7", borderRadius:24, padding:"32px 28px" }}>
+        <div style={{ background:"linear-gradient(135deg,#0a0218,#12063a)", border:"2px solid #fb923c", borderRadius:24, padding:"32px 28px" }}>
           <div style={{ fontSize:56, textAlign:"center", marginBottom:16 }}>💊</div>
-          <h2 style={{ color:"#a855f7", fontSize:22, fontWeight:900, textAlign:"center", marginBottom:6 }}>텔레그램 마약 거래 해설</h2>
+          <h2 style={{ color:"#fb923c", fontSize:22, fontWeight:900, textAlign:"center", marginBottom:6 }}>텔레그램 마약 거래 해설</h2>
           <p style={{ color:"#6b7280", fontSize:12, textAlign:"center", marginBottom:20 }}>구매자도 예외 없이 형사처벌 대상입니다</p>
           {choice === "buy" && (
             <div style={{ background:"#1a0808", border:"1px solid #ef444455", borderRadius:14, padding:"14px 18px", marginBottom:20 }}>
@@ -45,16 +45,16 @@ export default function TelegramDrugPage() {
               <div key={i} style={{ display:"flex", gap:12, marginBottom: i < 4 ? 14 : 0 }}>
                 <span style={{ fontSize:18, flexShrink:0 }}>{it.icon}</span>
                 <div>
-                  <p style={{ color:"#c4b5fd", fontSize:12, fontWeight:700, marginBottom:2 }}>{it.t}</p>
+                  <p style={{ color:"#fed7aa", fontSize:12, fontWeight:700, marginBottom:2 }}>{it.t}</p>
                   <p style={{ color:"#6b7280", fontSize:12, lineHeight:1.6, margin:0 }}>{it.d}</p>
                 </div>
               </div>
             ))}
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-            <ReportNumber number="182" label="📞 경찰청 마약수사대" bg="#12003a" color="#c4b5fd" />
+            <ReportNumber number="182" label="📞 경찰청 마약수사대" bg="#12003a" color="#fed7aa" />
             <div style={{ marginTop:8 }}>
-              <ReportNumber number="1301" label="🏛️ 검찰청" bg="#0a0020" color="#a78bfa" />
+              <ReportNumber number="1301" label="🏛️ 검찰청" bg="#0a0020" color="#fdba74" />
             </div>
           </div>
           <button onClick={() => router.push("/")} style={{ width:"100%", background:"none", border:"1px solid #1a1030", borderRadius:14, padding:"12px 0", color:"#4a3060", fontSize:13, cursor:"pointer" }}>← 메인으로</button>
@@ -66,18 +66,18 @@ export default function TelegramDrugPage() {
   if (phase === "deal") return (
     <div style={{ position:"fixed", top:0, right:0, bottom:0, left:0, zIndex:9999, overflowY:"auto" as const, background:"#0d0014", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:440, width:"100%" }}>
-        <div style={{ background:"#120020", border:"2px solid #7c3aed", borderRadius:20, padding:"24px", marginBottom:16 }}>
-          <p style={{ color:"#a855f7", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>💊 구매 제안</p>
+        <div style={{ background:"#120020", border:"2px solid #ea580c", borderRadius:20, padding:"24px", marginBottom:16 }}>
+          <p style={{ color:"#fb923c", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>💊 구매 제안</p>
           <div style={{ background:"#0a0015", borderRadius:14, padding:"16px 18px", marginBottom:20 }}>
             <p style={{ color:"#e2e8f0", fontSize:14, lineHeight:1.8 }}>
-              1개월분 <strong style={{ color:"#a855f7" }}>₩120,000</strong><br/>
+              1개월분 <strong style={{ color:"#fb923c" }}>₩120,000</strong><br/>
               새벽 무지 박스 배송<br/>
               코인·계좌 둘 다 가능
             </p>
           </div>
           <p style={{ color:"#6b7280", fontSize:13, textAlign:"center", marginBottom:20 }}>어떻게 하시겠습니까?</p>
           <div style={{ display:"flex", flexDirection:"column" as const, gap:10 }}>
-            <button onClick={() => { setChoice("buy"); setPhase("reveal"); }} style={{ background:"#1a0030", border:"2px solid #7c3aed66", borderRadius:14, padding:"16px", color:"#c4b5fd", fontWeight:700, fontSize:14, cursor:"pointer", textAlign:"left" as const }}>
+            <button onClick={() => { setChoice("buy"); setPhase("reveal"); }} style={{ background:"#1a0030", border:"2px solid #ea580c66", borderRadius:14, padding:"16px", color:"#fed7aa", fontWeight:700, fontSize:14, cursor:"pointer", textAlign:"left" as const }}>
               💸 구매하기<br/>
               <span style={{ color:"#555", fontSize:12, fontWeight:400 }}>효과 좋다니까... 한 번만 해보자</span>
             </button>
@@ -101,8 +101,8 @@ export default function TelegramDrugPage() {
     <AiCrimeChat
       systemPrompt={SYSTEM_PROMPT_DRUG}
       openingMessage="안녕하세요~ 뭘 찾으세요? 처음이시죠? 걱정 마세요, 완전 안전해요 😊"
-      header={{ icon:"👤", name:"딜러", sub:"● 온라인", badge:"🔒 암호화됨", badgeColor:"#c4b5fd", bg:"#120020" }}
-      userBubbleColor="#4c1d95"
+      header={{ icon:"👤", name:"딜러", sub:"● 온라인", badge:"🔒 암호화됨", badgeColor:"#fed7aa", bg:"#120020" }}
+      userBubbleColor="#9a3412"
       placeholder="메시지를 입력하세요..."
       maxTurns={5}
       onComplete={() => setPhase("deal")}
@@ -112,7 +112,7 @@ export default function TelegramDrugPage() {
   if (phase === "channel") return (
     <div style={{ minHeight:"100vh", background:"#0d0014" }}>
       <div style={{ background:"#120020", borderBottom:"1px solid #1a0030", padding:"14px 20px", display:"flex", alignItems:"center", gap:12 }}>
-        <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#7c3aed,#4c1d95)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>🌿</div>
+        <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg,#ea580c,#9a3412)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>🌿</div>
         <div>
           <p style={{ color:"#e2e8f0", fontWeight:700, fontSize:14, margin:0 }}>건강식품직구 🌿</p>
           <p style={{ color:"#6b7280", fontSize:11, margin:0 }}>구독자 12,847명</p>
@@ -126,7 +126,7 @@ export default function TelegramDrugPage() {
             <p style={{ color:"#4a3060", fontSize:12 }}>{post.reactions}</p>
           </div>
         ))}
-        <button onClick={() => setPhase("chat")} style={{ width:"100%", background:"linear-gradient(135deg,#7c3aed,#4c1d95)", border:"none", borderRadius:14, padding:"16px 0", color:"#fff", fontWeight:900, fontSize:15, cursor:"pointer", marginTop:8 }}>
+        <button onClick={() => setPhase("chat")} style={{ width:"100%", background:"linear-gradient(135deg,#ea580c,#9a3412)", border:"none", borderRadius:14, padding:"16px 0", color:"#fff", fontWeight:900, fontSize:15, cursor:"pointer", marginTop:8 }}>
           💬 딜러에게 DM 보내기
         </button>
       </div>
@@ -138,8 +138,8 @@ export default function TelegramDrugPage() {
       <div style={{ maxWidth:560, margin:"0 auto" }}>
         <button onClick={() => router.push("/")} style={{ background:"none", border:"none", color:"#555", fontSize:13, cursor:"pointer", marginBottom:24 }}>← 메인으로</button>
         <div style={{ textAlign:"center", marginBottom:32 }}>
-          <div style={{ display:"inline-block", background:"#7c3aed22", border:"1px solid #7c3aed55", borderRadius:20, padding:"4px 12px", marginBottom:12 }}>
-            <span style={{ color:"#c4b5fd", fontSize:11, fontWeight:800, letterSpacing:2 }}>⚠️ 실제 범죄 수법 재현 — 교육 목적</span>
+          <div style={{ display:"inline-block", background:"#ea580c22", border:"1px solid #ea580c55", borderRadius:20, padding:"4px 12px", marginBottom:12 }}>
+            <span style={{ color:"#fed7aa", fontSize:11, fontWeight:800, letterSpacing:2 }}>⚠️ 실제 범죄 수법 재현 — 교육 목적</span>
           </div>
           <h1 style={{ color:"#fff", fontSize:26, fontWeight:900, marginBottom:10 }}>💊 텔레그램 마약 거래</h1>
           <p style={{ color:"#64748b", fontSize:14, lineHeight:1.7 }}>
@@ -148,11 +148,11 @@ export default function TelegramDrugPage() {
           </p>
         </div>
         <div style={{ background:"#0f0020", border:"1px solid #1a0030", borderRadius:20, padding:24, marginBottom:20 }}>
-          <p style={{ color:"#a855f7", fontSize:11, fontWeight:800, letterSpacing:2, marginBottom:14 }}>📊 국내 마약 피해 현황</p>
+          <p style={{ color:"#fb923c", fontSize:11, fontWeight:800, letterSpacing:2, marginBottom:14 }}>📊 국내 마약 피해 현황</p>
           {[
             { label:"2024년 마약 사범 검거", val:"28,000명+", color:"#ef4444" },
             { label:"텔레그램 경로 비율", val:"전체의 71%", color:"#f59e0b" },
-            { label:"10~20대 검거 증가율", val:"전년 대비 +47%", color:"#a855f7" },
+            { label:"10~20대 검거 증가율", val:"전년 대비 +47%", color:"#fb923c" },
             { label:"구매자 처벌 여부", val:"100% 처벌 대상", color:"#ef4444" },
           ].map((s, i) => (
             <div key={i} style={{ display:"flex", justifyContent:"space-between", paddingBottom:i<3?10:0, marginBottom:i<3?10:0, borderBottom:i<3?"1px solid #1a0030":"none" }}>
@@ -161,7 +161,7 @@ export default function TelegramDrugPage() {
             </div>
           ))}
         </div>
-        <button onClick={() => setPhase("channel")} style={{ width:"100%", background:"linear-gradient(135deg,#4c1d95,#7c3aed)", border:"none", borderRadius:18, padding:"18px 0", color:"#fff", fontWeight:900, fontSize:16, cursor:"pointer", boxShadow:"0 4px 24px #7c3aed44" }}>
+        <button onClick={() => setPhase("channel")} style={{ width:"100%", background:"linear-gradient(135deg,#9a3412,#ea580c)", border:"none", borderRadius:18, padding:"18px 0", color:"#fff", fontWeight:900, fontSize:16, cursor:"pointer", boxShadow:"0 4px 24px #ea580c44" }}>
           📱 텔레그램 채널 체험 시작
         </button>
         <p style={{ color:"#2d1f4a", fontSize:11, textAlign:"center", marginTop:12 }}>⚠️ 교육용 시뮬레이션 — 실제 약품 거래가 아닙니다</p>

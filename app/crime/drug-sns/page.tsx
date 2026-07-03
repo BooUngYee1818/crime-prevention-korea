@@ -44,7 +44,7 @@ const SCENARIOS = [
     title: "파티용 '합법 클럽약'",
     handle: "@party_legal_kr",
     avatar: "💊",
-    color: "#a855f7",
+    color: "#f97316",
     tag: "10~20대 클럽/파티족 타깃",
     desc: "\"합법\" \"안전\" 강조하며 MDMA·케타민 등 향정신성 물질 판매",
     intro: "클럽 가시나요? 요즘 외국에서 다들 쓰는 합법 파티 서플리먼트 아세요? 에너지드링크보다 효과 좋고 부작용도 없어요",
@@ -64,7 +64,7 @@ export default function DrugSnsPage() {
   const [scenario, setScenario] = useState(SCENARIOS[0]);
 
   if (phase === "reveal") return (
-    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#0a061a", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ maxWidth: 520, width: "100%" }}>
         <div style={{ background: "linear-gradient(135deg,#1a0000,#2a0808)", border: "2px solid #ef4444", borderRadius: 24, padding: "32px 28px", marginBottom: 16 }}>
           <div style={{ fontSize: 52, textAlign: "center", marginBottom: 16 }}>🚔</div>
@@ -93,7 +93,7 @@ export default function DrugSnsPage() {
   );
 
   if (phase === "hook") return (
-    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#060606", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, left: 0, zIndex: 9999, overflowY: "auto" as const, background: "#0a061a", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ maxWidth: 480, width: "100%" }}>
         <div style={{ background: "#1a0000", border: "2px solid #ef4444", borderRadius: 20, padding: "28px 24px", marginBottom: 16 }}>
           <div style={{ fontSize: 48, textAlign: "center", marginBottom: 12 }}>🚨</div>
@@ -108,7 +108,7 @@ export default function DrugSnsPage() {
               <p key={i} style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.7, margin: 0 }}>⚠️ {txt}</p>
             ))}
           </div>
-          <button onClick={() => setPhase("reveal")} style={{ width: "100%", background: "linear-gradient(135deg,#7c3aed,#4c1d95)", border: "none", borderRadius: 14, padding: "14px 0", color: "#fff", fontWeight: 900, fontSize: 15, cursor: "pointer" }}>수법 전체 해설 보기 →</button>
+          <button onClick={() => setPhase("reveal")} style={{ width: "100%", background: "linear-gradient(135deg,#f97316,#ea580c)", border: "none", borderRadius: 14, padding: "14px 0", color: "#fff", fontWeight: 900, fontSize: 15, cursor: "pointer" }}>수법 전체 해설 보기 →</button>
         </div>
       </div>
     </div>
@@ -142,7 +142,7 @@ export default function DrugSnsPage() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0a0a0a,#1a0828)", padding: "40px 20px" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0a061a,#0f0620)", padding: "40px 20px" }}>
       <div style={{ maxWidth: 560, margin: "0 auto" }}>
         <button onClick={() => router.push("/")} style={{ background: "none", border: "none", color: "#555", fontSize: 13, cursor: "pointer", marginBottom: 24 }}>← 메인으로</button>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -152,7 +152,7 @@ export default function DrugSnsPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" as const, gap: 14 }}>
           {SCENARIOS.map(s => (
-            <button key={s.id} onClick={() => { setScenario(s); setPhase("chat"); }} style={{ background: "#111", border: `1px solid ${s.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer" }}>
+            <button key={s.id} onClick={() => { setScenario(s); setPhase("chat"); }} style={{ background: "#110820", border: `1px solid ${s.color}44`, borderRadius: 18, padding: "20px 22px", textAlign: "left" as const, cursor: "pointer" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
                 <span style={{ fontSize: 26 }}>{s.avatar}</span>
                 <div>

@@ -206,7 +206,7 @@ export default function BgmPlayer() {
             <style>{`
               @keyframes volSlide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
               .vol-slider { -webkit-appearance:none; appearance:none; width:100%; height:8px; border-radius:4px; outline:none; cursor:pointer; }
-              .vol-slider::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:#534AB7; cursor:pointer; border:2px solid #fff; box-shadow:0 2px 6px #00000030; }
+              .vol-slider::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:#f97316; cursor:pointer; border:2px solid #fff; box-shadow:0 2px 6px #00000030; }
               .vol-btn { width:44px; height:44px; border-radius:50%; border:1.5px solid #e2e8f0; background:#f8f9fa; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
               .vol-btn:active { background:#e2e8f0; }
             `}</style>
@@ -219,7 +219,7 @@ export default function BgmPlayer() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <button className="vol-btn" onClick={() => handleVolume(Math.max(0, volume - 0.04))}>🔉</button>
               <div style={{ flex: 1, textAlign: "center" }}>
-                <div style={{ fontSize: 28, fontWeight: 900, color: "#534AB7", lineHeight: 1 }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#f97316", lineHeight: 1 }}>
                   {Math.round(volume / 0.4 * 100)}
                 </div>
                 <div style={{ fontSize: 10, color: "#9ca3af" }}>/ 100</div>
@@ -233,7 +233,7 @@ export default function BgmPlayer() {
               value={volume}
               onChange={e => handleVolume(parseFloat(e.target.value))}
               className="vol-slider"
-              style={{ background: `linear-gradient(to right, #534AB7 ${pct}%, #e2e8f0 ${pct}%)` }}
+              style={{ background: `linear-gradient(to right, #f97316 ${pct}%, #e2e8f0 ${pct}%)` }}
             />
 
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
@@ -245,7 +245,7 @@ export default function BgmPlayer() {
               </button>
               <button
                 onClick={() => handleVolume(0.2)}
-                style={{ fontSize: 11, color: "#534AB7", background: "none", border: "none", cursor: "pointer", padding: "4px 8px", fontWeight: 700 }}
+                style={{ fontSize: 11, color: "#f97316", background: "none", border: "none", cursor: "pointer", padding: "4px 8px", fontWeight: 700 }}
               >
                 {t("bgm_medium", lang)}
               </button>
@@ -267,8 +267,8 @@ export default function BgmPlayer() {
             title={t("bgm_vol_title", lang)}
             style={{
               width: 44, height: 44, borderRadius: "50%",
-              background: open ? "#534AB7" : "rgba(255,255,255,0.92)",
-              border: `1.5px solid ${open ? "#534AB7" : "#e2e8f0"}`,
+              background: open ? "#f97316" : "rgba(255,255,255,0.92)",
+              border: `1.5px solid ${open ? "#f97316" : "#e2e8f0"}`,
               cursor: "pointer", fontSize: 18,
               display: "flex", alignItems: "center", justifyContent: "center",
               boxShadow: "0 4px 16px #00000018",

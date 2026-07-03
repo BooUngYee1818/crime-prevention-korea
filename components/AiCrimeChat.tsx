@@ -27,7 +27,7 @@ export default function AiCrimeChat({
   systemPrompt,
   openingMessage,
   header,
-  userBubbleColor = "#6366f1",
+  userBubbleColor = "#f97316",
   placeholder     = "메시지를 입력하세요...",
   maxTurns        = 6,
   onComplete,

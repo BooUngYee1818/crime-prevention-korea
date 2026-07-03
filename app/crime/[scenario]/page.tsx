@@ -765,7 +765,7 @@ function RevealScreen({
 
       {/* 메인 결과 카드 */}
       <div style={{
-        background: "#0d0d0d", border: "2px solid #ef444499",
+        background: "#0d0820", border: "2px solid #ef444499",
         borderRadius: 24, padding: 20, textAlign: "center",
       }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>🚨</div>
@@ -786,7 +786,7 @@ function RevealScreen({
       </div>
 
       {/* 범죄 설명 */}
-      <div style={{ background: "#1a1a1a", borderRadius: 18, padding: 16 }}>
+      <div style={{ background: "#1a1040", borderRadius: 18, padding: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
           <AlertTriangle size={15} color="#fbbf24" />
           <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 14 }}>{data.reveal.crimeName}</p>
@@ -816,8 +816,8 @@ function RevealScreen({
       <div style={{
         background: isDangerous
           ? "linear-gradient(135deg, #0a1628, #0d1f3c)"
-          : "#131313",
-        border: isDangerous ? "2px solid #3b82f6" : "1px solid #1e1e1e",
+          : "#13082a",
+        border: isDangerous ? "2px solid #3b82f6" : "1px solid #1e0a3a",
         borderRadius: 20, padding: 16,
         boxShadow: isDangerous ? "0 0 24px #3b82f620" : "none",
       }}>
@@ -856,7 +856,7 @@ function RevealScreen({
               key={item.number}
               href={`tel:${item.number}`}
               style={{
-                background: "#0d0d0d", borderRadius: 14, padding: "12px",
+                background: "#0d0820", borderRadius: 14, padding: "12px",
                 border: isDangerous ? "1px solid #1e3a5f" : "1px solid #1a1a1a",
                 textDecoration: "none", display: "block",
                 transition: "background 0.1s",
@@ -1026,7 +1026,7 @@ function RevealScreen({
           onClick={onHome}
           style={{
             flex: 1, padding: "14px 0", borderRadius: 16,
-            background: "#534AB7", color: "#fff",
+            background: "#f97316", color: "#fff",
             border: "none", fontSize: 14, fontWeight: 700, cursor: "pointer",
           }}
         >
@@ -1994,7 +1994,7 @@ export default function ScenarioPage() {
                     maxWidth: "72%", padding: "10px 14px", fontSize: 14, lineHeight: 1.65,
                     color: msg.role === "user" ? "#fff" : "#1a1a1a",
                     background: msg.role === "user"
-                      ? "linear-gradient(135deg,#6366f1,#8b5cf6)"
+                      ? "linear-gradient(135deg,#f97316,#ea580c)"
                       : "#ffffff",
                     borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
@@ -2029,7 +2029,7 @@ export default function ScenarioPage() {
           </div>
 
           {pendingSend && phase === "chat" && (
-            <div style={{ margin: "0 12px 10px", background: "#fff", border: "1.5px solid #e0e7ff", borderRadius: 18, padding: 14, flexShrink: 0, boxShadow: "0 2px 12px rgba(99,102,241,0.1)" }}>
+            <div style={{ margin: "0 12px 10px", background: "#fff", border: "1.5px solid #fed7aa", borderRadius: 18, padding: 14, flexShrink: 0, boxShadow: "0 2px 12px rgba(249,115,22,0.1)" }}>
               <p style={{ textAlign: "center", color: "#374151", fontSize: 13, marginBottom: 10 }}>
                 <span style={{ color: "#4f46e5", fontWeight: 800 }}>{formatAmount(pendingSend)}</span> 송금 요청
               </p>
@@ -2099,7 +2099,7 @@ export default function ScenarioPage() {
                 <button onClick={sendMessage} disabled={!input.trim() || loading}
                   style={{
                     width: 34, height: 34, borderRadius: "50%", border: "none", cursor: input.trim() && !loading ? "pointer" : "default",
-                    background: input.trim() && !loading ? "linear-gradient(135deg,#6366f1,#8b5cf6)" : "#e5e7eb",
+                    background: input.trim() && !loading ? "linear-gradient(135deg,#f97316,#ea580c)" : "#e5e7eb",
                     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                     transition: "background 0.2s",
                   }}>
@@ -2345,14 +2345,14 @@ export default function ScenarioPage() {
                   {line.from !== "system" && (
                     <div style={{
                       maxWidth: "75%", padding: "10px 14px", borderRadius: line.from === "user" ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
-                      background: line.from === "user" ? "#534AB7" : line.text.includes("죄송") || line.text.includes("어렵") ? "#7f1d1d" : "#2a2a2a",
+                      background: line.from === "user" ? "#f97316" : line.text.includes("죄송") || line.text.includes("어렵") ? "#7f1d1d" : "#2a2a2a",
                       color: "#fff", fontSize: 13, lineHeight: 1.6,
                     }}>
                       {line.text}
                     </div>
                   )}
                   {line.from === "user" && (
-                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#534AB7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14 }}>👤</div>
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14 }}>👤</div>
                   )}
                 </div>
               ))}
@@ -2390,7 +2390,7 @@ export default function ScenarioPage() {
         return (
           <div style={{
             flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-            background: "#0a0a0a", padding: "32px 24px",
+            background: "#0a061a", padding: "32px 24px",
             opacity: visible ? 1 : 0, transition: "opacity 0.6s ease",
           }}>
             <div style={{ fontSize: 64, marginBottom: 24 }}>💔</div>
@@ -2422,7 +2422,7 @@ export default function ScenarioPage() {
               onClick={() => setPhase("reveal")}
               style={{
                 width: "100%", maxWidth: 400, padding: "16px 0", borderRadius: 14,
-                background: "linear-gradient(135deg, #534AB7, #7c3aed)",
+                background: "linear-gradient(135deg, #f97316, #ea580c)",
                 color: "#fff", border: "none", cursor: "pointer",
                 fontWeight: 800, fontSize: 16,
               }}
