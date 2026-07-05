@@ -1,12 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
 export default function DonorEventPopup() {
   const { lang } = useLang();
   const [visible, setVisible] = useState(false);
-  const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
+  const [hidePos, setHidePos] = useState({ x: 0, y: 0 });
+  const [contactPos, setContactPos] = useState({ x: 0, y: 0 });
+  const [showGuiltyMsg, setShowGuiltyMsg] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("donor_popup_hidden_v2");
@@ -15,15 +18,38 @@ export default function DonorEventPopup() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!visible) return;
+    function onMouseMove(e: MouseEvent) {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.08;
+      const dy = (e.clientY - cy) * 0.08;
+      setContactPos({ x: dx, y: dy });
+    }
+    window.addEventListener("mousemove", onMouseMove);
+    return () => window.removeEventListener("mousemove", onMouseMove);
+  }, [visible]);
+
   function hideToday() {
     localStorage.setItem("donor_popup_hidden_v2", String(Date.now() + 24 * 60 * 60 * 1000));
     setVisible(false);
   }
 
-  function dodgeBtn() {
-    const rx = (Math.random() - 0.5) * 200;
-    const ry = (Math.random() - 0.5) * 100;
-    setBtnPos({ x: rx, y: ry });
+  function onClickX() {
+    setShowGuiltyMsg(true);
+    setTimeout(() => {
+      hideToday();
+    }, 1800);
+  }
+
+  function dodgeHide() {
+    const rx = (Math.random() - 0.5) * 320;
+    const ry = (Math.random() - 0.5) * 120;
+    setHidePos({ x: rx, y: ry });
   }
 
   if (!visible) return null;
@@ -39,13 +65,13 @@ export default function DonorEventPopup() {
         @keyframes fadeInBg { from{opacity:0} to{opacity:1} }
         @keyframes slideUp  { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
       `}</style>
-      <div onClick={e => e.stopPropagation()} style={{
+      <div ref={containerRef} onClick={e => e.stopPropagation()} style={{
         background: "#ffffff", borderRadius: 24, maxWidth: 440, width: "100%",
-        overflow: "hidden", animation: "slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-        boxShadow: "0 24px 80px rgba(0,0,0,0.35)",
+        overflow: "visible", animation: "slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.35)", position: "relative",
       }}>
         {/* X 닫기 버튼 */}
-        <button onClick={hideToday} style={{
+        <button onClick={onClickX} style={{
           position: "absolute", top: 12, right: 12, zIndex: 10,
           width: 32, height: 32, borderRadius: "50%",
           background: "rgba(0,0,0,0.15)", border: "none",
@@ -54,8 +80,27 @@ export default function DonorEventPopup() {
           fontWeight: 900,
         }}>✕</button>
 
+        {/* 죄책감 유발 메시지 */}
+        {showGuiltyMsg && (
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 20, textAlign: "center",
+            background: "rgba(255,255,255,0.97)",
+            borderRadius: 20, padding: "28px 32px",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
+            animation: "slideUp 0.3s ease",
+            width: "90%",
+          }}>
+            <p style={{ fontSize: 22, marginBottom: 8 }}>🥲</p>
+            <p style={{ fontSize: 16, fontWeight: 800, color: "#1a1a1a", margin: 0 }}>
+              후원 해주면 고마울텐데...
+            </p>
+          </div>
+        )}
+
         {/* 노란 배너 */}
-        <div style={{ background: "#F5C400", padding: "28px 28px 22px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "#F5C400", padding: "28px 28px 22px", position: "relative", overflow: "hidden", borderRadius: "24px 24px 0 0" }}>
           <div style={{
             position: "absolute", inset: 0, fontSize: 52, fontWeight: 900, color: "#ffffff20",
             display: "flex", alignItems: "center", whiteSpace: "nowrap", overflow: "hidden",
@@ -92,29 +137,39 @@ export default function DonorEventPopup() {
             </p>
           </div>
 
-          <a
-            href={`mailto:itnlifecn@gmail.com?subject=${encodeURIComponent("후원 및 명예의 전당 등재 신청")}&body=${encodeURIComponent("닉네임:\n후원 방법 문의:")}`}
-            style={{
-              display: "block", width: "100%", background: "#F5C400",
-              border: "none", borderRadius: 14, padding: "15px 0",
-              fontSize: 15, fontWeight: 900, color: "#1a1000",
-              textAlign: "center", cursor: "pointer", textDecoration: "none", boxSizing: "border-box",
-            }}
-            onClick={hideToday}
-          >
-            {t("donor_contact", lang)}
-          </a>
-
-          <div style={{ position: "relative", height: 36, marginTop: 12, overflow: "visible" }}>
-            <button
-              onMouseEnter={dodgeBtn}
-              onTouchStart={dodgeBtn}
+          {/* 마우스 따라오는 후원 버튼 */}
+          <div style={{ position: "relative", height: 52, marginBottom: 4 }}>
+            <a
+              href={`mailto:itnlifecn@gmail.com?subject=${encodeURIComponent("후원 및 명예의 전당 등재 신청")}&body=${encodeURIComponent("닉네임:\n후원 방법 문의:")}`}
               style={{
                 position: "absolute",
-                left: `calc(50% + ${btnPos.x}px)`,
-                top: `${btnPos.y}px`,
+                left: `calc(50% + ${contactPos.x}px)`,
+                top: `${contactPos.y}px`,
                 transform: "translateX(-50%)",
-                transition: "left 0.15s ease, top 0.15s ease",
+                transition: "left 0.2s ease, top 0.2s ease",
+                display: "block", width: "calc(100% - 0px)", background: "#F5C400",
+                border: "none", borderRadius: 14, padding: "15px 0",
+                fontSize: 15, fontWeight: 900, color: "#1a1000",
+                textAlign: "center", cursor: "pointer", textDecoration: "none", boxSizing: "border-box",
+                whiteSpace: "nowrap",
+              }}
+              onClick={hideToday}
+            >
+              {t("donor_contact", lang)}
+            </a>
+          </div>
+
+          {/* 도망가는 오늘 하루 보지 않기 */}
+          <div style={{ position: "relative", height: 36, marginTop: 12, overflow: "visible" }}>
+            <button
+              onMouseEnter={dodgeHide}
+              onTouchStart={dodgeHide}
+              style={{
+                position: "absolute",
+                left: `calc(50% + ${hidePos.x}px)`,
+                top: `${hidePos.y}px`,
+                transform: "translateX(-50%)",
+                transition: "left 0.12s ease, top 0.12s ease",
                 background: "none", border: "none", fontSize: 12, color: "#aaa",
                 cursor: "pointer", textDecoration: "underline", whiteSpace: "nowrap",
               }}
