@@ -27,11 +27,28 @@ export default function DonorEventPopup() {
       const el = containerRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) * 0.08;
-      const dy = (e.clientY - cy) * 0.08;
-      setContactPos({ x: dx, y: dy });
+      // X 버튼 위치 (우상단 top:12 right:12)
+      const xBtnX = rect.right - 12 - 16; // 센터
+      const xBtnY = rect.top + 12 + 16;
+      const distToX = Math.sqrt((e.clientX - xBtnX) ** 2 + (e.clientY - xBtnY) ** 2);
+
+      if (distToX < 60) {
+        // X 버튼 근처면 후원 버튼이 X 위치로 이동
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        // 후원 버튼 기본 위치: padding 영역 내 중앙
+        const btnCy = rect.top + rect.height - 100;
+        setContactPos({
+          x: xBtnX - cx,
+          y: xBtnY - btnCy,
+        });
+      } else {
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) * 0.08;
+        const dy = (e.clientY - cy) * 0.08;
+        setContactPos({ x: dx, y: dy });
+      }
     }
     window.addEventListener("mousemove", onMouseMove);
     return () => window.removeEventListener("mousemove", onMouseMove);
