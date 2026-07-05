@@ -1596,7 +1596,8 @@ export default function ScenarioPage() {
 
       {/* ══ 은행 메인 ══ */}
       {phase === "bank-main" && (
-        <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
+        <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#d0d0d0", alignItems:"center", justifyContent:"center", position:"relative" }}>
+        <div style={{ width:"100%", maxWidth:390, height:"min(780px,95vh)", borderRadius:36, overflow:"hidden", boxShadow:"0 20px 60px rgba(0,0,0,0.45)", border:"7px solid #1a1a1a", display:"flex", flexDirection:"column", background:"#f5f5f5" }}>
           <SimDot />
           {/* 상태바 */}
           <div style={{ background: BK, padding: "10px 20px 0", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
@@ -1683,6 +1684,7 @@ export default function ScenarioPage() {
               </div>
             ))}
           </div>
+        </div>
         </div>
       )}
 
