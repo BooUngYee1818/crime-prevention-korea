@@ -7,6 +7,7 @@ export default function ReviewPopup() {
   const { lang } = useLang();
   const [visible, setVisible] = useState(false);
   const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
+  const [showGuiltyMsg, setShowGuiltyMsg] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("review_popup_hidden_v2");
@@ -47,8 +48,30 @@ export default function ReviewPopup() {
         boxShadow: "0 -8px 60px rgba(83,74,183,0.25), 0 20px 80px rgba(0,0,0,0.5)",
         position: "relative",
       }}>
+        {/* 죄책감 유발 메시지 */}
+        {showGuiltyMsg && (
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 20, textAlign: "center",
+            background: "rgba(13,13,30,0.97)",
+            borderRadius: 20, padding: "28px 32px",
+            boxShadow: "0 8px 40px rgba(83,74,183,0.4)",
+            animation: "reviewSlide 0.3s ease",
+            width: "90%", border: "1px solid #534AB750",
+          }}>
+            <p style={{ fontSize: 22, marginBottom: 8 }}>📝</p>
+            <p style={{ fontSize: 16, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>
+              강요는 아닌데 필수로 후기 남기고 가주세요❗️
+            </p>
+            <p style={{ fontSize: 12, color: "#a78bfa", margin: 0 }}>
+              짧은 한 마디도 개발자에게 큰 힘이 됩니다 💜
+            </p>
+          </div>
+        )}
+
         {/* X 닫기 버튼 */}
-        <button onClick={hideToday} style={{
+        <button onClick={() => { setShowGuiltyMsg(true); setTimeout(hideToday, 2000); }} style={{
           position: "absolute", top: 12, right: 12, zIndex: 10,
           width: 32, height: 32, borderRadius: "50%",
           background: "rgba(255,255,255,0.15)", border: "none",
