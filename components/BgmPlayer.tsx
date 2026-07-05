@@ -6,15 +6,15 @@ import { t } from "@/lib/i18n";
 
 function getSrc(pathname: string) {
   if (pathname === "/") return "/music-main.mp3";
-  if (pathname.startsWith("/crime/")) return "/music-simulation.mp3";
-  if (pathname.startsWith("/gambling/")) return "/music-casino.mp3";
+  if (pathname.startsWith("/crime")) return "/music-simulation.mp3";
+  if (pathname.startsWith("/gambling")) return "/music-casino.mp3";
   return "/music-other.mp3";
 }
 
 // 페이지별 기본 볼륨
 function getBaseVolume(pathname: string) {
-  if (pathname.startsWith("/crime/")) return 0.22;
-  if (pathname.startsWith("/gambling/")) return 0.18;
+  if (pathname.startsWith("/crime")) return 0.22;
+  if (pathname.startsWith("/gambling")) return 0.18;
   return 0.13;
 }
 
@@ -30,7 +30,7 @@ export default function BgmPlayer() {
   const startedRef  = useRef(false);
   const pulseRef    = useRef<NodeJS.Timeout | null>(null);
   const pulsePhase  = useRef(0);
-  const isSimulation = pathname.startsWith("/crime/");
+  const isSimulation = pathname.startsWith("/crime");
 
   // 채팅 플레이 중 미니모드 이벤트
   useEffect(() => {
