@@ -161,15 +161,15 @@ export default function ReportPage() {
           number: "1332", url: "https://www.fss.or.kr"
         },
         {
-          name: lang === "ko" ? "카카오 고객센터" : lang === "en" ? "Kakao Customer Center" : lang === "ja" ? "カカオカスタマーセンター" : lang === "zh" ? "Kakao客服中心" : lang === "vi" ? "Trung tâm hỗ trợ Kakao" : "Centro de Atención al Cliente de Kakao",
-          desc: lang === "ko" ? "사기 계정 신고 (카카오톡 앱 내 신고)" : lang === "en" ? "Report fraud account (in-app reporting on KakaoTalk)" : lang === "ja" ? "詐欺アカウント通報（カカオトークアプリ内通報）" : lang === "zh" ? "举报诈骗账户（在KakaoTalk应用内举报）" : lang === "vi" ? "Báo cáo tài khoản lừa đảo (báo cáo trong app KakaoTalk)" : "Reportar cuenta fraudulenta (en la app KakaoTalk)",
+          name: lang === "ko" ? "오카카 고객센터" : lang === "en" ? "Kakao Customer Center" : lang === "ja" ? "カカオカスタマーセンター" : lang === "zh" ? "Kakao客服中心" : lang === "vi" ? "Trung tâm hỗ trợ Kakao" : "Centro de Atención al Cliente de Kakao",
+          desc: lang === "ko" ? "사기 계정 신고 (오카카톡 앱 내 신고)" : lang === "en" ? "Report fraud account (in-app reporting on KakaoTalk)" : lang === "ja" ? "詐欺アカウント通報（カカオトークアプリ内通報）" : lang === "zh" ? "举报诈骗账户（在KakaoTalk应用内举报）" : lang === "vi" ? "Báo cáo tài khoản lừa đảo (báo cáo trong app KakaoTalk)" : "Reportar cuenta fraudulenta (en la app KakaoTalk)",
           number: null, url: "https://cs.kakao.com"
         },
       ],
       steps: [
         lang === "ko" ? "상대방과의 모든 대화 내용을 캡처해 보관하세요" : lang === "en" ? "Screenshot and save all conversations with the other party" : lang === "ja" ? "相手とのすべての会話内容をキャプチャして保管してください" : lang === "zh" ? "截图并保存与对方的所有对话内容" : lang === "vi" ? "Chụp ảnh và lưu tất cả nội dung trò chuyện với đối phương" : "Captura y guarda todas las conversaciones con la otra parte",
         lang === "ko" ? "상대방 계좌로 이체한 금액이 있다면 즉시 112에 신고하세요" : lang === "en" ? "If you transferred money to the other party, report to 112 immediately" : lang === "ja" ? "相手の口座に送金した金額があればすぐに112に通報してください" : lang === "zh" ? "如果向对方账户转账，请立即拨打112举报" : lang === "vi" ? "Nếu đã chuyển tiền cho đối phương, hãy báo cáo ngay cho 112" : "Si transferiste dinero a la otra parte, repórtalo al 112 de inmediato",
-        lang === "ko" ? "카카오톡·SNS 계정을 즉시 신고·차단하세요" : lang === "en" ? "Report and block the KakaoTalk/SNS account immediately" : lang === "ja" ? "カカオトーク・SNSアカウントを即時通報・ブロックしてください" : lang === "zh" ? "立即举报并屏蔽KakaoTalk/SNS账户" : lang === "vi" ? "Báo cáo và chặn ngay tài khoản KakaoTalk/SNS" : "Reporta y bloquea la cuenta de KakaoTalk/SNS de inmediato",
+        lang === "ko" ? "오카카톡·SNS 계정을 즉시 신고·차단하세요" : lang === "en" ? "Report and block the KakaoTalk/SNS account immediately" : lang === "ja" ? "カカオトーク・SNSアカウントを即時通報・ブロックしてください" : lang === "zh" ? "立即举报并屏蔽KakaoTalk/SNS账户" : lang === "vi" ? "Báo cáo và chặn ngay tài khoản KakaoTalk/SNS" : "Reporta y bloquea la cuenta de KakaoTalk/SNS de inmediato",
         lang === "ko" ? "수치심을 느낄 필요 없습니다. 이건 당신의 잘못이 아닙니다." : lang === "en" ? "You don't need to feel ashamed. This is not your fault." : lang === "ja" ? "恥ずかしく感じる必要はありません。これはあなたのせいではありません。" : lang === "zh" ? "不需要感到羞耻。这不是你的错。" : lang === "vi" ? "Bạn không cần cảm thấy xấu hổ. Đây không phải lỗi của bạn." : "No necesitas sentir vergüenza. Esto no es tu culpa.",
       ],
     },

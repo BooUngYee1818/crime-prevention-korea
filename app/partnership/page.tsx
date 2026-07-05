@@ -15,7 +15,7 @@ export default function PartnershipPage() {
       name: lang === "ko" ? "기본형" : lang === "en" ? "Basic" : lang === "ja" ? "ベーシック" : lang === "zh" ? "基础版" : lang === "vi" ? "Cơ bản" : "Básico",
       tag: lang === "ko" ? "소규모 기관" : lang === "en" ? "Small Org" : lang === "ja" ? "小規模機関" : lang === "zh" ? "小型机构" : lang === "vi" ? "Tổ chức nhỏ" : "Org. Pequeña",
       price: lang === "ko" ? "협의" : lang === "en" ? "Negotiable" : lang === "ja" ? "要相談" : lang === "zh" ? "协商" : lang === "vi" ? "Thương lượng" : "Negociable",
-      color: "#9161b2",
+      color: "#f97316",
       bg: "#f5dfee",
       border: "#dcc5e8",
       features: [
@@ -142,7 +142,7 @@ export default function PartnershipPage() {
   const whyItems = [
     {
       icon: "🎯",
-      color: "#9161b2",
+      color: "#f97316",
       bg: "#f5dfee",
       title: lang === "ko" ? "실제 체험 교육" : lang === "en" ? "Hands-on Experience" : lang === "ja" ? "実体験教育" : lang === "zh" ? "实际体验教育" : lang === "vi" ? "Giáo dục trải nghiệm thực tế" : "Experiencia Práctica",
       desc: lang === "ko" ? "AI가 실제 사기범처럼 대화하며 범죄 수법을 몸으로 익힙니다. 강의보다 10배 더 기억에 남습니다." : lang === "en" ? "AI simulates real scammers so participants experience crime tactics firsthand — 10x more memorable than a lecture." : lang === "ja" ? "AIが実際の詐欺師のように会話し、犯罪手口を体で学びます。講義より10倍記憶に残ります。" : lang === "zh" ? "AI像真实骗子一样对话，让参与者亲身体验犯罪手法。比讲座记忆深刻10倍。" : lang === "vi" ? "AI mô phỏng kẻ lừa đảo thật để người tham gia trải nghiệm thủ thuật tội phạm — ghi nhớ gấp 10 lần so với bài giảng." : "La IA simula estafadores reales para que los participantes experimenten tácticas delictivas — 10 veces más memorable que una charla.",
@@ -242,13 +242,13 @@ export default function PartnershipPage() {
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
           <ArrowLeft size={18} />
         </button>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #f97316, #ea580c)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Shield size={14} color="#fff" />
         </div>
         <span style={{ fontWeight: 700, fontSize: 15, color: "#1c0d2e" }}>
           {lang === "ko" ? "기관 도입 안내" : lang === "en" ? "Institution Guide" : lang === "ja" ? "機関導入案内" : lang === "zh" ? "机构引入指南" : lang === "vi" ? "Hướng dẫn tổ chức" : "Guía para Instituciones"}
         </span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#9161b2", background: "#f5dfee", padding: "2px 8px", borderRadius: 20, border: "1px solid #dcc5e8" }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#ea580c", background: "#fff7ed", padding: "2px 8px", borderRadius: 20, border: "1px solid #fed7aa" }}>
           Partnership
         </span>
       </nav>
@@ -321,7 +321,7 @@ export default function PartnershipPage() {
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#inquiry" style={{
               padding: "16px 36px", borderRadius: 14,
-              background: "linear-gradient(135deg, #7c3aed, #7c3aed)",
+              background: "linear-gradient(135deg, #f97316, #ea580c)",
               color: "#fff", textDecoration: "none", fontWeight: 800, fontSize: 16,
               boxShadow: "0 4px 28px #9161b260",
               display: "flex", alignItems: "center", gap: 8,
@@ -340,6 +340,37 @@ export default function PartnershipPage() {
         </div>
       </section>
 
+      {/* ── 긴급 통계 배너 ── */}
+      <div style={{ background:"#0f0f0f", padding:"40px 40px" }}>
+        <div style={{ maxWidth:1140, margin:"0 auto" }}>
+          <p style={{ color:"#f97316", fontSize:11, fontWeight:800, letterSpacing:3, textAlign:"center", marginBottom:28 }}>📊 2025년 대한민국 범죄 피해 현황 — 교육이 시급합니다</p>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16 }}>
+            {[
+              { num:"1조 2천억", unit:"원", label:"연간 보이스피싱 피해액", sub:"하루 평균 32억원 피해", color:"#ef4444" },
+              { num:"200만", unit:"명", label:"국내 도박 중독 추정 인원", sub:"10대 비율 매년 증가", color:"#f59e0b" },
+              { num:"47%", unit:"↑", label:"10~20대 마약 검거 증가율", sub:"SNS 유통 경로 68%", color:"#a855f7" },
+              { num:"85%", unit:"", label:"피해자가 사전 교육 무경험", sub:"\"몰랐다\"는 응답 압도적", color:"#22c55e" },
+            ].map((s,i) => (
+              <div key={i} style={{ background:"#1a1a1a", borderRadius:16, padding:"20px", borderTop:`3px solid ${s.color}` }}>
+                <div style={{ display:"flex", alignItems:"baseline", gap:4, marginBottom:6 }}>
+                  <span style={{ color:s.color, fontSize:28, fontWeight:900 }}>{s.num}</span>
+                  <span style={{ color:s.color, fontSize:14, fontWeight:700 }}>{s.unit}</span>
+                </div>
+                <p style={{ color:"#e2e8f0", fontSize:13, fontWeight:700, marginBottom:4 }}>{s.label}</p>
+                <p style={{ color:"#6b7280", fontSize:11 }}>{s.sub}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign:"center", marginTop:24 }}>
+            <div style={{ display:"inline-block", background:"#1a0a00", border:"1px solid #f97316", borderRadius:12, padding:"12px 28px" }}>
+              <p style={{ color:"#fed7aa", fontSize:13, fontWeight:700 }}>
+                ⚡ 강의·유인물보다 <strong style={{ color:"#f97316" }}>직접 체험 교육이 3배 효과적</strong>입니다 — 교육학 연구 기반
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 기관 신뢰 배너 */}
       <div style={{ background:"#fff", borderBottom:"1px solid #e8e8ea", padding:"20px 40px" }}>
         <div style={{ maxWidth:1140, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"center", gap:40, flexWrap:"wrap" }}>
@@ -354,7 +385,7 @@ export default function PartnershipPage() {
 
         {/* Why */}
         <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>WHY US</p>
+          <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>WHY US</p>
           <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
             {lang === "ko" ? "왜 이 프로그램인가요?" : lang === "en" ? "Why this program?" : lang === "ja" ? "なぜこのプログラムですか？" : lang === "zh" ? "为什么选择这个项目？" : lang === "vi" ? "Tại sao chọn chương trình này?" : "¿Por qué este programa?"}
           </h2>
@@ -385,7 +416,7 @@ export default function PartnershipPage() {
         {/* Targets */}
         <div style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>TARGET</p>
+            <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>TARGET</p>
             <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e" }}>
               {lang === "ko" ? "이런 기관에 적합합니다" : lang === "en" ? "Suitable for these institutions" : lang === "ja" ? "このような機関に適しています" : lang === "zh" ? "适合这些机构" : lang === "vi" ? "Phù hợp với những tổ chức này" : "Adecuado para estas instituciones"}
             </h2>
@@ -410,7 +441,7 @@ export default function PartnershipPage() {
         {/* Process */}
         <div style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PROCESS</p>
+            <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PROCESS</p>
             <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e" }}>
               {lang === "ko" ? "도입 절차" : lang === "en" ? "How It Works" : lang === "ja" ? "導入手順" : lang === "zh" ? "引入流程" : lang === "vi" ? "Quy trình triển khai" : "Cómo Funciona"}
             </h2>
@@ -450,10 +481,90 @@ export default function PartnershipPage() {
           </div>
         </div>
 
+        {/* ── 체험 먼저 해보기 ── */}
+        <div style={{ marginBottom: 72, background:"linear-gradient(135deg,#0f2010,#052e16)", borderRadius:24, padding:"40px", textAlign:"center" }}>
+          <p style={{ color:"#4ade80", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:12 }}>BEFORE YOU DECIDE</p>
+          <h2 style={{ fontSize:28, fontWeight:900, color:"#fff", marginBottom:12 }}>도입 전, 먼저 직접 체험해보세요</h2>
+          <p style={{ color:"#86efac", fontSize:14, lineHeight:1.9, marginBottom:28 }}>
+            담당자께서 먼저 실제로 체험해보시고 판단하세요.<br/>
+            로그인 없이 즉시 이용 가능합니다.
+          </p>
+          <div style={{ display:"flex", gap:14, justifyContent:"center", flexWrap:"wrap" }}>
+            {[
+              { label:"🎙️ 보이스피싱 체험", href:"/crime/family-impersonation", color:"#ef4444" },
+              { label:"📱 오카카톡 사칭 체험", href:"/crime/kakaotalk-impersonation", color:"#fbbf24" },
+              { label:"🎰 도박 사이트 체험", href:"/gambling", color:"#a855f7" },
+              { label:"🕵️ AI 영상 탐정 퀴즈", href:"/crime/ai-detective", color:"#22c55e" },
+            ].map((b,i) => (
+              <a key={i} href={b.href} style={{
+                padding:"12px 22px", borderRadius:50, fontWeight:700, fontSize:14,
+                background:`${b.color}22`, border:`1.5px solid ${b.color}66`,
+                color:b.color, textDecoration:"none", whiteSpace:"nowrap" as const,
+              }}>{b.label}</a>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 공공기관 전용 안내 ── */}
+        <div style={{ marginBottom: 72 }}>
+          <div style={{ textAlign:"center", marginBottom:44 }}>
+            <p style={{ color:"#f97316", fontSize:12, fontWeight:700, letterSpacing:2, marginBottom:10 }}>FOR GOVERNMENT</p>
+            <h2 style={{ fontSize:32, fontWeight:900, letterSpacing:-0.8, color:"#1c0d2e", marginBottom:14 }}>공공기관 담당자분께</h2>
+            <p style={{ color:"#64748b", fontSize:14, lineHeight:1.8 }}>공문, 예산 없이 도입 가능하도록 모든 절차를 간소화했습니다.</p>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:24 }}>
+            {/* 공문 안내 */}
+            <div style={{ background:"#f8fafc", border:"2px solid #e2e8f0", borderRadius:20, padding:"28px 26px" }}>
+              <div style={{ fontSize:32, marginBottom:14 }}>📋</div>
+              <h3 style={{ color:"#1c0d2e", fontWeight:800, fontSize:18, marginBottom:10 }}>공문으로 협조 요청 가능</h3>
+              <p style={{ color:"#64748b", fontSize:13, lineHeight:1.9, marginBottom:16 }}>
+                기관 공문을 통해 공식 협력을 요청하실 수 있습니다.<br/>
+                공문 수신처: <strong style={{ color:"#1c0d2e" }}>itnlifecn@gmail.com</strong><br/>
+                공문 제목 예시: <em style={{ color:"#64748b" }}>"범죄예방 교육 프로그램 협력 요청의 건"</em>
+              </p>
+              <div style={{ background:"#f1f5f9", borderRadius:10, padding:"10px 14px" }}>
+                <p style={{ color:"#475569", fontSize:12 }}>📌 공문 수신 후 48시간 내 공식 회신 드립니다</p>
+              </div>
+            </div>
+            {/* 제안서 */}
+            <div style={{ background:"#fff7ed", border:"2px solid #fed7aa", borderRadius:20, padding:"28px 26px" }}>
+              <div style={{ fontSize:32, marginBottom:14 }}>📄</div>
+              <h3 style={{ color:"#1c0d2e", fontWeight:800, fontSize:18, marginBottom:10 }}>기관 제안서 요청</h3>
+              <p style={{ color:"#64748b", fontSize:13, lineHeight:1.9, marginBottom:16 }}>
+                내부 결재용 제안서(PDF)를 무료로 제공드립니다.<br/>
+                포함 내용: 프로그램 소개, 기대효과, 도입 방법, 비용(무료), 담당자 연락처
+              </p>
+              <a href="mailto:itnlifecn@gmail.com?subject=[제안서 요청] 기관명 기재&body=기관명: %0D%0A담당자명: %0D%0A연락처: %0D%0A제안서 수신 이메일: " style={{
+                display:"block", textAlign:"center" as const, padding:"11px 0", borderRadius:10,
+                background:"linear-gradient(135deg,#f97316,#ea580c)", color:"#fff",
+                fontWeight:700, fontSize:13, textDecoration:"none",
+              }}>📧 제안서 이메일로 요청하기</a>
+            </div>
+          </div>
+          {/* 법적 근거 */}
+          <div style={{ background:"#1c0d2e", borderRadius:20, padding:"28px 32px" }}>
+            <p style={{ color:"#f97316", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>⚖️ 법적 근거 — 범죄예방 교육의 의무성</p>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
+              {[
+                { law:"형사소송법 제197조의3", desc:"경찰의 범죄예방 활동 의무 명시", icon:"🚔" },
+                { law:"청소년 보호법 제35조", desc:"학교·지자체의 청소년 범죄예방 교육 실시 권고", icon:"🎓" },
+                { law:"금융소비자 보호법 제22조", desc:"금융기관의 금융범죄 예방 교육 의무화", icon:"🏦" },
+              ].map((l,i) => (
+                <div key={i} style={{ background:"#ffffff0a", borderRadius:12, padding:"16px" }}>
+                  <div style={{ fontSize:22, marginBottom:8 }}>{l.icon}</div>
+                  <p style={{ color:"#f97316", fontSize:11, fontWeight:700, marginBottom:4 }}>{l.law}</p>
+                  <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6 }}>{l.desc}</p>
+                </div>
+              ))}
+            </div>
+            <p style={{ color:"#4b5563", fontSize:11, marginTop:16 }}>※ 위 법률 조항은 참고 목적이며, 실제 적용 여부는 각 기관의 법무 담당자와 확인하시기 바랍니다.</p>
+          </div>
+        </div>
+
         {/* Packages */}
         <div id="packages" style={{ marginBottom: 72 }}>
           <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PACKAGES</p>
+            <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>PACKAGES</p>
             <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
               {lang === "ko" ? "도입 패키지" : lang === "en" ? "Packages" : lang === "ja" ? "導入パッケージ" : lang === "zh" ? "引入套餐" : lang === "vi" ? "Các gói triển khai" : "Paquetes de Implementación"}
             </h2>
@@ -529,7 +640,7 @@ export default function PartnershipPage() {
 
             {/* Left: Info */}
             <div>
-              <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 12 }}>CONTACT</p>
+              <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 12 }}>CONTACT</p>
               <h2 style={{ fontSize: 28, fontWeight: 900, letterSpacing: -0.6, color: "#1c0d2e", marginBottom: 16 }}>
                 {lang === "ko" ? "도입 문의" : lang === "en" ? "Get in Touch" : lang === "ja" ? "導入問い合わせ" : lang === "zh" ? "联系我们" : lang === "vi" ? "Liên hệ" : "Contáctenos"}<br />
                 {lang === "ko" ? "지금 바로 해주세요" : lang === "en" ? "Right Now" : lang === "ja" ? "今すぐどうぞ" : lang === "zh" ? "立即联系" : lang === "vi" ? "Ngay bây giờ" : "Ahora Mismo"}
@@ -608,7 +719,7 @@ export default function PartnershipPage() {
                 </p>
                 <button
                   onClick={() => setSent(false)}
-                  style={{ marginTop: 8, padding: "10px 24px", borderRadius: 10, background: "#f5dfee", color: "#9161b2", border: "1px solid #dcc5e8", cursor: "pointer", fontWeight: 600, fontSize: 13 }}
+                  style={{ marginTop: 8, padding: "10px 24px", borderRadius: 10, background: "#f5dfee", color: "#f97316", border: "1px solid #dcc5e8", cursor: "pointer", fontWeight: 600, fontSize: 13 }}
                 >
                   {lang === "ko" ? "다시 문의하기" : lang === "en" ? "Submit Another Inquiry" : lang === "ja" ? "再度問い合わせ" : lang === "zh" ? "再次咨询" : lang === "vi" ? "Gửi yêu cầu khác" : "Enviar Otra Consulta"}
                 </button>
@@ -660,7 +771,7 @@ export default function PartnershipPage() {
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     padding: "15px 0", borderRadius: 14,
-                    background: "linear-gradient(135deg, #9161b2, #7c4da8)",
+                    background: "linear-gradient(135deg, #f97316, #ea580c)",
                     color: "#fff", border: "none", cursor: "pointer",
                     fontSize: 15, fontWeight: 700,
                     boxShadow: "0 4px 20px #9161b230",
@@ -686,7 +797,7 @@ export default function PartnershipPage() {
         flexWrap: "wrap", gap: 16,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #9161b2, #7c4da8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #f97316, #ea580c)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Shield size={14} color="#fff" />
           </div>
           <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>

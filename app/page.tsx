@@ -161,7 +161,7 @@ const SCAM_SCENARIOS = [
     emoji: "🥕",
     tag: "중고거래 사기",
     tagColor: "#f97316",
-    title: "당근에서 아이패드를 팔아요",
+    title: "피망마켓에서 아이패드를 팔아요",
     desc: "안전결제 링크 위조. 중고거래 사기 피해 연 5만 건 이상.",
     preview: "구매자: 안전결제로 할게요~ 링크 보내드릴게요 ㅎㅎ",
     steps: [
@@ -170,11 +170,11 @@ const SCAM_SCENARIOS = [
       { type: "chat", from: "구매자김철수", msg: "https://safe-pay-kr.shop/deal/28471 ← 여기서 판매자 등록하시면 바로 입금돼요!" },
       { type: "choice", question: "어떻게 할까요?", choices: [
         { label: "링크 눌러서 계좌 입력", result: "lose" },
-        { label: "당근페이 공식 안전결제로 요청", result: "win" },
+        { label: "피망페이 공식 안전결제로 요청", result: "win" },
         { label: "그냥 계좌이체로 먼저 보내달라 함", result: "lose" },
       ]},
     ],
-    winMsg: "✅ 정답! 외부 링크는 절대 금물. 당근마켓 앱 내 공식 안전결제만 사용해야 합니다.",
+    winMsg: "✅ 정답! 외부 링크는 절대 금물. 피망마켓 앱 내 공식 안전결제만 사용해야 합니다.",
     loseMsg: "💸 개인정보와 계좌가 털렸습니다. 저 링크는 가짜 피싱 사이트였습니다.",
   },
   {
@@ -473,11 +473,12 @@ export default function HomePage() {
     { version: "v1.5", badgeColor: "#f59e0b", items: ["📱 문자 사기 체험 (스미싱) — 택배·건강보험·카드 3종", "🎰 불법 도박 신규 게임 3종 (홀짝·파워볼·슬롯머신)", "💳 충전 시 카드 자동입력 애니메이션"] },
     { version: "v1.5.1", badgeColor: "#22c55e", items: ["💡 도박 페이지 전면 네온 사인 UI 적용", "👁️ 모바일 글씨 투명화 버그 전면 수정"] },
     { version: "v1.5.2", badgeColor: "#22c55e", items: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"] },
-    { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 당근마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
+    { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 피망마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
     { version: "v1.7", badgeColor: "#38bdf8", items: ["📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션", "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도", "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크", "✨ 기관 판매 배너 홀로그램 은박 효과"] },
-    { version: "v1.7", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 당근마켓 사기 체험 개선"] },
+    { version: "v1.7", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 피망마켓 사기 체험 개선"] },
     { version: "v1.8", badgeColor: "#f472b6", items: ["🎨 전화 통화 화면 전면 리디자인 — 삼성 One UI 8.5 / iOS 26 Liquid Glass 스타일 적용", "🔇 발신자 번호 '발신자표시제한'으로 변경 (실제 보이스피싱 수법 반영)", "🎙️ AI 목소리 업그레이드 — ElevenLabs 딥보이스 TTS 적용 (기존 로봇음 → 실제 사람 목소리)", "📌 방명록 추천 후기 고정 표시", "✍️ 방명록 1인 1회 작성 제한"] },
-    { version: "v1.9.2", badge: "최신", badgeColor: "#ef4444", items: ["⚠️ 무기 거래 중 사고 시나리오 추가 — 강탈·운반 연루·경찰 급습 3종 체험"] },
+    { version: "v1.9.3", badge: "최신", badgeColor: "#f97316", items: ["🎨 전체 컬러 주황(#f97316)으로 변경 — 기존 인디고·퍼플 계열 전면 교체", "🌑 다크 배경 어두운 보라(#0d0820)로 통일", "🧒 어린이 쉬운 설명 추가 — 8개 범죄 시나리오 결과 화면에 어린이·초보자용 설명 카드", "⌨️ 엔터 전송 — 방명록 Ctrl+Enter로 전송 가능", "🎵 BGM 개선 — '체험 선택'으로 이동 시 음악 즉시 전환", "🚫 네비게이션 중복 버튼 제거 — 상단 보라색 체험시작 버튼 삭제", "🛡️ 도박 페이지 상단 고정 시뮬레이션 배지 추가", "🏛️ 기관도입 페이지 전면 개편 — 피해 통계·공문 안내·제안서 요청·법적 근거 추가", "🤖 AI 영상 교육 콘텐츠 추가 — 탐정 게임 전 AI 발전 비교·워터마크·탐지법 학습 섹션", "🃏 시나리오 목록 제목 오류 수정 — 미매핑 시나리오가 '불법 도박'으로 표시되던 버그 수정"] },
+    { version: "v1.9.2", badgeColor: "#ef4444", items: ["⚠️ 무기 거래 중 사고 시나리오 추가 — 강탈·운반 연루·경찰 급습 3종 체험"] },
     { version: "v1.9.1", badgeColor: "#ef4444", items: ["💊 텔레그램 마약 거래 시나리오 추가 — 채널 구독부터 딜러 DM 체험", "🔫 불법 총기 거래 시나리오 추가 — 다크마켓 목록 조회 및 거래 체험", "😱 총기 구매 사기 대처법 추가 — 이중 피해 상황에서 선택지 탐색"] },
     { version: "v1.9", badgeColor: "#22c55e", items: ["🛡️ 공공장소 안전 설계 — 경찰·타인이 봐도 교육 앱임을 즉시 인식할 수 있는 UI 구성", "🎓 모든 범죄 시뮬레이션 페이지에 교육용 배너·대각선 워터마크·우하단 뱃지 상시 표시", "📵 신고 번호 전화 자동연결 전면 제거 → 번호 복사 버튼으로 교체 (공공장소 오작동 방지)", "ℹ️ 앱 정보 모달 추가 — 교육 목적·비실제 거래·법적 문제 없음 명시", "🎵 카지노 피아노 BGM 추가 — 도박 페이지 전용 배경음악", "🔊 도박 효과음 추가 — 슬롯 스핀·릴 정지·코인 드롭·잭팟 사운드", "💼 취업 사기 시나리오 추가 — 재택알바 보증금 사기", "💊 마약 SNS 유인 시나리오 추가 — 다이어트약·힐링템 위장", "🏛️ 금융감독원 사칭 시나리오 추가 — 보이스피싱 전화 체험", "🔮 미래형 범죄 3종 추가 — 스마트홈 랜섬웨어·AI 유전자 분석 사기·메타버스 가상부동산 사기", "❓ FAQ 섹션 신설 — 11가지 자주 묻는 질문", "📊 통계·명예의전당 버튼 메인 페이지 전용으로 변경", "🎨 업데이트 내역 버튼 호버 시에만 확장되도록 수정"] },
   ];
@@ -989,33 +990,7 @@ export default function HomePage() {
           >
             {t("nav_partner", lang)}
           </button>
-          <button
-            onClick={() => router.push("/crime")}
-            style={{
-              padding: "9px 22px", borderRadius: 22,
-              background: "linear-gradient(135deg, #9161b2, #7c4da8)",
-              color: "#fff", border: "none", cursor: "pointer",
-              fontSize: 13, fontWeight: 700,
-              boxShadow: "0 2px 12px #9161b240",
-            }}
-          >
-            {t("nav_start", lang)} →
-          </button>
         </div>
-        {/* 모바일 전용 시작 버튼 */}
-        <button
-          className="nav-mobile-start"
-          onClick={() => router.push("/crime")}
-          style={{
-            display: "none",
-            padding: "8px 16px", borderRadius: 20,
-            background: "linear-gradient(135deg, #9161b2, #7c4da8)",
-            color: "#fff", border: "none", cursor: "pointer",
-            fontSize: 13, fontWeight: 700,
-          }}
-        >
-          {t("nav_start", lang)} →
-        </button>
       </nav>
 
       {/* ── 히어로 섹션 ── */}
@@ -1683,7 +1658,7 @@ export default function HomePage() {
                   color: "#1a7a4a", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {(lang === "ko"
-                    ? ["📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출", "📱 갤럭시S2", "📲 카카오톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출"]
+                    ? ["📱 갤럭시S2", "📲 오카카톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출", "📱 갤럭시S2", "📲 오카카톡 출시", "💬 스미싱 문자", "🔗 bitly 단축링크", "📶 3G LTE", "🏧 ATM 인출"]
                     : lang === "ja"
                     ? ["📱 Galaxy S2", "📲 KakaoTalk誕生", "💬 スミッシングテキスト", "🔗 bit.ly 短縮リンク", "📶 3G LTE", "🏧 ATM引出し", "📱 Galaxy S2", "📲 KakaoTalk誕生", "💬 スミッシングテキスト", "🔗 bit.ly 短縮リンク", "📶 3G LTE", "🏧 ATM引出し"]
                     : ["📱 Galaxy S2", "📲 KakaoTalk Launch", "💬 Smishing Texts", "🔗 bit.ly Short Links", "📶 3G LTE", "🏧 ATM Withdrawal", "📱 Galaxy S2", "📲 KakaoTalk Launch", "💬 Smishing Texts", "🔗 bit.ly Short Links", "📶 3G LTE", "🏧 ATM Withdrawal"]
@@ -1697,7 +1672,7 @@ export default function HomePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: 28, marginBottom: 4 }}>📱</div>
                   <span style={{ color: "#34d399", fontSize: 13, fontWeight: 700, letterSpacing: 4, fontFamily: "monospace" }}>{lang === "ko" ? "── 2 0 1 0 년 대 초 ──" : "── E a r l y  2 0 1 0 s ──"}</span>
-                  <p style={{ color: "#065f46", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "스마트폰 보급 · 카카오 · 스미싱의 시대" : lang === "ja" ? "スマートフォン普及・カカオ・スミッシングの時代" : lang === "zh" ? "智能手机普及·Kakao·短信钓鱼的时代" : "Smartphone Boom · KakaoTalk · Smishing Era"}</p>
+                  <p style={{ color: "#065f46", fontSize: 10, marginTop: 4, letterSpacing: 1 }}>{lang === "ko" ? "스마트폰 보급 · 오카카 · 스미싱의 시대" : lang === "ja" ? "スマートフォン普及・カカオ・スミッシングの時代" : lang === "zh" ? "智能手机普及·Kakao·短信钓鱼的时代" : "Smartphone Boom · KakaoTalk · Smishing Era"}</p>
                 </div>
                 <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, #34d39988, transparent)" }} />
               </div>
@@ -1712,7 +1687,7 @@ export default function HomePage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { sender: "[Web발신]", preview: "무료쿠폰 발급완료 수령▶ http://bit.ly/xK3m", name: "스미싱 1세대", nameTr: lang === "ja" ? "スミッシング第一世代" : lang === "zh" ? "短信钓鱼第一代" : lang === "ko" ? null : "Smishing — 1st Gen", desc: "클릭 즉시 소액결제 자동 청구. '무료쿠폰'에 의심 없이 눌렀던 시절. 당시엔 스미싱이란 단어조차 없었음.", descTr: lang === "ja" ? "クリックで少額決済が自動請求。「無料クーポン」に疑いなく押した時代。当時はスミッシングという言葉もなかった。" : lang === "zh" ? "点击后立即扣取小额费用。毫无疑心点击'免费优惠券'的年代。当时连短信钓鱼这词都不存在。" : lang === "ko" ? null : "One click = instant micro-payment. People clicked 'free coupon' without suspicion. 'Smishing' wasn't even a word yet." },
-                  { sender: "민지", preview: "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게", name: "카카오 해킹 초기형", nameTr: lang === "ja" ? "カカオハッキング初期型" : lang === "zh" ? "KakaoTalk账号被盗初期型" : lang === "ko" ? null : "KakaoTalk Hacking — Early Form", desc: "계정 해킹 후 지인에게 문자형 사기. 카카오가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음.", descTr: lang === "ja" ? "アカウントハッキング後に知人へのメッセージ型詐欺。「これ本物のカカオトークなの？」と騙された時代。" : lang === "zh" ? "账号被黑客入侵后向熟人发送骗钱信息。KakaoTalk还很陌生，人们被骗时问'这真的是KakaoTalk吗？'。" : lang === "ko" ? null : "After hacking an account, scammers text the victim's contacts. 'Is this really KakaoTalk?' — people were fooled." },
+                  { sender: "민지", preview: "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게", name: "오카카 해킹 초기형", nameTr: lang === "ja" ? "カカオハッキング初期型" : lang === "zh" ? "KakaoTalk账号被盗初期型" : lang === "ko" ? null : "KakaoTalk Hacking — Early Form", desc: "계정 해킹 후 지인에게 문자형 사기. 오카카가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음.", descTr: lang === "ja" ? "アカウントハッキング後に知人へのメッセージ型詐欺。「これ本物のカカオトークなの？」と騙された時代。" : lang === "zh" ? "账号被黑客入侵后向熟人发送骗钱信息。KakaoTalk还很陌生，人们被骗时问'这真的是KakaoTalk吗？'。" : lang === "ko" ? null : "After hacking an account, scammers text the victim's contacts. 'Is this really KakaoTalk?' — people were fooled." },
                   { sender: "직구몰", preview: "아이폰5 미개봉 정품 29만원! 오늘마감 선착순50명", name: "가짜 직구몰 사기", nameTr: lang === "ja" ? "偽直接購入サイト詐欺" : lang === "zh" ? "假购物网站诈骗" : lang === "ko" ? null : "Fake Shopping Mall Scam", desc: "너무 싼 해외직구 쇼핑몰. 결제 후 잠적. 지금의 중고거래 사기 전신. 환불 개념 자체가 없던 시대.", descTr: lang === "ja" ? "安すぎる海外直購入ショッピングモール。決済後に逃走。現在の中古取引詐欺の前身。返金という概念もなかった時代。" : lang === "zh" ? "价格太便宜的海外直购商城。付款后消失。现在二手交易诈骗的前身。那时根本没有退款这个概念。" : lang === "ko" ? null : "Too-cheap online stores. Pay, then vanish. Precursor to today's used-goods scam. Refunds were an unknown concept." },
                 ].map((c, j) => (
                   <div key={j} style={{
@@ -1797,7 +1772,7 @@ export default function HomePage() {
                   color: "#c084fc99", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {(lang === "ko"
-                    ? ["📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 카카오스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"]
+                    ? ["📸 인스타그램", "👥 페이스북", "💬 오카카스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기", "📸 인스타그램", "👥 페이스북", "💬 오카카스토리", "📊 주식카페", "🎯 재택알바", "📲 DM사기"]
                     : lang === "ja"
                     ? ["📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 株式カフェ", "🎯 テレワーク詐欺", "📲 DM詐欺", "📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 株式カフェ", "🎯 テレワーク詐欺", "📲 DM詐欺"]
                     : ["📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 Stock Forums", "🎯 WFH Scam", "📲 DM Fraud", "📸 Instagram", "👥 Facebook", "💬 KakaoStory", "📊 Stock Forums", "🎯 WFH Scam", "📲 DM Fraud"]
@@ -1827,7 +1802,7 @@ export default function HomePage() {
                 {[
                   { platform: "Facebook", dot: "#1877f2", name: "SNS 지인 사칭", nameTr: lang === "ja" ? "SNS知人なりすまし" : lang === "zh" ? "SNS熟人冒充诈骗" : lang === "ko" ? null : "SNS Acquaintance Impersonation", post: "이거 실화냐 ㅋㅋ 나 어제 이거 당했는데... 갑자기 지인 계정에서 DM 와서 돈 빌려달라고 해서 보냈더니 해킹당한 계정이었음", like: "좋아요 247개", desc: "페이스북·인스타 클론 계정. AI 없던 시대의 수작업 사기. 지인 관계망을 가장 잘 활용한 형태.", descTr: lang === "ja" ? "Facebook・Instagramクローンアカウント。AIがない時代の手作業詐欺。知人の関係網を巧みに利用した形態。" : lang === "zh" ? "Facebook·Instagram克隆账号。没有AI的时代的手工诈骗。最善于利用熟人关系网的形式。" : lang === "ko" ? null : "Cloned Facebook/Instagram accounts. Manual fraud before AI. Best exploited personal social networks." },
                   { platform: "취업카페", dot: "#ff6b35", name: "가짜 재택 취업 사기", nameTr: lang === "ja" ? "偽テレワーク求人詐欺" : lang === "zh" ? "假冒远程工作诈骗" : lang === "ko" ? null : "Fake Remote Job Scam", post: "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!", like: "조회 8,402", desc: "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법.", descTr: lang === "ja" ? "\"テレワーク月300万ウォン\"広告。教材費先払い後に逃走。IMF世代以降の若年層の就職難を狙った手口。" : lang === "zh" ? "\"居家办公月薪300万\"广告。先付教材费后消失。针对IMF危机后年轻人就业困难的手法。" : lang === "ko" ? null : "Work-from-home ads. Pay for materials upfront, then vanish. Targeted youth unemployment after IMF crisis." },
-                  { platform: "KakaoTalk", dot: "#ffe100", name: "3단계 메신저 피싱", nameTr: lang === "ja" ? "3段階メッセンジャーフィッシング" : lang === "zh" ? "三阶段短信钓鱼" : lang === "ko" ? null : "3-Step Messenger Phishing", post: "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게", like: "읽음 1", desc: "문자→카카오→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도.", descTr: lang === "ja" ? "SMS→カカオ→電話の3段階アプローチ。各チャンネルで信頼を構築後、最終決済を誘導。" : lang === "zh" ? "短信→KakaoTalk→电话三阶段。在每个渠道建立信任后，最终诱导付款。" : lang === "ko" ? null : "SMS → KakaoTalk → phone: 3-step approach. Build trust on each channel pretending to be real, then pressure payment." },
+                  { platform: "KakaoTalk", dot: "#ffe100", name: "3단계 메신저 피싱", nameTr: lang === "ja" ? "3段階メッセンジャーフィッシング" : lang === "zh" ? "三阶段短信钓鱼" : lang === "ko" ? null : "3-Step Messenger Phishing", post: "나야 급한데 지금 폰이 없어서 이 번호로 연락해. 50만원만 계좌이체 해줄 수 있어? 오늘 저녁에 현금으로 줄게", like: "읽음 1", desc: "문자→오카카→전화 3단계 접근법 등장. 각 채널에서 진짜인 척 신뢰 구축 후 최종 결제 유도.", descTr: lang === "ja" ? "SMS→カカオ→電話の3段階アプローチ。各チャンネルで信頼を構築後、最終決済を誘導。" : lang === "zh" ? "短信→KakaoTalk→电话三阶段。在每个渠道建立信任后，最终诱导付款。" : lang === "ko" ? null : "SMS → KakaoTalk → phone: 3-step approach. Build trust on each channel pretending to be real, then pressure payment." },
                 ].map((c, j) => (
                   <div key={j} style={{ background: "linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6)", padding: "1px", borderRadius: 12 }}>
                   <div style={{
@@ -2035,9 +2010,9 @@ export default function HomePage() {
                   color: "#c58dc655", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {(lang === "ko"
-                    ? ["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 당근마켓", "⚡ 번개장터", "🤖 딥보이스", "💰 코인 사기"]
+                    ? ["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기"]
                     : lang === "ja"
-                    ? ["🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 당근Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺", "🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 당근Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺"]
+                    ? ["🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺", "🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺"]
                     : ["🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam", "🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam"]
                   ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
@@ -2063,8 +2038,8 @@ export default function HomePage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { tag: "AI VOICE", glow: "#c58dc6", name: "딥보이스 보이스피싱 등장", nameTr: lang === "ja" ? "ディープボイス詐欺の登場" : lang === "zh" ? "深度伪造语音诈骗兴起" : lang === "ko" ? null : "Deepfake Voice Phishing Emerges", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해.", descTr: lang === "ja" ? "AIで子供の声を複製。3〜5秒のサンプルだけで完璧な模倣。親が初めて声さえ信用できなくなった年。" : lang === "zh" ? "AI复制子女声音。仅需3~5秒样本即可完美模仿。父母第一次连声音都无法信任的一年。" : lang === "ko" ? null : "AI replicates a child's voice with just 3-5 seconds of audio. Parents could no longer trust even familiar voices." },
-                  { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", nameTr: lang === "ja" ? "オープンチャット投資詐欺の全盛期" : lang === "zh" ? "开放聊天室投资诈骗鼎盛期" : lang === "ko" ? null : "Open Chat Investment Scam Peak", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "카카오 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명.", descTr: lang === "ja" ? "カカオオープンチャット「株の達人」部屋。収益証明キャプチャーで埋め尽くし→入金誘導→逃走。同時被害者数千人。" : lang === "zh" ? "KakaoTalk开放聊天室'股票高手'群。收益截图轰炸→诱导入金→消失。同时受害者数千人。" : lang === "ko" ? null : "KakaoTalk 'stock expert' open chat rooms. Profit screenshots → deposit pressure → disappear. Thousands of simultaneous victims." },
-                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", nameTr: lang === "ja" ? "中古取引詐欺の急増" : lang === "zh" ? "二手交易诈骗激增" : lang === "ko" ? null : "Used Goods Scam Surge", waveform: "당근🥕 번개⚡ 중고나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점.", descTr: lang === "ja" ? "プラットフォームの爆発的成長とともに詐欺も急増。「直接取引文化」が詐欺に悪用され始めた転換点。" : lang === "zh" ? "随着平台爆炸式增长，诈骗也急剧增加。'直接交易文化'开始被诈骗分子利用的转折点。" : lang === "ko" ? null : "Scams surged alongside platform explosive growth. The 'direct trade culture' began being exploited by fraudsters." },
+                  { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", nameTr: lang === "ja" ? "オープンチャット投資詐欺の全盛期" : lang === "zh" ? "开放聊天室投资诈骗鼎盛期" : lang === "ko" ? null : "Open Chat Investment Scam Peak", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "오카카 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명.", descTr: lang === "ja" ? "カカオオープンチャット「株の達人」部屋。収益証明キャプチャーで埋め尽くし→入金誘導→逃走。同時被害者数千人。" : lang === "zh" ? "KakaoTalk开放聊天室'股票高手'群。收益截图轰炸→诱导入金→消失。同时受害者数千人。" : lang === "ko" ? null : "KakaoTalk 'stock expert' open chat rooms. Profit screenshots → deposit pressure → disappear. Thousands of simultaneous victims." },
+                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", nameTr: lang === "ja" ? "中古取引詐欺の急増" : lang === "zh" ? "二手交易诈骗激增" : lang === "ko" ? null : "Used Goods Scam Surge", waveform: "피망마켓🥕 번개⚡ 평화나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점.", descTr: lang === "ja" ? "プラットフォームの爆発的成長とともに詐欺も急増。「直接取引文化」が詐欺に悪用され始めた転換点。" : lang === "zh" ? "随着平台爆炸式增长，诈骗也急剧增加。'直接交易文化'开始被诈骗分子利用的转折点。" : lang === "ko" ? null : "Scams surged alongside platform explosive growth. The 'direct trade culture' began being exploited by fraudsters." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#09090b",
@@ -3129,7 +3104,7 @@ export default function HomePage() {
                 tag: "투자 사기 예방",
                 tagColor: "#f59e0b",
                 date: "2개월 전",
-                text: "카카오 오픈채팅에서 주식 고수라는 사람한테 꼬임당할 뻔 했는데요. SNS 투자 사기 체험 해보고 나서 뭔가 느낌이 이상하다 싶어서 더 안따라갔어요. 알고보니 피해자 모임에 그분도 계시더라고요... 100만원은 이미 보낸 후였는데 더 크게 당할 뻔 했음. 그나마 다행.",
+                text: "오카카 오픈채팅에서 주식 고수라는 사람한테 꼬임당할 뻔 했는데요. SNS 투자 사기 체험 해보고 나서 뭔가 느낌이 이상하다 싶어서 더 안따라갔어요. 알고보니 피해자 모임에 그분도 계시더라고요... 100만원은 이미 보낸 후였는데 더 크게 당할 뻔 했음. 그나마 다행.",
                 highlight: "100만원 더 날릴 뻔한 걸 막았어요",
               },
               {
@@ -3162,7 +3137,7 @@ export default function HomePage() {
                 tag: "중고거래 사기 예방",
                 tagColor: "#f97316",
                 date: "3주 전",
-                text: "당근마켓에서 맥북 팔겠다는 사람이 안전결제 링크 보내줬는데 체험이랑 완전 똑같았어요. 그 화면까지. URL이 좀 이상하다 싶어서 확인해보니까 가짜사이트였고... 경찰에 신고했더니 이미 피해자가 17명이래요. 제가 18번째가 될 뻔. 이거 필수로 해봐야 하는 거 아닌가요 진짜로.",
+                text: "피망마켓에서 맥북 팔겠다는 사람이 안전결제 링크 보내줬는데 체험이랑 완전 똑같았어요. 그 화면까지. URL이 좀 이상하다 싶어서 확인해보니까 가짜사이트였고... 경찰에 신고했더니 이미 피해자가 17명이래요. 제가 18번째가 될 뻔. 이거 필수로 해봐야 하는 거 아닌가요 진짜로.",
                 highlight: "피해자 18번째가 될 뻔했어요",
               },
               {

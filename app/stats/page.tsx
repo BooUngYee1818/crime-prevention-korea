@@ -65,7 +65,7 @@ export default function StatsPage() {
         { label: t("주요 피해 연령", "Primary Victim Age", "主な被害年齢", "主要受害年龄", "Độ tuổi nạn nhân chủ yếu", "Edad Primaria de Víctimas"), value: t("50~70대 (전체의 68%)", "50s–70s (68% of all)", "50〜70代（全体の68%）", "50-70岁（占总数68%）", "50–70 tuổi (68% tổng số)", "50–70 años (68% del total)"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
         { label: t("평균 피해액", "Avg. Loss per Case", "平均被害額", "平均损失额", "Thiệt hại trung bình", "Pérdida Promedio"), value: "약 1,200만원/건", source: t("금융감독원", "FSS", "金融監督院", "金融监督院", "FSS", "FSS") },
         { label: t("수법", "Method", "手口", "作案手法", "Phương thức", "Método"), value: t("자녀 폰 고장·사고 핑계로 급전 요청", "Claiming child's phone broke/accident, urgent money request", "子どもの携帯故障・事故を口実に急ぎの送金要求", "以子女手机损坏/事故为由紧急索钱", "Giả vờ điện thoại con bị hỏng/tai nạn, xin tiền gấp", "Fingir que el teléfono del hijo/a está roto, pedir dinero urgente"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
-        { label: t("주요 채널", "Main Channel", "主なチャネル", "主要渠道", "Kênh chủ yếu", "Canal Principal"), value: t("카카오톡·문자 (87%)", "KakaoTalk/SMS (87%)", "カカオトーク・SMS（87%）", "KakaoTalk/短信（87%）", "KakaoTalk/SMS (87%)", "KakaoTalk/SMS (87%)"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
+        { label: t("주요 채널", "Main Channel", "主なチャネル", "主要渠道", "Kênh chủ yếu", "Canal Principal"), value: t("오카카톡·문자 (87%)", "KakaoTalk/SMS (87%)", "カカオトーク・SMS（87%）", "KakaoTalk/短信（87%）", "KakaoTalk/SMS (87%)", "KakaoTalk/SMS (87%)"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
       ],
       sources: [
         t("경찰청 범죄통계", "National Police Agency Crime Statistics", "警察庁犯罪統計", "警察厅犯罪统计", "Thống kê tội phạm Cảnh sát Quốc gia", "Estadísticas de Crimen de la Policía Nacional"),
@@ -230,7 +230,7 @@ export default function StatsPage() {
     {
       id: "kakaotalk-impersonation",
       icon: "💬",
-      title: t("카카오톡·메신저 사기", "KakaoTalk / Messenger Fraud", "カカオトーク・メッセンジャー詐欺", "KakaoTalk/即时通讯诈骗", "Lừa đảo qua KakaoTalk / Tin nhắn", "Fraude por KakaoTalk / Mensajería"),
+      title: t("오카카톡·메신저 사기", "KakaoTalk / Messenger Fraud", "カカオトーク・メッセンジャー詐欺", "KakaoTalk/即时通讯诈骗", "Lừa đảo qua KakaoTalk / Tin nhắn", "Fraude por KakaoTalk / Mensajería"),
       color: "#f59e0b",
       bg: "#fffbeb",
       border: "#fde68a",
@@ -248,7 +248,7 @@ export default function StatsPage() {
         t("금융감독원 보이스피싱 통계", "FSS Voice Phishing Statistics", "金融監督院ボイスフィッシング統計", "金融监督院语音钓鱼统计", "Thống kê lừa đảo qua điện thoại FSS", "Estadísticas de Fraude Telefónico FSS"),
       ],
       note: t(
-        "카카오톡 프로필 사진·이름은 쉽게 도용됩니다. 돈 요청 시 반드시 전화 통화로 확인하세요.",
+        "오카카톡 프로필 사진·이름은 쉽게 도용됩니다. 돈 요청 시 반드시 전화 통화로 확인하세요.",
         "KakaoTalk profile photos and names are easily stolen. Always verify money requests with a phone call.",
         "カカオトークのプロフィール写真・名前は簡単に盗用されます。送金要求時は必ず電話で確認してください。",
         "KakaoTalk头像和姓名很容易被盗用。收到金钱请求时，务必通过电话确认。",
@@ -269,7 +269,7 @@ export default function StatsPage() {
         { label: t("전체 사기 범죄 내 비중", "Share of All Fraud Crimes", "全体詐欺犯罪における割合", "占全体诈骗犯罪比重", "Tỷ trọng trong tổng tội phạm lừa đảo", "Porción del Total de Fraudes"), value: "약 14%", source: t("대검찰청", "SPO", "大検察庁", "大检察厅", "SPO", "SPO") },
         { label: t("1건당 평균 피해액", "Avg. Loss per Case", "1件あたり平均被害額", "每起平均损失额", "Thiệt hại trung bình/vụ", "Pérdida Promedio por Caso"), value: "약 32만원", source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
         { label: t("주요 피해 품목", "Main Victim Items", "主な被害品目", "主要受害商品", "Mặt hàng nạn nhân chủ yếu", "Artículos Víctimas Principales"), value: t("전자기기(38%), 의류·잡화(21%), 티켓(17%)", "Electronics (38%), Clothing/Goods (21%), Tickets (17%)", "電子機器（38%）、衣類・雑貨（21%）、チケット（17%）", "电子设备(38%)、服装/杂货(21%)、票券(17%)", "Điện tử (38%), Quần áo/Hàng hóa (21%), Vé (17%)", "Electrónica (38%), Ropa/Artículos (21%), Entradas (17%)"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
-        { label: t("주요 피해 플랫폼", "Main Fraud Platforms", "主な被害プラットフォーム", "主要受害平台", "Nền tảng lừa đảo chủ yếu", "Principales Plataformas de Fraude"), value: t("중고나라·당근마켓·번개장터", "Joonggonara, Karrot, Bungaejangter", "中古なら・カロット・バンゲジャンター", "中古那拉·萝卜市场·闪电市场", "Joonggonara, Karrot, Bungaejangter", "Joonggonara, Karrot, Bungaejangter"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
+        { label: t("주요 피해 플랫폼", "Main Fraud Platforms", "主な被害プラットフォーム", "主要受害平台", "Nền tảng lừa đảo chủ yếu", "Principales Plataformas de Fraude"), value: t("평화나라·피망마켓·개번장터", "Joonggonara, Karrot, Bungaejangter", "中古なら・カロット・バンゲジャンター", "中古那拉·萝卜市场·闪电市场", "Joonggonara, Karrot, Bungaejangter", "Joonggonara, Karrot, Bungaejangter"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
         { label: t("피해자 연령", "Victim Age", "被害者年齢", "受害者年龄", "Tuổi nạn nhân", "Edad de Víctimas"), value: t("20~30대 (전체의 62%)", "20s–30s (62% of all)", "20〜30代（全体の62%）", "20-30岁（占总数62%）", "20–30 tuổi (62% tổng số)", "20–30 años (62% del total)"), source: t("경찰청", "NPA", "警察庁", "警察厅", "NPA", "PNN") },
       ],
       sources: [

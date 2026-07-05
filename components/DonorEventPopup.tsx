@@ -6,6 +6,7 @@ import { t } from "@/lib/i18n";
 export default function DonorEventPopup() {
   const { lang } = useLang();
   const [visible, setVisible] = useState(false);
+  const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const stored = localStorage.getItem("donor_popup_hidden_v2");
@@ -17,6 +18,12 @@ export default function DonorEventPopup() {
   function hideToday() {
     localStorage.setItem("donor_popup_hidden_v2", String(Date.now() + 24 * 60 * 60 * 1000));
     setVisible(false);
+  }
+
+  function dodgeBtn() {
+    const rx = (Math.random() - 0.5) * 200;
+    const ry = (Math.random() - 0.5) * 100;
+    setBtnPos({ x: rx, y: ry });
   }
 
   if (!visible) return null;
@@ -37,6 +44,16 @@ export default function DonorEventPopup() {
         overflow: "hidden", animation: "slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1)",
         boxShadow: "0 24px 80px rgba(0,0,0,0.35)",
       }}>
+        {/* X 닫기 버튼 */}
+        <button onClick={hideToday} style={{
+          position: "absolute", top: 12, right: 12, zIndex: 10,
+          width: 32, height: 32, borderRadius: "50%",
+          background: "rgba(0,0,0,0.15)", border: "none",
+          fontSize: 16, color: "#fff", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontWeight: 900,
+        }}>✕</button>
+
         {/* 노란 배너 */}
         <div style={{ background: "#F5C400", padding: "28px 28px 22px", position: "relative", overflow: "hidden" }}>
           <div style={{
@@ -88,13 +105,23 @@ export default function DonorEventPopup() {
             {t("donor_contact", lang)}
           </a>
 
-          <button onClick={hideToday} style={{
-            display: "block", width: "100%", marginTop: 12,
-            background: "none", border: "none", fontSize: 12, color: "#aaa",
-            cursor: "pointer", textDecoration: "underline",
-          }}>
-            {t("donor_hide", lang)}
-          </button>
+          <div style={{ position: "relative", height: 36, marginTop: 12, overflow: "visible" }}>
+            <button
+              onMouseEnter={dodgeBtn}
+              onTouchStart={dodgeBtn}
+              style={{
+                position: "absolute",
+                left: `calc(50% + ${btnPos.x}px)`,
+                top: `${btnPos.y}px`,
+                transform: "translateX(-50%)",
+                transition: "left 0.15s ease, top 0.15s ease",
+                background: "none", border: "none", fontSize: 12, color: "#aaa",
+                cursor: "pointer", textDecoration: "underline", whiteSpace: "nowrap",
+              }}
+            >
+              {t("donor_hide", lang)}
+            </button>
+          </div>
         </div>
       </div>
     </div>

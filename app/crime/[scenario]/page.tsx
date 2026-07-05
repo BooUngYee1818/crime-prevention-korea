@@ -26,14 +26,14 @@ type Phase =
 // 시나리오별 채팅 스타일 설정
 type ChatType = "kakao" | "sms" | "call";
 const CHAT_CONFIG: Record<string, { type: ChatType; headerTitle: string; sender: string; senderSub?: string }> = {
-  "family-impersonation":   { type: "kakao", headerTitle: "카카오톡", sender: "김민준", senderSub: "모르는 번호" },
+  "family-impersonation":   { type: "kakao", headerTitle: "오카카톡", sender: "김민준", senderSub: "모르는 번호" },
   "prosecutor-impersonation": { type: "call", headerTitle: "전화 통화 중", sender: "02-530-4000", senderSub: "서울중앙지검 (사칭)" },
-  "romance-scam":           { type: "kakao", headerTitle: "카카오톡", sender: "이수진", senderSub: "온라인 지인" },
-  "investment-scam":        { type: "kakao", headerTitle: "카카오톡", sender: "박재현 ☆", senderSub: "전 직장동료" },
-  "loan-fraud":             { type: "call",  headerTitle: "전화 통화 중", sender: "KB저축은행 상담", senderSub: "02-1234-5678" },
-  "delivery-scam":          { type: "sms",   headerTitle: "메시지", sender: "CJ대한통운", senderSub: "+8210-0000-0000" },
-  "kakaotalk-impersonation":{ type: "kakao", headerTitle: "카카오톡", sender: "민지 🌸", senderSub: "친구" },
-  "used-goods-scam":        { type: "kakao", headerTitle: "카카오톡", sender: "당근 판매자", senderSub: "중고거래" },
+  "romance-scam":           { type: "kakao", headerTitle: "오카카톡", sender: "이수진", senderSub: "온라인 지인" },
+  "investment-scam":        { type: "kakao", headerTitle: "오카카톡", sender: "박재현 ☆", senderSub: "전 직장동료" },
+  "loan-fraud":             { type: "call",  headerTitle: "전화 통화 중", sender: "BK저축은행 상담", senderSub: "02-1234-5678" },
+  "delivery-scam":          { type: "sms",   headerTitle: "메시지", sender: "JC대한통운", senderSub: "+8210-0000-0000" },
+  "kakaotalk-impersonation":{ type: "kakao", headerTitle: "오카카톡", sender: "민지 🌸", senderSub: "친구" },
+  "used-goods-scam":        { type: "kakao", headerTitle: "오카카톡", sender: "피망마켓 판매자", senderSub: "중고거래" },
 };
 
 // 전화형 시나리오는 ringing 단계부터 시작
@@ -90,9 +90,9 @@ function detectCriminalDanger(text: string): boolean {
 
 // ─── UI 컴포넌트 ─────────────────────────────────────────────────────────────
 
-const KB = "#1A6FD4";   // 한빛은행 파란색
-const KB_DARK = "#fff"; // 헤더 텍스트 흰색
-const KB_LIGHT = "#e8f1fb"; // 연한 배경
+const BK = "#1A6FD4";   // 한빛은행 파란색
+const BK_DARK = "#fff"; // 헤더 텍스트 흰색
+const BK_LIGHT = "#e8f1fb"; // 연한 배경
 
 const FIRST_MESSAGES: Record<string, string> = {
   // 처음엔 돈 얘기 없이 감정적 훅으로 시작 → 자연스럽게 대화 유도
@@ -100,13 +100,13 @@ const FIRST_MESSAGES: Record<string, string> = {
   "prosecutor-impersonation": "여보세요. 저는 서울중앙지검 수사관 박진우입니다. 지금 급히 연락드릴 사안이 생겨서요. 잠깐 통화 가능하십니까? 중요한 사안입니다.",
   "romance-scam": "자기야ㅠㅠ 나야. 나 지금 홍콩인데... 큰일 났어. 너한테 제일 먼저 연락하고 싶었어. 지금 많이 무서워.",
   "investment-scam": "안녕하세요~ 박재현입니다! 작년에 같이 일했던 거 기억하시죠? 요즘 어떻게 지내세요? 드릴 말씀이 있어서 연락했어요.",
-  "loan-fraud": "안녕하세요 고객님! KB저축은행 이민준 상담사입니다. 오늘 고객님 신용 조회 결과가 나왔는데요, 좋은 소식이 있어서 연락드렸어요. 지금 통화 가능하세요?",
-  "delivery-scam": "[CJ대한통운] 고객님 안녕하세요. 운송장번호 CJ1284739201847 건으로 배송 보류 상태입니다. 확인 부탁드립니다.",
+  "loan-fraud": "안녕하세요 고객님! BK저축은행 이민준 상담사입니다. 오늘 고객님 신용 조회 결과가 나왔는데요, 좋은 소식이 있어서 연락드렸어요. 지금 통화 가능하세요?",
+  "delivery-scam": "[JC대한통운] 고객님 안녕하세요. 운송장번호 CJ1284739201847 건으로 배송 보류 상태입니다. 확인 부탁드립니다.",
   "kakaotalk-impersonation": "야 나야 민지! 오랜만ㅋㅋ 잘 지내고 있어? 사실 연락한 이유가 있는데...",
   "used-goods-scam": "안녕하세요! 아이폰16 Pro 256GB 게시글 보셨어요? 솔직히 이 가격 진짜 없어요. 지금 2명이 더 보고 있는데 먼저 연락 주신 분께 드리려고요.",
 };
 
-function KBStar({ size = 24, fill = KB }: { size?: number; fill?: string }) {
+function BKStar({ size = 24, fill = BK }: { size?: number; fill?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 28 28" fill="none" aria-hidden="true">
       <polygon points="14,2 17.5,10.5 27,10.5 19.5,16.5 22.5,25 14,20 5.5,25 8.5,16.5 1,10.5 10.5,10.5" fill={fill} />
@@ -283,9 +283,9 @@ function EmergencyBlock({ block, onClose, onReveal, lang }: {
 
 // 현실감 있는 가짜 개인정보 (시뮬레이션 전용)
 const FAKE_PROFILES = [
-  { name: "김○현", rrn: "850315-1284731", addr: "서울특별시 노원구 중계동 387-12 현대아파트 101동 504호", phone: "010-3847-9012", email: "khyun85@naver.com", bank: "신한은행 110-473-829014", card: "5412 **** **** 8837" },
+  { name: "김○현", rrn: "850315-1284731", addr: "서울특별시 노원구 중계동 387-12 현대아파트 101동 504호", phone: "010-3847-9012", email: "khyun85@naver.com", bank: "한신은행 110-473-829014", card: "5412 **** **** 8837" },
   { name: "이○진", rrn: "920724-2893047", addr: "경기도 수원시 영통구 매탄동 1142번지 삼성래미안 203동 1102호", phone: "010-5623-7841", email: "ljin9207@gmail.com", bank: "국민은행 789-24-0193847", card: "4532 **** **** 2291" },
-  { name: "박○수", rrn: "780502-1567234", addr: "부산광역시 해운대구 우동 1477-3 해운대아이파크 508동 2203호", phone: "010-8912-3047", email: "pksoo78@daum.net", bank: "우리은행 1002-847-293041", card: "3782 **** **** 5519" },
+  { name: "박○수", rrn: "780502-1567234", addr: "부산광역시 해운대구 우동 1477-3 해운대아이파크 508동 2203호", phone: "010-8912-3047", email: "pksoo78@daum.net", bank: "남은행 1002-847-293041", card: "3782 **** **** 5519" },
 ];
 
 function LinkSmsPhase({ onLinkClick }: { onLinkClick: () => void }) {
@@ -467,7 +467,7 @@ function LinkHackingPhase({ onReveal }: { onReveal: () => void }) {
           maxHeight: 80, overflow: "hidden",
         }}>
           {step >= 2 && <p style={{ opacity: 0.7 }}>[10:23:41] 링크 클릭 감지 → 세션 하이재킹 시도...</p>}
-          {step >= 3 && <p>[10:23:41] 악성 스크립트 로드 완료 (32KB)</p>}
+          {step >= 3 && <p>[10:23:41] 악성 스크립트 로드 완료 (32BK)</p>}
           {step >= 4 && <p style={{ color: "#ef4444" }}>[10:23:42] 저장된 자격증명 스캔 중...</p>}
           {step >= 5 && <p style={{ color: "#f97316" }}>[10:23:42] 개인정보 추출 시작 → 원격 서버 전송</p>}
         </div>
@@ -692,7 +692,7 @@ function RevealScreen({
                 📋 신고할 때 이것을 준비하세요
               </p>
               {[
-                "상대방 전화번호 또는 카카오톡 아이디",
+                "상대방 전화번호 또는 오카카톡 아이디",
                 "상대방이 알려준 계좌번호",
                 "대화 내용 캡처 (스크린샷)",
                 "피해 금액 및 이체 일시",
@@ -798,6 +798,14 @@ function RevealScreen({
           </div>
         )}
       </div>
+
+      {/* 어린이 설명 */}
+      {data.reveal.kidExplanation && (
+        <div style={{ background: "linear-gradient(135deg, #1a0a2e, #0f1a2e)", border: "2px solid #fb923c55", borderRadius: 18, padding: 16 }}>
+          <p style={{ color: "#fb923c", fontWeight: 800, fontSize: 13, marginBottom: 8 }}>🧒 어린이·초보자용 쉬운 설명</p>
+          <p style={{ color: "#fed7aa", fontSize: 13, lineHeight: 1.8 }}>{data.reveal.kidExplanation.replace("🧒 쉽게 말하면: ", "")}</p>
+        </div>
+      )}
 
       {/* 예방법 */}
       <div style={{ background: "#0a1a0a", border: "1px solid #22c55e33", borderRadius: 18, padding: 16 }}>
@@ -949,8 +957,8 @@ function RevealScreen({
             title: "보낸 은행 앱 → 이체 취소 시도",
             desc: "은행 앱을 열어 '이체 내역'에서 취소를 시도하거나,\n은행 고객센터에 즉시 전화해 \"사기 이체 지급정지\"를 요청하세요.\n신고가 빠를수록 환급 가능성이 높아집니다.",
             numbers: [
-              { n: "1588-9999", l: "KB국민은행 고객센터", c: "#f59e0b" },
-              { n: "1599-9999", l: "신한은행 고객센터", c: "#3b82f6" },
+              { n: "1588-9999", l: "BK국민은행 고객센터", c: "#f59e0b" },
+              { n: "1599-9999", l: "한신은행 고객센터", c: "#3b82f6" },
             ],
           },
           {
@@ -1045,7 +1053,7 @@ export default function ScenarioPage() {
   const data = CRIME_SCENARIOS.find((s) => s.id === scenario);
   const { lang } = useLang();
 
-  const chatCfg = CHAT_CONFIG[scenario as string] ?? { type: "kakao" as ChatType, headerTitle: "카카오톡", sender: "알 수 없음" };
+  const chatCfg = CHAT_CONFIG[scenario as string] ?? { type: "kakao" as ChatType, headerTitle: "오카카톡", sender: "알 수 없음" };
   const [phase, setPhase] = useState<Phase>(
     CALL_SCENARIOS.has(scenario as string) ? "ringing"
     : LINK_SCENARIOS.has(scenario as string) ? "link-sms"
@@ -1591,43 +1599,43 @@ export default function ScenarioPage() {
         <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
           {/* 상태바 */}
-          <div style={{ background: KB, padding: "10px 20px 0", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
-            <span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span>
+          <div style={{ background: BK, padding: "10px 20px 0", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+            <span style={{ fontSize:12, fontWeight:700, color: BK_DARK }}>9:41</span>
             <div style={{ display:"flex", gap:4, alignItems:"center" }}>
-              <span style={{ fontSize:10, color: KB_DARK }}>●●●●</span>
-              <span style={{ fontSize:10, color: KB_DARK }}>WiFi</span>
-              <span style={{ fontSize:10, color: KB_DARK }}>🔋</span>
+              <span style={{ fontSize:10, color: BK_DARK }}>●●●●</span>
+              <span style={{ fontSize:10, color: BK_DARK }}>WiFi</span>
+              <span style={{ fontSize:10, color: BK_DARK }}>🔋</span>
             </div>
           </div>
           {/* 헤더 */}
-          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
+          <div style={{ background: BK, padding:"8px 20px 16px", flexShrink:0 }}>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                <KBStar size={22} fill={KB_DARK} />
-                <span style={{ fontWeight:900, fontSize:17, color: KB_DARK, letterSpacing:-0.5 }}>KB스타뱅킹</span>
+                <BKStar size={22} fill={BK_DARK} />
+                <span style={{ fontWeight:900, fontSize:17, color: BK_DARK, letterSpacing:-0.5 }}>BK타스뱅크</span>
               </div>
               <div style={{ display:"flex", gap:12, alignItems:"center" }}>
-                <Bell size={20} color={KB_DARK} />
+                <Bell size={20} color={BK_DARK} />
                 <div style={{ width:30, height:30, borderRadius:"50%", background:"rgba(0,0,0,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>👤</div>
               </div>
             </div>
           </div>
 
           {/* 계좌 카드 */}
-          <div style={{ margin:"12px 14px 0", background:`linear-gradient(135deg, #1a1200, #2d1f00)`, borderRadius:20, padding:"18px 20px", flexShrink:0, border:`1.5px solid ${KB}55`, boxShadow:`0 4px 20px ${KB}22` }}>
+          <div style={{ margin:"12px 14px 0", background:`linear-gradient(135deg, #1a1200, #2d1f00)`, borderRadius:20, padding:"18px 20px", flexShrink:0, border:`1.5px solid ${BK}55`, boxShadow:`0 4px 20px ${BK}22` }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:12 }}>
               <div>
-                <p style={{ color: KB+"99", fontSize:11, marginBottom:3 }}>KB 주거래통장</p>
+                <p style={{ color: BK+"99", fontSize:11, marginBottom:3 }}>BK 주거래통장</p>
                 <p style={{ color:"#888", fontSize:11 }}>123-456-78-901234</p>
               </div>
-              <KBStar size={28} fill={KB} />
+              <BKStar size={28} fill={BK} />
             </div>
             <p style={{ color:"#fff", fontWeight:900, fontSize:28, letterSpacing:-1, marginBottom:4 }}>{formatAmount(displayAsset)}</p>
-            <p style={{ color: KB+"77", fontSize:11, marginBottom:16 }}>출금가능금액 {formatAmount(displayAsset)}</p>
+            <p style={{ color: BK+"77", fontSize:11, marginBottom:16 }}>출금가능금액 {formatAmount(displayAsset)}</p>
             <div style={{ display:"flex", gap:8 }}>
-              <button onClick={() => setPhase("transfer-form")} style={{ flex:1, padding:"10px 0", borderRadius:12, background: KB, color: KB_DARK, fontWeight:700, fontSize:13, border:"none", cursor:"pointer" }}>이체</button>
-              <button onClick={() => setPhase("loan-main")} style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${KB}44`, cursor:"pointer" }}>대출</button>
-              <button style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${KB}44`, cursor:"pointer" }}>조회</button>
+              <button onClick={() => setPhase("transfer-form")} style={{ flex:1, padding:"10px 0", borderRadius:12, background: BK, color: BK_DARK, fontWeight:700, fontSize:13, border:"none", cursor:"pointer" }}>이체</button>
+              <button onClick={() => setPhase("loan-main")} style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${BK}44`, cursor:"pointer" }}>대출</button>
+              <button style={{ flex:1, padding:"10px 0", borderRadius:12, background:"rgba(255,255,255,0.1)", color:"#fff", fontWeight:600, fontSize:13, border:`1px solid ${BK}44`, cursor:"pointer" }}>조회</button>
             </div>
           </div>
 
@@ -1648,7 +1656,7 @@ export default function ScenarioPage() {
             <p style={{ fontWeight:700, fontSize:13, color:"#222", marginBottom:12 }}>최근 거래내역</p>
             {[
               {name:"편의점 GS25", date:"오늘 08:31", amount:"-3,200원", color:"#ef4444"},
-              {name:"카카오페이 수신", date:"어제 19:44", amount:"+50,000원", color:"#059669"},
+              {name:"오카카페이 수신", date:"어제 19:44", amount:"+50,000원", color:"#059669"},
               {name:"스타벅스", date:"어제 14:20", amount:"-6,500원", color:"#ef4444"},
               {name:"급여", date:"06.01", amount:"+2,850,000원", color:"#059669"},
               {name:"관리비 자동이체", date:"06.01", amount:"-87,000원", color:"#ef4444"},
@@ -1670,8 +1678,8 @@ export default function ScenarioPage() {
           <div style={{ background:"#fff", borderTop:"1px solid #eee", display:"flex", flexShrink:0, paddingBottom:8 }}>
             {[{icon:<Home size={20}/>,label:"홈"},{icon:<CreditCard size={20}/>,label:"카드"},{icon:<BarChart2 size={20}/>,label:"투자"},{icon:<Bell size={20}/>,label:"알림"}].map((t,i)=>(
               <div key={t.label} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2, padding:"8px 0", cursor:"pointer" }}>
-                <div style={{ color: i===0 ? KB_DARK : "#bbb" }}>{t.icon}</div>
-                <span style={{ fontSize:9, color: i===0 ? KB_DARK : "#bbb", fontWeight: i===0?700:400 }}>{t.label}</span>
+                <div style={{ color: i===0 ? BK_DARK : "#bbb" }}>{t.icon}</div>
+                <span style={{ fontSize:9, color: i===0 ? BK_DARK : "#bbb", fontWeight: i===0?700:400 }}>{t.label}</span>
               </div>
             ))}
           </div>
@@ -1682,14 +1690,14 @@ export default function ScenarioPage() {
       {phase === "transfer-form" && (
         <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
-          <div style={{ background: KB, padding:"10px 20px 0", display:"flex", justifyContent:"space-between" }}>
-            <span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span>
+          <div style={{ background: BK, padding:"10px 20px 0", display:"flex", justifyContent:"space-between" }}>
+            <span style={{ fontSize:12, fontWeight:700, color: BK_DARK }}>9:41</span>
           </div>
-          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
-            <button onClick={() => setPhase("bank-main")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: KB_DARK, marginBottom:8 }}>
+          <div style={{ background: BK, padding:"8px 20px 16px", flexShrink:0 }}>
+            <button onClick={() => setPhase("bank-main")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: BK_DARK, marginBottom:8 }}>
               <ArrowLeft size={18} /><span style={{ fontSize:14, fontWeight:500 }}>뒤로</span>
             </button>
-            <p style={{ fontWeight:800, fontSize:18, color: KB_DARK }}>이체</p>
+            <p style={{ fontWeight:800, fontSize:18, color: BK_DARK }}>이체</p>
           </div>
 
           <div style={{ flex:1, overflowY:"auto", padding:"14px 14px 80px", display:"flex", flexDirection:"column", gap:12 }}>
@@ -1698,7 +1706,7 @@ export default function ScenarioPage() {
               <p style={{ fontSize:11, color:"#aaa", marginBottom:4 }}>출금 계좌</p>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                 <div>
-                  <p style={{ fontWeight:700, fontSize:14, color:"#1a1a1a" }}>KB 주거래통장</p>
+                  <p style={{ fontWeight:700, fontSize:14, color:"#1a1a1a" }}>BK 주거래통장</p>
                   <p style={{ fontSize:11, color:"#888", marginTop:2 }}>123-456-78-901234</p>
                 </div>
                 <div style={{ textAlign:"right" }}>
@@ -1751,7 +1759,7 @@ export default function ScenarioPage() {
 
             <button
               onClick={() => { if (!transferAmount) return; setPhase("transfer-confirm"); }}
-              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: KB, color: KB_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer", marginTop:4 }}
+              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: BK, color: BK_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer", marginTop:4 }}
             >
               다음
             </button>
@@ -1763,12 +1771,12 @@ export default function ScenarioPage() {
       {phase === "transfer-confirm" && (
         <div style={{ display:"flex", flexDirection:"column", height:"100%", background:"#f5f5f5", position:"relative" }}>
           <SimDot />
-          <div style={{ background: KB, padding:"10px 20px 0" }}><span style={{ fontSize:12, fontWeight:700, color: KB_DARK }}>9:41</span></div>
-          <div style={{ background: KB, padding:"8px 20px 16px", flexShrink:0 }}>
-            <button onClick={() => setPhase("transfer-form")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: KB_DARK, marginBottom:8 }}>
+          <div style={{ background: BK, padding:"10px 20px 0" }}><span style={{ fontSize:12, fontWeight:700, color: BK_DARK }}>9:41</span></div>
+          <div style={{ background: BK, padding:"8px 20px 16px", flexShrink:0 }}>
+            <button onClick={() => setPhase("transfer-form")} style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", color: BK_DARK, marginBottom:8 }}>
               <ArrowLeft size={18} /><span style={{ fontSize:14, fontWeight:500 }}>뒤로</span>
             </button>
-            <p style={{ fontWeight:800, fontSize:18, color: KB_DARK }}>이체 확인</p>
+            <p style={{ fontWeight:800, fontSize:18, color: BK_DARK }}>이체 확인</p>
           </div>
 
           <div style={{ flex:1, overflowY:"auto", padding:"14px 14px 24px", display:"flex", flexDirection:"column", gap:12 }}>
@@ -1782,7 +1790,7 @@ export default function ScenarioPage() {
             <div style={{ background:"#fff", borderRadius:16, padding:"4px 16px", border:"1px solid #eee" }}>
               {[
                 { label:"받는 분", value: transferTarget || "입력된 계좌" },
-                { label:"출금 계좌", value:"KB 주거래통장" },
+                { label:"출금 계좌", value:"BK 주거래통장" },
                 { label:"이체 후 잔액", value: formatAmount(Math.max(0, asset - parseInt(transferAmount||"0"))) },
                 { label:"이체 일시", value:"즉시 이체" },
               ].map((row, i, arr) => (
@@ -1806,7 +1814,7 @@ export default function ScenarioPage() {
             <p style={{ color:"#1a1a1a", opacity:0.03, fontSize:10, textAlign:"center", userSelect:"none" }}>시뮬레이션</p>
 
             <button onClick={() => doTransfer(parseInt(transferAmount||"0"))}
-              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: KB, color: KB_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer" }}>
+              style={{ width:"100%", padding:"16px 0", borderRadius:16, background: BK, color: BK_DARK, fontWeight:800, fontSize:15, border:"none", cursor:"pointer" }}>
               이체하기
             </button>
             {/* 사기 거부 버튼 */}
@@ -1832,18 +1840,18 @@ export default function ScenarioPage() {
       {phase === "loan-main" && (
         <div className="flex flex-col h-full relative">
           <SimDot />
-          <div style={{ backgroundColor: KB }} className="px-5 pt-14 pb-5 flex-shrink-0">
-            <button onClick={() => setPhase("bank-main")} style={{ color: KB_DARK }} className="flex items-center gap-1 mb-3">
+          <div style={{ backgroundColor: BK }} className="px-5 pt-14 pb-5 flex-shrink-0">
+            <button onClick={() => setPhase("bank-main")} style={{ color: BK_DARK }} className="flex items-center gap-1 mb-3">
               <ArrowLeft size={18} /><span className="text-sm font-medium">뒤로</span>
             </button>
             <div className="flex items-center gap-2">
-              <KBStar size={18} fill={KB_DARK} />
-              <span className="font-bold" style={{ color: KB_DARK }}>KB 비상금대출</span>
+              <BKStar size={18} fill={BK_DARK} />
+              <span className="font-bold" style={{ color: BK_DARK }}>BK 비상금대출</span>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto px-4 pt-5 pb-8 flex flex-col gap-4">
-            <div className="bg-[#1e1a00] rounded-2xl p-5" style={{ border: `1px solid ${KB}33` }}>
-              <p className="text-xs mb-2" style={{ color: KB + "88" }}>최대 대출 가능 금액</p>
+            <div className="bg-[#1e1a00] rounded-2xl p-5" style={{ border: `1px solid ${BK}33` }}>
+              <p className="text-xs mb-2" style={{ color: BK + "88" }}>최대 대출 가능 금액</p>
               <p className="text-white font-bold text-3xl">{formatAmount(loanAmount)}</p>
               <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#2a2a1a]">
                 <div className="flex-1"><p className="text-gray-500 text-xs">금리</p><p className="text-white text-sm font-semibold">연 4.5%</p></div>
@@ -1853,7 +1861,7 @@ export default function ScenarioPage() {
             <div className="bg-[#1a1a1a] rounded-2xl p-4 flex flex-col gap-2">
               {["비대면 즉시 실행", "24시간 대출 가능", "중도상환 수수료 없음"].map((f) => (
                 <div key={f} className="flex items-center gap-2">
-                  <CheckCircle size={14} style={{ color: KB }} />
+                  <CheckCircle size={14} style={{ color: BK }} />
                   <span className="text-gray-300 text-sm">{f}</span>
                 </div>
               ))}
@@ -1863,7 +1871,7 @@ export default function ScenarioPage() {
             </p>
             <button onClick={() => setPhase("loan-confirm")}
               className="w-full py-4 rounded-2xl font-bold text-sm active:scale-[0.98] transition-transform"
-              style={{ backgroundColor: KB, color: KB_DARK }}>
+              style={{ backgroundColor: BK, color: BK_DARK }}>
               대출 신청하기
             </button>
           </div>
@@ -1874,22 +1882,22 @@ export default function ScenarioPage() {
       {phase === "loan-confirm" && (
         <div className="flex flex-col h-full relative">
           <SimDot />
-          <div style={{ backgroundColor: KB }} className="px-5 pt-14 pb-5 flex-shrink-0">
-            <button onClick={() => setPhase("loan-main")} style={{ color: KB_DARK }} className="flex items-center gap-1 mb-3">
+          <div style={{ backgroundColor: BK }} className="px-5 pt-14 pb-5 flex-shrink-0">
+            <button onClick={() => setPhase("loan-main")} style={{ color: BK_DARK }} className="flex items-center gap-1 mb-3">
               <ArrowLeft size={18} /><span className="text-sm font-medium">뒤로</span>
             </button>
             <div className="flex items-center gap-2">
-              <KBStar size={18} fill={KB_DARK} />
-              <span className="font-bold" style={{ color: KB_DARK }}>대출 실행 확인</span>
+              <BKStar size={18} fill={BK_DARK} />
+              <span className="font-bold" style={{ color: BK_DARK }}>대출 실행 확인</span>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto px-4 pt-5 pb-8 flex flex-col gap-4">
             <div className="bg-[#1a1a1a] rounded-2xl p-5 flex flex-col gap-3">
               {[
-                { label: "대출 상품", value: "KB 비상금대출" },
+                { label: "대출 상품", value: "BK 비상금대출" },
                 { label: "대출 금액", value: formatAmount(loanAmount) },
                 { label: "금리", value: "연 4.5%" },
-                { label: "입금 계좌", value: "KB 주거래통장" },
+                { label: "입금 계좌", value: "BK 주거래통장" },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between py-2 border-b border-[#2a2a2a] last:border-0">
                   <span className="text-gray-400 text-sm">{row.label}</span>
@@ -1907,7 +1915,7 @@ export default function ScenarioPage() {
             </div>
             <button onClick={() => { setAsset((a) => a + loanAmount); setDisplayAsset((a) => a + loanAmount); setPhase("bank-main"); }}
               className="w-full py-4 rounded-2xl font-bold text-sm active:scale-[0.98] transition-transform"
-              style={{ backgroundColor: KB, color: KB_DARK }}>
+              style={{ backgroundColor: BK, color: BK_DARK }}>
               대출 실행
             </button>
           </div>
@@ -2127,7 +2135,7 @@ export default function ScenarioPage() {
         const recipientMap: Record<string, string> = {
           "family-impersonation": "김민준", "prosecutor-impersonation": "금융범죄수사팀",
           "romance-scam": "이수진", "investment-scam": "박재현",
-          "loan-fraud": "BK대출센터", "delivery-scam": "CJ대한통운",
+          "loan-fraud": "BK대출센터", "delivery-scam": "JC대한통운",
           "kakaotalk-impersonation": "민지", "used-goods-scam": "판매자",
         };
         const acct = acctMap[scenario as string] ?? "BK민국은행 010-0000-0000000";
@@ -2135,7 +2143,7 @@ export default function ScenarioPage() {
         return (
           <div style={{ flex: 1, overflowY: "auto", background: "#f4f4f4", display: "flex", flexDirection: "column", position: "relative" }}>
 
-            {/* ── KB스타일 상단 헤더 ── */}
+            {/* ── BK스타일 상단 헤더 ── */}
             <div style={{ background: "#FFCC00", paddingTop: 44, paddingBottom: 0 }}>
               {/* 상태바 영역 */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 12px" }}>

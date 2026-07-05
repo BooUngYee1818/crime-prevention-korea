@@ -17,9 +17,9 @@ const QUESTIONS = [
   {
     id: 2,
     type: "SMS",
-    sender: "KB국민카드",
+    sender: "BK국민카드",
     senderNum: "1588-1688",
-    msg: "[KB국민카드] 1월 결제대금 230,000원이 2월 15일 출금 예정입니다. 문의: 1588-1688",
+    msg: "[BK국민카드] 1월 결제대금 230,000원이 2월 15일 출금 예정입니다. 문의: 1588-1688",
     isScam: false,
     category: "정상문자",
     explanation: "정상 카드사 문자입니다. 링크가 없고, 개인정보 입력을 요구하지 않으며, 공식 번호(1588-1688)만 안내합니다. 이런 문자는 안전합니다.",
@@ -28,9 +28,9 @@ const QUESTIONS = [
   {
     id: 3,
     type: "SMS",
-    sender: "CJ대한통운",
+    sender: "JC대한통운",
     senderNum: "1588-1255",
-    msg: "[CJ대한통운] 택배 배송 중 고객님 부재로 보관 중입니다. 배송비 3,500원 입금 후 재배송 가능합니다.\n농협 302-9384-7291-41",
+    msg: "[JC대한통운] 택배 배송 중 고객님 부재로 보관 중입니다. 배송비 3,500원 입금 후 재배송 가능합니다.\n협농 302-9384-7291-41",
     isScam: true,
     category: "택배사칭",
     explanation: "택배사는 절대 계좌이체를 요구하지 않습니다. 재배송 신청은 공식 앱이나 홈페이지에서만 합니다. 계좌번호가 문자에 있으면 100% 사기입니다.",
@@ -38,10 +38,10 @@ const QUESTIONS = [
   },
   {
     id: 4,
-    type: "카카오",
+    type: "오카카",
     sender: "엄마",
     senderNum: "",
-    msg: "나 폰 고장났어. 이 번호로 연락해. 지금 급하게 돈 50만원만 보내줘. 나중에 갚을게. 카카오뱅크 3333-04-1928374",
+    msg: "나 폰 고장났어. 이 번호로 연락해. 지금 급하게 돈 50만원만 보내줘. 나중에 갚을게. 오카카뱅크 3333-04-1928374",
     isScam: true,
     category: "가족사칭",
     explanation: "가족을 사칭한 메신저 피싱입니다. 폰이 고장났다며 새 번호로 연락하고 즉시 송금을 요구하는 건 대표적인 사기 수법입니다. 반드시 기존 번호로 직접 전화해 확인하세요.",
@@ -82,21 +82,21 @@ const QUESTIONS = [
   },
   {
     id: 8,
-    type: "당근",
+    type: "피망마켓",
     sender: "구매자",
-    senderNum: "당근마켓",
+    senderNum: "피망마켓",
     msg: "안녕하세요! 맥북 아직 있나요? 직거래 어렵고 택배 거래 원해요. 안전결제로 하면 어떨까요? 제가 먼저 안전결제 링크 보내드릴게요~\nhttps://daangn-safe.pay-kr.com/link/a8f3k",
     isScam: true,
     category: "중고거래사기",
-    explanation: "당근마켓 공식 안전결제 링크는 앱 내에서만 생성됩니다. 외부 링크('daangn-safe.pay-kr.com')는 100% 피싱 사이트입니다. 구매자가 먼저 결제 링크를 보내는 것도 사기 패턴입니다.",
+    explanation: "피망마켓 공식 안전결제 링크는 앱 내에서만 생성됩니다. 외부 링크('daangn-safe.pay-kr.com')는 100% 피싱 사이트입니다. 구매자가 먼저 결제 링크를 보내는 것도 사기 패턴입니다.",
     redFlags: ["외부 링크로 안전결제 유도", "공식 앱 밖에서 거래 유도", "구매자가 먼저 링크 제시"],
   },
   {
     id: 9,
     type: "SMS",
-    sender: "우리은행",
+    sender: "남은행",
     senderNum: "1588-5000",
-    msg: "[우리은행] 고객님 계좌에서 해외 로그인이 감지되었습니다. 본인이 아닌 경우 지금 즉시 아래 링크에서 인증하세요. (10분 내 미인증 시 계좌 동결)\nhttp://woori-secure.net/auth",
+    msg: "[남은행] 고객님 계좌에서 해외 로그인이 감지되었습니다. 본인이 아닌 경우 지금 즉시 아래 링크에서 인증하세요. (10분 내 미인증 시 계좌 동결)\nhttp://woori-secure.net/auth",
     isScam: true,
     category: "금융사칭",
     explanation: "은행은 문자 링크로 인증을 요구하지 않습니다. '10분 내 계좌 동결'은 공포심을 이용한 긴박감 조성입니다. 의심되면 링크 클릭 말고 은행 공식 앱이나 1588-5000으로 직접 전화하세요.",
@@ -160,7 +160,7 @@ export default function QuizPage() {
     }
   }
 
-  const typeIcon = (t: string) => t === "SMS" ? "💬" : t === "카카오" ? "💛" : t === "전화" ? "📞" : t === "SNS" ? "📸" : "🥕";
+  const typeIcon = (t: string) => t === "SMS" ? "💬" : t === "오카카" ? "💛" : t === "전화" ? "📞" : t === "SNS" ? "📸" : "🥕";
 
   if (phase === "intro") return (
     <div style={{ minHeight:"100vh", background:"#0f172a", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"24px 16px", fontFamily:"'Pretendard','Apple SD Gothic Neo',sans-serif" }}>
@@ -175,7 +175,7 @@ export default function QuizPage() {
         </p>
         <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:20, padding:"20px 24px", marginBottom:28, textAlign:"left" }}>
           {[
-            { icon:"💬", text:"SMS·카카오·SNS·전화 등 다양한 유형 출제" },
+            { icon:"💬", text:"SMS·오카카·SNS·전화 등 다양한 유형 출제" },
             { icon:"🔴", text:"사기면 '사기입니다' / 정상이면 '정상입니다' 선택" },
             { icon:"📊", text:"마지막에 내가 어떤 수법에 취약한지 분석" },
           ].map((tip, i) => (

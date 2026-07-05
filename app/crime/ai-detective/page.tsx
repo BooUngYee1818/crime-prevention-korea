@@ -155,7 +155,7 @@ const REWARDS = [
 ];
 
 export default function AIDetectivePage() {
-  const [phase, setPhase] = useState<"intro" | "quiz" | "result">("intro");
+  const [phase, setPhase] = useState<"learn" | "intro" | "quiz" | "result">("learn");
   const [round, setRound] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -193,7 +193,7 @@ export default function AIDetectivePage() {
   };
 
   const reset = () => {
-    setPhase("intro"); setRound(0); setSelected(null);
+    setPhase("learn"); setRound(0); setSelected(null);
     setConfirmed(false); setScore(0); setAnswers([]); setShowExplain(false);
   };
 
@@ -217,6 +217,213 @@ export default function AIDetectivePage() {
           </span>
         )}
       </div>
+
+      {/* ── 학습 콘텐츠 ── */}
+      {phase === "learn" && (
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 20px 60px", animation: "fadeUp 0.4s ease" }}>
+
+          {/* 타이틀 */}
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
+            <div style={{ fontSize: 52, marginBottom: 12 }}>🎬</div>
+            <h1 style={{ fontSize: 24, fontWeight: 900, marginBottom: 10, letterSpacing: -0.5 }}>AI 영상, 이제는 진짜처럼 보입니다</h1>
+            <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.8 }}>
+              사기꾼들이 AI 영상으로 사람들을 속이기 시작했어요.<br />
+              어떻게 발전했는지, 어떻게 구별하는지 알아봐요.
+            </p>
+          </div>
+
+          {/* ── SECTION 1: 발전 비교 ── */}
+          <div style={{ background: "#0f0f1a", border: "1px solid #2a1a3a", borderRadius: 20, padding: "22px 20px", marginBottom: 18 }}>
+            <p style={{ color: "#fbbf24", fontSize: 12, fontWeight: 800, letterSpacing: 2, marginBottom: 16 }}>📈 AI 영상의 발전 — 1년 사이에 이렇게 달라졌어요</p>
+
+            {/* Before / After 비교 카드 */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 18 }}>
+              <div style={{ background: "#1a1a2e", border: "2px solid #ef444466", borderRadius: 14, overflow: "hidden" }}>
+                <div style={{ background: "#ef444422", padding: "6px 12px", display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#ef4444", fontSize: 10, fontWeight: 800 }}>1년 전 AI 영상</span>
+                </div>
+                {/* 이미지 자리 — /public/ai-before.jpg 저장 시 아래 주석 해제 */}
+                {/* <img src="/ai-before.jpg" alt="1년전 AI" style={{ width:"100%", display:"block" }} /> */}
+                <div style={{ padding: "14px 12px" }}>
+                  <p style={{ color: "#374151", fontSize: 10, marginBottom: 8, fontStyle: "italic" }}>
+                    출처: Google 검색 (윌 스미스 AI 영상 캡처)
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column" as const, gap: 6 }}>
+                    {["손가락이 6개 또는 4개로 보임", "머리카락 끝이 배경에 녹아들어 흐릿함", "눈 깜빡임이 없거나 어색함", "치아가 뭉개지거나 이상하게 붙어 있음"].map((t, i) => (
+                      <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+                        <span style={{ color: "#ef4444", fontSize: 10, marginTop: 2, flexShrink: 0 }}>✗</span>
+                        <p style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.5 }}>{t}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: "#0f1e10", border: "2px solid #22c55e66", borderRadius: 14, overflow: "hidden" }}>
+                <div style={{ background: "#22c55e22", padding: "6px 12px", display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#22c55e", fontSize: 10, fontWeight: 800 }}>현재 AI 영상</span>
+                </div>
+                {/* 이미지 자리 — /public/ai-after.jpg 저장 시 아래 주석 해제 */}
+                {/* <img src="/ai-after.jpg" alt="현재 AI" style={{ width:"100%", display:"block" }} /> */}
+                <div style={{ padding: "14px 12px" }}>
+                  <p style={{ color: "#374151", fontSize: 10, marginBottom: 8, fontStyle: "italic" }}>
+                    출처: Google 검색 (윌 스미스 AI 영상 캡처)
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column" as const, gap: 6 }}>
+                    {["손가락 개수가 정확히 5개", "머리카락 윤곽이 선명하게 분리됨", "자연스러운 눈 깜빡임과 표정 변화", "치아와 입 모양이 자연스러움"].map((t, i) => (
+                      <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+                        <span style={{ color: "#22c55e", fontSize: 10, marginTop: 2, flexShrink: 0 }}>✓</span>
+                        <p style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.5 }}>{t}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p style={{ color: "#374151", fontSize: 10, fontStyle: "italic", textAlign: "right" as const, marginBottom: 8 }}>
+              ※ 위 이미지는 Google 검색을 통해 수집된 자료입니다. 교육 목적으로만 사용됩니다.
+            </p>
+            <div style={{ background: "#13082a", border: "1px solid #f97316", borderRadius: 12, padding: "13px 16px" }}>
+              <p style={{ color: "#fed7aa", fontSize: 13, lineHeight: 1.9 }}>
+                요즘 AI는 정말 똑같이 만들어 냅니다. 예전에는 AI에게 사람을 그려달라고 하면 팔이 두 개이거나 손가락이 어딘가 잘린 듯한 부자연스러운 모습이었어요.
+                하지만 요즘은 그 기술도 발전하여, <strong style={{ color: "#f97316" }}>사람의 신체 전체가 자연스럽게 보이도록</strong> 만들어 줄 수 있게 됐습니다.
+                <br /><br />
+                이를 통해 알 수 있는 부분은 <strong style={{ color: "#fb923c" }}>&apos;AI는 많은 유저들의 기획과 프롬프트(명령)를 통해 새롭게 발전해 나간다&apos;</strong>는 것입니다.
+                이것이 우리가 AI의 영상이나 사진을 눈여겨봐야 하는 이유입니다.
+              </p>
+            </div>
+          </div>
+
+          {/* ── SECTION 2: Sora 소개 ── */}
+          <div style={{ background: "#0a0a1a", border: "1px solid #3b82f666", borderRadius: 20, padding: "20px", marginBottom: 18 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+              {/* Sora 로고 CSS 표현 */}
+              <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #1e3a5f, #0a1628)", border: "1px solid #3b82f644", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <span style={{ color: "#60a5fa", fontSize: 22, fontWeight: 900 }}>S</span>
+              </div>
+              <div>
+                <p style={{ color: "#60a5fa", fontWeight: 800, fontSize: 16 }}>Sora — OpenAI의 AI 영상 생성 도구</p>
+                <p style={{ color: "#6b7280", fontSize: 12 }}>텍스트 한 줄로 실제 같은 영상을 만들어냅니다</p>
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+              {[
+                { icon: "⌨️", label: "명령어(프롬프트) 입력", desc: "\"해변에서 걷는 남성\" 한 줄" },
+                { icon: "🤖", label: "AI가 영상 생성", desc: "수초~수분 안에 완성" },
+                { icon: "🎬", label: "실제 같은 영상 출력", desc: "구별 거의 불가능" },
+              ].map((s, i) => (
+                <div key={i} style={{ background: "#111128", borderRadius: 10, padding: "12px 10px", textAlign: "center" as const }}>
+                  <div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div>
+                  <p style={{ color: "#93c5fd", fontSize: 11, fontWeight: 700, marginBottom: 3 }}>{s.label}</p>
+                  <p style={{ color: "#4b5563", fontSize: 10, lineHeight: 1.4 }}>{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── SECTION 3: AI 워터마크 ── */}
+          <div style={{ background: "#0f0f1a", border: "1px solid #fbbf2444", borderRadius: 20, padding: "22px 20px", marginBottom: 18 }}>
+            <p style={{ color: "#fbbf24", fontSize: 12, fontWeight: 800, letterSpacing: 2, marginBottom: 6 }}>🔍 AI 워터마크 — 이것을 확인하세요</p>
+            <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.8, marginBottom: 16 }}>
+              AI들은 보통 영상이나 이미지를 만들 때 <strong style={{ color: "#fbbf24" }}>워터마크</strong>를 생성합니다.
+              영상의 각 모서리나 화면 어딘가에 AI 프로그램의 표시가 기본으로 삽입돼요.
+              법적으로도 표기 의무가 있지만, 이를 없애려는 사람들도 있습니다.
+            </p>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
+              {/* Instagram 워터마크 */}
+              <div style={{ background: "#1a1a2e", borderRadius: 14, overflow: "hidden", border: "1px solid #2a2a4a" }}>
+                <div style={{ background: "linear-gradient(135deg,#405de6,#833ab4,#fd1d1d,#fcb045)", padding: "8px 12px" }}>
+                  <p style={{ color: "#fff", fontSize: 10, fontWeight: 800 }}>📱 인스타그램 / 릴스</p>
+                </div>
+                {/* 실제 스크린샷 이미지 자리 */}
+                {/* <img src="/watermark-instagram.jpg" style={{ width:"100%", display:"block" }} /> */}
+                <div style={{ padding: "12px", textAlign: "center" as const }}>
+                  <p style={{ color: "#374151", fontSize: 10, marginBottom: 8, fontStyle: "italic", textAlign: "left" as const }}>출처: Google 검색</p>
+                  <div style={{ background: "#000", borderRadius: 20, padding: "6px 14px", display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+                    <span style={{ fontSize: 12 }}>✨</span>
+                    <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>AI로 생성한 콘텐츠</span>
+                  </div>
+                  <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.5 }}>영상 하단에 이 표시가 뜨면 AI 생성 콘텐츠</p>
+                </div>
+              </div>
+
+              {/* Gemini 워터마크 */}
+              <div style={{ background: "#1a1a2e", borderRadius: 14, overflow: "hidden", border: "1px solid #2a2a4a" }}>
+                <div style={{ background: "linear-gradient(135deg,#1a73e8,#4285f4)", padding: "8px 12px" }}>
+                  <p style={{ color: "#fff", fontSize: 10, fontWeight: 800 }}>🔷 Gemini (구글)</p>
+                </div>
+                {/* 실제 스크린샷 이미지 자리 */}
+                {/* <img src="/watermark-gemini.jpg" style={{ width:"100%", display:"block" }} /> */}
+                <div style={{ padding: "12px", textAlign: "center" as const }}>
+                  <p style={{ color: "#374151", fontSize: 10, marginBottom: 8, fontStyle: "italic", textAlign: "left" as const }}>출처: Google 검색</p>
+                  <div style={{ fontSize: 28, marginBottom: 6 }}>✦</div>
+                  <p style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.5 }}>우측 하단 별모양이 Gemini 워터마크. 잘라내도 이미지 비율이 틀려짐</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 다른 AI 워터마크 */}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" as const }}>
+              {[
+                { tool: "Sora", mark: "우측 하단 'S' 마크", color: "#60a5fa" },
+                { tool: "Midjourney", mark: "이미지 하단 MJ 서명", color: "#a78bfa" },
+                { tool: "DALL-E", mark: "메타데이터에 숨겨진 표시", color: "#34d399" },
+                { tool: "Runway", mark: "모서리 R 아이콘", color: "#f87171" },
+              ].map((w, i) => (
+                <div key={i} style={{ background: "#111128", borderRadius: 8, padding: "7px 11px", display: "flex", gap: 7, alignItems: "center" }}>
+                  <span style={{ color: w.color, fontSize: 11, fontWeight: 800 }}>{w.tool}</span>
+                  <span style={{ color: "#4b5563", fontSize: 10 }}>{w.mark}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── SECTION 4: 워터마크 없을 때 대처법 ── */}
+          <div style={{ background: "#0a1628", border: "2px solid #ef4444", borderRadius: 20, padding: "20px", marginBottom: 24 }}>
+            <p style={{ color: "#ef4444", fontSize: 13, fontWeight: 800, marginBottom: 12 }}>⚠️ 워터마크가 보이지 않을 때는?</p>
+            <p style={{ color: "#9ca3af", fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
+              요즘은 워터마크를 없애는 도구도 많아졌어요. 워터마크가 없다고 안심하면 안 됩니다.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column" as const, gap: 10 }}>
+              {[
+                { num: "1", title: "눈을 확대해서 확인하세요", desc: "실제 눈동자에는 주변 환경이 반사돼 보여요. AI 눈에는 반사가 없거나 틀려요.", icon: "👁️" },
+                { num: "2", title: "배경 글자를 읽어보세요", desc: "AI는 배경 간판이나 책의 글자를 제대로 만들지 못해요. 뭉개지거나 알 수 없는 기호가 섞임.", icon: "📖" },
+                { num: "3", title: "구글 이미지 검색 / 역이미지 검색", desc: "의심스러운 사진은 구글에 이미지를 직접 끌어다 놓아 출처를 확인하세요.", icon: "🔍" },
+                { num: "4", title: "AI 탐지 도구를 활용하세요", desc: "Hive Moderation, Illuminarty, FotoForensics 등 AI 이미지 탐지 웹사이트가 있어요.", icon: "🛡️" },
+                { num: "5", title: "너무 완벽하면 의심하세요", desc: "피부가 너무 매끄럽고 조명이 완벽하고 표정이 자연스럽지 않으면 AI일 가능성 높아요.", icon: "🤔" },
+              ].map((s, i) => (
+                <div key={i} style={{ display: "flex", gap: 12, background: "#0d1a2e", borderRadius: 12, padding: "12px 14px" }}>
+                  <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#ef444422", border: "1px solid #ef444455", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
+                    {s.icon}
+                  </div>
+                  <div>
+                    <p style={{ color: "#f87171", fontSize: 12, fontWeight: 700, marginBottom: 3 }}>{s.num}. {s.title}</p>
+                    <p style={{ color: "#6b7280", fontSize: 12, lineHeight: 1.6 }}>{s.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── 퀴즈 시작 버튼 ── */}
+          <div style={{ textAlign: "center" }}>
+            <p style={{ color: "#6b7280", fontSize: 13, marginBottom: 16 }}>배운 내용을 토대로 직접 AI 영상을 구별해 보세요!</p>
+            <button
+              onClick={() => setPhase("intro")}
+              style={{
+                background: "linear-gradient(135deg,#f59e0b,#d97706)",
+                color: "#fff", fontWeight: 900, fontSize: 17,
+                padding: "18px 56px", borderRadius: 50, border: "none",
+                cursor: "pointer", boxShadow: "0 0 40px #f59e0b55",
+                letterSpacing: 0.5,
+              }}
+            >
+              🕵️ 퀴즈 풀기
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── 인트로 ── */}
       {phase === "intro" && (

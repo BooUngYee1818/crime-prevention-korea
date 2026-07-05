@@ -54,6 +54,16 @@ const CAT_MAP: Record<string, string> = {
   "sympathy-scam":           "cat_sympathy",
   "jeonse-scam":             "cat_realestate",
   "deepfake-blackmail":      "cat_deepfake",
+  "job-scam":                "cat_used",
+  "drug-sns":                "cat_messenger",
+  "fss-impersonation":       "cat_agency",
+  "weapon-deal-accident":    "cat_deepfake",
+  "telegram-drug":           "cat_messenger",
+  "illegal-gun-trade":       "cat_deepfake",
+  "gun-purchase-scam":       "cat_deepfake",
+  "smarthome-ransomware":    "cat_smishing",
+  "dna-scam":                "cat_deepfake",
+  "metaverse-fraud":         "cat_invest",
 };
 
 const REPORT_NUMBERS = [
@@ -236,7 +246,7 @@ export default function CrimeCenterPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 10 }}>
           {[
             { path: "/crime/quiz", icon: "🕵️", label: "사기 판별 퀴즈", sub: "진짜 vs 가짜 맞추기", bg: "linear-gradient(135deg,#3d1f5a,#7c3aed)", border: "#7c3aed" },
-            { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "당근마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
+            { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "피망마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
             { path: "/crime/sns-invest", icon: "📸", label: "SNS 투자 사기", sub: "인스타 DM 사기 체험", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
           ].map((item) => (
             <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 14, padding: "14px 10px", cursor: "pointer", textAlign: "center" as const, transition: "transform 0.15s", position: "relative" as const }}
@@ -298,14 +308,14 @@ export default function CrimeCenterPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
                   <span style={{ color: "#1c0d2e", fontWeight: 700, fontSize: 15 }}>
-                    {t((SC_TITLE_MAP[scenario.id] ?? "sc_gambling_title") as Parameters<typeof t>[0], lang)}
+                    {SC_TITLE_MAP[scenario.id] ? t(SC_TITLE_MAP[scenario.id] as Parameters<typeof t>[0], lang) : scenario.title}
                   </span>
                   <span style={{
                     fontSize: 10, padding: "2px 8px", borderRadius: 20, fontWeight: 700,
                     background: scenario.color + "14", color: scenario.color,
                     border: `1px solid ${scenario.color}28`,
                   }}>
-                    {t((CAT_MAP[scenario.id] ?? "cat_gambling") as Parameters<typeof t>[0], lang)}
+                    {CAT_MAP[scenario.id] ? t(CAT_MAP[scenario.id] as Parameters<typeof t>[0], lang) : scenario.reveal.crimeName.split(" ")[0]}
                   </span>
                   {scenario.targetAge === "senior" && (
                     <span style={{
@@ -318,7 +328,7 @@ export default function CrimeCenterPage() {
                   )}
                 </div>
                 <p style={{ color: "#64748b", fontSize: 13 }}>
-                  {t((SC_SUB_MAP[scenario.id] ?? "sc_gambling_sub") as Parameters<typeof t>[0], lang)}
+                  {SC_SUB_MAP[scenario.id] ? t(SC_SUB_MAP[scenario.id] as Parameters<typeof t>[0], lang) : scenario.subtitle}
                 </p>
                 <p style={{ color: "#94a3b8", fontSize: 11, marginTop: 3 }}>{scenario.reveal.stats}</p>
               </div>

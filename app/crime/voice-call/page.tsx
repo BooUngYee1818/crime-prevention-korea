@@ -90,7 +90,7 @@ const FAMILY_TURNS: Turn[] = [
   },
   // 7: 돈 요청 (핵심)
   {
-    criminal: "엄마 고마워ㅠㅠ 150만원만 빌려줄 수 있어? 집에 가면 바로 갚을게 진짜. 카카오뱅크 3333-04-2819471 김민준이야. 사장님이 오늘 자정까지라는데.",
+    criminal: "엄마 고마워ㅠㅠ 150만원만 빌려줄 수 있어? 집에 가면 바로 갚을게 진짜. 오카카뱅크 3333-04-2819471 김민준이야. 사장님이 오늘 자정까지라는데.",
     choices: [
       { text: "알겠어, 지금 바로 보낼게.", nextTurn: -2 },
       { text: "잠깐, 계좌 좀 확인해볼게.", nextTurn: 11 },
@@ -220,7 +220,7 @@ const PROSECUTOR_TURNS: Turn[] = [
   },
   // 5: 안전계좌 이체 요구
   {
-    criminal: "네, 알겠습니다. 지금 즉시 해당 금액을 안전계좌로 이체하셔야 수사 완료 후 100% 반환받을 수 있습니다. 우리은행 1002-847-293018 금융범죄수사팀입니다.",
+    criminal: "네, 알겠습니다. 지금 즉시 해당 금액을 안전계좌로 이체하셔야 수사 완료 후 100% 반환받을 수 있습니다. 남은행 1002-847-293018 금융범죄수사팀입니다.",
     choices: [
       { text: "알겠습니다, 이체할게요.", nextTurn: -2 },
       { text: "검찰이 왜 개인 계좌로 이체하라는 거죠?", nextTurn: 6 },
@@ -320,7 +320,7 @@ const CALL_SCRIPTS: Record<ScenarioId, {
     caller: "아들 (민준)",
     callerSub: "발신자표시제한",
     transferAmount: 1500000,
-    transferAccount: "카카오뱅크 3333-04-2819471 김민준",
+    transferAccount: "오카카뱅크 3333-04-2819471 김민준",
     turns: FAMILY_TURNS,
   },
   prosecutor: {
@@ -328,7 +328,7 @@ const CALL_SCRIPTS: Record<ScenarioId, {
     caller: "서울중앙지검",
     callerSub: "발신자표시제한",
     transferAmount: 5000000,
-    transferAccount: "우리은행 1002-847-293018 금융범죄수사팀",
+    transferAccount: "남은행 1002-847-293018 금융범죄수사팀",
     turns: PROSECUTOR_TURNS,
   },
 };

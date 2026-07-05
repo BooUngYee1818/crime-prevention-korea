@@ -90,7 +90,7 @@ export default function BgmPlayer() {
   //    클릭(네비게이션) 직후 즉시 play()를 호출해야 모바일에서 작동.
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !startedRef.current || muted) return;
+    if (!audio || muted) return;
 
     const newSrc  = getSrc(pathname);
     const newBase = getBaseVolume(pathname);

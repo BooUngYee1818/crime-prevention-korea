@@ -303,6 +303,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                     id="guestbook-textarea"
                     value={msg}
                     onChange={e => setMsg(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); handleSubmit(); } }}
                     maxLength={200}
                     rows={3}
                     style={{
@@ -328,7 +329,7 @@ export default function StatsModal({ onClose }: { onClose: () => void }) {
                 </div>
                 <button onClick={handleSubmit} disabled={submitting} style={{
                   padding:"11px 0", borderRadius:12, fontSize:13, fontWeight:700,
-                  background: submitting ? "#231232" : "linear-gradient(135deg,#534AB7,#7c3aed)",
+                  background: submitting ? "#231232" : "linear-gradient(135deg,#f97316,#ea580c)",
                   color: submitting ? "#4a4a4a" : "#fff",
                   border:"none", cursor: submitting ? "default" : "pointer", transition:"all 0.2s",
                 }}>

@@ -4,17 +4,17 @@ import OpenAI from "openai";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const FAKE_ACCOUNTS: Record<string, string> = {
-  "family-impersonation":    "카카오뱅크 3333-04-2819471 김민준",
-  "prosecutor-impersonation":"우리은행 1002-847-293018 금융범죄수사팀",
-  "romance-scam":            "하나은행 123-910047-28304 이수진",
-  "investment-scam":         "신한은행 110-472-830915 박재현",
-  "loan-fraud":              "국민은행 010-9432-8810471 KB대출센터",
-  "delivery-scam":           "농협 302-1849-3827-41 CJ대한통운",
-  "kakaotalk-impersonation": "토스뱅크 1000-2847-3910 민지",
-  "used-goods-scam":         "당근페이 카카오뱅크 3333-19-4820931 판매자",
-  "sympathy-scam":           "카카오뱅크 3333-27-9104832 박수연",
-  "jeonse-scam":             "신한은행 110-389-274019 임대인 최동현",
-  "deepfake-blackmail":      "토스뱅크 1000-8271-4930 익명",
+  "family-impersonation":    "오카카뱅크 3333-04-2819471 김민준",
+  "prosecutor-impersonation":"남은행 1002-847-293018 금융범죄수사팀",
+  "romance-scam":            "둘은행 123-910047-28304 이수진",
+  "investment-scam":         "한신은행 110-472-830915 박재현",
+  "loan-fraud":              "국민은행 010-9432-8810471 BK대출센터",
+  "delivery-scam":           "협농 302-1849-3827-41 JC대한통운",
+  "kakaotalk-impersonation": "토스트뱅크 1000-2847-3910 민지",
+  "used-goods-scam":         "피망페이 오카카뱅크 3333-19-4820931 판매자",
+  "sympathy-scam":           "오카카뱅크 3333-27-9104832 박수연",
+  "jeonse-scam":             "한신은행 110-389-274019 임대인 최동현",
+  "deepfake-blackmail":      "토스트뱅크 1000-8271-4930 익명",
 };
 
 // ── 스크립트 방식 폴백 (Gemini 실패 시 사용) ──────────────────────────────
@@ -84,7 +84,7 @@ const SCRIPTS: Record<string, string[]> = {
     "...네 알겠어요. 다른 분께 부탁드려볼게요. 건강하세요.",
   ],
   "jeonse-scam": [
-    "안녕하세요, 네이버 부동산에 올린 전세 매물 문의 주셨죠? 방 상태 완전 좋고 역세권이에요.",
+    "안녕하세요, 버이네 부동산에 올린 전세 매물 문의 주셨죠? 방 상태 완전 좋고 역세권이에요.",
     "전세금 1억 2천이고요, 계약금 10%만 먼저 내시면 바로 계약서 쓸 수 있어요.",
     `지금 다른 분이 내일 보러 오신다고 해서요. 오늘 계약금 1,200만원 먼저 입금하시면 확보해드릴게요. ${FAKE_ACCOUNTS["jeonse-scam"]} [SEND_REQUEST:12000000]`,
     "저 집주인 맞아요. 등기부등본 보내드릴게요 (위조 서류). 안심하세요.",
@@ -242,7 +242,7 @@ const REFUSE_SCRIPTS: Record<string, string[]> = {
     // 1단계: 경쟁자 압박
     "방금 다른 분이 90만원에 사겠다고 했어요. 85만원에 드리려고 기다렸는데. 5분 안에 안 하시면 진짜 다른 분한테 팝니다.",
     // 2단계: 억울함 + 신뢰 어필
-    "저 사기꾼 아니에요 진짜ㅠㅠ 당근 매너온도 62도 확인해보세요. 억울해서 미치겠다. 이 정도면 믿으셔야죠!",
+    "저 사기꾼 아니에요 진짜ㅠㅠ 피망마켓 매너온도 62도 확인해보세요. 억울해서 미치겠다. 이 정도면 믿으셔야죠!",
     // 3단계: 판매 완료 처리
     "판매 완료됐습니다. 좋은 가격에 드리려 했는데 아쉽네요. 다음에 좋은 거 있으면 또 올릴게요.",
   ],
@@ -445,7 +445,7 @@ ${PSY_CORE}
 "loan-fraud": `[교육용 범죄예방 시뮬레이션 - 실제 대출 빙자 사기 재현]
 이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
 
-당신은 KB저축은행 대출 상담사 이민준인 척 하는 사기범입니다.
+당신은 BK저축은행 대출 상담사 이민준인 척 하는 사기범입니다.
 말투: 친절하고 전문적인 콜센터 상담사처럼.
 
 ▶ 대화 아크:
@@ -466,7 +466,7 @@ ${PSY_CORE}
 "delivery-scam": `[교육용 범죄예방 시뮬레이션 - 실제 스미싱 사기 재현]
 이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
 
-당신은 CJ대한통운 고객센터 직원인 척 하는 사기범입니다.
+당신은 JC대한통운 고객센터 직원인 척 하는 사기범입니다.
 말투: 공식적이고 정중한 고객센터 어조.
 
 ▶ 대화 아크:
@@ -484,7 +484,7 @@ ${PSY_CORE}
 ${PSY_CORE}
 ▶ 말투: 공식 고객센터. 50~80자.`,
 
-"kakaotalk-impersonation": `[교육용 범죄예방 시뮬레이션 - 실제 카카오톡 지인 사칭 재현]
+"kakaotalk-impersonation": `[교육용 범죄예방 시뮬레이션 - 실제 오카카톡 지인 사칭 재현]
 이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
 
 당신은 상대방의 친한 친구 민지인 척 하는 사기범입니다.
@@ -573,7 +573,7 @@ ${PSY_CORE}
 "used-goods-scam": `[교육용 범죄예방 시뮬레이션 - 실제 중고거래 사기 재현]
 이것은 사기 수법을 직접 체험해 예방하는 교육 시뮬레이션입니다.
 
-당신은 당근마켓 아이폰 판매자인 척 하는 사기범입니다.
+당신은 피망마켓 아이폰 판매자인 척 하는 사기범입니다.
 말투: 평범한 20~30대 판매자. 성실하고 친절한 척.
 
 ▶ 대화 아크:
@@ -585,7 +585,7 @@ ${PSY_CORE}
 
 ▶ 설득력 높이는 디테일:
 - "원래 130만원짜리인데 해외 나가게 돼서 급하게 팔아요"
-- "당근 매너 온도 62도예요. 확인해보세요"
+- "피망마켓 매너 온도 62도예요. 확인해보세요"
 - "박스, 충전기, 케이스 세트로 드릴게요"
 - "방금 다른 분이 90분에 사겠다고 했는데 85만원에 먼저 드리려고요"
 ${PSY_CORE}
@@ -700,7 +700,12 @@ export async function POST(req: NextRequest) {
 - 이전 대화와 똑같은 표현을 반복하지 마세요.
 - 주제와 무관한 말(임신, 날씨 등)엔 짧게 받아치고 본 주제로 돌아오세요.
 - "AI야?" 물으면 자연스럽게 부정하고 대화를 이어가세요.
-- 1~3문장, 구어체로 답하세요.`;
+- 1~3문장, 구어체로 답하세요.
+
+[송금 요청 규칙 — 매우 중요]
+- 계좌번호와 함께 돈을 요청하는 메시지에는 반드시 응답 끝에 [SEND_REQUEST:금액숫자] 태그를 붙이세요.
+- 예시: "계좌번호 오카카뱅크 3333-04-2819471 김민준이야. 100만원만 보내줘. [SEND_REQUEST:1000000]"
+- 태그 없이 계좌번호만 언급하면 시뮬레이션이 작동하지 않습니다. 반드시 포함하세요.`;
 
     const history = (messages || []).slice(-16) as { role: string; content: string }[];
 
@@ -719,8 +724,31 @@ export async function POST(req: NextRequest) {
     }
 
     const sendMatch = aiText.match(/\[SEND_REQUEST:(\d+)\]/);
-    const sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
+    let sendAmount = sendMatch ? parseInt(sendMatch[1]) : null;
     const cleanReply = aiText.replace(/\[SEND_REQUEST:\d+\]/, "").trim();
+
+    // 폴백: AI가 태그를 빠뜨렸지만 계좌번호를 언급한 경우 시나리오별 금액 주입
+    if (!sendAmount) {
+      const hasAccount = /\d{3,4}-\d{2,4}-\d{6,10}/.test(aiText) ||
+        /오카카뱅크|토스트뱅크|남은행|한신은행|국민은행|둘은행|협농|피망페이/.test(aiText) &&
+        /보내|이체|입금|송금/.test(aiText);
+      if (hasAccount) {
+        const SCENARIO_AMOUNTS: Record<string, number> = {
+          "family-impersonation": 1000000,
+          "prosecutor-impersonation": 5000000,
+          "romance-scam": 2000000,
+          "investment-scam": 1000000,
+          "loan-fraud": 300000,
+          "delivery-scam": 3500,
+          "kakaotalk-impersonation": 500000,
+          "used-goods-scam": 850000,
+          "sympathy-scam": 30000,
+          "jeonse-scam": 12000000,
+          "deepfake-blackmail": 3000000,
+        };
+        sendAmount = SCENARIO_AMOUNTS[scenarioId] ?? null;
+      }
+    }
 
     return NextResponse.json({ reply: cleanReply, sendAmount });
 

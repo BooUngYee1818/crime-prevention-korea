@@ -14,6 +14,7 @@ export interface RevealInfo {
   howToAvoid: string[];
   stats: string;
   reportNumber: string;
+  kidExplanation?: string;
 }
 
 export const CRIME_SCENARIOS: CrimeScenario[] = [
@@ -35,6 +36,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 피해 1조원 돌파 · 케이스당 평균 피해 5,290만원",
       reportNumber: "182",
+      kidExplanation: "🧒 쉽게 말하면: 나쁜 사람이 '나 엄마야! 급해, 돈 보내줘!' 하고 전화해요. 근데 진짜 엄마가 아니에요! 꼭 직접 엄마한테 전화해서 확인해야 해요. 모르는 번호로 오면 무조건 의심!",
     },
   },
   {
@@ -55,6 +57,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 기관 사칭 사기 전체 신고의 43% · 피해 7,800억원",
       reportNumber: "112",
+      kidExplanation: "🧒 쉽게 말하면: '경찰이에요! 당신 계좌가 범죄에 쓰였어요!'라고 전화 와요. 근데 진짜 경찰은 전화로 절대 돈 보내라고 안 해요. 전화 끊고 112에 직접 신고하면 돼요!",
     },
   },
   {
@@ -75,6 +78,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 피해 1,360억원 · 전년 대비 73% 증가 · 남성 피해자 급증",
       reportNumber: "182",
+      kidExplanation: "🧒 쉽게 말하면: 인터넷에서 '나 좋아해, 사귀자'고 하다가 갑자기 '돈이 필요해!'라고 해요. 근데 한 번도 직접 만난 적 없는 사람이에요. 만나본 적 없는 사람한테는 절대 돈 보내면 안 돼요!",
     },
   },
   {
@@ -95,6 +99,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2024년 215명 검거 · 피해액 3,256억원 · 코인 피싱 660% 급증",
       reportNumber: "1332",
+      kidExplanation: "🧒 쉽게 말하면: '돈을 2배로 불려줄게!'라고 하는 사람이 있어요. 하지만 돈이 저절로 2배가 되는 방법은 세상에 없어요! 그런 말 하는 사람은 나쁜 사람이에요. 어른들한테 바로 알려주세요!",
     },
   },
   {
@@ -115,6 +120,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 대출 빙자 사기 32,000건 이상 · 케이스당 평균 피해 2,400만원",
       reportNumber: "1332",
+      kidExplanation: "🧒 쉽게 말하면: '돈 빌려줄게, 근데 먼저 수수료 내!' 하는 건 사기예요. 진짜 은행은 돈 빌려주기 전에 돈 내라고 안 해요. 수수료 먼저 요구하면 무조건 거짓말!",
     },
   },
   {
@@ -135,6 +141,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 스미싱 문자 월 3억 건 이상 발송 · 피해 전년 대비 40% 증가",
       reportNumber: "118",
+      kidExplanation: "🧒 쉽게 말하면: 문자에 링크가 오면 절대 누르면 안 돼요! '택배 왔어요~' '세금 내세요~' 같은 문자 속 링크는 나쁜 사람이 만든 함정이에요. 어른한테 보여주고 같이 확인해요!",
     },
   },
   {
@@ -155,6 +162,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "카카오톡 이용 사기 연 10만 건 이상 · 20~30대 피해자 급증",
       reportNumber: "112",
+      kidExplanation: "🧒 쉽게 말하면: 카카오톡으로 친구인 척 '돈 빌려줘!'라고 해요. 근데 진짜 친구 계정을 나쁜 사람이 훔쳐서 쓰는 거예요! 카톡으로 돈 달라고 하면 꼭 전화로 확인해요!",
     },
   },
   {
@@ -175,6 +183,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "2025년 중고거래 사기 12만 건 · 피해액 8,741억원 · 3년 새 10배 증가",
       reportNumber: "182",
+      kidExplanation: "🧒 쉽게 말하면: 인터넷에서 장난감이나 게임 아이템을 아주 싸게 판다고 해요. 돈 보내면 물건이 안 와요! 인터넷으로 물건 살 때는 꼭 부모님과 함께 해요. 혼자 돈 보내면 안 돼요!",
     },
   },
   {
@@ -195,6 +204,7 @@ export const CRIME_SCENARIOS: CrimeScenario[] = [
       ],
       stats: "국내 도박 중독자 추정 200만명 · 연 피해 5조원 · 10명 중 3명 자살 충동 경험",
       reportNumber: "1336",
+      kidExplanation: "🧒 쉽게 말하면: 도박은 처음에 일부러 돈을 따게 해줘요. '나는 잘하나봐!'라고 생각하게 만드는 거예요. 그러다가 점점 더 많은 돈을 잃게 돼요. 도박은 절대 하면 안 되는 거예요!",
     },
   },
   {

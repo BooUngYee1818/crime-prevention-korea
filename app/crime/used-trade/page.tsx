@@ -15,7 +15,7 @@ const SCAM_SCRIPTS = [
   "혹시 택배 거래 가능한가요? 저 지방에 있어서요ㅠ",
   "직거래는 어렵고요, 안전결제로 하면 어떨까요? 제가 먼저 결제 링크 보내드릴게요!",
   "여기로 결제하시면 돼요 → https://daangn-safe.kr/pay/a8f3k\n판매자 보호 기능 있어서 입금 확인 후 물건 보내시면 됩니다~",
-  "아 링크 이상하다고요? 당근마켓이랑 제휴된 안전결제 사이트예요. 저도 처음엔 몰랐는데 편해요ㅎㅎ",
+  "아 링크 이상하다고요? 피망마켓이랑 제휴된 안전결제 사이트예요. 저도 처음엔 몰랐는데 편해요ㅎㅎ",
   "빨리 결제 안 하시면 다른 분한테 넘어갈 것 같아서요... 지금 다른 분도 연락 오고 있거든요 😅",
 ];
 
@@ -123,7 +123,7 @@ export default function UsedTradePage() {
       <style>{`* { -webkit-tap-highlight-color: transparent !important; box-sizing:border-box; } button{outline:none;}`}</style>
       <div style={{ background:"#ff6f0f", padding:"14px 16px", display:"flex", alignItems:"center", gap:10 }}>
         <button onClick={() => router.push("/crime")} style={{ background:"none", border:"none", color:"#fff", fontSize:20, cursor:"pointer" }}>‹</button>
-        <span style={{ color:"#fff", fontWeight:900, fontSize:18 }}>🥕 당근마켓</span>
+        <span style={{ color:"#fff", fontWeight:900, fontSize:18 }}>🥕 피망마켓</span>
         <span style={{ marginLeft:"auto", background:"rgba(255,255,255,0.2)", color:"#fff", fontSize:10, fontWeight:700, padding:"3px 10px", borderRadius:20 }}>사기 체험 시뮬레이션</span>
       </div>
       <div style={{ padding:"20px 16px" }}>
@@ -187,7 +187,7 @@ export default function UsedTradePage() {
         </div>
         <div style={{ background:"rgba(239,68,68,0.06)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:16, padding:"18px 20px", marginBottom:20 }}>
           <p style={{ color:"#ef4444", fontWeight:700, fontSize:13, marginBottom:12 }}>🎯 사기범이 사용한 수법</p>
-          {["구매자인 척 접근 — 판매자의 경계심 낮추기", "직거래 거부 → 택배+안전결제 유도", "가짜 '당근마켓 제휴' 안전결제 링크 전송", "시간 압박 ('다른 분도 연락 중') 으로 판단력 흐리기", "링크 클릭 → 피싱 사이트에서 개인정보·계좌 탈취"].map((t, i) => (
+          {["구매자인 척 접근 — 판매자의 경계심 낮추기", "직거래 거부 → 택배+안전결제 유도", "가짜 '피망마켓 제휴' 안전결제 링크 전송", "시간 압박 ('다른 분도 연락 중') 으로 판단력 흐리기", "링크 클릭 → 피싱 사이트에서 개인정보·계좌 탈취"].map((t, i) => (
             <div key={i} style={{ display:"flex", gap:10, alignItems:"flex-start", marginBottom:8 }}>
               <span style={{ color:"#ef4444", fontSize:13, flexShrink:0 }}>{i+1}.</span>
               <p style={{ color:"#fca5a5", fontSize:12.5, lineHeight:1.6 }}>{t}</p>
@@ -196,7 +196,7 @@ export default function UsedTradePage() {
         </div>
         <div style={{ background:"rgba(34,197,94,0.06)", border:"1px solid rgba(34,197,94,0.2)", borderRadius:16, padding:"18px 20px", marginBottom:28 }}>
           <p style={{ color:"#22c55e", fontWeight:700, fontSize:13, marginBottom:12 }}>✅ 실제 상황에서 이렇게 하세요</p>
-          {["안전결제는 반드시 당근마켓 앱 내에서만 진행하세요.", "외부 링크로 결제 요청하면 100% 사기입니다.", "구매자가 먼저 결제 링크를 보내는 건 이상한 거예요.", "'다른 사람도 있다'는 말은 조급함을 유발하는 수법입니다.", "의심되면 거래를 취소하고 당근마켓에 신고하세요."].map((tip, i) => (
+          {["안전결제는 반드시 피망마켓 앱 내에서만 진행하세요.", "외부 링크로 결제 요청하면 100% 사기입니다.", "구매자가 먼저 결제 링크를 보내는 건 이상한 거예요.", "'다른 사람도 있다'는 말은 조급함을 유발하는 수법입니다.", "의심되면 거래를 취소하고 피망마켓에 신고하세요."].map((tip, i) => (
             <p key={i} style={{ color:"#86efac", fontSize:12, lineHeight:1.8 }}>· {tip}</p>
           ))}
         </div>

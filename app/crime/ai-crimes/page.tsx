@@ -127,7 +127,7 @@ function DeepfakeBlackmailSim({ onClose }: { onClose: () => void }) {
             "절대 돈을 보내지 마세요 — 한 번 보내면 추가 요구가 이어집니다",
             "경찰청 사이버수사대 182 또는 여성긴급전화 1366에 신고하세요",
             "SNS 프로필 사진을 비공개로 전환하세요",
-            "텔레그램·카카오에 해당 계정을 신고·차단하세요",
+            "텔레그램·오카카에 해당 계정을 신고·차단하세요",
             "증거 스크린샷을 보관한 뒤 메시지는 삭제하지 마세요",
           ].map((t, i) => (
             <p key={i} style={{ color: "#86efac", fontSize: 12, lineHeight: 1.7, paddingLeft: 8, borderLeft: "2px solid #22c55e44", marginBottom: 8 }}>{t}</p>

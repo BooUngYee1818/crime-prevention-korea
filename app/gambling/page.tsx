@@ -375,13 +375,33 @@ export default function GamblingPortalPage() {
         </div>
       )}
 
+      {/* ── 상단 고정 시뮬레이션 배지 ── */}
+      {!showWarning && (
+        <div style={{
+          position:"fixed", top:0, left:0, right:0, zIndex:9999,
+          background:"linear-gradient(90deg,#052e16,#064e3b,#052e16)",
+          borderBottom:"2px solid #22c55e",
+          padding:"6px 16px",
+          display:"flex", alignItems:"center", justifyContent:"center", gap:10,
+        }}>
+          <span style={{ fontSize:14 }}>🛡️</span>
+          <span style={{ color:"#4ade80", fontSize:12, fontWeight:800, letterSpacing:1 }}>
+            범죄예방 교육 시뮬레이션 체험관
+          </span>
+          <span style={{ color:"#22c55e44", fontSize:12 }}>|</span>
+          <span style={{ color:"#86efac", fontSize:11 }}>
+            실제 도박 사이트가 아닙니다 · 실제 돈은 사용되지 않습니다
+          </span>
+        </div>
+      )}
+
       {/* ── 당첨 토스트 ── */}
       <div style={{ position:"fixed", bottom:24, right:16, zIndex:900, width:260 }}>
         {toasts.map(t => <WinToast key={t.id} msg={t} onDone={() => setToasts(p => p.filter(x=>x.id!==t.id))} />)}
       </div>
 
       {/* ── 무지개 마키 ── */}
-      <div style={{ background:`linear-gradient(90deg,${rainbow},${rainbow2},${rainbow3},${rainbow4},${rainbow5},${rainbow6})`, padding:"7px 0", overflow:"hidden", position:"relative", zIndex:10 }}>
+      <div style={{ background:`linear-gradient(90deg,${rainbow},${rainbow2},${rainbow3},${rainbow4},${rainbow5},${rainbow6})`, padding:"7px 0", overflow:"hidden", position:"relative", zIndex:10, marginTop: showWarning ? 0 : 34 }}>
         <div style={{ display:"inline-block", whiteSpace:"nowrap", animation:"marquee 22s linear infinite", fontSize:12, fontWeight:900, color:"#000", letterSpacing:0.5 }}>
           {marquee+marquee}
         </div>
