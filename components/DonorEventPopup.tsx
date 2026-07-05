@@ -159,15 +159,13 @@ export default function DonorEventPopup() {
                 진짜 해주시게요❓
               </p>
               <p style={{ fontSize: 13, fontWeight: 600, color: "#7a6200", marginBottom: 16 }}>
-                아이 안하셔도 된다니까~<br/>
-                <span style={{ fontSize: 12, color: "#c0392b", fontWeight: 700 }}>근데 하면 제작자가 너무 행복해서 더 열심히 만들어요 ☕</span>
+                강요 아님 — 근데 진짜 행복해짐 😊
               </p>
               {qrUrl && <img src={qrUrl} alt="후원 QR" style={{ width: 160, height: 160, borderRadius: 12, margin: "0 auto 8px", display: "block" }} />}
               <p style={{ fontSize: 12, color: "#aaa", marginBottom: 6 }}>itnlifecn@gmail.com</p>
               <p style={{ fontSize: 12, color: "#e67e22", fontWeight: 700, marginBottom: 6 }}>⚠️ 10대는 부모님 허락 받아와라❗️</p>
               <p style={{ fontSize: 12, color: "#7a6200", fontWeight: 600, marginBottom: 16, lineHeight: 1.6 }}>
-                ☕ 제작자가 커피 한 잔 때리며 작업할 수 있게 해주세요 ㅠㅠㅠ<br/>
-                <span style={{ fontSize: 11, color: "#aaa" }}>밤새 혼자 만들고 있습니다... 커피값이 없어요...</span>
+                ☕ 커피 한 잔 값으로 개발자 충전시켜주기
               </p>
               <a
                 href={`mailto:itnlifecn@gmail.com?subject=${encodeURIComponent("후원 및 명예의 전당 등재 신청")}&body=${encodeURIComponent("닉네임:\n후원 방법 문의:")}`}
@@ -177,12 +175,12 @@ export default function DonorEventPopup() {
                   border: "none", borderRadius: 12, padding: "12px 28px",
                   fontWeight: 800, fontSize: 14, color: "#1a1000",
                   cursor: "pointer", marginRight: 8, textDecoration: "none",
-                }}>☕ 커피 한 잔 쏠게요!</a>
-              <button onClick={hideToday} style={{
+                }}>커피 쏠게요 ☕</a>
+              <button onClick={onClickX} style={{
                 background: "#f0f0f0", border: "none", borderRadius: 12,
                 padding: "12px 28px", fontWeight: 600, fontSize: 14,
                 color: "#888", cursor: "pointer",
-              }}>다음에요 🥲</button>
+              }}>다음에요</button>
             </div>
           ) : (
             <>
