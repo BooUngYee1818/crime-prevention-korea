@@ -4,6 +4,7 @@ import { ArrowLeft, Shield, ChevronRight, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { SCENARIO_TYPES } from "@/lib/scenarioTypes";
 
 const SCENARIO_KEYS: Record<string, {
   title: keyof ReturnType<typeof import("@/lib/i18n")["t"] extends (k: infer K, l: never) => string ? never : never>;
@@ -330,7 +331,23 @@ export default function CrimeCenterPage() {
                 <p style={{ color: "#64748b", fontSize: 13 }}>
                   {SC_SUB_MAP[scenario.id] ? t(SC_SUB_MAP[scenario.id] as Parameters<typeof t>[0], lang) : scenario.subtitle}
                 </p>
-                <p style={{ color: "#94a3b8", fontSize: 11, marginTop: 3 }}>{scenario.reveal.stats}</p>
+                {/* 유형 태그 */}
+                {SCENARIO_TYPES[scenario.id] && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                    {SCENARIO_TYPES[scenario.id].variants.map((v) => (
+                      <span key={v.label} style={{
+                        fontSize: 10, padding: "2px 7px", borderRadius: 20,
+                        background: v.isThis ? scenario.color + "18" : "#f1f5f9",
+                        color: v.isThis ? scenario.color : "#94a3b8",
+                        border: v.isThis ? `1px solid ${scenario.color}30` : "1px solid #e2e8f0",
+                        fontWeight: v.isThis ? 700 : 500,
+                      }}>
+                        {v.icon} {v.label}{v.isThis ? " ✓" : ""}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p style={{ color: "#94a3b8", fontSize: 11, marginTop: 5 }}>{scenario.reveal.stats}</p>
               </div>
               <ChevronRight size={16} color="#cbd5e1" style={{ flexShrink: 0 }} />
             </button>

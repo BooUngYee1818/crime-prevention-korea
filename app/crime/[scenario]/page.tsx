@@ -6,8 +6,11 @@ import { CRIME_SCENARIOS } from "@/lib/crimes";
 import Certificate from "@/components/Certificate";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { SCENARIO_TIPS } from "@/lib/scenarioTips";
+import { SCENARIO_TYPES } from "@/lib/scenarioTypes";
 
 type Phase =
+  | "type-intro"
   | "ringing"
   | "bank-main"
   | "transfer-form"
@@ -1064,10 +1067,13 @@ export default function ScenarioPage() {
   const { lang } = useLang();
 
   const chatCfg = CHAT_CONFIG[scenario as string] ?? { type: "kakao" as ChatType, headerTitle: "오카카톡", sender: "알 수 없음" };
-  const [phase, setPhase] = useState<Phase>(
+  const realFirstPhase: Phase =
     CALL_SCENARIOS.has(scenario as string) ? "ringing"
     : LINK_SCENARIOS.has(scenario as string) ? "link-sms"
-    : "chat"
+    : "chat";
+
+  const [phase, setPhase] = useState<Phase>(
+    SCENARIO_TYPES[scenario as string] ? "type-intro" : realFirstPhase
   );
   const [asset, setAsset] = useState(15000000);
   const [displayAsset, setDisplayAsset] = useState(15000000);
@@ -1093,6 +1099,9 @@ export default function ScenarioPage() {
   // 위험 행동 감지 누적
   const [dangerCount, setDangerCount] = useState(0);
   const [dangerReasons, setDangerReasons] = useState<string[]>([]);
+  const [tipMode, setTipMode] = useState(false);
+  const [activeTip, setActiveTip] = useState<{ tip: string; counter: string[] } | null>(null);
+  const shownTips = useRef<Set<string>>(new Set());
   const [numbersSaved, setNumbersSaved] = useState(false);
   const [chatOutcome, setChatOutcome] = useState<"none" | "refused" | "sent">("none");
   const [intensity, setIntensity] = useState<1|2|3>(() => {
@@ -1268,6 +1277,19 @@ export default function ScenarioPage() {
       const d = await res.json();
       if (d.reply || d.error) {
         setMessages((prev) => [...prev, { role: "criminal", content: d.reply || "..." }]);
+        // 팁 모드 — AI 응답에서 트리거 키워드 감지
+        if (tipMode && d.reply) {
+          const tips = SCENARIO_TIPS[scenario as string] ?? [];
+          for (const t of tips) {
+            if (shownTips.current.has(t.tip)) continue;
+            if (t.trigger.some(kw => d.reply.includes(kw))) {
+              shownTips.current.add(t.tip);
+              setActiveTip({ tip: t.tip, counter: t.counter });
+              setTimeout(() => setActiveTip(null), 8000);
+              break;
+            }
+          }
+        }
         if (detectCriminalDanger(d.reply)) {
           recordDanger("사기범이 현금 전달·ATM 인출 지시");
           setTimeout(() => setBlock({ type: "criminal-location", criminalText: d.reply }), 800);
@@ -1534,6 +1556,102 @@ export default function ScenarioPage() {
                 lang={lang}
               />
             )}
+
+      {/* ══ 유형 인트로 ══ */}
+      {phase === "type-intro" && (() => {
+        const typeInfo = SCENARIO_TYPES[scenario as string];
+        if (!typeInfo) return null;
+        return (
+          <div style={{
+            flex: 1, overflowY: "auto", background: "#0d0d1e",
+            display: "flex", flexDirection: "column",
+          }}>
+            <style>{`
+              @keyframes typeSlide { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+            `}</style>
+
+            {/* 상단 헤더 */}
+            <div style={{
+              background: "linear-gradient(135deg,#1a0d2e,#2d1060)",
+              padding: "28px 20px 20px",
+              borderBottom: "1px solid #ffffff10",
+            }}>
+              <p style={{ color: "#a78bfa", fontSize: 10, fontWeight: 700, letterSpacing: 3, marginBottom: 8, textTransform: "uppercase" }}>
+                📚 수법 분석
+              </p>
+              <p style={{ color: "#fff", fontWeight: 900, fontSize: 17, lineHeight: 1.4, marginBottom: 8 }}>
+                {data.title}
+              </p>
+              <p style={{ color: "#c4b5fd", fontSize: 12, lineHeight: 1.6 }}>
+                {typeInfo.summary}
+              </p>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                marginTop: 10, background: "#ef444420", border: "1px solid #ef444440",
+                borderRadius: 20, padding: "4px 12px",
+              }}>
+                <span style={{ fontSize: 10, color: "#fca5a5", fontWeight: 700 }}>⚔️ 심리 무기</span>
+                <span style={{ fontSize: 11, color: "#fef2f2", fontWeight: 800 }}>{typeInfo.psychWeapon}</span>
+              </div>
+            </div>
+
+            {/* 유형 목록 */}
+            <div style={{ padding: "16px 16px 0", flex: 1 }}>
+              <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 12, textTransform: "uppercase" }}>
+                이 사기에서 흔히 나타나는 유형
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {typeInfo.variants.map((v, i) => (
+                  <div key={i} style={{
+                    background: v.isThis ? "linear-gradient(135deg,#1a0d2e,#2d1060)" : "#111827",
+                    border: v.isThis ? "1.5px solid #7c3aed" : "1px solid #1f2937",
+                    borderRadius: 14, padding: "14px 16px",
+                    animation: `typeSlide 0.4s ease ${i * 0.1}s both`,
+                    position: "relative",
+                  }}>
+                    {v.isThis && (
+                      <span style={{
+                        position: "absolute", top: 10, right: 12,
+                        background: "#7c3aed", color: "#fff",
+                        fontSize: 9, fontWeight: 800, padding: "2px 8px", borderRadius: 20,
+                      }}>오늘 체험</span>
+                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                      <span style={{ fontSize: 20 }}>{v.icon}</span>
+                      <span style={{
+                        fontWeight: 800, fontSize: 13,
+                        color: v.isThis ? "#c4b5fd" : "#9ca3af",
+                      }}>{v.label}</span>
+                    </div>
+                    <p style={{ color: v.isThis ? "#e9d5ff" : "#6b7280", fontSize: 12, lineHeight: 1.6 }}>
+                      {v.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 시작 버튼 */}
+            <div style={{ padding: "20px 16px 28px" }}>
+              <p style={{ color: "#4b5563", fontSize: 11, textAlign: "center", marginBottom: 12, lineHeight: 1.6 }}>
+                실제 피해자들이 가장 많이 경험한 유형을 체험합니다
+              </p>
+              <button
+                onClick={() => setPhase(realFirstPhase)}
+                style={{
+                  width: "100%", padding: "16px 0",
+                  background: "linear-gradient(135deg,#7c3aed,#9161b2)",
+                  border: "none", borderRadius: 16,
+                  color: "#fff", fontWeight: 900, fontSize: 15,
+                  cursor: "pointer", boxShadow: "0 4px 20px #7c3aed40",
+                }}
+              >
+                🎮 시뮬레이션 시작
+              </button>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ══ 전화 수신 ══ */}
       {phase === "ringing" && (
@@ -1973,6 +2091,24 @@ export default function ScenarioPage() {
                 }}>{chatCfg.senderSub}</p>
               )}
             </div>
+            {/* 팁 모드 토글 */}
+            <button
+              onClick={() => { setTipMode(v => !v); shownTips.current = new Set(); setActiveTip(null); }}
+              title={tipMode ? "팁 모드 끄기" : "팁 모드 켜기"}
+              style={{
+                display: "flex", alignItems: "center", gap: 5,
+                padding: "6px 12px", borderRadius: 20,
+                border: tipMode ? "1.5px solid #f97316" : "1.5px solid #d1d5db",
+                background: tipMode ? "#fff7ed" : "rgba(255,255,255,0.7)",
+                color: tipMode ? "#ea580c" : "#6b7280",
+                fontSize: 12, fontWeight: 700, cursor: "pointer",
+                boxShadow: tipMode ? "0 2px 8px rgba(249,115,22,0.2)" : "none",
+                transition: "all 0.2s ease",
+                flexShrink: 0,
+              }}
+            >
+              💡 {tipMode ? "팁 ON" : "팁 OFF"}
+            </button>
           </div>
 
           {/* 교육용 상단 배너 */}
@@ -2047,6 +2183,43 @@ export default function ScenarioPage() {
             )}
             <div ref={bottomRef} />
           </div>
+
+          {/* 팁 카드 — 슬라이드업 */}
+          {activeTip && (
+            <div style={{
+              margin: "0 12px 6px", flexShrink: 0,
+              background: "linear-gradient(135deg,#fff7ed,#ffedd5)",
+              border: "1.5px solid #fed7aa",
+              borderRadius: 18, padding: "14px 16px",
+              boxShadow: "0 4px 20px rgba(249,115,22,0.18)",
+              animation: "tipSlide 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+              position: "relative",
+            }}>
+              <style>{`@keyframes tipSlide { from{transform:translateY(24px);opacity:0} to{transform:translateY(0);opacity:1} }`}</style>
+              <button
+                onClick={() => setActiveTip(null)}
+                style={{
+                  position: "absolute", top: 10, right: 12,
+                  background: "none", border: "none", cursor: "pointer",
+                  fontSize: 14, color: "#9ca3af", lineHeight: 1,
+                }}
+              >✕</button>
+              <p style={{ fontWeight: 800, fontSize: 13, color: "#c2410c", marginBottom: 8, paddingRight: 24, lineHeight: 1.4 }}>
+                {activeTip.tip}
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {activeTip.counter.map((c, i) => (
+                  <div key={i} style={{
+                    background: "#fff", border: "1px solid #fed7aa",
+                    borderRadius: 10, padding: "7px 12px",
+                    fontSize: 12, color: "#374151", fontWeight: 600,
+                  }}>
+                    👉 {c}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {pendingSend && phase === "chat" && (
             <div style={{ margin: "0 12px 10px", background: "#fff", border: "1.5px solid #fed7aa", borderRadius: 18, padding: 14, flexShrink: 0, boxShadow: "0 2px 12px rgba(249,115,22,0.1)" }}>
