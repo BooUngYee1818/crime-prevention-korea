@@ -193,10 +193,20 @@ function EmergencyBlock({ block, onClose, onReveal, lang }: {
           </p>
           <div style={{
             background: "#1a0000", border: "1px solid #ef444466", borderRadius: 16,
-            padding: "14px 18px", marginBottom: 20, width: "100%",
+            padding: "14px 18px", marginBottom: 12, width: "100%",
           }}>
             <p style={{ color: "#fca5a5", fontSize: 14, lineHeight: 1.7, textAlign: "center", whiteSpace: "pre-line" }}>
               {t("em_leave_body", lang)}
+            </p>
+          </div>
+          <div style={{
+            background: "#1a1000", border: "1px solid #f59e0b66", borderRadius: 16,
+            padding: "12px 16px", marginBottom: 20, width: "100%",
+          }}>
+            <p style={{ color: "#fcd34d", fontSize: 12, lineHeight: 1.7, textAlign: "center" }}>
+              ⚠️ 시뮬레이션에 표시되는 계좌번호는 <strong style={{ color: "#fff" }}>실제와 무관한 임의 번호</strong>입니다.<br />
+              제작자의 후원 계좌도 아니며, 해당 번호로 송금 시 <strong style={{ color: "#ef4444" }}>회수가 불가능</strong>합니다.<br />
+              절대 실제로 송금하지 마세요.
             </p>
           </div>
         </>
