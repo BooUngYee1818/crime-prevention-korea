@@ -6,6 +6,7 @@ import { t } from "@/lib/i18n";
 export default function ReviewPopup() {
   const { lang } = useLang();
   const [visible, setVisible] = useState(false);
+  const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const stored = localStorage.getItem("review_popup_hidden_v2");
@@ -17,6 +18,12 @@ export default function ReviewPopup() {
   function hideToday() {
     localStorage.setItem("review_popup_hidden_v2", String(Date.now() + 24 * 60 * 60 * 1000));
     setVisible(false);
+  }
+
+  function dodgeBtn() {
+    const rx = (Math.random() - 0.5) * 200;
+    const ry = (Math.random() - 0.5) * 60;
+    setBtnPos({ x: rx, y: ry });
   }
 
   if (!visible) return null;
@@ -36,12 +43,24 @@ export default function ReviewPopup() {
       <div onClick={e => e.stopPropagation()} style={{
         background: "#0d0d1e", border: "1px solid #534AB730",
         borderRadius: 24, maxWidth: 420, width: "calc(100% - 32px)",
-        overflow: "hidden", animation: "reviewSlide 0.45s cubic-bezier(0.34,1.56,0.64,1)",
+        overflow: "visible", animation: "reviewSlide 0.45s cubic-bezier(0.34,1.56,0.64,1)",
         boxShadow: "0 -8px 60px rgba(83,74,183,0.25), 0 20px 80px rgba(0,0,0,0.5)",
+        position: "relative",
       }}>
+        {/* X 닫기 버튼 */}
+        <button onClick={hideToday} style={{
+          position: "absolute", top: 12, right: 12, zIndex: 10,
+          width: 32, height: 32, borderRadius: "50%",
+          background: "rgba(255,255,255,0.15)", border: "none",
+          fontSize: 16, color: "#fff", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontWeight: 900,
+        }}>✕</button>
+
         <div style={{
           background: "linear-gradient(135deg,#534AB7,#7c3aed)",
           padding: "22px 24px 18px", position: "relative", overflow: "hidden",
+          borderRadius: "24px 24px 0 0",
         }}>
           <div style={{
             position: "absolute", top: -20, right: -20,
@@ -99,13 +118,24 @@ export default function ReviewPopup() {
             </button>
           </div>
 
-          <button onClick={hideToday} style={{
-            display: "block", width: "100%", marginTop: 12,
-            background: "none", border: "none", fontSize: 11, color: "#374151",
-            cursor: "pointer", textDecoration: "underline",
-          }}>
-            {t("review_hide", lang)}
-          </button>
+          {/* 도망가는 버튼 */}
+          <div style={{ position: "relative", height: 36, marginTop: 12, overflow: "visible" }}>
+            <button
+              onMouseEnter={dodgeBtn}
+              onTouchStart={dodgeBtn}
+              style={{
+                position: "absolute",
+                left: `calc(50% + ${btnPos.x}px)`,
+                top: `${btnPos.y}px`,
+                transform: "translateX(-50%)",
+                transition: "left 0.15s ease, top 0.15s ease",
+                background: "none", border: "none", fontSize: 11, color: "#374151",
+                cursor: "pointer", textDecoration: "underline", whiteSpace: "nowrap",
+              }}
+            >
+              {t("review_hide", lang)}
+            </button>
+          </div>
         </div>
       </div>
     </div>
