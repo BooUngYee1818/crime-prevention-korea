@@ -5,6 +5,7 @@ import { Shield, Phone, ChevronRight, BookOpen, Users, AlertCircle, ExternalLink
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { getChangelogs } from "@/lib/changelogs";
 import HallOfFame from "@/components/HallOfFame";
 
 // ══ FAQ 컴포넌트 ══
@@ -458,30 +459,7 @@ export default function HomePage() {
     return () => observer.disconnect();
   }, [statsCounted]);
 
-  const CHANGELOGS = [
-    { version: "v1.10", badge: "최신", badgeColor: "#f97316", items: ["💡 팁 공개모드 추가 — 채팅 중 사기 수법 실시간 팁 카드 슬라이드업 (시나리오별 트리거 키워드 기반)", "📚 수법 유형 분석 인트로 — 시뮬레이션 시작 전 '오늘 체험할 유형 vs 다른 유형' 비교 화면 추가", "🏷️ 시나리오 카드 유형 태그 — 각 카드에 수법 유형 태그 표시 (체험 유형 강조)", "🎭 후원 팝업 개선 — 마우스 따라오는 후원 버튼, X 버튼 누르면 죄책감 멘트, QR 단계 추가", "📝 후기 팝업 개선 — '오늘 하루 보지 않기' 버튼 도망, X 버튼 시 필수 후기 요청 멘트", "🏦 은행 앱 UI 개선 — 실제 휴대폰 크기 프레임으로 래핑, 가짜 계좌 안내 추가", "🎵 BGM 경로 수정 — /crime 페이지에서 시뮬레이션 음악 정상 재생", "🔤 브랜드명 픽션화 — KB→BK타스뱅크 등 법적 보호를 위한 가상 브랜드명 적용"] },
-    { version: "v1.9.3", badgeColor: "#f97316", items: ["🎨 전체 컬러 주황(#f97316)으로 변경 — 기존 인디고·퍼플 계열 전면 교체", "🌑 다크 배경 어두운 보라(#0d0820)로 통일", "🧒 어린이 쉬운 설명 추가 — 8개 범죄 시나리오 결과 화면에 어린이·초보자용 설명 카드", "⌨️ 엔터 전송 — 방명록 Ctrl+Enter로 전송 가능", "🎵 BGM 개선 — '체험 선택'으로 이동 시 음악 즉시 전환", "🚫 네비게이션 중복 버튼 제거 — 상단 보라색 체험시작 버튼 삭제", "🛡️ 도박 페이지 상단 고정 시뮬레이션 배지 추가", "🏛️ 기관도입 페이지 전면 개편 — 피해 통계·공문 안내·제안서 요청·법적 근거 추가", "🤖 AI 영상 교육 콘텐츠 추가 — 탐정 게임 전 AI 발전 비교·워터마크·탐지법 학습 섹션", "🃏 시나리오 목록 제목 오류 수정 — 미매핑 시나리오가 '불법 도박'으로 표시되던 버그 수정"] },
-    { version: "v1.9.2", badgeColor: "#ef4444", items: ["⚠️ 무기 거래 중 사고 시나리오 추가 — 강탈·운반 연루·경찰 급습 3종 체험"] },
-    { version: "v1.9.1", badgeColor: "#ef4444", items: ["💊 텔레그램 마약 거래 시나리오 추가 — 채널 구독부터 딜러 DM 체험", "🔫 불법 총기 거래 시나리오 추가 — 다크마켓 목록 조회 및 거래 체험", "😱 총기 구매 사기 대처법 추가 — 이중 피해 상황에서 선택지 탐색"] },
-    { version: "v1.9", badgeColor: "#22c55e", items: ["🛡️ 공공장소 안전 설계 — 경찰·타인이 봐도 교육 앱임을 즉시 인식할 수 있는 UI 구성", "🎓 모든 범죄 시뮬레이션 페이지에 교육용 배너·대각선 워터마크·우하단 뱃지 상시 표시", "📵 신고 번호 전화 자동연결 전면 제거 → 번호 복사 버튼으로 교체 (공공장소 오작동 방지)", "ℹ️ 앱 정보 모달 추가 — 교육 목적·비실제 거래·법적 문제 없음 명시", "🎵 카지노 피아노 BGM 추가 — 도박 페이지 전용 배경음악", "🔊 도박 효과음 추가 — 슬롯 스핀·릴 정지·코인 드롭·잭팟 사운드", "💼 취업 사기 시나리오 추가 — 재택알바 보증금 사기", "💊 마약 SNS 유인 시나리오 추가 — 다이어트약·힐링템 위장", "🏛️ 금융감독원 사칭 시나리오 추가 — 보이스피싱 전화 체험", "🔮 미래형 범죄 3종 추가 — 스마트홈 랜섬웨어·AI 유전자 분석 사기·메타버스 가상부동산 사기", "❓ FAQ 섹션 신설 — 11가지 자주 묻는 질문", "📊 통계·명예의전당 버튼 메인 페이지 전용으로 변경", "🎨 업데이트 내역 버튼 호버 시에만 확장되도록 수정"] },
-    { version: "v1.8", badgeColor: "#f472b6", items: ["🎨 전화 통화 화면 전면 리디자인 — 삼성 One UI 8.5 / iOS 26 Liquid Glass 스타일 적용", "🔇 발신자 번호 '발신자표시제한'으로 변경 (실제 보이스피싱 수법 반영)", "🎙️ AI 목소리 업그레이드 — ElevenLabs 딥보이스 TTS 적용 (기존 로봇음 → 실제 사람 목소리)", "📌 방명록 추천 후기 고정 표시", "✍️ 방명록 1인 1회 작성 제한"] },
-    { version: "v1.7", badgeColor: "#c58dc6", items: ["🏛️ 과거 범죄 아카이브 — 시대별 배경 추가", "⚖️ 어린이 법률 안내 추가", "🥕 피망마켓 사기 체험 개선", "📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션", "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도", "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크", "✨ 기관 판매 배너 홀로그램 은박 효과"] },
-    { version: "v1.6", badgeColor: "#22c55e", items: ["🕵️ 사기 판별 퀴즈 추가", "🥕 중고거래 사기 체험 — 피망마켓 UI", "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일"] },
-    { version: "v1.5.2", badgeColor: "#22c55e", items: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"] },
-    { version: "v1.5.1", badgeColor: "#22c55e", items: ["💡 도박 페이지 전면 네온 사인 UI 적용", "👁️ 모바일 글씨 투명화 버그 전면 수정"] },
-    { version: "v1.5", badgeColor: "#f59e0b", items: ["📱 문자 사기 체험 (스미싱) — 택배·건강보험·카드 3종", "🎰 불법 도박 신규 게임 3종 (홀짝·파워볼·슬롯머신)", "💳 충전 시 카드 자동입력 애니메이션"] },
-    { version: "v1.4.2", badgeColor: "#f59e0b", items: ["🎢 도박 긴장감 강화 — 연패/연승 심리 확률 조작", "🪜 사다리 게임 경로 오류 수정"] },
-    { version: "v1.4.1", badgeColor: "#f59e0b", items: ["👆 모바일 버튼 터치 시 글씨 사라짐 현상 수정", "💰 충전 전 자동입력 사전 안내 문구 추가"] },
-    { version: "v1.4", badgeColor: "#f59e0b", items: ["🍼 감성 동정 사기 시나리오 추가 (베이비 피싱)", "🏠 전세·부동산 사기 시나리오 추가", "🤖 AI 딥페이크 협박 사기 시나리오 추가"] },
-    { version: "v1.3.1", badgeColor: "#4ade80", items: ["⚙️ 자극 강도 설정 추가 (순화/보통/실전)", "🏆 거절 3회 시 축하 메시지 + 결과 화면 분기", "📋 업데이트 내역 섹션 신설"] },
-    { version: "v1.3", badgeColor: "#4ade80", items: ["📞 전화 사기 체험 — 삼성·아이폰 통화 UI + AI 목소리 (TTS)", "🔗 링크·다운로드 사기 시나리오 추가", "💬 AI 대화 자연스러움 개선"] },
-    { version: "v1.2.1", badgeColor: "#c58dc6", items: ["📊 이용 통계 실시간 표시", "👑 명예의 전당 기능 추가", "🐛 다국어 번역 누락 항목 수정"] },
-    { version: "v1.2", badgeColor: "#c58dc6", items: ["🎰 불법도박 체험 시나리오 추가", "🌏 10개 언어 다국어 지원"] },
-    { version: "v1.1.1", badgeColor: "#c58dc6", items: ["📱 모바일 최적화 (터치 영역·레이아웃 개선)", "🐛 일부 시나리오 AI 응답 오류 수정"] },
-    { version: "v1.1", badgeColor: "#c58dc6", items: ["💸 가짜 송금 애니메이션 추가", "🏦 피해 결과 화면 개선", "🏦 은행 앱 UI 추가"] },
-    { version: "v1.0.1", badgeColor: "#6b7280", items: ["🐛 초기 배포 후 긴급 버그 수정", "⚡ 로딩 속도 개선"] },
-    { version: "v1.0", badgeColor: "#6b7280", items: ["🚀 서비스 최초 출시", "📋 8가지 기본 사기 시나리오", "🤖 AI 기반 범인 대화 엔진"] },
-  ];
+  const CHANGELOGS = getChangelogs(lang);
 
   const startChangelogScroll = () => {
     setShowChangelog(true);
@@ -891,7 +869,7 @@ export default function HomePage() {
               cursor: "pointer", transition: "all 0.15s",
               animation: changelogBounce ? "cl-bounce 0.9s cubic-bezier(0.36,0.07,0.19,0.97)" : "none",
             }}>
-              <span style={{ fontSize: 11 }}>📋</span> 업데이트 내역
+              <span style={{ fontSize: 11 }}>📋</span> {t("nav_changelog", lang)}
             </button>
             <style>{`
               @keyframes cl-bounce {
@@ -926,7 +904,7 @@ export default function HomePage() {
               }}>
                 <span style={{ fontSize: 18 }}>📋</span>
                 <div>
-                  <p style={{ color: "#e9d5ff", fontSize: 15, fontWeight: 800, letterSpacing: 1, margin: 0 }}>업데이트 내역</p>
+                  <p style={{ color: "#e9d5ff", fontSize: 15, fontWeight: 800, letterSpacing: 1, margin: 0 }}>{t("nav_changelog", lang)}</p>
                   <p style={{ color: "#9333ea80", fontSize: 11, margin: "2px 0 0", fontWeight: 600 }}>CHANGELOG</p>
                 </div>
                 <div style={{
@@ -947,7 +925,7 @@ export default function HomePage() {
                   ref={changelogScrollRef}
                   style={{ maxHeight: 380, overflowY: "scroll", padding: "14px 20px 70px", scrollbarWidth: "none" }}
                 >
-                  {[...CHANGELOGS].reverse().map((log, i) => (
+                  {CHANGELOGS.map((log, i) => (
                     <div key={i} style={{ display: "flex", gap: 14, paddingBottom: 18, alignItems: "flex-start" }}>
                       <div style={{
                         flexShrink: 0, minWidth: 64,
@@ -1171,7 +1149,7 @@ export default function HomePage() {
           <div style={{ marginTop: 56 }}>
             <div style={{ textAlign: "center", marginBottom: 28 }}>
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>UPDATE CLIPS</p>
-              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>🎬 업데이트 영상</h2>
+              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>{t("section_update_video", lang)}</h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
               {[
@@ -1202,7 +1180,7 @@ export default function HomePage() {
           <div ref={changelogSectionRef} style={{ marginTop: 56 }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>CHANGELOG</p>
-              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>📋 업데이트 내역</h2>
+              <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>{t("section_changelog", lang)}</h2>
             </div>
             <style>{`
               @keyframes cl-bounce {
@@ -1219,7 +1197,7 @@ export default function HomePage() {
                 transition: "max-height 0.75s cubic-bezier(0.4,0,0.2,1)",
               }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                  {[...CHANGELOGS].reverse().map((log, i) => {
+                  {CHANGELOGS.map((log, i) => {
                     // v1.7 항목은 펼치기 전엔 2개만 표시
                     const isV17 = log.version === "v1.7";
                     const items = (!changelogExpand && isV17) ? log.items.slice(0, 2) : log.items;
@@ -1288,7 +1266,7 @@ export default function HomePage() {
                     position: "relative", zIndex: 2,
                   }}
                 >
-                  📋 전체 업데이트 내역 보기 &nbsp;↑
+                  {t("changelog_view_all", lang)}
                 </button>
               </div>
             </div>

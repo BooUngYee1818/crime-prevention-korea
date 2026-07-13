@@ -1,0 +1,609 @@
+import type { LangCode } from "./i18n";
+
+export interface ChangelogEntry {
+  version: string;
+  badge?: string;
+  badgeColor: string;
+  items: Record<string, string[]>;
+}
+
+function pick(items: Record<string, string[]>, lang: LangCode): string[] {
+  return items[lang] ?? items["en"] ?? items["ko"] ?? [];
+}
+
+const RAW: ChangelogEntry[] = [
+  {
+    version: "v1.10", badge: "최신", badgeColor: "#f97316",
+    items: {
+      ko: [
+        "💡 팁 공개모드 추가 — 채팅 중 사기 수법 실시간 팁 카드 슬라이드업 (시나리오별 트리거 키워드 기반)",
+        "📚 수법 유형 분석 인트로 — 시뮬레이션 시작 전 '오늘 체험할 유형 vs 다른 유형' 비교 화면 추가",
+        "🏷️ 시나리오 카드 유형 태그 — 각 카드에 수법 유형 태그 표시 (체험 유형 강조)",
+        "🎭 후원 팝업 개선 — 마우스 따라오는 후원 버튼, X 버튼 누르면 죄책감 멘트, QR 단계 추가",
+        "📝 후기 팝업 개선 — '오늘 하루 보지 않기' 버튼 도망, X 버튼 시 필수 후기 요청 멘트",
+        "🏦 은행 앱 UI 개선 — 실제 휴대폰 크기 프레임으로 래핑, 가짜 계좌 안내 추가",
+        "🎵 BGM 경로 수정 — /crime 페이지에서 시뮬레이션 음악 정상 재생",
+        "🔤 브랜드명 픽션화 — KB→BK타스뱅크 등 법적 보호를 위한 가상 브랜드명 적용",
+      ],
+      en: [
+        "💡 Tip Mode Added — Real-time tip cards slide up during chat based on scenario trigger keywords",
+        "📚 Scam Type Intro Screen — Before simulation, shows 'today's type vs other types' comparison",
+        "🏷️ Scenario Card Type Tags — Scam type tags shown on each card (current type highlighted)",
+        "🎭 Donation Popup Improved — Mouse-following button, guilt message on X click, QR step added",
+        "📝 Review Popup Improved — 'Hide today' button dodges cursor, mandatory review prompt on X",
+        "🏦 Bank App UI — Wrapped in phone-sized frame, fake account disclaimer added",
+        "🎵 BGM Path Fixed — Simulation music now plays correctly on /crime page",
+        "🔤 Brand Names Fictionalized — Legal protection via fictional brand names (e.g. KB→BK Bank)",
+      ],
+      zh: [
+        "💡 新增提示模式 — 聊天中根据触发关键词实时弹出诈骗手法提示卡",
+        "📚 手法类型分析介绍页 — 模拟开始前显示「今日体验类型 vs 其他类型」对比界面",
+        "🏷️ 场景卡片类型标签 — 每张卡片显示诈骗手法类型标签（当前体验类型高亮）",
+        "🎭 捐赠弹窗改进 — 鼠标跟随按钮、点击X时显示内疚提示、新增二维码步骤",
+        "📝 评价弹窗改进 — 「今日不再显示」按钮会逃跑、点击X时显示必填评价提示",
+        "🏦 银行应用UI改进 — 以手机尺寸框架包裹、新增虚假账户说明",
+        "🎵 BGM路径修复 — /crime页面模拟音乐现已正常播放",
+        "🔤 品牌名称虚构化 — 为法律保护使用虚构品牌名（如KB→BK银行）",
+      ],
+      ja: [
+        "💡 ヒントモード追加 — チャット中にシナリオのトリガーキーワードに基づくヒントカードが表示",
+        "📚 手口タイプ分析イントロ — シミュレーション開始前に「今日の体験タイプ vs 他のタイプ」比較画面",
+        "🏷️ シナリオカードタイプタグ — 各カードに手口タイプタグ表示（体験タイプ強調）",
+        "🎭 後援ポップアップ改善 — マウス追跡ボタン、×クリック時に罪悪感メッセージ、QRステップ追加",
+        "📝 レビューポップアップ改善 — 「今日は表示しない」ボタンが逃げる、×ボタンで必須レビュー促進",
+        "🏦 銀行アプリUI改善 — 実際の携帯サイズフレームでラッピング、偽口座案内追加",
+        "🎵 BGMパス修正 — /crimeページでシミュレーション音楽が正常再生",
+        "🔤 ブランド名フィクション化 — 法的保護のため仮想ブランド名を適用（KB→BKバンク等）",
+      ],
+      vi: [
+        "💡 Thêm Chế Độ Gợi Ý — Thẻ gợi ý trượt lên trong chat dựa trên từ khóa kích hoạt theo kịch bản",
+        "📚 Màn Hình Giới Thiệu Loại Lừa Đảo — Trước khi mô phỏng, hiện màn hình so sánh 'loại hôm nay vs các loại khác'",
+        "🏷️ Thẻ Loại Kịch Bản — Hiển thị thẻ loại lừa đảo trên mỗi thẻ (loại đang trải nghiệm được làm nổi bật)",
+        "🎭 Cải Thiện Popup Quyên Góp — Nút theo dõi chuột, thông báo cảm giác tội lỗi khi nhấn X, thêm bước QR",
+        "📝 Cải Thiện Popup Đánh Giá — Nút 'Ẩn hôm nay' chạy tránh, nhắc đánh giá bắt buộc khi nhấn X",
+        "🏦 Cải Thiện UI App Ngân Hàng — Bọc trong khung kích thước điện thoại, thêm thông báo tài khoản giả",
+        "🎵 Sửa Đường Dẫn BGM — Nhạc mô phỏng phát đúng trên trang /crime",
+        "🔤 Hư Cấu Hóa Tên Thương Hiệu — Tên thương hiệu hư cấu cho bảo vệ pháp lý (KB→BK Bank)",
+      ],
+    },
+  },
+  {
+    version: "v1.9.3", badgeColor: "#f97316",
+    items: {
+      ko: [
+        "🎨 전체 컬러 주황(#f97316)으로 변경 — 기존 인디고·퍼플 계열 전면 교체",
+        "🌑 다크 배경 어두운 보라(#0d0820)로 통일",
+        "🧒 어린이 쉬운 설명 추가 — 8개 범죄 시나리오 결과 화면에 어린이·초보자용 설명 카드",
+        "⌨️ 엔터 전송 — 방명록 Ctrl+Enter로 전송 가능",
+        "🎵 BGM 개선 — '체험 선택'으로 이동 시 음악 즉시 전환",
+        "🚫 네비게이션 중복 버튼 제거 — 상단 보라색 체험시작 버튼 삭제",
+        "🛡️ 도박 페이지 상단 고정 시뮬레이션 배지 추가",
+        "🏛️ 기관도입 페이지 전면 개편 — 피해 통계·공문 안내·제안서 요청·법적 근거 추가",
+        "🤖 AI 영상 교육 콘텐츠 추가 — 탐정 게임 전 AI 발전 비교·워터마크·탐지법 학습 섹션",
+        "🃏 시나리오 목록 제목 오류 수정 — 미매핑 시나리오가 '불법 도박'으로 표시되던 버그 수정",
+      ],
+      en: [
+        "🎨 Full color change to orange (#f97316) — replaced indigo/purple scheme entirely",
+        "🌑 Dark background unified to dark purple (#0d0820)",
+        "🧒 Children's easy explanations added — explanation cards for kids & beginners on 8 scenario result screens",
+        "⌨️ Enter to send — guestbook now supports Ctrl+Enter to submit",
+        "🎵 BGM improved — music switches immediately when navigating to 'Choose Experience'",
+        "🚫 Duplicate nav button removed — purple 'Start Experience' button in header deleted",
+        "🛡️ Sticky simulation badge added to gambling page header",
+        "🏛️ Partnership page revamped — added damage stats, official letter guide, proposal request, legal basis",
+        "🤖 AI video education content added — AI evolution comparison, watermark & detection method section before detective game",
+        "🃏 Scenario list title bug fixed — unmapped scenarios were incorrectly showing as 'Illegal Gambling'",
+      ],
+      zh: [
+        "🎨 全站颜色改为橙色(#f97316) — 全面替换原有靛蓝·紫色配色",
+        "🌑 深色背景统一为深紫色(#0d0820)",
+        "🧒 新增儿童简易说明 — 8个犯罪场景结果页面添加儿童·初学者说明卡",
+        "⌨️ 回车发送 — 留言板支持Ctrl+Enter提交",
+        "🎵 BGM改进 — 进入「体验选择」页面时音乐立即切换",
+        "🚫 移除重复导航按钮 — 删除顶部紫色「开始体验」按钮",
+        "🛡️ 赌博页面顶部新增固定模拟徽章",
+        "🏛️ 机构合作页面全面改版 — 新增损害统计·公函指南·提案申请·法律依据",
+        "🤖 新增AI视频教育内容 — 侦探游戏前的AI发展对比·水印·检测方法学习区块",
+        "🃏 修复场景列表标题错误 — 未映射场景显示为「非法赌博」的BUG已修复",
+      ],
+      ja: [
+        "🎨 全体カラーをオレンジ(#f97316)に変更 — インディゴ・パープル系を完全置き換え",
+        "🌑 ダーク背景を暗いパープル(#0d0820)に統一",
+        "🧒 子ども向け簡単説明追加 — 8つの犯罪シナリオ結果画面に子ども・初心者向け説明カード",
+        "⌨️ Enterで送信 — ゲストブックでCtrl+Enter送信が可能に",
+        "🎵 BGM改善 — 「体験選択」に移動時に音楽が即時切替",
+        "🚫 ナビの重複ボタン削除 — 上部パープルの体験開始ボタンを削除",
+        "🛡️ ギャンブルページ上部に固定シミュレーションバッジを追加",
+        "🏛️ 機関導入ページを全面改訂 — 被害統計・公文案内・提案書依頼・法的根拠を追加",
+        "🤖 AI動画教育コンテンツ追加 — 探偵ゲーム前のAI進化比較・透かし・検出法の学習セクション",
+        "🃏 シナリオリストのタイトルバグ修正 — 未マッピングのシナリオが「違法ギャンブル」と表示されていたバグを修正",
+      ],
+      vi: [
+        "🎨 Đổi màu toàn bộ sang cam (#f97316) — thay thế hoàn toàn màu chàm/tím",
+        "🌑 Nền tối thống nhất sang tím đậm (#0d0820)",
+        "🧒 Thêm giải thích dễ hiểu cho trẻ em — thẻ giải thích cho trẻ & người mới trên 8 màn hình kết quả",
+        "⌨️ Gửi bằng Enter — guestbook hỗ trợ Ctrl+Enter để gửi",
+        "🎵 BGM cải thiện — nhạc chuyển đổi ngay khi điều hướng đến 'Chọn Trải Nghiệm'",
+        "🚫 Xóa nút nav trùng lặp — xóa nút 'Bắt đầu trải nghiệm' màu tím ở header",
+        "🛡️ Thêm huy hiệu mô phỏng cố định trên trang cờ bạc",
+        "🏛️ Trang hợp tác được cải tổ toàn diện — thêm thống kê thiệt hại, hướng dẫn công văn, yêu cầu đề xuất, cơ sở pháp lý",
+        "🤖 Thêm nội dung giáo dục video AI — phần so sánh phát triển AI, watermark & phương pháp phát hiện trước trò chơi thám tử",
+        "🃏 Sửa lỗi tiêu đề danh sách kịch bản — các kịch bản chưa ánh xạ hiển thị sai là 'Cờ bạc bất hợp pháp'",
+      ],
+    },
+  },
+  {
+    version: "v1.9.2", badgeColor: "#ef4444",
+    items: {
+      ko: ["⚠️ 무기 거래 중 사고 시나리오 추가 — 강탈·운반 연루·경찰 급습 3종 체험"],
+      en: ["⚠️ Weapon deal accident scenarios added — 3 types: robbery, transport involvement, police raid"],
+      zh: ["⚠️ 新增武器交易事故场景 — 抢劫·运输牵连·警察突袭3种体验"],
+      ja: ["⚠️ 武器取引中の事故シナリオ追加 — 強奪・輸送関与・警察急襲の3種体験"],
+      vi: ["⚠️ Thêm kịch bản tai nạn giao dịch vũ khí — 3 loại: cướp, dính líu vận chuyển, cảnh sát đột kích"],
+    },
+  },
+  {
+    version: "v1.9.1", badgeColor: "#ef4444",
+    items: {
+      ko: [
+        "💊 텔레그램 마약 거래 시나리오 추가 — 채널 구독부터 딜러 DM 체험",
+        "🔫 불법 총기 거래 시나리오 추가 — 다크마켓 목록 조회 및 거래 체험",
+        "😱 총기 구매 사기 대처법 추가 — 이중 피해 상황에서 선택지 탐색",
+      ],
+      en: [
+        "💊 Telegram drug deal scenario added — experience from channel subscription to dealer DM",
+        "🔫 Illegal gun trade scenario added — dark market listing & transaction experience",
+        "😱 Gun purchase scam response added — explore options in a double-victim situation",
+      ],
+      zh: [
+        "💊 新增Telegram毒品交易场景 — 从订阅频道到联系毒贩DM全程体验",
+        "🔫 新增非法枪支交易场景 — 暗网市场浏览及交易体验",
+        "😱 新增购枪诈骗应对方法 — 在双重受害情况下探索选项",
+      ],
+      ja: [
+        "💊 テレグラム麻薬取引シナリオ追加 — チャンネル登録からディーラーDMまでの体験",
+        "🔫 違法銃器取引シナリオ追加 — ダークマーケットの閲覧・取引体験",
+        "😱 銃購入詐欺への対処法追加 — 二重被害状況での選択肢探索",
+      ],
+      vi: [
+        "💊 Thêm kịch bản buôn bán ma túy Telegram — từ đăng ký kênh đến DM với dealer",
+        "🔫 Thêm kịch bản buôn súng bất hợp pháp — xem danh sách chợ đen và giao dịch",
+        "😱 Thêm cách ứng phó lừa đảo mua súng — khám phá các lựa chọn trong tình huống nạn nhân kép",
+      ],
+    },
+  },
+  {
+    version: "v1.9", badgeColor: "#22c55e",
+    items: {
+      ko: [
+        "🛡️ 공공장소 안전 설계 — 경찰·타인이 봐도 교육 앱임을 즉시 인식할 수 있는 UI 구성",
+        "🎓 모든 범죄 시뮬레이션 페이지에 교육용 배너·대각선 워터마크·우하단 뱃지 상시 표시",
+        "📵 신고 번호 전화 자동연결 전면 제거 → 번호 복사 버튼으로 교체 (공공장소 오작동 방지)",
+        "ℹ️ 앱 정보 모달 추가 — 교육 목적·비실제 거래·법적 문제 없음 명시",
+        "🎵 카지노 피아노 BGM 추가 — 도박 페이지 전용 배경음악",
+        "🔊 도박 효과음 추가 — 슬롯 스핀·릴 정지·코인 드롭·잭팟 사운드",
+        "💼 취업 사기 시나리오 추가 — 재택알바 보증금 사기",
+        "💊 마약 SNS 유인 시나리오 추가 — 다이어트약·힐링템 위장",
+        "🏛️ 금융감독원 사칭 시나리오 추가 — 보이스피싱 전화 체험",
+        "🔮 미래형 범죄 3종 추가 — 스마트홈 랜섬웨어·AI 유전자 분석 사기·메타버스 가상부동산 사기",
+        "❓ FAQ 섹션 신설 — 11가지 자주 묻는 질문",
+        "📊 통계·명예의전당 버튼 메인 페이지 전용으로 변경",
+        "🎨 업데이트 내역 버튼 호버 시에만 확장되도록 수정",
+      ],
+      en: [
+        "🛡️ Public safety design — UI instantly recognizable as an educational app even to police or bystanders",
+        "🎓 Educational banner, diagonal watermark & bottom-right badge always visible on all crime simulation pages",
+        "📵 Auto-dial removed from report numbers → replaced with copy button (prevents accidental calls in public)",
+        "ℹ️ App info modal added — clearly states educational purpose, no real transactions, no legal issues",
+        "🎵 Casino piano BGM added — dedicated background music for gambling page",
+        "🔊 Gambling sound effects added — slot spin, reel stop, coin drop, jackpot sounds",
+        "💼 Job scam scenario added — work-from-home deposit fraud",
+        "💊 Drug SNS lure scenario added — disguised as diet pills or wellness products",
+        "🏛️ FSS impersonation scenario added — voice phishing phone call experience",
+        "🔮 3 future crime scenarios added — smart home ransomware, AI DNA analysis scam, metaverse virtual real estate fraud",
+        "❓ FAQ section created — 11 frequently asked questions",
+        "📊 Stats & Hall of Fame buttons moved to main page only",
+        "🎨 Changelog button now expands only on hover",
+      ],
+      zh: [
+        "🛡️ 公共场所安全设计 — 即便警察或旁人看到也能立即识别为教育应用的UI设计",
+        "🎓 所有犯罪模拟页面常驻显示教育横幅·对角水印·右下角徽章",
+        "📵 全面移除举报电话自动拨号 → 改为复制按钮（防止公共场所误操作）",
+        "ℹ️ 新增应用信息弹窗 — 明确说明教育目的·非真实交易·无法律问题",
+        "🎵 新增赌场钢琴BGM — 赌博页面专属背景音乐",
+        "🔊 新增赌博音效 — 老虎机旋转·卷轴停止·硬币掉落·大奖音效",
+        "💼 新增求职诈骗场景 — 居家兼职保证金诈骗",
+        "💊 新增毒品SNS诱导场景 — 伪装成减肥药·养生品",
+        "🏛️ 新增金融监督院冒充场景 — 诈骗电话体验",
+        "🔮 新增3种未来犯罪场景 — 智能家居勒索软件·AI基因分析诈骗·元宇宙虚拟房产诈骗",
+        "❓ 新设FAQ栏目 — 11个常见问题",
+        "📊 统计·名誉殿堂按钮改为仅在主页显示",
+        "🎨 更新内容按钮改为仅悬停时展开",
+      ],
+      ja: [
+        "🛡️ 公共場所安全設計 — 警察や他の人が見ても教育アプリと即座にわかるUI構成",
+        "🎓 全犯罪シミュレーションページに教育用バナー・対角ウォーターマーク・右下バッジを常時表示",
+        "📵 通報番号の自動発信を全面削除 → コピーボタンに変更（公共場所での誤作動防止）",
+        "ℹ️ アプリ情報モーダル追加 — 教育目的・非実取引・法的問題なしを明記",
+        "🎵 カジノピアノBGM追加 — ギャンブルページ専用BGM",
+        "🔊 ギャンブル効果音追加 — スロットスピン・リール停止・コインドロップ・ジャックポット",
+        "💼 就職詐欺シナリオ追加 — 在宅アルバイト保証金詐欺",
+        "💊 麻薬SNS誘引シナリオ追加 — ダイエット薬・癒しアイテムに偽装",
+        "🏛️ 金融監督院なりすましシナリオ追加 — ボイスフィッシング電話体験",
+        "🔮 未来型犯罪3種追加 — スマートホームランサムウェア・AI遺伝子分析詐欺・メタバース仮想不動産詐欺",
+        "❓ FAQセクション新設 — 11のよくある質問",
+        "📊 統計・殿堂ボタンをメインページ専用に変更",
+        "🎨 更新履歴ボタンはホバー時のみ展開するよう修正",
+      ],
+      vi: [
+        "🛡️ Thiết kế an toàn nơi công cộng — UI nhận diện ngay là app giáo dục kể cả với cảnh sát hay người qua đường",
+        "🎓 Băng rôn giáo dục, watermark chéo & huy hiệu góc phải dưới luôn hiển thị trên tất cả trang mô phỏng",
+        "📵 Xóa hoàn toàn tự động gọi số báo cáo → thay bằng nút sao chép (tránh gọi nhầm nơi công cộng)",
+        "ℹ️ Thêm modal thông tin ứng dụng — nêu rõ mục đích giáo dục, không giao dịch thật, không vấn đề pháp lý",
+        "🎵 Thêm BGM piano casino — nhạc nền riêng cho trang cờ bạc",
+        "🔊 Thêm hiệu ứng âm thanh cờ bạc — quay slot, dừng cuộn, rơi xu, jackpot",
+        "💼 Thêm kịch bản lừa đảo việc làm — lừa đảo đặt cọc làm việc từ xa",
+        "💊 Thêm kịch bản dụ dỗ ma túy qua SNS — giả dạng thuốc giảm cân hoặc sản phẩm sức khỏe",
+        "🏛️ Thêm kịch bản giả mạo FSS — trải nghiệm cuộc gọi lừa đảo giọng nói",
+        "🔮 Thêm 3 kịch bản tội phạm tương lai — ransomware nhà thông minh, lừa đảo phân tích DNA AI, lừa đảo bất động sản ảo metaverse",
+        "❓ Tạo mục FAQ — 11 câu hỏi thường gặp",
+        "📊 Nút thống kê & Hall of Fame chuyển sang chỉ hiển thị ở trang chính",
+        "🎨 Nút lịch sử cập nhật chỉ mở rộng khi hover",
+      ],
+    },
+  },
+  {
+    version: "v1.8", badgeColor: "#f472b6",
+    items: {
+      ko: [
+        "🎨 전화 통화 화면 전면 리디자인 — 삼성 One UI 8.5 / iOS 26 Liquid Glass 스타일 적용",
+        "🔇 발신자 번호 '발신자표시제한'으로 변경 (실제 보이스피싱 수법 반영)",
+        "🎙️ AI 목소리 업그레이드 — ElevenLabs 딥보이스 TTS 적용 (기존 로봇음 → 실제 사람 목소리)",
+        "📌 방명록 추천 후기 고정 표시",
+        "✍️ 방명록 1인 1회 작성 제한",
+      ],
+      en: [
+        "🎨 Phone call screen fully redesigned — Samsung One UI 8.5 / iOS 26 Liquid Glass style applied",
+        "🔇 Caller ID changed to 'Unknown' (reflects actual voice phishing tactics)",
+        "🎙️ AI voice upgraded — ElevenLabs deep voice TTS applied (robotic → natural human voice)",
+        "📌 Recommended guestbook reviews pinned to top",
+        "✍️ Guestbook limited to one entry per person",
+      ],
+      zh: [
+        "🎨 电话通话界面全面重新设计 — 采用三星One UI 8.5 / iOS 26 Liquid Glass风格",
+        "🔇 来电显示改为「号码限制显示」（反映真实电话诈骗手法）",
+        "🎙️ AI语音升级 — 应用ElevenLabs深度语音TTS（机器音→真实人声）",
+        "📌 留言板推荐评价置顶显示",
+        "✍️ 留言板每人限留一条",
+      ],
+      ja: [
+        "🎨 電話通話画面を全面リデザイン — Samsung One UI 8.5 / iOS 26 Liquid Glassスタイル適用",
+        "🔇 発信者番号を「発信者番号非表示」に変更（実際のボイスフィッシング手口を反映）",
+        "🎙️ AI音声アップグレード — ElevenLabsディープボイスTTS適用（ロボット音→実際の人間の声）",
+        "📌 ゲストブックのおすすめレビューをピン留め表示",
+        "✍️ ゲストブックを1人1回の投稿に制限",
+      ],
+      vi: [
+        "🎨 Thiết kế lại hoàn toàn màn hình cuộc gọi — áp dụng phong cách Samsung One UI 8.5 / iOS 26 Liquid Glass",
+        "🔇 ID người gọi đổi thành 'Không xác định' (phản ánh chiến thuật lừa đảo giọng nói thực tế)",
+        "🎙️ Nâng cấp giọng AI — áp dụng TTS giọng sâu ElevenLabs (giọng robot → giọng người thật)",
+        "📌 Ghim đánh giá guestbook được đề xuất lên đầu",
+        "✍️ Giới hạn guestbook mỗi người một lần nhập",
+      ],
+    },
+  },
+  {
+    version: "v1.7", badgeColor: "#c58dc6",
+    items: {
+      ko: [
+        "🏛️ 과거 범죄 아카이브 — 시대별 배경 추가",
+        "⚖️ 어린이 법률 안내 추가",
+        "🥕 피망마켓 사기 체험 개선",
+        "📞 AI 딥보이스 사기 체험 — 목소리 복제 전화 시뮬레이션",
+        "💕 로맨스 스캠 체험 — SNS 접근 후 코인 투자 유도",
+        "🥕 중고거래 피싱 체험 — 가짜 안전결제 링크",
+        "✨ 기관 판매 배너 홀로그램 은박 효과",
+      ],
+      en: [
+        "🏛️ Past crime archive — historical background added by era",
+        "⚖️ Children's legal guide added",
+        "🥕 Pimang Market scam experience improved",
+        "📞 AI deep voice scam — voice cloning phone simulation",
+        "💕 Romance scam experience — SNS approach then crypto investment lure",
+        "🥕 Used-goods phishing — fake safe payment link",
+        "✨ Holographic silver foil effect on institutional sales banner",
+      ],
+      zh: [
+        "🏛️ 过去犯罪档案 — 按时代添加历史背景",
+        "⚖️ 新增儿童法律指南",
+        "🥕 彩椒市场诈骗体验改进",
+        "📞 AI深度语音诈骗 — 语音复制电话模拟",
+        "💕 网恋诈骗体验 — SNS接触后诱导加密货币投资",
+        "🥕 二手交易网络钓鱼 — 虚假安全支付链接",
+        "✨ 机构销售横幅全息银箔效果",
+      ],
+      ja: [
+        "🏛️ 過去の犯罪アーカイブ — 時代別背景を追加",
+        "⚖️ 子ども向け法律案内を追加",
+        "🥕 ピーマンマーケット詐欺体験の改善",
+        "📞 AIディープボイス詐欺 — 声のクローン電話シミュレーション",
+        "💕 ロマンス詐欺体験 — SNSアプローチ後に仮想通貨投資を誘導",
+        "🥕 中古取引フィッシング — 偽の安全決済リンク",
+        "✨ 機関販売バナーにホログラム銀箔エフェクト",
+      ],
+      vi: [
+        "🏛️ Lưu trữ tội phạm quá khứ — thêm bối cảnh lịch sử theo thời đại",
+        "⚖️ Thêm hướng dẫn pháp luật cho trẻ em",
+        "🥕 Cải thiện trải nghiệm lừa đảo Pimang Market",
+        "📞 Lừa đảo giọng AI sâu — mô phỏng điện thoại nhân bản giọng nói",
+        "💕 Trải nghiệm romance scam — tiếp cận SNS rồi dụ dỗ đầu tư tiền ảo",
+        "🥕 Lừa đảo hàng đã qua sử dụng — liên kết thanh toán an toàn giả",
+        "✨ Hiệu ứng lá bạc holographic trên banner bán hàng tổ chức",
+      ],
+    },
+  },
+  {
+    version: "v1.6", badgeColor: "#22c55e",
+    items: {
+      ko: [
+        "🕵️ 사기 판별 퀴즈 추가",
+        "🥕 중고거래 사기 체험 — 피망마켓 UI",
+        "📸 SNS 투자 사기 체험 — 인스타그램 DM 스타일",
+      ],
+      en: [
+        "🕵️ Scam detection quiz added",
+        "🥕 Used-goods scam experience — Pimang Market UI",
+        "📸 SNS investment scam experience — Instagram DM style",
+      ],
+      zh: [
+        "🕵️ 新增诈骗识别测验",
+        "🥕 二手交易诈骗体验 — 彩椒市场UI",
+        "📸 SNS投资诈骗体验 — Instagram DM风格",
+      ],
+      ja: [
+        "🕵️ 詐欺判別クイズ追加",
+        "🥕 中古取引詐欺体験 — ピーマンマーケットUI",
+        "📸 SNS投資詐欺体験 — インスタグラムDMスタイル",
+      ],
+      vi: [
+        "🕵️ Thêm câu đố phát hiện lừa đảo",
+        "🥕 Trải nghiệm lừa đảo hàng đã qua sử dụng — Giao diện Pimang Market",
+        "📸 Trải nghiệm lừa đảo đầu tư SNS — Phong cách DM Instagram",
+      ],
+    },
+  },
+  {
+    version: "v1.5.2", badgeColor: "#22c55e",
+    items: {
+      ko: ["🚫 도박 과몰입 자동 폐쇄 시스템", "🎯 도박 초반 당첨 확률 강화 → 이후 급락"],
+      en: ["🚫 Gambling over-immersion auto-close system", "🎯 Early gambling win rate boosted → then drops sharply"],
+      zh: ["🚫 赌博过度沉迷自动关闭系统", "🎯 赌博初期中奖概率提升 → 之后急剧下降"],
+      ja: ["🚫 ギャンブル過没入自動終了システム", "🎯 ギャンブル序盤の当選確率強化 → その後急落"],
+      vi: ["🚫 Hệ thống tự động đóng khi nghiện cờ bạc quá mức", "🎯 Tỷ lệ thắng cờ bạc đầu cao → sau đó giảm mạnh"],
+    },
+  },
+  {
+    version: "v1.5.1", badgeColor: "#22c55e",
+    items: {
+      ko: ["💡 도박 페이지 전면 네온 사인 UI 적용", "👁️ 모바일 글씨 투명화 버그 전면 수정"],
+      en: ["💡 Full neon sign UI applied to gambling page", "👁️ Mobile text transparency bug fully fixed"],
+      zh: ["💡 赌博页面全面应用霓虹灯UI", "👁️ 移动端文字透明化BUG全面修复"],
+      ja: ["💡 ギャンブルページに全面ネオンサインUI適用", "👁️ モバイル文字透明化バグを全面修正"],
+      vi: ["💡 Áp dụng UI biển neon đầy đủ cho trang cờ bạc", "👁️ Sửa hoàn toàn lỗi chữ trong suốt trên mobile"],
+    },
+  },
+  {
+    version: "v1.5", badgeColor: "#f59e0b",
+    items: {
+      ko: [
+        "📱 문자 사기 체험 (스미싱) — 택배·건강보험·카드 3종",
+        "🎰 불법 도박 신규 게임 3종 (홀짝·파워볼·슬롯머신)",
+        "💳 충전 시 카드 자동입력 애니메이션",
+      ],
+      en: [
+        "📱 SMS scam experience (smishing) — 3 types: delivery, health insurance, credit card",
+        "🎰 3 new illegal gambling games (odd/even, powerball, slot machine)",
+        "💳 Card auto-fill animation on recharge",
+      ],
+      zh: [
+        "📱 短信诈骗体验(钓鱼短信) — 快递·健康保险·信用卡3种",
+        "🎰 3种新非法赌博游戏（单双·强力球·老虎机）",
+        "💳 充值时信用卡自动填写动画",
+      ],
+      ja: [
+        "📱 SMS詐欺体験（スミッシング） — 宅配・健康保険・クレジットカードの3種",
+        "🎰 違法ギャンブル新ゲーム3種（奇偶・パワーボール・スロットマシン）",
+        "💳 チャージ時のカード自動入力アニメーション",
+      ],
+      vi: [
+        "📱 Trải nghiệm lừa đảo SMS (smishing) — 3 loại: giao hàng, bảo hiểm y tế, thẻ tín dụng",
+        "🎰 3 trò cờ bạc bất hợp pháp mới (chẵn/lẻ, powerball, máy đánh bạc)",
+        "💳 Animation tự động điền thẻ khi nạp tiền",
+      ],
+    },
+  },
+  {
+    version: "v1.4.2", badgeColor: "#f59e0b",
+    items: {
+      ko: ["🎢 도박 긴장감 강화 — 연패/연승 심리 확률 조작", "🪜 사다리 게임 경로 오류 수정"],
+      en: ["🎢 Gambling tension enhanced — psychological probability manipulation for win/loss streaks", "🪜 Ladder game path error fixed"],
+      zh: ["🎢 增强赌博紧张感 — 操纵连败/连胜的心理概率", "🪜 修复梯形游戏路径错误"],
+      ja: ["🎢 ギャンブルの緊張感強化 — 連敗/連勝の心理的確率操作", "🪜 はしごゲームのパスエラーを修正"],
+      vi: ["🎢 Tăng cường căng thẳng cờ bạc — thao túng xác suất tâm lý cho chuỗi thắng/thua", "🪜 Sửa lỗi đường dẫn trò chơi thang"],
+    },
+  },
+  {
+    version: "v1.4.1", badgeColor: "#f59e0b",
+    items: {
+      ko: ["👆 모바일 버튼 터치 시 글씨 사라짐 현상 수정", "💰 충전 전 자동입력 사전 안내 문구 추가"],
+      en: ["👆 Mobile button text disappearing on touch fixed", "💰 Pre-charge auto-fill notice added"],
+      zh: ["👆 修复移动端按钮触摸时文字消失问题", "💰 充值前新增自动填写事先提示文字"],
+      ja: ["👆 モバイルボタンタッチ時に文字が消える現象を修正", "💰 チャージ前の自動入力事前案内文言を追加"],
+      vi: ["👆 Sửa lỗi chữ biến mất khi chạm nút trên mobile", "💰 Thêm thông báo tự động điền trước khi nạp tiền"],
+    },
+  },
+  {
+    version: "v1.4", badgeColor: "#f59e0b",
+    items: {
+      ko: [
+        "🍼 감성 동정 사기 시나리오 추가 (베이비 피싱)",
+        "🏠 전세·부동산 사기 시나리오 추가",
+        "🤖 AI 딥페이크 협박 사기 시나리오 추가",
+      ],
+      en: [
+        "🍼 Sympathy scam scenario added (baby phishing)",
+        "🏠 Jeonse / real estate fraud scenario added",
+        "🤖 AI deepfake blackmail scam scenario added",
+      ],
+      zh: [
+        "🍼 新增情感同情诈骗场景（婴儿钓鱼）",
+        "🏠 新增全租·房产诈骗场景",
+        "🤖 新增AI深度伪造恐吓诈骗场景",
+      ],
+      ja: [
+        "🍼 感情的な同情詐欺シナリオ追加（ベビーフィッシング）",
+        "🏠 チョンセ・不動産詐欺シナリオ追加",
+        "🤖 AIディープフェイク脅迫詐欺シナリオ追加",
+      ],
+      vi: [
+        "🍼 Thêm kịch bản lừa đảo đồng cảm (baby phishing)",
+        "🏠 Thêm kịch bản lừa đảo jeonse / bất động sản",
+        "🤖 Thêm kịch bản lừa đảo tống tiền deepfake AI",
+      ],
+    },
+  },
+  {
+    version: "v1.3.1", badgeColor: "#4ade80",
+    items: {
+      ko: [
+        "⚙️ 자극 강도 설정 추가 (순화/보통/실전)",
+        "🏆 거절 3회 시 축하 메시지 + 결과 화면 분기",
+        "📋 업데이트 내역 섹션 신설",
+      ],
+      en: [
+        "⚙️ Intensity setting added (mild / normal / realistic)",
+        "🏆 Congratulation message + result screen branch on 3 refusals",
+        "📋 Changelog section newly created",
+      ],
+      zh: [
+        "⚙️ 新增刺激强度设置（缓和/普通/实战）",
+        "🏆 拒绝3次时显示祝贺消息 + 结果画面分支",
+        "📋 新设更新内容栏目",
+      ],
+      ja: [
+        "⚙️ 刺激強度設定を追加（순화/보통/실전）",
+        "🏆 3回拒否でお祝いメッセージ + 結果画面分岐",
+        "📋 更新履歴セクションを新設",
+      ],
+      vi: [
+        "⚙️ Thêm cài đặt cường độ kích thích (nhẹ / bình thường / thực tế)",
+        "🏆 Thông báo chúc mừng + phân nhánh màn hình kết quả khi từ chối 3 lần",
+        "📋 Tạo mới mục lịch sử cập nhật",
+      ],
+    },
+  },
+  {
+    version: "v1.3", badgeColor: "#4ade80",
+    items: {
+      ko: [
+        "📞 전화 사기 체험 — 삼성·아이폰 통화 UI + AI 목소리 (TTS)",
+        "🔗 링크·다운로드 사기 시나리오 추가",
+        "💬 AI 대화 자연스러움 개선",
+      ],
+      en: [
+        "📞 Phone scam experience — Samsung & iPhone call UI + AI voice (TTS)",
+        "🔗 Link & download scam scenario added",
+        "💬 AI conversation naturalness improved",
+      ],
+      zh: [
+        "📞 电话诈骗体验 — 三星·苹果通话UI + AI语音(TTS)",
+        "🔗 新增链接·下载诈骗场景",
+        "💬 AI对话自然度改进",
+      ],
+      ja: [
+        "📞 電話詐欺体験 — Samsung・iPhoneの通話UI + AI音声(TTS)",
+        "🔗 リンク・ダウンロード詐欺シナリオ追加",
+        "💬 AI会話の自然さを改善",
+      ],
+      vi: [
+        "📞 Trải nghiệm lừa đảo điện thoại — Giao diện cuộc gọi Samsung & iPhone + giọng AI (TTS)",
+        "🔗 Thêm kịch bản lừa đảo liên kết & tải xuống",
+        "💬 Cải thiện độ tự nhiên của hội thoại AI",
+      ],
+    },
+  },
+  {
+    version: "v1.2.1", badgeColor: "#c58dc6",
+    items: {
+      ko: ["📊 이용 통계 실시간 표시", "👑 명예의 전당 기능 추가", "🐛 다국어 번역 누락 항목 수정"],
+      en: ["📊 Real-time usage statistics displayed", "👑 Hall of Fame feature added", "🐛 Missing multilingual translation items fixed"],
+      zh: ["📊 实时显示使用统计", "👑 新增名誉殿堂功能", "🐛 修复多语言翻译缺失项"],
+      ja: ["📊 利用統計のリアルタイム表示", "👑 殿堂入り機能追加", "🐛 多言語翻訳の欠落項目を修正"],
+      vi: ["📊 Hiển thị thống kê sử dụng thời gian thực", "👑 Thêm tính năng Hall of Fame", "🐛 Sửa các mục dịch thuật đa ngôn ngữ bị thiếu"],
+    },
+  },
+  {
+    version: "v1.2", badgeColor: "#c58dc6",
+    items: {
+      ko: ["🎰 불법도박 체험 시나리오 추가", "🌏 10개 언어 다국어 지원"],
+      en: ["🎰 Illegal gambling experience scenario added", "🌏 10-language multilingual support"],
+      zh: ["🎰 新增非法赌博体验场景", "🌏 支持10种语言"],
+      ja: ["🎰 違法ギャンブル体験シナリオ追加", "🌏 10言語の多言語サポート"],
+      vi: ["🎰 Thêm kịch bản trải nghiệm cờ bạc bất hợp pháp", "🌏 Hỗ trợ đa ngôn ngữ 10 ngôn ngữ"],
+    },
+  },
+  {
+    version: "v1.1.1", badgeColor: "#c58dc6",
+    items: {
+      ko: ["📱 모바일 최적화 (터치 영역·레이아웃 개선)", "🐛 일부 시나리오 AI 응답 오류 수정"],
+      en: ["📱 Mobile optimization (touch area & layout improvements)", "🐛 AI response errors in some scenarios fixed"],
+      zh: ["📱 移动端优化（触摸区域·布局改进）", "🐛 修复部分场景AI响应错误"],
+      ja: ["📱 モバイル最適化（タッチ領域・レイアウト改善）", "🐛 一部シナリオのAI応答エラーを修正"],
+      vi: ["📱 Tối ưu hóa mobile (cải thiện vùng chạm & bố cục)", "🐛 Sửa lỗi phản hồi AI trong một số kịch bản"],
+    },
+  },
+  {
+    version: "v1.1", badgeColor: "#c58dc6",
+    items: {
+      ko: ["💸 가짜 송금 애니메이션 추가", "🏦 피해 결과 화면 개선", "🏦 은행 앱 UI 추가"],
+      en: ["💸 Fake transfer animation added", "🏦 Damage result screen improved", "🏦 Bank app UI added"],
+      zh: ["💸 新增虚假转账动画", "🏦 受害结果页面改进", "🏦 新增银行应用UI"],
+      ja: ["💸 偽送金アニメーション追加", "🏦 被害結果画面の改善", "🏦 銀行アプリUIを追加"],
+      vi: ["💸 Thêm animation chuyển khoản giả", "🏦 Cải thiện màn hình kết quả thiệt hại", "🏦 Thêm giao diện ứng dụng ngân hàng"],
+    },
+  },
+  {
+    version: "v1.0.1", badgeColor: "#6b7280",
+    items: {
+      ko: ["🐛 초기 배포 후 긴급 버그 수정", "⚡ 로딩 속도 개선"],
+      en: ["🐛 Emergency bug fixes after initial deployment", "⚡ Loading speed improved"],
+      zh: ["🐛 初始部署后紧急修复BUG", "⚡ 提升加载速度"],
+      ja: ["🐛 初期デプロイ後の緊急バグ修正", "⚡ 読み込み速度の改善"],
+      vi: ["🐛 Sửa lỗi khẩn cấp sau khi triển khai ban đầu", "⚡ Cải thiện tốc độ tải"],
+    },
+  },
+  {
+    version: "v1.0", badgeColor: "#6b7280",
+    items: {
+      ko: ["🚀 서비스 최초 출시", "📋 8가지 기본 사기 시나리오", "🤖 AI 기반 범인 대화 엔진"],
+      en: ["🚀 Service initial launch", "📋 8 basic scam scenarios", "🤖 AI-based criminal conversation engine"],
+      zh: ["🚀 服务首次上线", "📋 8种基本诈骗场景", "🤖 基于AI的犯罪对话引擎"],
+      ja: ["🚀 サービス初回リリース", "📋 8つの基本詐欺シナリオ", "🤖 AIベースの犯人会話エンジン"],
+      vi: ["🚀 Ra mắt dịch vụ lần đầu", "📋 8 kịch bản lừa đảo cơ bản", "🤖 Công cụ hội thoại tội phạm dựa trên AI"],
+    },
+  },
+];
+
+export function getChangelogs(lang: LangCode): Array<{
+  version: string;
+  badge?: string;
+  badgeColor: string;
+  items: string[];
+}> {
+  return RAW.map(entry => ({
+    version: entry.version,
+    badge: entry.badge,
+    badgeColor: entry.badgeColor,
+    items: pick(entry.items, lang),
+  }));
+}
