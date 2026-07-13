@@ -206,6 +206,7 @@ function ScamSimSection({ lang }: { lang: string }) {
   const [step, setStep] = useState(0);
   const [result, setResult] = useState<"win" | "lose" | null>(null);
   const [shown, setShown] = useState(0);
+  const isMobile = useIsMobile();
 
   const scenario = SCAM_SCENARIOS.find(s => s.id === active);
 
@@ -333,7 +334,7 @@ function ScamSimSection({ lang }: { lang: string }) {
   }
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: isMobile ? 12 : 20 }}>
       {SCAM_SCENARIOS.map(s => (
         <div key={s.id} onClick={() => setActive(s.id)} style={{
           background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
@@ -996,21 +997,24 @@ export default function HomePage() {
       </nav>
 
       {/* ── 히어로 섹션 ── */}
-      <section className="hero-section hero-grid" style={{
-        maxWidth: 1140, margin: "0 auto", padding: "80px 40px 70px",
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center",
+      <section className="hero-section" style={{
+        maxWidth: 1140, margin: "0 auto",
+        padding: isMobile ? "40px 20px 32px" : "80px 40px 70px",
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+        gap: isMobile ? 32 : 64, alignItems: "center",
       }}>
         <div>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             background: "#fef2f2", border: "1px solid #fecaca",
-            borderRadius: 20, padding: "6px 14px", marginBottom: 24,
+            borderRadius: 20, padding: "6px 14px", marginBottom: isMobile ? 16 : 24,
           }}>
             <AlertCircle size={13} color="#dc2626" />
             <span style={{ color: "#dc2626", fontSize: 12, fontWeight: 700 }}>{t("hero_alert", lang)}</span>
           </div>
 
-          <h1 style={{ fontSize: 50, fontWeight: 900, lineHeight: 1.15, marginBottom: 20, letterSpacing: -1.5, color: "#1c0d2e" }}>
+          <h1 style={{ fontSize: isMobile ? 32 : 50, fontWeight: 900, lineHeight: 1.15, marginBottom: isMobile ? 14 : 20, letterSpacing: -1, color: "#1c0d2e" }}>
             {t("hero_title1", lang)}<br />
             <span style={{
               background: "linear-gradient(90deg, #9161b2, #7c3aed)",
@@ -1020,7 +1024,7 @@ export default function HomePage() {
             </span>
           </h1>
 
-          <p style={{ color: "#64748b", fontSize: 17, lineHeight: 1.8, marginBottom: 36, maxWidth: 460 }}>
+          <p style={{ color: "#64748b", fontSize: isMobile ? 14 : 17, lineHeight: 1.8, marginBottom: isMobile ? 24 : 36, maxWidth: 460 }}>
             {t("hero_subtitle", lang)}
           </p>
 
@@ -1060,7 +1064,7 @@ export default function HomePage() {
         </div>
 
         {/* 통계 카드 */}
-        <div ref={statsRef} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div ref={statsRef} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? 10 : 14 }}>
           {STATS.map((s) => (
             <div key={s.label} style={{
               background: s.bg, borderRadius: 18, padding: "24px 20px",
@@ -1069,7 +1073,7 @@ export default function HomePage() {
             }}>
               <div style={{ fontSize: 28, marginBottom: 10 }}>{s.icon}</div>
               <p style={{
-                fontSize: 30, fontWeight: 900, color: s.color, marginBottom: 6, letterSpacing: -1,
+                fontSize: isMobile ? 22 : 30, fontWeight: 900, color: s.color, marginBottom: 6, letterSpacing: -1,
                 transition: "all 0.05s ease",
                 fontVariantNumeric: "tabular-nums",
               }}>{s.value}</p>
@@ -1093,7 +1097,7 @@ export default function HomePage() {
       {/* ── 홍보 영상 ── */}
       <section style={{
         background: "#130c1c", borderTop: "1px solid #2a1a3a",
-        padding: "64px 40px",
+        padding: isMobile ? "40px 20px" : "64px 40px",
       }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
@@ -1147,7 +1151,7 @@ export default function HomePage() {
               <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>UPDATE CLIPS</p>
               <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 22, marginBottom: 0, letterSpacing: -0.5 }}>{t("section_update_video", lang)}</h2>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)", gap: 16 }}>
               {[
                 { id: "vtWiPIfAeKY", title: "v1.8 업데이트 — 통화 UI · AI 목소리", badge: "NEW", badgeColor: "#f472b6" },
               ].map((v, i) => (

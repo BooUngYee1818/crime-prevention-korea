@@ -125,9 +125,11 @@ export default function CrimeCenterPage() {
         {/* 안내 배너 */}
         <div style={{
           background: "linear-gradient(135deg, #f5dfee, #f0fdf4)",
-          border: "1px solid #dcc5e8", borderRadius: 20, padding: "20px 28px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginBottom: 40, flexWrap: "wrap", gap: 16,
+          border: "1px solid #dcc5e8", borderRadius: 20, padding: isMobile ? "16px 20px" : "20px 28px",
+          display: "flex", alignItems: isMobile ? "flex-start" : "center",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-between",
+          marginBottom: isMobile ? 24 : 40, flexWrap: "wrap", gap: 16,
           boxShadow: "0 2px 12px #9161b20a",
         }}>
           <div>
@@ -138,11 +140,11 @@ export default function CrimeCenterPage() {
               {t("crime_free_desc", lang)}
             </p>
           </div>
-          <div style={{ display: "flex", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? 10 : 20 }}>
             {REPORT_NUMBERS.map((r) => (
               <a key={r.number} href={`tel:${r.number}`} style={{ textDecoration: "none", textAlign: "center" }}>
                 <p style={{ color: "#94a3b8", fontSize: 10, marginBottom: 2 }}>{t(r.labelKey as Parameters<typeof t>[0], lang)}</p>
-                <p style={{ color: r.color, fontWeight: 900, fontSize: 22 }}>{r.number}</p>
+                <p style={{ color: r.color, fontWeight: 900, fontSize: isMobile ? 18 : 22 }}>{r.number}</p>
               </a>
             ))}
           </div>
@@ -290,8 +292,8 @@ export default function CrimeCenterPage() {
               key={scenario.id}
               onClick={() => router.push(scenario.id === "illegal-gambling" ? "/gambling" : `/crime/${scenario.id}`)}
               style={{
-                display: "flex", alignItems: "center", gap: 18,
-                background: "#fdf8ff", borderRadius: 20, padding: "18px 22px",
+                display: "flex", alignItems: "center", gap: isMobile ? 12 : 18,
+                background: "#fdf8ff", borderRadius: 20, padding: isMobile ? "12px 14px" : "18px 22px",
                 border: "1px solid #f1f5f9", cursor: "pointer", textAlign: "left",
                 transition: "all 0.2s", boxShadow: "0 2px 10px #0000000a",
               }}
