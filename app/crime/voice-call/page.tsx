@@ -901,10 +901,10 @@ function CallScreen({
 function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sent"; onRetry: () => void; onHome: () => void }) {
   const { lang } = useLang();
   const REPORT_NUMS = [
-    { n: "182", l: "경찰청 사이버수사대", c: "#3b82f6" },
-    { n: "1332", l: "금융감독원", c: "#0891b2" },
-    { n: "118", l: "한국인터넷진흥원", c: "#059669" },
-    { n: "112", l: "경찰청 (24시간)", c: "#ef4444" },
+    { n: "182", l: t("vc_agency_1", lang), c: "#3b82f6" },
+    { n: "1332", l: t("vc_agency_2", lang), c: "#0891b2" },
+    { n: "118", l: t("vc_agency_3", lang), c: "#059669" },
+    { n: "112", l: t("vc_agency_4", lang), c: "#ef4444" },
   ];
 
   return (
@@ -923,7 +923,7 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
               animation: "ticker-scroll 14s linear infinite",
               color: "#fca5a5", fontSize: 11, fontWeight: 700,
             }}>
-              🚨 경찰청 182 즉시 신고 &nbsp;·&nbsp; 금융감독원 1332 피해 접수 &nbsp;·&nbsp; 은행 고객센터 지급정지 &nbsp;·&nbsp; 지금 바로 신고하세요! &nbsp;·&nbsp; 경찰청 182
+              {t("vc_ticker", lang)}
             </div>
           </div>
         </div>
@@ -934,9 +934,9 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
           <div style={{ fontSize: 52, marginBottom: 10, animation: "trophy-bounce 1.2s ease infinite", display: "inline-block" }}>🏆</div>
           <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 18, marginBottom: 6 }}>{t("vc_refused", lang)}</p>
           <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.7 }}>
-            실제 사기범은 이보다 훨씬 더 끈질깁니다.<br />
-            <strong style={{ color: "#fff" }}>모르는 번호의 이체 요구 = 100% 사기</strong><br />
-            의심이 최고의 방어입니다!
+            {t("vc_refused_body1", lang)}<br />
+            <strong style={{ color: "#fff" }}>{t("vc_refused_body2", lang)}</strong><br />
+            {t("vc_refused_body3", lang)}
           </p>
         </div>
       ) : (
@@ -946,16 +946,15 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
           animation: "fadeIn 0.5s ease",
         }}>
           <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 15, marginBottom: 6 }}>{t("vc_sent", lang)}</p>
-          <p style={{ color: "#fca5a5", fontSize: 12, lineHeight: 1.7 }}>
-            실제 상황이라면 지금 바로 은행에 연락해<br />
-            <strong>지급정지</strong>를 요청하고 <strong>182에 신고</strong>해야 합니다.
+          <p style={{ color: "#fca5a5", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+            {t("vc_sent_body", lang)}
           </p>
         </div>
       )}
 
       <div style={{ background: "#0a1628", border: "1px solid #1e3a5f", borderRadius: 14, padding: "12px 14px" }}>
         <p style={{ color: "#60a5fa", fontWeight: 800, fontSize: 13, marginBottom: 8 }}>
-          📣 {outcome === "refused" ? "안 당해도 신고해 주세요" : "지금 당장 신고하세요"}
+          📣 {outcome === "refused" ? t("vc_report_refused", lang) : t("vc_report_sent", lang)}
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 10 }}>
           {REPORT_NUMS.map(r => (
@@ -970,8 +969,8 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
           ))}
         </div>
         <div style={{ background: "#111", borderRadius: 10, padding: "10px 12px" }}>
-          <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 11, marginBottom: 6 }}>📋 신고할 때 준비사항</p>
-          {["발신 전화번호 (스크린샷)", "요구한 계좌번호 전체", "통화 내용 요약 (날짜·시간·금액)", "이미 이체했다면 이체 영수증"].map((item, i) => (
+          <p style={{ color: "#fbbf24", fontWeight: 700, fontSize: 11, marginBottom: 6 }}>{t("vc_checklist_title", lang)}</p>
+          {([t("vc_checklist_1", lang), t("vc_checklist_2", lang), t("vc_checklist_3", lang), t("vc_checklist_4", lang)]).map((item, i) => (
             <div key={i} style={{ display: "flex", gap: 6, marginBottom: 4 }}>
               <span style={{ color: "#fbbf24", fontSize: 10 }}>▸</span>
               <span style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.5 }}>{item}</span>

@@ -5,9 +5,10 @@ import { ArrowLeft, Send, AlertTriangle, CheckCircle, ChevronRight, Bell, Home, 
 import { CRIME_SCENARIOS } from "@/lib/crimes";
 import Certificate from "@/components/Certificate";
 import { useLang } from "@/lib/LanguageContext";
-import { t } from "@/lib/i18n";
+import { t, LANGUAGES } from "@/lib/i18n";
 import { SCENARIO_TIPS } from "@/lib/scenarioTips";
 import { SCENARIO_TYPES } from "@/lib/scenarioTypes";
+import { getLocalizedScenarioType } from "@/lib/scenarioTypesI18n";
 
 type Phase =
   | "type-intro"
@@ -266,8 +267,8 @@ function EmergencyBlock({ block, onClose, onReveal, lang }: {
         padding: "12px 20px", marginBottom: 20, width: "100%", textAlign: "center",
       }}>
         <p style={{ color: "#60a5fa", fontSize: 12, marginBottom: 4 }}>{t("em_report_182", lang)}</p>
-        <p style={{ color: "#fff", fontWeight: 900, fontSize: 24 }}>경찰청 182</p>
-        <p style={{ color: "#555", fontSize: 11, marginTop: 2 }}>24시간 운영 · 피해 즉시 신고</p>
+        <p style={{ color: "#fff", fontWeight: 900, fontSize: 24 }}>{t("crime_police_182", lang)}</p>
+        <p style={{ color: "#555", fontSize: 11, marginTop: 2 }}>{t("crime_24h_ops", lang)}</p>
       </div>
 
       <div style={{ display: "flex", gap: 10, width: "100%" }}>
@@ -1559,7 +1560,7 @@ export default function ScenarioPage() {
 
       {/* ══ 유형 인트로 ══ */}
       {phase === "type-intro" && (() => {
-        const typeInfo = SCENARIO_TYPES[scenario as string];
+        const typeInfo = getLocalizedScenarioType(scenario as string, lang) ?? SCENARIO_TYPES[scenario as string];
         if (!typeInfo) return null;
         return (
           <div style={{
@@ -2298,6 +2299,9 @@ export default function ScenarioPage() {
                   <Send size={14} color={input.trim() && !loading ? "#fff" : "#9ca3af"} />
                 </button>
               </div>
+              <p style={{ textAlign: "center", color: "#9ca3af", fontSize: 10, marginTop: 4 }}>
+                {LANGUAGES.find(l => l.code === lang)?.flag} {t("chat_sub_lang", lang)}
+              </p>
             </div>
           )}
         </>

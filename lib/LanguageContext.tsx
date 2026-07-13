@@ -183,13 +183,41 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
         ))}
       </div>
 
-      <p style={{
-        color: "#334155", fontSize: 11, marginTop: 28,
-        animation: "lang-fade-in 0.5s ease 0.35s both",
-        textAlign: "center",
+      {/* 네온 브로드웨이 화살표 */}
+      <div style={{
+        position: "relative", marginTop: 20, width: "100%", display: "flex",
+        flexDirection: "column", alignItems: "center",
+        animation: "lang-fade-in 0.5s ease 0.4s both",
       }}>
-        You can change the language anytime from the button at the bottom-left.
-      </p>
+        <style>{`
+          @keyframes neon-pulse-1 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #ff00ff) drop-shadow(0 0 12px #ff00ff)} 50%{opacity:0.7;filter:drop-shadow(0 0 3px #ff00ff)} }
+          @keyframes neon-pulse-2 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff)} 50%{opacity:0.6;filter:drop-shadow(0 0 3px #00ffff)} }
+          @keyframes neon-pulse-3 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #ffff00) drop-shadow(0 0 12px #ffff00)} 50%{opacity:0.8;filter:drop-shadow(0 0 4px #ffff00)} }
+          @keyframes arrow-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+        `}</style>
+        <svg width="160" height="90" viewBox="0 0 160 90" style={{ animation: "arrow-bounce 1.4s ease-in-out infinite", overflow: "visible" }}>
+          {/* 꼬불꼬불 화살표 경로 */}
+          <path d="M 80 5 C 110 5, 130 20, 110 35 C 90 50, 50 40, 60 58 C 70 75, 100 70, 80 85"
+            fill="none" stroke="#ff00ff" strokeWidth="3.5" strokeLinecap="round"
+            style={{ animation: "neon-pulse-1 1.2s ease-in-out infinite" }} />
+          <path d="M 80 5 C 110 5, 130 20, 110 35 C 90 50, 50 40, 60 58 C 70 75, 100 70, 80 85"
+            fill="none" stroke="#ff88ff" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+          {/* 화살표 머리 */}
+          <polyline points="65,80 80,85 72,72" fill="none" stroke="#ff00ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"
+            style={{ animation: "neon-pulse-1 1.2s ease-in-out infinite" }} />
+          {/* 장식 별 */}
+          <circle cx="20" cy="20" r="3" fill="#00ffff" style={{ animation: "neon-pulse-2 0.9s ease-in-out infinite" }} />
+          <circle cx="140" cy="15" r="2.5" fill="#ffff00" style={{ animation: "neon-pulse-3 1.1s ease-in-out infinite" }} />
+          <circle cx="30" cy="65" r="2" fill="#ff6600" style={{ animation: "neon-pulse-1 1.3s ease-in-out 0.3s infinite" }} />
+          <circle cx="145" cy="55" r="2" fill="#00ff88" style={{ animation: "neon-pulse-2 1.0s ease-in-out 0.5s infinite" }} />
+          {/* 스파클 */}
+          <text x="10" y="45" fontSize="14" style={{ animation: "neon-pulse-3 0.8s ease-in-out infinite" }}>✦</text>
+          <text x="128" y="40" fontSize="12" style={{ animation: "neon-pulse-2 1.1s ease-in-out 0.4s infinite" }}>★</text>
+        </svg>
+        <p style={{ color: "#a78bfa", fontSize: 11, textAlign: "center", marginTop: -4 }}>
+          언어는 언제든 왼쪽 아래 버튼으로 변경할 수 있어요
+        </p>
+      </div>
     </div>
   );
 }
@@ -262,9 +290,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem("lang") as LangCode | null;
     if (saved && LANGUAGES.find((l) => l.code === saved)) {
       setLangState(saved);
-      // 이미 선택한 적 있으면 팝업 안 띄움
-    } else {
-      // 첫 방문 — 언어 선택 팝업
+    }
+    // 매 세션마다 언어 선택 팝업 표시
+    const shownThisSession = sessionStorage.getItem("langPickerShown");
+    if (!shownThisSession) {
       setShowLangPicker(true);
     }
   }, []);
@@ -277,11 +306,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   function handlePickLang(l: LangCode) {
     setLang(l);
     setShowLangPicker(false);
+    sessionStorage.setItem("langPickerShown", "1");
   }
 
   return (
     <LanguageContext.Provider value={{ lang, setLang }}>
       {showLangPicker && <LangSelectModal onSelect={handlePickLang} />}
+      {/* 공공장소 안내 배너 — 항상 한국어 고정 */}
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 9990,
+        background: "rgba(0,0,0,0.82)", backdropFilter: "blur(6px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "4px 8px", gap: 6, pointerEvents: "none",
+      }}>
+        <span style={{ fontSize: 12 }}>🎓</span>
+        <span style={{ color: "#fbbf24", fontSize: 11, fontWeight: 700, letterSpacing: 0.3 }}>
+          범죄 예방 시뮬레이션을 플레이 중입니다
+        </span>
+      </div>
+      <div style={{ height: 24 }} />
       {children}
       <FloatingLanguageSelector />
     </LanguageContext.Provider>
