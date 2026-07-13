@@ -228,6 +228,9 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
         <p style={{ color: "#c084fc", fontSize: 11, marginTop: -8, paddingLeft: 4, fontWeight: 600 }}>
           ↙ 왼쪽 아래 버튼으로 언제든 변경 가능해요
         </p>
+        <p style={{ color: "#9ca3af", fontSize: 10, marginTop: 2, paddingLeft: 4 }}>
+          ↙ You can change the language anytime using the bottom-left button
+        </p>
       </div>
     </div>
   );
