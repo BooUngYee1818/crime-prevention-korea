@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, PhoneOff, Phone, Volume2, MicOff, Keyboard, Users } from "lucide-react";
+import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 // ─── 턴 기반 대화 스크립트 ────────────────────────────────────────────────────
 // 범인 말 → 유저 선택 → 범인 반응 (약 3분 대화 구조)
@@ -398,6 +400,7 @@ function CallScreen({
   refuseCountdown: number | null;
 }) {
   const isSamsung = device === "samsung";
+  const { lang } = useLang();
   const now = new Date();
   const timeStr = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
 
@@ -470,9 +473,9 @@ function CallScreen({
         {/* 수신 라벨 */}
         <div style={{ textAlign: "center", padding: "16px 20px 0" }}>
           {callPhase === "ringing" ? (
-            <p style={{ color: p.accent, fontSize: 13, fontWeight: 600, animation: "ou-pulse 1.5s ease infinite" }}>수신 전화</p>
+            <p style={{ color: p.accent, fontSize: 13, fontWeight: 600, animation: "ou-pulse 1.5s ease infinite" }}>{t("vc_incoming", lang)}</p>
           ) : (
-            <p style={{ color: "#ffffffa0", fontSize: 13, fontWeight: 500 }}>통화 중 · {timer}</p>
+            <p style={{ color: "#ffffffa0", fontSize: 13, fontWeight: 500 }}>{t("vc_active", lang)} · {timer}</p>
           )}
         </div>
 
@@ -512,7 +515,7 @@ function CallScreen({
               borderRadius: 20, padding: "4px 14px",
               color: p.accent, fontSize: 11, fontWeight: 700,
               animation: "countdown-pulse 1s ease infinite", display: "inline-block",
-            }}>🏆 {refuseCountdown}초 버티면 성공!</span>
+            }}>🏆 {refuseCountdown}{t("vc_countdown", lang)}</span>
           </div>
         )}
 
@@ -525,7 +528,7 @@ function CallScreen({
                 borderRadius: 14, padding: "12px 14px", marginBottom: 8,
                 animation: "slide-up 0.4s ease", flexShrink: 0, backdropFilter: "blur(8px)",
               }}>
-                <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
+                <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ {t("vc_transfer_req", lang)}</p>
                 <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>{(transferAmount / 10000).toLocaleString()}만원</p>
                 <button onClick={onTransfer} style={{
                   width: "100%", padding: "10px 0", borderRadius: 10,
@@ -579,12 +582,12 @@ function CallScreen({
           {callPhase === "active" && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 14 }}>
               {[
-                { icon: <MicOff size={18}/>, label: muted ? "마이크켬" : "음소거", action: onMute, active: muted },
-                { icon: <Keyboard size={18}/>, label: "키패드", action: ()=>{} },
-                { icon: <Volume2 size={18}/>, label: "스피커", action: ()=>{} },
-                { icon: <Users size={18}/>, label: "통화 추가", action: ()=>{} },
-                { icon: <Phone size={18}/>, label: "영상통화", action: ()=>{} },
-                { icon: <span style={{fontSize:16}}>⋯</span>, label: "더 보기", action: ()=>{} },
+                { icon: <MicOff size={18}/>, label: muted ? t("vc_unmute",lang) : t("vc_mute",lang), action: onMute, active: muted },
+                { icon: <Keyboard size={18}/>, label: t("vc_keypad",lang), action: ()=>{} },
+                { icon: <Volume2 size={18}/>, label: t("vc_speaker",lang), action: ()=>{} },
+                { icon: <Users size={18}/>, label: t("vc_add",lang), action: ()=>{} },
+                { icon: <Phone size={18}/>, label: t("vc_video",lang), action: ()=>{} },
+                { icon: <span style={{fontSize:16}}>⋯</span>, label: t("vc_more",lang), action: ()=>{} },
               ].map((btn, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                   <button onClick={btn.action} style={{
@@ -611,7 +614,7 @@ function CallScreen({
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: "0 6px 24px rgba(239,68,68,0.55)",
                 }}><PhoneOff size={26} color="#fff"/></button>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>거절</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>{t("vc_reject", lang)}</span>
               </div>
             )}
             {callPhase === "ringing" && (
@@ -623,7 +626,7 @@ function CallScreen({
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: `0 6px 24px ${p.accent}66`,
                 }}><Phone size={26} color="#fff"/></button>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>수락</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>{t("vc_accept", lang)}</span>
               </div>
             )}
             {callPhase === "active" && (
@@ -635,7 +638,7 @@ function CallScreen({
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: "0 6px 24px rgba(239,68,68,0.55)",
                 }}><PhoneOff size={26} color="#fff"/></button>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>통화 종료</span>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11 }}>{t("vc_end", lang)}</span>
               </div>
             )}
           </div>
@@ -710,10 +713,10 @@ function CallScreen({
       <div style={{ textAlign: "center", padding: "14px 20px 0" }}>
         {callPhase === "ringing" ? (
           <p style={{ color: "#ffffffb0", fontSize: 14, fontWeight: 400, letterSpacing: 0.2, animation: "ios-glow 2s ease infinite" }}>
-            수신 전화
+            {t("vc_incoming", lang)}
           </p>
         ) : (
-          <p style={{ color: "#ffffffb0", fontSize: 14, fontWeight: 400 }}>통화 중 · {timer}</p>
+          <p style={{ color: "#ffffffb0", fontSize: 14, fontWeight: 400 }}>{t("vc_active", lang)} · {timer}</p>
         )}
       </div>
 
@@ -754,7 +757,7 @@ function CallScreen({
             border: "1px solid rgba(52,211,153,0.3)", borderRadius: 20, padding: "4px 14px",
             color: "#6ee7b7", fontSize: 11, fontWeight: 600, display: "inline-block",
             animation: "countdown-pulse 1s ease infinite",
-          }}>🏆 {refuseCountdown}초 버티면 성공!</span>
+          }}>🏆 {refuseCountdown}{t("vc_countdown", lang)}</span>
         </div>
       )}
 
@@ -768,7 +771,7 @@ function CallScreen({
               borderRadius: 16, padding: "12px 14px", marginBottom: 8,
               animation: "ios-slide-up 0.4s ease", flexShrink: 0,
             }}>
-              <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ 계좌이체 요청</p>
+              <p style={{ color: "#fca5a5", fontWeight: 700, fontSize: 12, marginBottom: 3 }}>⚠️ {t("vc_transfer_req", lang)}</p>
               <p style={{ color: "#9ca3af", fontSize: 11, marginBottom: 10 }}>{(transferAmount / 10000).toLocaleString()}만원</p>
               <button onClick={onTransfer} style={{
                 width: "100%", padding: "10px 0", borderRadius: 12,
@@ -823,12 +826,12 @@ function CallScreen({
         {callPhase === "active" && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 16 }}>
             {[
-              { icon: <MicOff size={18}/>, label: muted ? "마이크 켬" : "음소거", action: onMute, active: muted },
-              { icon: <Keyboard size={18}/>, label: "키패드", action: ()=>{} },
-              { icon: <Volume2 size={18}/>, label: "스피커", action: ()=>{} },
-              { icon: <Users size={18}/>, label: "통화 추가", action: ()=>{} },
+              { icon: <MicOff size={18}/>, label: muted ? t("vc_unmute",lang) : t("vc_mute",lang), action: onMute, active: muted },
+              { icon: <Keyboard size={18}/>, label: t("vc_keypad",lang), action: ()=>{} },
+              { icon: <Volume2 size={18}/>, label: t("vc_speaker",lang), action: ()=>{} },
+              { icon: <Users size={18}/>, label: t("vc_add",lang), action: ()=>{} },
               { icon: <Phone size={18}/>, label: "FaceTime", action: ()=>{} },
-              { icon: <span style={{fontSize:16}}>⋯</span>, label: "더 보기", action: ()=>{} },
+              { icon: <span style={{fontSize:16}}>⋯</span>, label: t("vc_more",lang), action: ()=>{} },
             ].map((btn, i) => (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                 <button onClick={btn.action} style={{
@@ -860,7 +863,7 @@ function CallScreen({
                 display: "flex", alignItems: "center", justifyContent: "center",
                 boxShadow: "0 4px 20px rgba(239,68,68,0.5), inset 0 1px 0 rgba(255,255,255,0.15)",
               }}><PhoneOff size={26} color="#fff"/></button>
-              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>거절</span>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>{t("vc_reject", lang)}</span>
             </div>
           )}
           {callPhase === "ringing" && (
@@ -872,7 +875,7 @@ function CallScreen({
                 display: "flex", alignItems: "center", justifyContent: "center",
                 boxShadow: "0 4px 20px rgba(48,209,88,0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
               }}><Phone size={26} color="#fff"/></button>
-              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>수락</span>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>{t("vc_accept", lang)}</span>
             </div>
           )}
           {callPhase === "active" && (
@@ -884,7 +887,7 @@ function CallScreen({
                 display: "flex", alignItems: "center", justifyContent: "center",
                 boxShadow: "0 4px 20px rgba(239,68,68,0.5), inset 0 1px 0 rgba(255,255,255,0.15)",
               }}><PhoneOff size={26} color="#fff"/></button>
-              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>통화 종료</span>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, letterSpacing: 0.2 }}>{t("vc_end", lang)}</span>
             </div>
           )}
         </div>
@@ -896,6 +899,7 @@ function CallScreen({
 // ─── 결과 화면 ────────────────────────────────────────────────────────────────
 
 function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sent"; onRetry: () => void; onHome: () => void }) {
+  const { lang } = useLang();
   const REPORT_NUMS = [
     { n: "182", l: "경찰청 사이버수사대", c: "#3b82f6" },
     { n: "1332", l: "금융감독원", c: "#0891b2" },
@@ -928,7 +932,7 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
       {outcome === "refused" ? (
         <div style={{ textAlign: "center", animation: "fadeIn 0.5s ease" }}>
           <div style={{ fontSize: 52, marginBottom: 10, animation: "trophy-bounce 1.2s ease infinite", display: "inline-block" }}>🏆</div>
-          <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 18, marginBottom: 6 }}>끝까지 버티셨습니다!</p>
+          <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 18, marginBottom: 6 }}>{t("vc_refused", lang)}</p>
           <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.7 }}>
             실제 사기범은 이보다 훨씬 더 끈질깁니다.<br />
             <strong style={{ color: "#fff" }}>모르는 번호의 이체 요구 = 100% 사기</strong><br />
@@ -941,7 +945,7 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
           border: "2px solid #ef444488", borderRadius: 18, padding: 14,
           animation: "fadeIn 0.5s ease",
         }}>
-          <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 15, marginBottom: 6 }}>⚠️ 송금이 완료됐습니다</p>
+          <p style={{ color: "#ef4444", fontWeight: 900, fontSize: 15, marginBottom: 6 }}>{t("vc_sent", lang)}</p>
           <p style={{ color: "#fca5a5", fontSize: 12, lineHeight: 1.7 }}>
             실제 상황이라면 지금 바로 은행에 연락해<br />
             <strong>지급정지</strong>를 요청하고 <strong>182에 신고</strong>해야 합니다.
@@ -981,12 +985,12 @@ function OutcomeScreen({ outcome, onRetry, onHome }: { outcome: "refused" | "sen
           flex: 1, padding: "12px 0", borderRadius: 14,
           background: "transparent", color: "#666", border: "1px solid #2a2a2a",
           fontSize: 13, cursor: "pointer",
-        }}>다시 체험</button>
+        }}>{t("vc_retry", lang)}</button>
         <button onClick={onHome} style={{
           flex: 1, padding: "12px 0", borderRadius: 14,
           background: "#534AB7", color: "#fff", border: "none",
           fontSize: 13, fontWeight: 700, cursor: "pointer",
-        }}>홈으로</button>
+        }}>{t("vc_home", lang)}</button>
       </div>
     </div>
   );
@@ -1002,6 +1006,7 @@ const REFUSE_TIMER_SECONDS = 60;
 
 export default function VoiceCallPage() {
   const router = useRouter();
+  const { lang } = useLang();
   const [device, setDevice] = useState<DeviceType>("samsung");
   const [scenario, setScenario] = useState<ScenarioId>("family");
   const [callPhase, setCallPhase] = useState<CallPhase>("select");
@@ -1146,23 +1151,22 @@ export default function VoiceCallPage() {
             background: "none", border: "none", cursor: "pointer", color: "#64748b",
             display: "flex", alignItems: "center", borderRadius: 8, padding: 8,
           }}><ArrowLeft size={18} /></button>
-          <span style={{ fontWeight: 800, fontSize: 16, color: "#1e293b" }}>📞 전화 사기 체험</span>
+          <span style={{ fontWeight: 800, fontSize: 16, color: "#1e293b" }}>📞 {t("vc_page_title", lang)}</span>
         </div>
 
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "28px 20px", width: "100%" }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: "12px 16px", marginBottom: 24 }}>
             <p style={{ fontSize: 13, color: "#166534", lineHeight: 1.7 }}>
-              💡 <strong>이용 방법</strong><br />
-              범인이 말하면 화면에 나타나는 <strong>내 답변 버튼</strong>을 선택하세요.<br />
-              약 3분간 실제처럼 대화가 진행됩니다.
+              💡 <strong>{t("vc_how_to", lang)}</strong><br />
+              {t("vc_how_body", lang).split("\n").map((line: string, i: number) => <span key={i}>{line}{i===0?<br/>:""}</span>)}
             </p>
           </div>
 
-          <p style={{ fontWeight: 800, fontSize: 15, color: "#1e293b", marginBottom: 12 }}>📱 기기 선택</p>
+          <p style={{ fontWeight: 800, fontSize: 15, color: "#1e293b", marginBottom: 12 }}>📱 {t("vc_device", lang)}</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
             {([
-              { id: "samsung", label: "삼성 갤럭시", icon: "📱", sub: "One UI 스타일" },
-              { id: "iphone",  label: "Apple iPhone", icon: "🍎", sub: "iOS 스타일" },
+              { id: "samsung", label: t("vc_samsung", lang), icon: "📱", sub: t("vc_samsung_sub", lang) },
+              { id: "iphone",  label: "Apple iPhone", icon: "🍎", sub: t("vc_iphone_sub", lang) },
             ] as const).map(d => (
               <button key={d.id} onClick={() => setDevice(d.id)} style={{
                 padding: "16px 10px", borderRadius: 14,
@@ -1177,7 +1181,7 @@ export default function VoiceCallPage() {
             ))}
           </div>
 
-          <p style={{ fontWeight: 800, fontSize: 15, color: "#1e293b", marginBottom: 12 }}>📋 시나리오 선택</p>
+          <p style={{ fontWeight: 800, fontSize: 15, color: "#1e293b", marginBottom: 12 }}>📋 {t("vc_scenario", lang)}</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
             {(Object.entries(CALL_SCRIPTS) as [ScenarioId, typeof CALL_SCRIPTS[ScenarioId]][]).map(([id, s]) => (
               <button key={id} onClick={() => setScenario(id)} style={{
@@ -1209,7 +1213,7 @@ export default function VoiceCallPage() {
               cursor: "pointer", boxShadow: "0 4px 20px #22c55e40",
             }}
           >
-            📞 전화 받기 시작
+            📞 {t("vc_start", lang)}
           </button>
         </div>
       </div>
@@ -1229,7 +1233,7 @@ export default function VoiceCallPage() {
           display: "flex", alignItems: "center", gap: 5, color: "#ffffff70",
         }}>
           <ArrowLeft size={14} />
-          <span style={{ fontSize: 11 }}>처음으로</span>
+          <span style={{ fontSize: 11 }}>{t("vc_back", lang)}</span>
         </button>
       </div>
 
