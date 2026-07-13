@@ -856,12 +856,19 @@ export default function HomePage() {
           <a href="#faq" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>FAQ</a>
           <div
             style={{ position: "relative" }}
-            onMouseEnter={startChangelogScroll}
-            onMouseLeave={stopChangelogScroll}
-            onTouchStart={e => { e.preventDefault(); startChangelogScroll(); }}
-            onTouchEnd={stopChangelogScroll}
+            onMouseLeave={() => {
+              if (changelogTimerRef.current) { clearInterval(changelogTimerRef.current); changelogTimerRef.current = null; }
+            }}
           >
-            <button style={{
+            <button
+              onClick={() => {
+                if (showChangelog) {
+                  stopChangelogScroll();
+                } else {
+                  startChangelogScroll();
+                }
+              }}
+              style={{
               display: "flex", alignItems: "center", gap: 5,
               padding: "7px 14px", borderRadius: 20,
               background: showChangelog ? "#2d1060" : "#1a0a2e", color: "#c58dc6",
@@ -870,6 +877,7 @@ export default function HomePage() {
               animation: changelogBounce ? "cl-bounce 0.9s cubic-bezier(0.36,0.07,0.19,0.97)" : "none",
             }}>
               <span style={{ fontSize: 11 }}>📋</span> {t("nav_changelog", lang)}
+              <span style={{ fontSize: 9, marginLeft: 2, color: "#9161b2" }}>{showChangelog ? "▲" : "▼"}</span>
             </button>
             <style>{`
               @keyframes cl-bounce {
@@ -881,9 +889,13 @@ export default function HomePage() {
                 100% { transform: translateY(0); }
               }
             `}</style>
+            {/* 바깥 클릭 닫기 */}
+            {showChangelog && (
+              <div onClick={stopChangelogScroll} style={{ position: "fixed", inset: 0, zIndex: 998 }} />
+            )}
             {/* 팝업 */}
             <div style={{
-              position: "absolute", top: "calc(100% + 10px)", right: 0,
+              position: "absolute", top: "calc(100% + 4px)", right: 0,
               width: 420, borderRadius: 20,
               background: "linear-gradient(160deg, #180830 0%, #0e051a 100%)",
               border: "1px solid #5b21b660",
