@@ -301,11 +301,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (saved && LANGUAGES.find((l) => l.code === saved)) {
       setLangState(saved);
     }
-    // 매 세션마다 언어 선택 팝업 표시
-    const shownThisSession = sessionStorage.getItem("langPickerShown");
-    if (!shownThisSession) {
-      setShowLangPicker(true);
-    }
+    // 매 페이지 로드마다 언어 선택 팝업 표시 (AppShell이 대기하도록 키 초기화)
+    sessionStorage.removeItem("langPickerShown");
+    setShowLangPicker(true);
   }, []);
 
   const setLang = (l: LangCode) => {
