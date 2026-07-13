@@ -1562,7 +1562,7 @@ export default function ScenarioPage() {
         {/* 우측: 폰 목업 */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{
-            width: 390, minHeight: 700,
+            width: 390, height: 780,
             background: "#1a1a2e", borderRadius: 44,
             border: "8px solid #d1d5db",
             boxShadow: "0 0 0 1px #e2e8f0, 0 32px 64px #0000002a",
@@ -2315,7 +2315,7 @@ export default function ScenarioPage() {
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); sendMessage(); } }}
                   placeholder={t("sim_input_placeholder", lang)}
                   autoFocus
                   style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 14, color: "#1a1a1a" }}
