@@ -86,12 +86,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             boxShadow: "0 24px 80px rgba(100,40,200,0.5)",
           }}>
             <div style={{ fontSize: 52, marginBottom: 16 }}>💻</div>
-            <p style={{ color: "#e9d5ff", fontSize: 18, fontWeight: 900, lineHeight: 1.5, margin: "0 0 10px" }}>
-              데스크톱 버전으로<br/>변경해 주세요!
-            </p>
-            <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 500, lineHeight: 1.7, margin: 0 }}>
-              모바일에서는 일부 체험이<br/>불편할 수 있어요.
-            </p>
+            <p style={{ color: "#e9d5ff", fontSize: 18, fontWeight: 900, lineHeight: 1.5, margin: "0 0 10px" }}
+              dangerouslySetInnerHTML={{ __html: t("appshell_mobile_title", lang).replace(/\n/g, "<br/>") }}
+            />
+            <p style={{ color: "#a78bfa", fontSize: 13, fontWeight: 500, lineHeight: 1.7, margin: 0 }}
+              dangerouslySetInnerHTML={{ __html: t("appshell_mobile_sub", lang).replace(/\n/g, "<br/>") }}
+            />
           </div>
         </div>
       )}
@@ -127,7 +127,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           onMouseLeave={e => (e.currentTarget.style.borderColor = "#334155")}
         >
           <span style={{ fontSize: 16 }}>🎮</span>
-          <span style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 700 }}>체험 선택</span>
+          <span style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 700 }}>{t("nav_start", lang)}</span>
           <span style={{ color: "#6b7280", fontSize: 10, marginLeft: 2 }}>{showExpMenu ? "▲" : "▼"}</span>
         </button>
 
@@ -154,8 +154,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               >
                 <span style={{ fontSize: 22 }}>🚨</span>
                 <div>
-                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>사기 범죄 체험</p>
-                  <p style={{ color: "#64748b", fontSize: 11 }}>보이스피싱·스미싱 등 13종</p>
+                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>{t("nav_crime", lang)}</p>
+                  <p style={{ color: "#64748b", fontSize: 11 }}>{t("nav_crime_sub", lang)}</p>
                 </div>
               </button>
 
@@ -173,8 +173,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               >
                 <span style={{ fontSize: 22 }}>🎰</span>
                 <div>
-                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>불법 도박 체험</p>
-                  <p style={{ color: "#64748b", fontSize: 11 }}>바카라·달팽이·사다리 등</p>
+                  <p style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 13, marginBottom: 1 }}>{t("nav_gamble", lang)}</p>
+                  <p style={{ color: "#64748b", fontSize: 11 }}>{t("nav_gamble_sub", lang)}</p>
                 </div>
               </button>
             </div>
