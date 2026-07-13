@@ -411,9 +411,21 @@ const SC_CAT_KEY: Record<string, Parameters<typeof t>[0]> = {
   "metaverse-fraud":         "cat_future",
 };
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 export default function HomePage() {
   const router = useRouter();
   const { lang } = useLang();
+  const isMobile = useIsMobile();
   const [popup1Open, setPopup1Open] = useState(false);
   const [popup2Open, setPopup2Open] = useState(false);
   const [guideTab, setGuideTab] = useState("parents");
@@ -896,7 +908,7 @@ export default function HomePage() {
             {/* 팝업 */}
             <div style={{
               position: "absolute", top: "calc(100% + 4px)", right: 0,
-              width: 420, borderRadius: 20,
+              width: isMobile ? "calc(100vw - 32px)" : 420, maxWidth: "calc(100vw - 32px)", borderRadius: 20,
               background: "linear-gradient(160deg, #180830 0%, #0e051a 100%)",
               border: "1px solid #5b21b660",
               boxShadow: "0 12px 48px rgba(100,40,200,0.45), 0 0 0 1px rgba(195,143,214,0.08)",
@@ -2446,7 +2458,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 이용 방법 ── */}
-      <section id="how" style={{
+      <section id="how" className="section-pad" style={{
         background: "#f8fafc", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
         padding: "72px 40px",
       }}>
@@ -2455,7 +2467,7 @@ export default function HomePage() {
             <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>HOW IT WORKS</p>
             <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("how_title", lang)}</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="how-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {[
               { icon: <BookOpen size={22} color="#9161b2" />, bg: "#f5dfee", border: "#dcc5e8", step: "01", titleKey: "step1_title" as const, descKey: "step1_desc" as const },
               { icon: <Phone size={22} color="#7c3aed" />, bg: "#faf5ff", border: "#ddd6fe", step: "02", titleKey: "step2_title" as const, descKey: "step2_desc" as const },
@@ -2484,7 +2496,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 시나리오 그리드 ── */}
-      <section id="scenarios" style={{ maxWidth: 1140, margin: "0 auto", padding: "80px 40px" }}>
+      <section id="scenarios" className="section-pad" style={{ maxWidth: 1140, margin: "0 auto", padding: "80px 40px" }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 44 }}>
           <div>
             <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>SCENARIOS</p>
@@ -2505,7 +2517,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+        <div className="scenario-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
           {CRIME_SCENARIOS.map((s) => (
             <button
               key={s.id}
@@ -2717,7 +2729,7 @@ export default function HomePage() {
       })()}
 
       {/* ── 신고 번호 ── */}
-      <section id="report" style={{
+      <section id="report" className="section-pad" style={{
         background: "#fdf8ff", borderTop: "1px solid #e2e8f0",
         padding: "72px 40px",
       }}>
@@ -2727,7 +2739,7 @@ export default function HomePage() {
             <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("rpt_section_title", lang)}</h2>
             <p style={{ color: "#64748b", fontSize: 14, marginTop: 10 }}>{t("rpt_section_sub", lang)}</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div className="report-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {REPORT_NUMBERS.map((r) => (
               <a
                 key={r.number}

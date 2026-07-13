@@ -1,5 +1,16 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Send, AlertTriangle, CheckCircle, ChevronRight, Bell, Home, CreditCard, BarChart2, ShieldAlert, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
@@ -1063,6 +1074,7 @@ function RevealScreen({
 
 export default function ScenarioPage() {
   const router = useRouter();
+  const isMobile = useIsMobile();
   const { scenario } = useParams<{ scenario: string }>();
   const data = CRIME_SCENARIOS.find((s) => s.id === scenario);
   const { lang } = useLang();
@@ -1435,7 +1447,7 @@ export default function ScenarioPage() {
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
         display: "flex", alignItems: "center", gap: 12,
-        padding: "0 40px", height: 56,
+        padding: isMobile ? "0 16px" : "0 40px", height: 56,
         boxShadow: "0 1px 8px #0000000a",
       }}>
         <button onClick={() => router.push("/")} style={{ padding: 6, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
@@ -1549,23 +1561,30 @@ export default function ScenarioPage() {
         </div>
       )}
 
-      {/* 2열 레이아웃 */}
-      <div style={{
+      {/* 레이아웃 */}
+      <div style={isMobile ? {
+        display: "flex", flexDirection: "column",
+      } : {
         maxWidth: 1140, margin: "0 auto", padding: "36px 40px",
         display: "grid", gridTemplateColumns: "300px 1fr", gap: 32, alignItems: "start",
       }}>
-        {/* 좌측: 시나리오 정보 */}
-        <div style={{ position: "sticky", top: 72 }}>
-          {leftPanel}
-        </div>
+        {/* 좌측: 시나리오 정보 — 모바일에서 숨김 */}
+        {!isMobile && (
+          <div style={{ position: "sticky", top: 72 }}>
+            {leftPanel}
+          </div>
+        )}
 
         {/* 우측: 폰 목업 */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", padding: isMobile ? 0 : undefined }}>
           <div style={{
-            width: 390, height: 780,
-            background: "#1a1a2e", borderRadius: 44,
-            border: "8px solid #d1d5db",
-            boxShadow: "0 0 0 1px #e2e8f0, 0 32px 64px #0000002a",
+            width: isMobile ? "100%" : 390,
+            height: isMobile ? "calc(100dvh - 56px)" : 780,
+            maxWidth: isMobile ? "100%" : 390,
+            background: "#1a1a2e",
+            borderRadius: isMobile ? 0 : 44,
+            border: isMobile ? "none" : "8px solid #d1d5db",
+            boxShadow: isMobile ? "none" : "0 0 0 1px #e2e8f0, 0 32px 64px #0000002a",
             overflow: "hidden", position: "relative",
             display: "flex", flexDirection: "column",
           }}>

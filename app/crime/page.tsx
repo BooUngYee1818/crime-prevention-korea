@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Shield, ChevronRight, Phone } from "lucide-react";
 import { CRIME_SCENARIOS } from "@/lib/crimes";
@@ -74,9 +75,21 @@ const REPORT_NUMBERS = [
   { labelKey: "report_gamble",  number: "1336", color: "#7c3aed" },
 ];
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 export default function CrimeCenterPage() {
   const router = useRouter();
   const { lang } = useLang();
+  const isMobile = useIsMobile();
 
   return (
     <div style={{ minHeight: "100vh", background: "#f2eaf6", color: "#2a1a3a" }}>
@@ -87,7 +100,7 @@ export default function CrimeCenterPage() {
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
         display: "flex", alignItems: "center", gap: 12,
-        padding: "0 40px", height: 60,
+        padding: isMobile ? "0 16px" : "0 40px", height: 60,
         boxShadow: "0 1px 8px #0000000a",
       }}>
         <button
@@ -107,7 +120,7 @@ export default function CrimeCenterPage() {
         <h1 style={{ fontSize: 15, fontWeight: 700, color: "#1c0d2e" }}>{t("crime_center_title", lang)}</h1>
       </div>
 
-      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "40px 40px" }}>
+      <div style={{ maxWidth: 1140, margin: "0 auto", padding: isMobile ? "20px 16px" : "40px 40px" }}>
 
         {/* 안내 배너 */}
         <div style={{
@@ -238,7 +251,7 @@ export default function CrimeCenterPage() {
         </div>
 
         {/* 새 체험 그리드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)", gap: 10, marginBottom: 10 }}>
           {[
             { path: "/crime/quiz", icon: "🕵️", labelKey: "crime_grid_quiz", subKey: "crime_grid_quiz_sub", bg: "linear-gradient(135deg,#3d1f5a,#7c3aed)", border: "#7c3aed" },
             { path: "/crime/used-trade", icon: "🥕", labelKey: "crime_grid_used", subKey: "crime_grid_used_sub", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
@@ -253,7 +266,7 @@ export default function CrimeCenterPage() {
             </button>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)", gap: 10, marginBottom: 20 }}>
           {[
             { path: "/crime/deepfake", icon: "🎭", labelKey: "crime_grid_deepfake", subKey: "crime_grid_deepfake_sub", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed", isNew: false },
             { path: "/crime/ai-crimes", icon: "🤖", labelKey: "crime_grid_ai", subKey: "crime_grid_ai_sub", bg: "linear-gradient(135deg,#1a0000,#7c0000)", border: "#dc2626", isNew: false },
@@ -271,7 +284,7 @@ export default function CrimeCenterPage() {
         </div>
 
         {/* 시나리오 그리드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginBottom: 40 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: isMobile ? 10 : 14, marginBottom: 40 }}>
           {CRIME_SCENARIOS.map((scenario) => (
             <button
               key={scenario.id}
@@ -358,7 +371,7 @@ export default function CrimeCenterPage() {
             <Phone size={14} color="#dc2626" />
             <p style={{ color: "#dc2626", fontWeight: 700, fontSize: 13 }}>{t("crime_report_title", lang)}</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 12 }}>
             {REPORT_NUMBERS.map((item) => (
               <a key={item.number} href={`tel:${item.number}`} style={{
                 background: "#f8fafc", borderRadius: 12, padding: "14px 16px",

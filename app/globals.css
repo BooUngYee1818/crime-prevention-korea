@@ -40,8 +40,8 @@ html, body {
   /* 통계 2열 유지 but 패딩 줄이기 */
   .section-pad { padding: 48px 20px !important; }
 
-  /* 시나리오 3열 → 1열 */
-  .scenario-grid { grid-template-columns: 1fr !important; }
+  /* 시나리오 3열 → 2열 */
+  .scenario-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
 
   /* 신고번호 4열 → 2열 */
   .report-grid { grid-template-columns: 1fr 1fr !important; }
@@ -91,6 +91,10 @@ html, body {
   .section-pad { padding: 36px 16px !important; }
   .hero-section { padding: 28px 16px 36px !important; }
   .popup-card { padding: 20px 16px 18px !important; }
+  /* 시나리오 카드 → 1열 */
+  .scenario-grid { grid-template-columns: 1fr !important; }
+  /* 왜 필요한가 2열 → 1열 */
+  .why-grid { grid-template-columns: 1fr !important; }
 }
 
 ::-webkit-scrollbar { width: 4px; }
