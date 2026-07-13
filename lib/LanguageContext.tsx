@@ -183,39 +183,49 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
         ))}
       </div>
 
-      {/* 네온 브로드웨이 화살표 */}
+      {/* 네온 브로드웨이 화살표 — 왼쪽 아래를 향함 */}
       <div style={{
-        position: "relative", marginTop: 20, width: "100%", display: "flex",
-        flexDirection: "column", alignItems: "center",
+        position: "relative", marginTop: 16, width: "100%", display: "flex",
+        flexDirection: "column", alignItems: "flex-start", paddingLeft: 40,
         animation: "lang-fade-in 0.5s ease 0.4s both",
       }}>
         <style>{`
-          @keyframes neon-pulse-1 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #ff00ff) drop-shadow(0 0 12px #ff00ff)} 50%{opacity:0.7;filter:drop-shadow(0 0 3px #ff00ff)} }
-          @keyframes neon-pulse-2 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff)} 50%{opacity:0.6;filter:drop-shadow(0 0 3px #00ffff)} }
-          @keyframes neon-pulse-3 { 0%,100%{opacity:1;filter:drop-shadow(0 0 6px #ffff00) drop-shadow(0 0 12px #ffff00)} 50%{opacity:0.8;filter:drop-shadow(0 0 4px #ffff00)} }
-          @keyframes arrow-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+          @keyframes neon-magenta { 0%,100%{filter:drop-shadow(0 0 4px #ff00ff) drop-shadow(0 0 10px #ff00ff) drop-shadow(0 0 20px #ff00ff)} 50%{filter:drop-shadow(0 0 2px #ff00ff) drop-shadow(0 0 6px #ff00ff)} }
+          @keyframes neon-cyan    { 0%,100%{filter:drop-shadow(0 0 4px #00ffff) drop-shadow(0 0 10px #00ffff)} 50%{filter:drop-shadow(0 0 2px #00ffff)} }
+          @keyframes neon-yellow  { 0%,100%{filter:drop-shadow(0 0 4px #ffe600) drop-shadow(0 0 10px #ffe600)} 50%{filter:drop-shadow(0 0 2px #ffe600)} }
+          @keyframes arrow-wiggle { 0%{transform:translate(0,0) rotate(0deg)} 25%{transform:translate(-3px,4px) rotate(-2deg)} 75%{transform:translate(2px,2px) rotate(1deg)} 100%{transform:translate(0,0) rotate(0deg)} }
+          @keyframes dot-chase    { 0%{opacity:0.2} 50%{opacity:1} 100%{opacity:0.2} }
         `}</style>
-        <svg width="160" height="90" viewBox="0 0 160 90" style={{ animation: "arrow-bounce 1.4s ease-in-out infinite", overflow: "visible" }}>
-          {/* 꼬불꼬불 화살표 경로 */}
-          <path d="M 80 5 C 110 5, 130 20, 110 35 C 90 50, 50 40, 60 58 C 70 75, 100 70, 80 85"
+        <svg width="220" height="120" viewBox="0 0 220 120" style={{ animation: "arrow-wiggle 1.8s ease-in-out infinite", overflow: "visible" }}>
+          {/* 글로우 레이어 (굵게) */}
+          <path d="M 190 10 C 170 10, 140 30, 160 55 C 175 72, 130 68, 110 85 C 90 100, 50 108, 20 112"
+            fill="none" stroke="#ff00ff" strokeWidth="8" strokeLinecap="round" opacity="0.25" />
+          {/* 메인 꼬불꼬불 마젠타 선 */}
+          <path d="M 190 10 C 170 10, 140 30, 160 55 C 175 72, 130 68, 110 85 C 90 100, 50 108, 20 112"
             fill="none" stroke="#ff00ff" strokeWidth="3.5" strokeLinecap="round"
-            style={{ animation: "neon-pulse-1 1.2s ease-in-out infinite" }} />
-          <path d="M 80 5 C 110 5, 130 20, 110 35 C 90 50, 50 40, 60 58 C 70 75, 100 70, 80 85"
-            fill="none" stroke="#ff88ff" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-          {/* 화살표 머리 */}
-          <polyline points="65,80 80,85 72,72" fill="none" stroke="#ff00ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"
-            style={{ animation: "neon-pulse-1 1.2s ease-in-out infinite" }} />
-          {/* 장식 별 */}
-          <circle cx="20" cy="20" r="3" fill="#00ffff" style={{ animation: "neon-pulse-2 0.9s ease-in-out infinite" }} />
-          <circle cx="140" cy="15" r="2.5" fill="#ffff00" style={{ animation: "neon-pulse-3 1.1s ease-in-out infinite" }} />
-          <circle cx="30" cy="65" r="2" fill="#ff6600" style={{ animation: "neon-pulse-1 1.3s ease-in-out 0.3s infinite" }} />
-          <circle cx="145" cy="55" r="2" fill="#00ff88" style={{ animation: "neon-pulse-2 1.0s ease-in-out 0.5s infinite" }} />
-          {/* 스파클 */}
-          <text x="10" y="45" fontSize="14" style={{ animation: "neon-pulse-3 0.8s ease-in-out infinite" }}>✦</text>
-          <text x="128" y="40" fontSize="12" style={{ animation: "neon-pulse-2 1.1s ease-in-out 0.4s infinite" }}>★</text>
+            style={{ animation: "neon-magenta 1.1s ease-in-out infinite" }} />
+          {/* 하이라이트 얇은 선 */}
+          <path d="M 190 10 C 170 10, 140 30, 160 55 C 175 72, 130 68, 110 85 C 90 100, 50 108, 20 112"
+            fill="none" stroke="#ffaaff" strokeWidth="1" strokeLinecap="round" opacity="0.7" />
+
+          {/* 화살표 머리 (왼쪽 아래) */}
+          <polyline points="36,104 20,112 28,97"
+            fill="none" stroke="#ff00ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"
+            style={{ animation: "neon-magenta 1.1s ease-in-out infinite" }} />
+
+          {/* 장식 점들 */}
+          <circle cx="190" cy="10" r="4" fill="#ffe600" style={{ animation: "neon-yellow 0.9s ease-in-out infinite" }} />
+          <circle cx="160" cy="55" r="3" fill="#00ffff" style={{ animation: "neon-cyan 1.2s 0.2s ease-in-out infinite" }} />
+          <circle cx="110" cy="85" r="3.5" fill="#ff6600" style={{ animation: "neon-magenta 1.0s 0.4s ease-in-out infinite" }} />
+          <circle cx="20"  cy="112" r="4" fill="#00ff88" style={{ animation: "neon-cyan 0.8s 0.1s ease-in-out infinite" }} />
+
+          {/* 스파클 별 */}
+          <text x="195" y="38" fontSize="13" fill="#ffe600" style={{ animation: "neon-yellow 1.3s ease-in-out infinite" }}>✦</text>
+          <text x="62"  y="75" fontSize="11" fill="#00ffff" style={{ animation: "neon-cyan 1.0s 0.5s ease-in-out infinite" }}>★</text>
+          <text x="140" y="42" fontSize="10" fill="#ff88ff" style={{ animation: "neon-magenta 0.9s 0.3s ease-in-out infinite" }}>✦</text>
         </svg>
-        <p style={{ color: "#a78bfa", fontSize: 11, textAlign: "center", marginTop: -4 }}>
-          언어는 언제든 왼쪽 아래 버튼으로 변경할 수 있어요
+        <p style={{ color: "#c084fc", fontSize: 11, marginTop: -8, paddingLeft: 4, fontWeight: 600 }}>
+          ↙ 왼쪽 아래 버튼으로 언제든 변경 가능해요
         </p>
       </div>
     </div>
