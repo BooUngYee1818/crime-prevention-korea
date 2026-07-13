@@ -1115,34 +1115,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* 2번 영상 (추후 링크 교체) */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: 8,
-                  background: "linear-gradient(135deg, #059669, #0d9488)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
-                }}>2</div>
-                <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>업데이트 홍보 영상</p>
-                <span style={{ color: "#065f46", fontSize: 11, background: "#022c22", border: "1px solid #065f46", borderRadius: 20, padding: "2px 10px", fontWeight: 700 }}>NEW</span>
-              </div>
-              <div style={{
-                position: "relative", width: "100%", paddingTop: "56.25%",
-                borderRadius: 16, overflow: "hidden",
-                boxShadow: "0 16px 48px #00000060",
-                border: "1px solid #1e3a2e",
-              }}>
-                <iframe
-                  src="https://www.youtube.com/embed/APWktjzq4f4"
-                  title="범죄예방 체험관 홍보영상 2"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
-                />
-              </div>
-            </div>
-
           </div>
 
           {/* ── 업데이트 영상 그리드 ── */}
