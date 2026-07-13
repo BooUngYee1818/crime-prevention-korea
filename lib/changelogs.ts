@@ -13,7 +13,52 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.11", badge: "최신", badgeColor: "#f97316",
+    version: "v1.12", badge: "최신", badgeColor: "#3b82f6",
+    items: {
+      ko: [
+        "📱 모바일 전면 최적화 — 375px 기준 전 페이지 반응형 레이아웃 완성",
+        "🏠 메인 히어로 섹션 — 2열 그리드 → 1열, 제목·패딩 모바일 최적화",
+        "🗂️ 시나리오 목록 — 신고번호 배너 세로 배치, 카드 패딩 축소",
+        "💬 채팅 페이지 — 모바일에서 폰 목업이 전체 화면 꽉 채움",
+        "🌐 언어 선택 화면 — 5개 카드 3열 그리드로 한 화면에 모두 표시",
+        "🤖 AI 캐릭터 개선 — 고정 스크립트 제거, 사용자 말에 반응하는 심리 기반 프롬프트",
+        "🌏 채팅 번역 수정 — 첫 메시지 번역 타이밍 버그 수정",
+        "⌨️ 엔터키 수정 — 한글 입력 후 정상 전송",
+      ],
+      en: [
+        "📱 Full mobile optimization — responsive layout across all pages for 375px",
+        "🏠 Hero section — 2-column to 1-column grid, font size and padding adjusted for mobile",
+        "🗂️ Scenario list — report number banner stacked vertically, card padding reduced",
+        "💬 Chat page — phone mockup fills full screen on mobile",
+        "🌐 Language picker — 5 cards in 3-column grid, all visible without scrolling",
+        "🤖 AI character improved — removed rigid scripts, psychology-based prompts that react to user",
+        "🌏 Chat translation fix — first message translation timing bug fixed",
+        "⌨️ Enter key fix — Korean IME composition issue resolved",
+      ],
+      zh: [
+        "📱 全面移动端优化 — 所有页面适配375px响应式布局",
+        "🏠 首页英雄区 — 双列改单列，字体与内边距移动端优化",
+        "🗂️ 场景列表 — 报警横幅改为垂直排列，卡片内边距缩小",
+        "💬 聊天页面 — 手机模型在移动端填满全屏",
+        "🌐 语言选择页 — 5个卡片3列显示，无需滚动",
+        "🤖 AI角色改进 — 移除固定脚本，改为基于心理的动态提示",
+        "🌏 聊天翻译修复 — 首条消息翻译时机问题修复",
+        "⌨️ 回车键修复 — 韩文输入法问题解决",
+      ],
+      ja: [
+        "📱 モバイル全面最適化 — 全ページ375px対応レスポンシブレイアウト",
+        "🏠 ヒーローセクション — 2列→1列グリッド、フォントサイズ・パディング最適化",
+        "🗂️ シナリオ一覧 — 通報番号バナー縦積み、カードパディング縮小",
+        "💬 チャットページ — モバイルでスマホモックアップが全画面表示",
+        "🌐 言語選択画面 — 5カード3列グリッドで1画面に収まる",
+        "🤖 AIキャラクター改善 — 固定スクリプト廃止、ユーザーの発言に反応する心理ベースのプロンプト",
+        "🌏 チャット翻訳修正 — 最初のメッセージ翻訳タイミングバグ修正",
+        "⌨️ Enterキー修正 — 韓国語IME入力後の送信問題解決",
+      ],
+    },
+  },
+  {
+    version: "v1.11", badgeColor: "#f97316",
     items: {
       ko: [
         "🌐 16개 언어 완전 다국어화 — OutcomeScreen 신고기관명·체크리스트·본문, 시나리오 유형 카드, 경찰청 182 문구 등 전면 번역",
