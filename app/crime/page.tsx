@@ -240,31 +240,31 @@ export default function CrimeCenterPage() {
         {/* 새 체험 그리드 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 10 }}>
           {[
-            { path: "/crime/quiz", icon: "🕵️", label: "사기 판별 퀴즈", sub: "진짜 vs 가짜 맞추기", bg: "linear-gradient(135deg,#3d1f5a,#7c3aed)", border: "#7c3aed" },
-            { path: "/crime/used-trade", icon: "🥕", label: "중고거래 사기", sub: "피망마켓 사기 체험", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
-            { path: "/crime/sns-invest", icon: "📸", label: "SNS 투자 사기", sub: "인스타 DM 사기 체험", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
+            { path: "/crime/quiz", icon: "🕵️", labelKey: "crime_grid_quiz", subKey: "crime_grid_quiz_sub", bg: "linear-gradient(135deg,#3d1f5a,#7c3aed)", border: "#7c3aed" },
+            { path: "/crime/used-trade", icon: "🥕", labelKey: "crime_grid_used", subKey: "crime_grid_used_sub", bg: "linear-gradient(135deg,#7c2d00,#ea580c)", border: "#ea580c" },
+            { path: "/crime/sns-invest", icon: "📸", labelKey: "crime_grid_sns", subKey: "crime_grid_sns_sub", bg: "linear-gradient(135deg,#500724,#be185d)", border: "#be185d" },
           ].map((item) => (
             <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 14, padding: "14px 10px", cursor: "pointer", textAlign: "center" as const, transition: "transform 0.15s", position: "relative" as const }}
               onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform="translateY(0)"}>
               <div style={{ fontSize: 24, marginBottom: 5 }}>{item.icon}</div>
-              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{item.label}</p>
-              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{item.sub}</p>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{t(item.labelKey as Parameters<typeof t>[0], lang)}</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{t(item.subKey as Parameters<typeof t>[0], lang)}</p>
             </button>
           ))}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 20 }}>
           {[
-            { path: "/crime/deepfake", icon: "🎭", label: "AI 딥페이크 사기", sub: "가족 사칭 영상통화", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed", isNew: false },
-            { path: "/crime/ai-crimes", icon: "🤖", label: "AI 범죄 체험관", sub: "딥페이크·음성복제 등", bg: "linear-gradient(135deg,#1a0000,#7c0000)", border: "#dc2626", isNew: false },
-            { path: "/crime/ai-detective", icon: "🏆", label: "AI 탐정 도전!", sub: "가짜 영상 찾고 뱃지 획득", bg: "linear-gradient(135deg,#1a1000,#7c5200)", border: "#fbbf24", isNew: true },
+            { path: "/crime/deepfake", icon: "🎭", labelKey: "crime_grid_deepfake", subKey: "crime_grid_deepfake_sub", bg: "linear-gradient(135deg,#2e1065,#7c3aed)", border: "#7c3aed", isNew: false },
+            { path: "/crime/ai-crimes", icon: "🤖", labelKey: "crime_grid_ai", subKey: "crime_grid_ai_sub", bg: "linear-gradient(135deg,#1a0000,#7c0000)", border: "#dc2626", isNew: false },
+            { path: "/crime/ai-detective", icon: "🏆", labelKey: "crime_grid_detective", subKey: "crime_grid_detective_sub", bg: "linear-gradient(135deg,#1a1000,#7c5200)", border: "#fbbf24", isNew: true },
           ].map((item) => (
             <button key={item.path} onClick={() => router.push(item.path)} style={{ background: item.bg, border: `1px solid ${item.border}44`, borderRadius: 14, padding: "14px 10px", cursor: "pointer", textAlign: "center" as const, transition: "transform 0.15s", position: "relative" as const }}
               onMouseEnter={e => e.currentTarget.style.transform="translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform="translateY(0)"}>
               <div style={{ fontSize: 24, marginBottom: 5 }}>{item.icon}</div>
-              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{item.label}</p>
-              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{item.sub}</p>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 11, marginBottom: 2 }}>{t(item.labelKey as Parameters<typeof t>[0], lang)}</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 9 }}>{t(item.subKey as Parameters<typeof t>[0], lang)}</p>
               {item.isNew && <span style={{ position: "absolute" as const, top: 7, right: 7, background: "#fbbf24", color: "#000", fontSize: 7, fontWeight: 900, padding: "2px 5px", borderRadius: 8 }}>NEW</span>}
             </button>
           ))}

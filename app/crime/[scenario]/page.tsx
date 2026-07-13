@@ -649,11 +649,11 @@ function RevealScreen({
               display: "inline-block",
             }}>🏆</div>
             <p style={{ color: "#4ade80", fontWeight: 900, fontSize: 20, marginBottom: 8 }}>
-              훌륭합니다! 사기를 막아냈습니다
+              {t("result_success", lang)}
             </p>
             <p style={{ color: "#86efac", fontSize: 14, lineHeight: 1.7, marginBottom: 12 }}>
               끝까지 의심하고 거절하셨습니다.<br />
-              <strong style={{ color: "#fff" }}>의심하는 것이 최고의 방어입니다.</strong><br />
+              <strong style={{ color: "#fff" }}>{t("result_suspect_title", lang)}</strong><br />
               실제 상황에서도 이렇게 행동해 주세요.
             </p>
             <div style={{
@@ -793,8 +793,8 @@ function RevealScreen({
           borderRadius: 16, padding: "16px",
         }}>
           <CheckCircle size={28} color="#22c55e" style={{ margin: "0 auto 8px" }} />
-          <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 16 }}>실제 돈은 나가지 않았습니다</p>
-          <p style={{ color: "#16a34a", fontSize: 12, marginTop: 4 }}>범죄 예방 교육 시뮬레이션입니다</p>
+          <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 16 }}>{t("result_fail", lang)}</p>
+          <p style={{ color: "#16a34a", fontSize: 12, marginTop: 4 }}>{t("gamble_sim_badge", lang)}</p>
         </div>
       </div>
 
@@ -1461,11 +1461,11 @@ export default function ScenarioPage() {
               background: "#fff", border: "1px solid #e2e8f0", borderRadius: 14,
               boxShadow: "0 8px 32px #0000001a", padding: "12px 4px", minWidth: 160,
             }}>
-              <p style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, padding: "0 14px", marginBottom: 6 }}>자극 강도 설정</p>
+              <p style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, padding: "0 14px", marginBottom: 6 }}>{t("intensity_title", lang)}</p>
               {([
-                [1, "🕊️ 순화", "욕설·협박 없음"],
-                [2, "⚡ 보통", "실제 수준"],
-                [3, "🔥 실전", "최고 강도"],
+                [1, t("intensity_mild", lang), ""],
+                [2, t("intensity_normal", lang), ""],
+                [3, t("intensity_hard", lang), ""],
               ] as [1|2|3, string, string][]).map(([lv, label, desc]) => (
                 <button key={lv} onClick={() => {
                   setIntensity(lv);
@@ -1478,7 +1478,7 @@ export default function ScenarioPage() {
                   borderRadius: 8, textAlign: "left",
                 }}>
                   <span style={{ fontSize: 13, fontWeight: intensity === lv ? 700 : 400, color: intensity === lv ? "#0369a1" : "#374151" }}>{label}</span>
-                  <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: "auto" }}>{desc}</span>
+                  {desc && <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: "auto" }}>{desc}</span>}
                   {intensity === lv && <span style={{ color: "#0369a1", fontSize: 12 }}>✓</span>}
                 </button>
               ))}
@@ -1501,14 +1501,14 @@ export default function ScenarioPage() {
               <div style={{ width: 36, height: 36, borderRadius: 10, background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth={2}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <p style={{ fontWeight: 800, fontSize: 15, color: "#0f172a" }}>개인정보 보호 안내</p>
+              <p style={{ fontWeight: 800, fontSize: 15, color: "#0f172a" }}>{t("scene_privacy_title", lang)}</p>
             </div>
             <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.8, marginBottom: 14 }}>
-              이 프로그램은 <strong>귀하의 실제 개인정보를 수집·저장하지 않습니다.</strong>
+              {t("privacy_body1", lang)}
             </p>
             <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
               <p style={{ fontSize: 13, color: "#991b1b", lineHeight: 1.8, fontWeight: 600 }}>
-                ⚠️ 주민번호·계좌번호·비밀번호 등 실제 개인정보를 입력하지 마십시오.
+                {t("privacy_warn", lang)}
               </p>
               <p style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.7, marginTop: 6 }}>
                 실제 정보를 입력하실 경우 예상치 못한 개인정보 노출 위험이 있습니다. 이 시뮬레이션은 가상의 정보만을 사용하며, 실제 금융거래는 절대 이루어지지 않습니다.
@@ -1520,7 +1520,7 @@ export default function ScenarioPage() {
             <button onClick={() => setShowPrivacyNotice(false)} style={{
               marginTop: 18, width: "100%", padding: "10px 0", background: "#2563eb",
               color: "#fff", border: "none", borderRadius: 10, fontWeight: 700, fontSize: 14, cursor: "pointer",
-            }}>확인했습니다</button>
+            }}>{t("privacy_confirm", lang)}</button>
           </div>
         </div>
       )}
@@ -1577,7 +1577,7 @@ export default function ScenarioPage() {
               borderBottom: "1px solid #ffffff10",
             }}>
               <p style={{ color: "#a78bfa", fontSize: 10, fontWeight: 700, letterSpacing: 3, marginBottom: 8, textTransform: "uppercase" }}>
-                📚 수법 분석
+                {t("intro_analysis", lang)}
               </p>
               <p style={{ color: "#fff", fontWeight: 900, fontSize: 17, lineHeight: 1.4, marginBottom: 8 }}>
                 {data.title}
@@ -1590,7 +1590,7 @@ export default function ScenarioPage() {
                 marginTop: 10, background: "#ef444420", border: "1px solid #ef444440",
                 borderRadius: 20, padding: "4px 12px",
               }}>
-                <span style={{ fontSize: 10, color: "#fca5a5", fontWeight: 700 }}>⚔️ 심리 무기</span>
+                <span style={{ fontSize: 10, color: "#fca5a5", fontWeight: 700 }}>{t("intro_psych", lang)}</span>
                 <span style={{ fontSize: 11, color: "#fef2f2", fontWeight: 800 }}>{typeInfo.psychWeapon}</span>
               </div>
             </div>
@@ -1598,7 +1598,7 @@ export default function ScenarioPage() {
             {/* 유형 목록 */}
             <div style={{ padding: "16px 16px 0", flex: 1 }}>
               <p style={{ color: "#6b7280", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 12, textTransform: "uppercase" }}>
-                이 사기에서 흔히 나타나는 유형
+                {t("intro_variants", lang)}
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {typeInfo.variants.map((v, i) => (
@@ -1614,7 +1614,7 @@ export default function ScenarioPage() {
                         position: "absolute", top: 10, right: 12,
                         background: "#7c3aed", color: "#fff",
                         fontSize: 9, fontWeight: 800, padding: "2px 8px", borderRadius: 20,
-                      }}>오늘 체험</span>
+                      }}>{t("intro_today", lang)}</span>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                       <span style={{ fontSize: 20 }}>{v.icon}</span>
@@ -1634,7 +1634,7 @@ export default function ScenarioPage() {
             {/* 시작 버튼 */}
             <div style={{ padding: "20px 16px 28px" }}>
               <p style={{ color: "#4b5563", fontSize: 11, textAlign: "center", marginBottom: 12, lineHeight: 1.6 }}>
-                실제 피해자들이 가장 많이 경험한 유형을 체험합니다
+                {t("intro_desc", lang)}
               </p>
               <button
                 onClick={() => setPhase(realFirstPhase)}
@@ -1646,7 +1646,7 @@ export default function ScenarioPage() {
                   cursor: "pointer", boxShadow: "0 4px 20px #7c3aed40",
                 }}
               >
-                🎮 시뮬레이션 시작
+                {t("intro_start", lang)}
               </button>
             </div>
           </div>
@@ -1668,7 +1668,7 @@ export default function ScenarioPage() {
             }
           `}</style>
           <div style={{ textAlign: "center" }}>
-            <p style={{ color: "#888", fontSize: 13, marginBottom: 8 }}>수신 전화</p>
+            <p style={{ color: "#888", fontSize: 13, marginBottom: 8 }}>{t("ring_incoming", lang)}</p>
             <p style={{ color: "#fff", fontSize: 22, fontWeight: 700, marginBottom: 4 }}>{chatCfg.sender}</p>
             {chatCfg.senderSub && (
               <p style={{ color: "#ef4444", fontSize: 13, fontWeight: 600 }}>{chatCfg.senderSub}</p>
@@ -1705,7 +1705,7 @@ export default function ScenarioPage() {
                   display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26,
                 }}
               >📵</button>
-              <span style={{ color: "#888", fontSize: 12 }}>거절</span>
+              <span style={{ color: "#888", fontSize: 12 }}>{t("ring_reject", lang)}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
               <button
@@ -1716,7 +1716,7 @@ export default function ScenarioPage() {
                   display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26,
                 }}
               >📞</button>
-              <span style={{ color: "#22c55e", fontSize: 12, fontWeight: 600 }}>받기</span>
+              <span style={{ color: "#22c55e", fontSize: 12, fontWeight: 600 }}>{t("ring_answer", lang)}</span>
             </div>
           </div>
         </div>
@@ -2107,7 +2107,7 @@ export default function ScenarioPage() {
                 flexShrink: 0,
               }}
             >
-              💡 {tipMode ? "팁 ON" : "팁 OFF"}
+              {tipMode ? t("tip_on", lang) : t("tip_off", lang)}
             </button>
           </div>
 
@@ -2120,8 +2120,7 @@ export default function ScenarioPage() {
           }}>
             <ShieldAlert size={13} color="#3b82f6" style={{ flexShrink: 0 }} />
             <p style={{ color: "#1d4ed8", fontSize: 11, lineHeight: 1.4 }}>
-              <strong>시뮬레이션</strong> — 실제 돈을 보내거나 어딘가로 이동하지 마세요.
-              의심스러우면 <strong>182</strong>로 신고하세요.
+              {t("chat_safety_banner", lang)}
             </p>
           </div>
 
