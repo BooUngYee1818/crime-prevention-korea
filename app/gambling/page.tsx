@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useLang } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 // ── 파티클 스파크 ─────────────────────────────────────────────────────────────
 const SPARK_COLORS = ["#ff0080","#ff6600","#ffdd00","#00ff88","#00ccff","#aa44ff","#ff44aa","#ffffff"];
@@ -354,23 +355,25 @@ export default function GamblingPortalPage() {
           <div style={{ maxWidth:480, width:"100%", background:"linear-gradient(135deg,#0a0a0a,#0f0f18)", border:"2px solid #ef4444", borderRadius:24, padding:"32px 28px", textAlign:"center", boxShadow:"0 0 60px #ef444433" }}>
             <div style={{ fontSize:9, color:"#22c55e", fontWeight:700, letterSpacing:2, marginBottom:12, opacity:0.8 }}>⚠ 불법도박 예방 시뮬레이션 체험관 ⚠</div>
             <div style={{ fontSize:52, marginBottom:12, animation:"float 2s ease-in-out infinite" }}>🎰</div>
-            <h2 style={{ fontSize:20, fontWeight:900, color:"#ef4444", marginBottom:12 }}>지금 보시는 화면은<br/>실제 도박 사이트입니까?</h2>
+            <h2 style={{ fontSize:20, fontWeight:900, color:"#ef4444", marginBottom:12 }}
+              dangerouslySetInnerHTML={{ __html: t("gamble_modal_q", lang).replace(/\n/g, "<br/>") }}
+            />
             <div style={{ background:"#0f0f0f", border:"1px solid #ef444422", borderRadius:14, padding:16, marginBottom:20, textAlign:"left" }}>
-              <p style={{ color:"#ef4444", fontSize:13, fontWeight:700, marginBottom:8 }}>📢 이것은 범죄예방 교육 시뮬레이션입니다</p>
+              <p style={{ color:"#ef4444", fontSize:13, fontWeight:700, marginBottom:8 }}>📢 {t("gamble_modal_badge", lang)}</p>
               <ul style={{ color:"#888", fontSize:12, lineHeight:2.2, paddingLeft:16, margin:0 }}>
-                <li>실제 도박 사이트처럼 보이도록 <strong style={{ color:"#fbbf24" }}>의도적으로 제작</strong>된 화면입니다</li>
-                <li>실제 돈은 절대 나가지 않습니다</li>
-                <li>불법 도박 유혹 수법을 직접 경험해보세요</li>
-                <li>진짜 도박 사이트 접속 자체가 <strong style={{ color:"#ef4444" }}>형사처벌 대상</strong>입니다</li>
+                <li>{t("gamble_modal_b1", lang)}</li>
+                <li>{t("gamble_modal_b2", lang)}</li>
+                <li>{t("gamble_modal_b3", lang)}</li>
+                <li>{t("gamble_modal_b4", lang)}</li>
               </ul>
             </div>
             <div style={{ display:"flex", gap:10 }}>
-              <button onClick={() => router.push("/")} style={{ flex:1, padding:"13px 0", borderRadius:12, fontSize:13, background:"transparent", color:"#555", border:"1px solid #2a2a2a", cursor:"pointer" }}>나가기</button>
+              <button onClick={() => router.push("/")} style={{ flex:1, padding:"13px 0", borderRadius:12, fontSize:13, background:"transparent", color:"#555", border:"1px solid #2a2a2a", cursor:"pointer" }}>{t("gamble_modal_exit", lang)}</button>
               <button onClick={() => setShowWarning(false)} style={{ flex:2, padding:"13px 0", borderRadius:12, fontSize:14, fontWeight:700, background:"linear-gradient(135deg,#dc2626,#ef4444)", color:"#fff", border:"none", cursor:"pointer", boxShadow:"0 0 20px #ef444455" }}>
-                ⚠ 교육 목적으로 체험하기
+                {t("gamble_modal_enter", lang)}
               </button>
             </div>
-            <p style={{ color:"#2a2a2a", fontSize:9, marginTop:12 }}>본 콘텐츠는 범죄예방 교육 프로그램입니다</p>
+            <p style={{ color:"#2a2a2a", fontSize:9, marginTop:12 }}>{t("gamble_modal_badge", lang)}</p>
           </div>
         </div>
       )}

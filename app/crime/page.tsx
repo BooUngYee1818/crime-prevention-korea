@@ -160,10 +160,10 @@ export default function CrimeCenterPage() {
           }}>📞</div>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>전화 사기 체험</span>
+              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>{t("crime_voice_title", lang)}</span>
               <span style={{ background: "#ef4444", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>NEW</span>
             </div>
-            <p style={{ color: "#dcc5e8", fontSize: 13 }}>삼성·아이폰 실제 통화 화면 + AI 목소리로 체험</p>
+            <p style={{ color: "#dcc5e8", fontSize: 13 }}>{t("crime_voice_sub", lang)}</p>
           </div>
           <ChevronRight size={18} color="#c58dc6" style={{ flexShrink: 0 }} />
         </button>
@@ -187,10 +187,10 @@ export default function CrimeCenterPage() {
           }}>📱</div>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>문자 사기 체험 (스미싱)</span>
+              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>{t("crime_sms_title", lang)}</span>
               <span style={{ background: "#a855f7", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>NEW</span>
             </div>
-            <p style={{ color: "#dcc5e8", fontSize: 13 }}>택배·건강보험·카드 사기 문자를 3분간 직접 체험</p>
+            <p style={{ color: "#dcc5e8", fontSize: 13 }}>{t("crime_sms_sub", lang)}</p>
           </div>
           <ChevronRight size={18} color="#c58dc6" style={{ flexShrink: 0 }} />
         </button>
@@ -204,12 +204,10 @@ export default function CrimeCenterPage() {
         }}>
           <div style={{ fontSize: 32, flexShrink: 0 }}>🧒</div>
           <div>
-            <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 14, marginBottom: 6 }}>어린이 친구들에게 🌟</p>
-            <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.9 }}>
-              이 프로그램은 <strong style={{ color: "#fff" }}>나쁜 사람들의 수법을 미리 알려줘서 속지 않게</strong> 도와주는 곳이에요.<br />
-              여기서 배운 것들은 절대로 다른 사람에게 써먹으면 안 돼요.<br />
-              <strong style={{ color: "#fbbf24" }}>범죄는 상대방 마음에 평생 남는 상처를 남겨요.</strong> 절대 하면 안 된답니다! 🙅
-            </p>
+            <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 14, marginBottom: 6 }}>{t("crime_child_title", lang)}</p>
+            <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.9 }}
+              dangerouslySetInnerHTML={{ __html: t("crime_child_body", lang).replace(/\n/g, "<br />") }}
+            />
           </div>
         </div>
 
@@ -219,7 +217,7 @@ export default function CrimeCenterPage() {
           border: "1px solid #ef444444",
           borderRadius: 18, padding: "16px 18px", marginBottom: 16,
         }}>
-          <p style={{ color: "#ef4444", fontWeight: 800, fontSize: 13, marginBottom: 10 }}>⚖️ 이 프로그램의 내용을 실제로 따라 하면?</p>
+          <p style={{ color: "#ef4444", fontWeight: 800, fontSize: 13, marginBottom: 10 }}>{t("crime_legal_title", lang)}</p>
           {[
             { icon: "📞", act: "전화로 \"경찰이에요\" 하고 속이면", law: "사기죄 (형법 제347조)", penalty: "최대 10년 징역" },
             { icon: "💬", act: "문자로 링크 보내 정보 빼내면", law: "정보통신망법 제49조", penalty: "최대 5년 징역" },
@@ -235,12 +233,8 @@ export default function CrimeCenterPage() {
               </div>
             </div>
           ))}
-          <p style={{ color: "#6b7280", fontSize: 11, marginTop: 10, lineHeight: 1.7 }}>
-            💡 만 14세 미만은 소년법으로 보호받지만, 14세 이상이면 형사처벌을 받을 수 있어요. 친구들, 이 체험은 <strong style={{ color: "#22c55e" }}>당하지 않기 위한 연습</strong>이에요!
-          </p>
-          <p style={{ color: "#f87171", fontSize: 11, marginTop: 6, lineHeight: 1.7, fontWeight: 600 }}>
-            ⚠️ 소년법 보호를 받더라도 <strong style={{ color: "#fca5a5" }}>안전한 게 아니에요</strong> — 보호처분·소년원 송치·피해자 민사소송은 나이 제한 없이 적용돼요.
-          </p>
+          <p style={{ color: "#6b7280", fontSize: 11, marginTop: 10, lineHeight: 1.7 }}>{t("crime_legal_note", lang)}</p>
+          <p style={{ color: "#f87171", fontSize: 11, marginTop: 6, lineHeight: 1.7, fontWeight: 600 }}>{t("crime_legal_warn", lang)}</p>
         </div>
 
         {/* 새 체험 그리드 */}
