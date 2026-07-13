@@ -1089,6 +1089,7 @@ export default function ScenarioPage() {
   const [transferTarget, setTransferTarget] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [translations, setTranslations] = useState<Record<number, string>>({});
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [pendingSend, setPendingSend] = useState<number | null>(null);
@@ -1277,7 +1278,11 @@ export default function ScenarioPage() {
 
       const d = await res.json();
       if (d.reply || d.error) {
-        setMessages((prev) => [...prev, { role: "criminal", content: d.reply || "..." }]);
+        setMessages((prev) => {
+          const next = [...prev, { role: "criminal" as const, content: d.reply || "..." }];
+          if (d.translation) setTranslations(t => ({ ...t, [next.length - 1]: d.translation }));
+          return next;
+        });
         // 팁 모드 — AI 응답에서 트리거 키워드 감지
         if (tipMode && d.reply) {
           const tips = SCENARIO_TIPS[scenario as string] ?? [];
@@ -2146,17 +2151,24 @@ export default function ScenarioPage() {
                   {msg.role === "criminal" && (
                     <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#fff", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0, boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>{data.icon}</div>
                   )}
-                  <div style={{
-                    maxWidth: "72%", padding: "10px 14px", fontSize: 14, lineHeight: 1.65,
-                    color: msg.role === "user" ? "#fff" : "#1a1a1a",
-                    background: msg.role === "user"
-                      ? "linear-gradient(135deg,#f97316,#ea580c)"
-                      : "#ffffff",
-                    borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-                    whiteSpace: "pre-wrap",
-                  }}>
-                    {msg.content}
+                  <div style={{ maxWidth: "72%", display: "flex", flexDirection: "column", gap: 3 }}>
+                    <div style={{
+                      padding: "10px 14px", fontSize: 14, lineHeight: 1.65,
+                      color: msg.role === "user" ? "#fff" : "#1a1a1a",
+                      background: msg.role === "user"
+                        ? "linear-gradient(135deg,#f97316,#ea580c)"
+                        : "#ffffff",
+                      borderRadius: msg.role === "user" ? "18px 4px 18px 18px" : "4px 18px 18px 18px",
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+                      whiteSpace: "pre-wrap",
+                    }}>
+                      {msg.content}
+                    </div>
+                    {msg.role === "criminal" && translations[i] && (
+                      <p style={{ fontSize: 11, color: "#6b7280", lineHeight: 1.5, paddingLeft: 4 }}>
+                        {translations[i]}
+                      </p>
+                    )}
                   </div>
                 </div>
               )

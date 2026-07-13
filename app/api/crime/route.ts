@@ -750,7 +750,25 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ reply: cleanReply, sendAmount });
+    // 번역 (lang이 ko가 아닐 때만)
+    let translation: string | null = null;
+    if (lang && lang !== "ko" && cleanReply) {
+      const LANG_NAMES: Record<string, string> = {
+        en:"English", ja:"Japanese", zh:"Chinese", vi:"Vietnamese",
+        es:"Spanish", de:"German", fr:"French", hi:"Hindi", pt:"Portuguese",
+        th:"Thai", uz:"Uzbek", tl:"Filipino", mn:"Mongolian", ru:"Russian", id:"Indonesian",
+      };
+      const langName = LANG_NAMES[lang] ?? "English";
+      try {
+        translation = await callAI(
+          `Translate the following Korean text to ${langName}. Return only the translated text, nothing else.`,
+          [],
+          cleanReply,
+        );
+      } catch { translation = null; }
+    }
+
+    return NextResponse.json({ reply: cleanReply, sendAmount, translation });
 
   } catch (err) {
     console.error("crime API error:", err);
