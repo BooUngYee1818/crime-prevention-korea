@@ -52,7 +52,7 @@ const SITE_NAME: Record<LangCode, string> = {
 };
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(true);
   useEffect(() => {
     const check = () => setM(window.innerWidth < 600);
     check();
