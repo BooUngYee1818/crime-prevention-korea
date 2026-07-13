@@ -1122,27 +1122,32 @@ export default function ScenarioPage() {
     setDangerReasons((prev) => [...new Set([...prev, reason])]);
   }
 
-  // chat 시작 시 첫 메시지 설정 (ringing에서 넘어올 때도 포함)
+  const LANG_NAMES: Record<string, string> = {
+    en:"English", ja:"Japanese", zh:"Chinese", vi:"Vietnamese",
+    es:"Spanish", de:"German", fr:"French", hi:"Hindi", pt:"Portuguese",
+    th:"Thai", uz:"Uzbek", tl:"Filipino", mn:"Mongolian", ru:"Russian", id:"Indonesian",
+  };
+
+  // chat 시작 시 첫 메시지 설정
   useEffect(() => {
     if (phase === "chat" && messages.length === 0) {
       const firstMsg = FIRST_MESSAGES[scenario as string] || "안녕하세요.";
       setMessages([{ role: "criminal", content: firstMsg }]);
-      if (lang && lang !== "ko") {
-        const LANG_NAMES: Record<string, string> = {
-          en:"English", ja:"Japanese", zh:"Chinese", vi:"Vietnamese",
-          es:"Spanish", de:"German", fr:"French", hi:"Hindi", pt:"Portuguese",
-          th:"Thai", uz:"Uzbek", tl:"Filipino", mn:"Mongolian", ru:"Russian", id:"Indonesian",
-        };
-        fetch("/api/crime/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: firstMsg, lang: LANG_NAMES[lang] ?? "English" }),
-        }).then(r => r.json()).then(d => {
-          if (d.translation) setTranslations({ 0: d.translation });
-        }).catch(() => {});
-      }
     }
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 첫 메시지 번역 (lang 또는 messages 준비되면 실행)
+  useEffect(() => {
+    if (phase === "chat" && messages.length === 1 && messages[0].role === "criminal" && lang && lang !== "ko" && !translations[0]) {
+      fetch("/api/crime/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: messages[0].content, lang: LANG_NAMES[lang] ?? "English" }),
+      }).then(r => r.json()).then(d => {
+        if (d.translation) setTranslations({ 0: d.translation });
+      }).catch(() => {});
+    }
+  }, [phase, messages, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 채팅 중 BGM 버튼 숨기기
   useEffect(() => {
