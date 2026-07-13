@@ -1293,11 +1293,9 @@ export default function ScenarioPage() {
 
       const d = await res.json();
       if (d.reply || d.error) {
-        setMessages((prev) => {
-          const next = [...prev, { role: "criminal" as const, content: d.reply || "..." }];
-          if (d.translation) setTranslations(t => ({ ...t, [next.length - 1]: d.translation }));
-          return next;
-        });
+        const criminalMsgIndex = newMessages.length;
+        setMessages((prev) => [...prev, { role: "criminal" as const, content: d.reply || "..." }]);
+        if (d.translation) setTranslations(t => ({ ...t, [criminalMsgIndex]: d.translation }));
         // 팁 모드 — AI 응답에서 트리거 키워드 감지
         if (tipMode && d.reply) {
           const tips = SCENARIO_TIPS[scenario as string] ?? [];
