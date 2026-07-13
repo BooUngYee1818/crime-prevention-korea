@@ -13,7 +13,57 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.10", badge: "최신", badgeColor: "#f97316",
+    version: "v1.11", badge: "최신", badgeColor: "#f97316",
+    items: {
+      ko: [
+        "🌐 16개 언어 완전 다국어화 — OutcomeScreen 신고기관명·체크리스트·본문, 시나리오 유형 카드, 경찰청 182 문구 등 전면 번역",
+        "🃏 시나리오 유형 카드 다국어화 — 10개 시나리오 영어·중국어·일본어·베트남어 번역 (나머지 언어 영어 폴백)",
+        "💬 채팅창 언어 표시기 추가 — 채팅 입력창 아래 선택된 언어가 소형 텍스트로 표시",
+        "🎓 공공장소 안내 배너 — 상단 고정 '범죄 예방 시뮬레이션을 플레이 중입니다' 항상 한국어 표시",
+        "🌟 네온 브로드웨이 화살표 — 언어 선택 모달에 꼬불꼬불 마젠타 네온 화살표로 왼쪽 아래 언어버튼 안내",
+        "🔄 매 접속마다 언어 선택창 표시 — 새로고침·재방문 시 언어 선택 모달 항상 먼저 표시",
+        "📋 chat_sub_lang 16개 언어 완성 및 신규 i18n 키 30+ 추가",
+      ],
+      en: [
+        "🌐 Full 16-language localization — OutcomeScreen agency names, checklist, body text, scenario type cards, Police 182 text all translated",
+        "🃏 Scenario type card multilingual — 10 scenarios translated into en/zh/ja/vi (English fallback for other languages)",
+        "💬 Chat language indicator — selected language shown as small text below the chat input",
+        "🎓 Public space banner — fixed top banner '범죄 예방 시뮬레이션을 플레이 중입니다' always in Korean",
+        "🌟 Neon Broadway arrow — curly magenta neon arrow in language modal pointing to bottom-left language button",
+        "🔄 Language picker on every visit — modal always appears first on every page load / refresh",
+        "📋 chat_sub_lang completed for 16 languages + 30+ new i18n keys added",
+      ],
+      zh: [
+        "🌐 完整16语言本地化 — OutcomeScreen机构名称·检查清单·正文、场景类型卡片、警察厅182文字全面翻译",
+        "🃏 场景类型卡片多语言化 — 10个场景翻译为英/中/日/越（其他语言英语回退）",
+        "💬 聊天语言指示器 — 聊天输入框下方显示当前选择语言",
+        "🎓 公共场所提示横幅 — 顶部固定「犯罪预防模拟进行中」始终以韩语显示",
+        "🌟 霓虹百老汇箭头 — 语言选择弹窗中弯曲的品红霓虹箭头指向左下角语言按钮",
+        "🔄 每次访问均显示语言选择窗 — 每次刷新·重访时语言选择弹窗优先显示",
+        "📋 chat_sub_lang完成16种语言支持，新增30+个i18n键",
+      ],
+      ja: [
+        "🌐 16言語完全多言語化 — OutcomeScreen機関名・チェックリスト・本文、シナリオタイプカード、警察庁182テキスト全面翻訳",
+        "🃏 シナリオタイプカード多言語化 — 10シナリオを英語・中国語・日本語・ベトナム語に翻訳（その他は英語フォールバック）",
+        "💬 チャット言語インジケーター — 入力欄の下に選択言語が小テキストで表示",
+        "🎓 公共場所案内バナー — 上部固定「범죄 예방 시뮬레이션을 플레이 중입니다」常に韓国語表示",
+        "🌟 ネオンブロードウェイ矢印 — 言語選択モーダルにくねくねしたマゼンタネオン矢印で左下の言語ボタンを案内",
+        "🔄 アクセス毎に言語選択画面表示 — リロード・再訪問時に言語選択モーダルが常に最初に表示",
+        "📋 chat_sub_lang 16言語完成＋30以上の新i18nキー追加",
+      ],
+      vi: [
+        "🌐 Bản địa hóa đầy đủ 16 ngôn ngữ — tên cơ quan OutcomeScreen, checklist, nội dung, thẻ loại kịch bản, văn bản Cảnh sát 182 đều được dịch",
+        "🃏 Đa ngôn ngữ thẻ loại kịch bản — 10 kịch bản dịch sang en/zh/ja/vi (ngôn ngữ khác dùng tiếng Anh)",
+        "💬 Chỉ báo ngôn ngữ chat — ngôn ngữ đã chọn hiển thị nhỏ bên dưới ô nhập chat",
+        "🎓 Banner nơi công cộng — băng rôn cố định trên đầu '범죄 예방 시뮬레이션을 플레이 중입니다' luôn bằng tiếng Hàn",
+        "🌟 Mũi tên neon Broadway — mũi tên neon magenta uốn lượn trong modal ngôn ngữ chỉ đến nút ngôn ngữ góc trái dưới",
+        "🔄 Hiển thị chọn ngôn ngữ mỗi lần truy cập — modal luôn xuất hiện đầu tiên mỗi khi tải lại / truy cập lại",
+        "📋 chat_sub_lang hoàn thành 16 ngôn ngữ + thêm 30+ khóa i18n mới",
+      ],
+    },
+  },
+  {
+    version: "v1.10", badgeColor: "#f97316",
     items: {
       ko: [
         "💡 팁 공개모드 추가 — 채팅 중 사기 수법 실시간 팁 카드 슬라이드업 (시나리오별 트리거 키워드 기반)",

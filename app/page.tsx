@@ -911,7 +911,7 @@ export default function HomePage() {
                   marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650",
                   borderRadius: 20, padding: "3px 10px",
                 }}>
-                  <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.9.2 최신</span>
+                  <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.11 최신</span>
                 </div>
               </div>
               {/* 스크롤 영역 */}
