@@ -593,11 +593,7 @@ ${PSY_CORE}
 };
 
 const LANG_INSTRUCTION: Record<string, string> = {
-  en: "IMPORTANT: Reply in English only.",
-  ja: "重要: 必ず日本語のみで返答してください。",
-  zh: "重要提示：只用中文回复。",
-  vi: "QUAN TRỌNG: Chỉ trả lời bằng tiếng Việt.",
-  es: "IMPORTANTE: Responde solo en español.",
+  // AI는 항상 한국어로 답변 — 번역은 클라이언트에서 처리
 };
 
 async function callAI(
