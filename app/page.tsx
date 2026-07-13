@@ -855,7 +855,7 @@ export default function HomePage() {
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
           <a href="#faq" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>FAQ</a>
           <div
-            style={{ position: "relative" }}
+            style={{ position: "relative", zIndex: 1000 }}
             onMouseLeave={() => {
               if (changelogTimerRef.current) { clearInterval(changelogTimerRef.current); changelogTimerRef.current = null; }
             }}
