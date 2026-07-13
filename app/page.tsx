@@ -159,9 +159,9 @@ const SCAM_SCENARIOS = [
   },
   {
     id: "usedtrade",
-    emoji: "🥕",
+    emoji: "🫑",
     tag: "중고거래 사기",
-    tagColor: "#f97316",
+    tagColor: "#16a34a",
     title: "피망마켓에서 아이패드를 팔아요",
     desc: "안전결제 링크 위조. 중고거래 사기 피해 연 5만 건 이상.",
     preview: "구매자: 안전결제로 할게요~ 링크 보내드릴게요 ㅎㅎ",
@@ -1972,10 +1972,10 @@ export default function HomePage() {
                   color: "#c58dc655", fontSize: 10, fontFamily: "monospace",
                 }}>
                   {(lang === "ko"
-                    ? ["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🥕 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기"]
+                    ? ["🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🫑 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기", "🎙️ AI 목소리 복제", "📈 주식 오픈채팅", "🫑 피망마켓", "⚡ 개번장터", "🤖 딥보이스", "💰 코인 사기"]
                     : lang === "ja"
-                    ? ["🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺", "🎙️ AI音声複製", "📈 株式オープンチャット", "🥕 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺"]
-                    : ["🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam", "🎙️ AI Voice Clone", "📈 Stock Open Chat", "🥕 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam"]
+                    ? ["🎙️ AI音声複製", "📈 株式オープンチャット", "🫑 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺", "🎙️ AI音声複製", "📈 株式オープンチャット", "🫑 피망마켓Market", "⚡ Bunjang", "🤖 ディープボイス", "💰 コイン詐欺"]
+                    : ["🎙️ AI Voice Clone", "📈 Stock Open Chat", "🫑 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam", "🎙️ AI Voice Clone", "📈 Stock Open Chat", "🫑 Carrot Market", "⚡ Bunjang", "🤖 Deep Voice", "💰 Coin Scam"]
                   ).map((t,i) => (
                     <span key={i}>{t} &nbsp;·&nbsp;</span>
                   ))}
@@ -2001,7 +2001,7 @@ export default function HomePage() {
                 {[
                   { tag: "AI VOICE", glow: "#c58dc6", name: "딥보이스 보이스피싱 등장", nameTr: lang === "ja" ? "ディープボイス詐欺の登場" : lang === "zh" ? "深度伪造语音诈骗兴起" : lang === "ko" ? null : "Deepfake Voice Phishing Emerges", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해.", descTr: lang === "ja" ? "AIで子供の声を複製。3〜5秒のサンプルだけで完璧な模倣。親が初めて声さえ信用できなくなった年。" : lang === "zh" ? "AI复制子女声音。仅需3~5秒样本即可完美模仿。父母第一次连声音都无法信任的一年。" : lang === "ko" ? null : "AI replicates a child's voice with just 3-5 seconds of audio. Parents could no longer trust even familiar voices." },
                   { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", nameTr: lang === "ja" ? "オープンチャット投資詐欺の全盛期" : lang === "zh" ? "开放聊天室投资诈骗鼎盛期" : lang === "ko" ? null : "Open Chat Investment Scam Peak", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "오카카 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명.", descTr: lang === "ja" ? "カカオオープンチャット「株の達人」部屋。収益証明キャプチャーで埋め尽くし→入金誘導→逃走。同時被害者数千人。" : lang === "zh" ? "KakaoTalk开放聊天室'股票高手'群。收益截图轰炸→诱导入金→消失。同时受害者数千人。" : lang === "ko" ? null : "KakaoTalk 'stock expert' open chat rooms. Profit screenshots → deposit pressure → disappear. Thousands of simultaneous victims." },
-                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", nameTr: lang === "ja" ? "中古取引詐欺の急増" : lang === "zh" ? "二手交易诈骗激增" : lang === "ko" ? null : "Used Goods Scam Surge", waveform: "피망마켓🥕 번개⚡ 평화나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점.", descTr: lang === "ja" ? "プラットフォームの爆発的成長とともに詐欺も急増。「直接取引文化」が詐欺に悪用され始めた転換点。" : lang === "zh" ? "随着平台爆炸式增长，诈骗也急剧增加。'直接交易文化'开始被诈骗分子利用的转折点。" : lang === "ko" ? null : "Scams surged alongside platform explosive growth. The 'direct trade culture' began being exploited by fraudsters." },
+                  { tag: "MARKET", glow: "#34d399", name: "중고거래 사기 급증", nameTr: lang === "ja" ? "中古取引詐欺の急増" : lang === "zh" ? "二手交易诈骗激增" : lang === "ko" ? null : "Used Goods Scam Surge", waveform: "피망마켓🫑 번개⚡ 평화나라", desc: "플랫폼 폭발 성장과 함께 사기도 급증. '직거래 문화'가 오히려 사기에 악용되기 시작한 전환점.", descTr: lang === "ja" ? "プラットフォームの爆発的成長とともに詐欺も急増。「直接取引文化」が詐欺に悪用され始めた転換点。" : lang === "zh" ? "随着平台爆炸式增长，诈骗也急剧增加。'直接交易文化'开始被诈骗分子利用的转折点。" : lang === "ko" ? null : "Scams surged alongside platform explosive growth. The 'direct trade culture' began being exploited by fraudsters." },
                 ].map((c, j) => (
                   <div key={j} style={{
                     background: "#09090b",
@@ -3097,7 +3097,7 @@ export default function HomePage() {
                 avatar: "👩",
                 rating: 5,
                 tag: "중고거래 사기 예방",
-                tagColor: "#f97316",
+                tagColor: "#16a34a",
                 date: "3주 전",
                 text: "피망마켓에서 맥북 팔겠다는 사람이 안전결제 링크 보내줬는데 체험이랑 완전 똑같았어요. 그 화면까지. URL이 좀 이상하다 싶어서 확인해보니까 가짜사이트였고... 경찰에 신고했더니 이미 피해자가 17명이래요. 제가 18번째가 될 뻔. 이거 필수로 해봐야 하는 거 아닌가요 진짜로.",
                 highlight: "피해자 18번째가 될 뻔했어요",
