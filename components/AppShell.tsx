@@ -31,8 +31,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [showMobileToast, setShowMobileToast] = useState(false);
 
   useEffect(() => {
-    // 매 방문마다 성별/나이 입력창 표시 (통계에 반영)
-    setShowProfile(true);
+    // 언어 선택이 완료된 후에만 프로필 모달 표시
+    const langPickerShown = sessionStorage.getItem("langPickerShown");
+    if (langPickerShown) {
+      setShowProfile(true);
+    } else {
+      // 언어 선택 완료를 기다렸다가 표시
+      const check = setInterval(() => {
+        if (sessionStorage.getItem("langPickerShown")) {
+          clearInterval(check);
+          setShowProfile(true);
+        }
+      }, 200);
+      return () => clearInterval(check);
+    }
   }, []);
 
   useEffect(() => {
