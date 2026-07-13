@@ -5,7 +5,8 @@ import { LangCode, LANGUAGES } from "./i18n";
 const LanguageContext = createContext<{
   lang: LangCode;
   setLang: (l: LangCode) => void;
-}>({ lang: "ko", setLang: () => {} });
+  langPickerVisible: boolean;
+}>({ lang: "ko", setLang: () => {}, langPickerVisible: true });
 
 // 주요 5개 언어 (큰 카드로 표시)
 const MAJOR_LANGS: LangCode[] = ["ko", "en", "zh", "ja", "vi"];
@@ -294,15 +295,15 @@ function FloatingLanguageSelector() {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<LangCode>("ko");
-  const [showLangPicker, setShowLangPicker] = useState(false);
+  // true로 시작 — 언어 선택 전까지 항상 표시
+  const [showLangPicker, setShowLangPicker] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as LangCode | null;
     if (saved && LANGUAGES.find((l) => l.code === saved)) {
       setLangState(saved);
     }
-    // 매 페이지 로드마다 언어 선택 팝업 표시 (AppShell이 대기하도록 키 초기화)
-    sessionStorage.removeItem("langPickerShown");
+    // 매 페이지 로드마다 언어 선택 팝업 표시
     setShowLangPicker(true);
   }, []);
 
@@ -314,11 +315,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   function handlePickLang(l: LangCode) {
     setLang(l);
     setShowLangPicker(false);
-    sessionStorage.setItem("langPickerShown", "1");
   }
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang }}>
+    <LanguageContext.Provider value={{ lang, setLang, langPickerVisible: showLangPicker }}>
       {showLangPicker && <LangSelectModal onSelect={handlePickLang} />}
       {/* 공공장소 안내 배너 — 항상 한국어 고정 */}
       <div style={{
