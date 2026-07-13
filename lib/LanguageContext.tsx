@@ -51,8 +51,20 @@ const SITE_NAME: Record<LangCode, string> = {
   id: "Simulasi Pencegahan Kejahatan",
 };
 
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const check = () => setM(window.innerWidth < 600);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return m;
+}
+
 function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
   const [hovered, setHovered] = useState<LangCode | null>(null);
+  const isMobile = useIsMobile();
 
   const majorLangs = LANGUAGES.filter((l) => MAJOR_LANGS.includes(l.code));
   const otherLangs = LANGUAGES.filter((l) => !MAJOR_LANGS.includes(l.code));
@@ -97,27 +109,36 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
       </div>
 
       {/* 헤더 */}
-      <div style={{ textAlign: "center", marginBottom: 32, animation: "lang-fade-in 0.5s ease both" }}>
-        <div style={{ fontSize: 52, marginBottom: 12 }}>🛡️</div>
-        <p style={{ color: "#fff", fontSize: 20, fontWeight: 900, marginBottom: 6, letterSpacing: -0.5 }}>
+      <div style={{ textAlign: "center", marginBottom: isMobile ? 16 : 32, animation: "lang-fade-in 0.5s ease both" }}>
+        <div style={{ fontSize: isMobile ? 36 : 52, marginBottom: isMobile ? 6 : 12 }}>🛡️</div>
+        <p style={{ color: "#fff", fontSize: isMobile ? 16 : 20, fontWeight: 900, marginBottom: 4, letterSpacing: -0.5 }}>
           Crime Prevention Korea
         </p>
-        <p style={{ color: "#a78bfa", fontSize: 13, marginBottom: 20 }}>
-          {MAJOR_LANGS.map((lc) => SITE_NAME[lc]).join(" · ")}
-        </p>
+        {!isMobile && (
+          <p style={{ color: "#a78bfa", fontSize: 13, marginBottom: 16 }}>
+            {MAJOR_LANGS.map((lc) => SITE_NAME[lc]).join(" · ")}
+          </p>
+        )}
         <div style={{
           display: "inline-block", background: "rgba(124,58,237,0.2)",
           border: "1.5px solid rgba(124,58,237,0.5)", borderRadius: 24,
-          padding: "8px 20px",
+          padding: isMobile ? "6px 14px" : "8px 20px",
+          marginTop: isMobile ? 6 : 0,
         }}>
-          <p style={{ color: "#c4b5fd", fontSize: 14, fontWeight: 700 }}>
-            {MAJOR_LANGS.map((lc) => PICK_TEXT[lc]).join("  /  ")}
+          <p style={{ color: "#c4b5fd", fontSize: isMobile ? 11 : 14, fontWeight: 700 }}>
+            {isMobile
+              ? "언어 선택 / Select Language"
+              : MAJOR_LANGS.map((lc) => PICK_TEXT[lc]).join("  /  ")}
           </p>
         </div>
       </div>
 
-      {/* 주요 5개 언어 — 큰 카드 */}
-      <div style={{
+      {/* 주요 5개 언어 — 모바일: 3열 그리드 / PC: flex */}
+      <div style={isMobile ? {
+        display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8,
+        width: "100%", maxWidth: 360,
+        marginBottom: 14, animation: "lang-fade-in 0.5s ease 0.1s both",
+      } : {
         display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center",
         marginBottom: 20, animation: "lang-fade-in 0.5s ease 0.1s both",
       }}>
@@ -129,8 +150,11 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
             onMouseEnter={() => setHovered(l.code)}
             onMouseLeave={() => setHovered(null)}
             style={{
-              display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-              padding: "20px 28px", minWidth: 110, borderRadius: 20,
+              display: "flex", flexDirection: "column", alignItems: "center",
+              gap: isMobile ? 4 : 8,
+              padding: isMobile ? "12px 8px" : "20px 28px",
+              minWidth: isMobile ? 0 : 110,
+              borderRadius: 16,
               background: hovered === l.code
                 ? "linear-gradient(135deg, rgba(124,58,237,0.35), rgba(59,130,246,0.25))"
                 : "rgba(255,255,255,0.07)",
@@ -141,11 +165,13 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
               boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             }}
           >
-            <span style={{ fontSize: 36 }}>{l.flag}</span>
-            <span style={{ color: "#fff", fontSize: 15, fontWeight: 800 }}>{l.label}</span>
-            <span style={{ color: "#94a3b8", fontSize: 11 }}>
-              {PICK_TEXT[l.code as LangCode].split(" ").slice(0, 2).join(" ")}
-            </span>
+            <span style={{ fontSize: isMobile ? 26 : 36 }}>{l.flag}</span>
+            <span style={{ color: "#fff", fontSize: isMobile ? 12 : 15, fontWeight: 800 }}>{l.label}</span>
+            {!isMobile && (
+              <span style={{ color: "#94a3b8", fontSize: 11 }}>
+                {PICK_TEXT[l.code as LangCode].split(" ").slice(0, 2).join(" ")}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -186,8 +212,8 @@ function LangSelectModal({ onSelect }: { onSelect: (l: LangCode) => void }) {
 
       {/* 네온 브로드웨이 화살표 — 왼쪽 아래를 향함 */}
       <div style={{
-        position: "relative", marginTop: 16, width: "100%", display: "flex",
-        flexDirection: "column", alignItems: "flex-start", paddingLeft: 40,
+        position: "relative", marginTop: isMobile ? 8 : 16, width: "100%", display: "flex",
+        flexDirection: "column", alignItems: "flex-start", paddingLeft: isMobile ? 16 : 40,
         animation: "lang-fade-in 0.5s ease 0.4s both",
       }}>
         <style>{`
