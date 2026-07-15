@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Shield, ExternalLink, ChevronDown, ChevronUp, BarChart2 } from "lucide-react";
 import { useLang } from "@/lib/LanguageContext";
@@ -8,6 +8,13 @@ export default function StatsPage() {
   const router = useRouter();
   const { lang } = useLang();
   const [openId, setOpenId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const t = (ko: string, en: string, ja: string, zh: string, vi: string, es: string) =>
     lang === "ko" ? ko : lang === "en" ? en : lang === "ja" ? ja : lang === "zh" ? zh : lang === "vi" ? vi : es;
@@ -336,7 +343,7 @@ export default function StatsPage() {
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
         display: "flex", alignItems: "center", gap: 12,
-        padding: "0 40px", height: 62,
+        padding: isMobile ? "0 16px" : "0 40px", height: 62,
         boxShadow: "0 1px 8px #0000000a",
       }}>
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
@@ -353,12 +360,12 @@ export default function StatsPage() {
         </span>
       </nav>
 
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "52px 40px 80px" }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: isMobile ? "28px 16px 80px" : "52px 40px 80px" }}>
 
         {/* Header */}
         <div style={{ marginBottom: 44 }}>
           <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>OFFICIAL DATA</p>
-          <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e", marginBottom: 14 }}>
+          <h1 style={{ fontSize: isMobile ? 24 : 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e", marginBottom: 14 }}>
             {t("국가가 공식 집계한 범죄 통계", "Officially Compiled Government Crime Statistics", "国家が公式に集計した犯罪統計", "国家官方汇编的犯罪统计", "Thống kê Tội phạm được Nhà nước Chính thức Tổng hợp", "Estadísticas de Crimen Oficialmente Compiladas por el Gobierno")}
           </h1>
           <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8 }}>
@@ -394,8 +401,8 @@ export default function StatsPage() {
         {/* Banner */}
         <div style={{
           background: "linear-gradient(135deg, #1c0d2e, #2a1a3a)",
-          borderRadius: 20, padding: "26px 32px", marginBottom: 36,
-          display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
+          borderRadius: 20, padding: isMobile ? "20px 18px" : "26px 32px", marginBottom: 36,
+          display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
         }}>
           <Shield size={32} color="#c58dc6" style={{ flexShrink: 0 }} />
           <div>
@@ -533,16 +540,19 @@ export default function StatsPage() {
                     <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: 20 }}>
                       {crime.stats.map((stat, i) => (
                         <div key={stat.label} style={{
-                          display: "grid", gridTemplateColumns: "1fr auto auto",
-                          alignItems: "center", gap: 16, padding: "11px 0",
+                          display: isMobile ? "flex" : "grid",
+                          flexDirection: isMobile ? "column" : undefined,
+                          gridTemplateColumns: isMobile ? undefined : "1fr auto auto",
+                          alignItems: isMobile ? "flex-start" : "center",
+                          gap: isMobile ? 4 : 16, padding: "11px 0",
                           borderBottom: i < crime.stats.length - 1 ? `1px solid ${crime.bg}` : "none",
                         }}>
                           <span style={{ color: "#64748b", fontSize: 13 }}>{stat.label}</span>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <span style={{
                             color: stat.bold ? crime.color : "#1c0d2e",
                             fontWeight: stat.bold ? 800 : 600,
-                            fontSize: stat.bold ? 16 : 14,
-                            textAlign: "right",
+                            fontSize: stat.bold ? (isMobile ? 14 : 16) : 14,
                           }}>
                             {stat.value}
                           </span>
@@ -554,6 +564,7 @@ export default function StatsPage() {
                           }}>
                             {stat.source}
                           </span>
+                          </div>
                         </div>
                       ))}
                     </div>

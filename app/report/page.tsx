@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ExternalLink, AlertTriangle } from "lucide-react";
 import { useLang } from "@/lib/LanguageContext";
@@ -6,6 +7,13 @@ import { useLang } from "@/lib/LanguageContext";
 export default function ReportPage() {
   const router = useRouter();
   const { lang } = useLang();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const REPORT_ITEMS = [
     {
@@ -222,7 +230,7 @@ export default function ReportPage() {
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
         display: "flex", alignItems: "center", gap: 12,
-        padding: "0 40px", height: 62, boxShadow: "0 1px 8px #0000000a",
+        padding: isMobile ? "0 16px" : "0 40px", height: 62, boxShadow: "0 1px 8px #0000000a",
       }}>
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
           <ArrowLeft size={18} />
@@ -235,7 +243,7 @@ export default function ReportPage() {
         </span>
       </nav>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "52px 40px 80px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "28px 16px 80px" : "52px 40px 80px" }}>
         <div style={{ background: "linear-gradient(135deg, #dc2626, #b91c1c)", borderRadius: 20, padding: "28px 32px", marginBottom: 40, boxShadow: "0 4px 24px #dc262630" }}>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
             <span style={{ fontSize: 36, flexShrink: 0 }}>🆘</span>
@@ -277,7 +285,7 @@ export default function ReportPage() {
                 <span style={{ fontSize: 22 }}>{item.icon}</span>
                 <p style={{ color: item.color, fontWeight: 800, fontSize: 15 }}>{item.category}</p>
               </div>
-              <div style={{ padding: "20px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+              <div style={{ padding: isMobile ? "16px" : "20px 24px", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 20 : 24 }}>
                 <div>
                   <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 12 }}>
                     {lang === "ko" ? "신고 기관" : lang === "en" ? "REPORTING AGENCIES" : lang === "ja" ? "通報機関" : lang === "zh" ? "举报机构" : lang === "vi" ? "CƠ QUAN BÁO CÁO" : "AGENCIAS DE DENUNCIA"}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/LanguageContext";
 import { ArrowLeft, Shield, CheckCircle, Phone, Mail, Building2, Users, BookOpen, ChevronRight, Send } from "lucide-react";
@@ -9,6 +9,13 @@ export default function PartnershipPage() {
   const { lang } = useLang();
   const [form, setForm] = useState({ org: "", name: "", email: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const PACKAGES = [
     {
@@ -236,7 +243,7 @@ export default function PartnershipPage() {
         background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0",
         display: "flex", alignItems: "center", gap: 12,
-        padding: "0 40px", height: 62,
+        padding: isMobile ? "0 16px" : "0 40px", height: 62,
         boxShadow: "0 1px 8px #0000000a",
       }}>
         <button onClick={() => router.push("/")} style={{ padding: 8, background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", borderRadius: 8 }}>
@@ -256,7 +263,7 @@ export default function PartnershipPage() {
       {/* Hero */}
       <section style={{
         background: "linear-gradient(160deg, #160a26 0%, #0f2a5c 35%, #1a1040 70%, #0a0f20 100%)",
-        padding: "80px 40px 100px",
+        padding: isMobile ? "52px 20px 72px" : "80px 40px 100px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
@@ -281,14 +288,14 @@ export default function PartnershipPage() {
             </span>
           </div>
 
-          <h1 style={{ fontSize: 48, fontWeight: 900, color: "#fff", letterSpacing: -1.5, lineHeight: 1.2, marginBottom: 16 }}>
+          <h1 style={{ fontSize: isMobile ? 30 : 48, fontWeight: 900, color: "#fff", letterSpacing: -1.5, lineHeight: 1.2, marginBottom: 16 }}>
             {lang === "ko" ? "우리 기관에\n범죄예방 교육을" : lang === "en" ? "Bring Crime Prevention\nEducation to Your Institution" : lang === "ja" ? "私たちの機関に\n犯罪予防教育を" : lang === "zh" ? "为我们的机构\n引入犯罪预防教育" : lang === "vi" ? "Đưa Giáo dục\nPhòng chống Tội phạm vào Tổ chức" : "Lleve la Educación de\nPrevención del Crimen a su Institución"}
           </h1>
           <div style={{
             display: "inline-block", marginBottom: 20,
             background: "linear-gradient(90deg, #c58dc6, #c58dc6, #c58dc6)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            fontSize: 48, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.2,
+            fontSize: isMobile ? 30 : 48, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.2,
           }}>
             {lang === "ko" ? "지금 바로 도입하세요" : lang === "en" ? "Start Today" : lang === "ja" ? "今すぐ導入しましょう" : lang === "zh" ? "立即引入" : lang === "vi" ? "Bắt đầu ngay hôm nay" : "Comience Hoy"}
           </div>
@@ -341,10 +348,10 @@ export default function PartnershipPage() {
       </section>
 
       {/* ── 긴급 통계 배너 ── */}
-      <div style={{ background:"#0f0f0f", padding:"40px 40px" }}>
+      <div style={{ background:"#0f0f0f", padding: isMobile ? "28px 16px" : "40px 40px" }}>
         <div style={{ maxWidth:1140, margin:"0 auto" }}>
           <p style={{ color:"#f97316", fontSize:11, fontWeight:800, letterSpacing:3, textAlign:"center", marginBottom:28 }}>📊 2025년 대한민국 범죄 피해 현황 — 교육이 시급합니다</p>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16 }}>
+          <div style={{ display:"grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,1fr)", gap:16 }}>
             {[
               { num:"1조 2천억", unit:"원", label:"연간 보이스피싱 피해액", sub:"하루 평균 32억원 피해", color:"#ef4444" },
               { num:"200만", unit:"명", label:"국내 도박 중독 추정 인원", sub:"10대 비율 매년 증가", color:"#f59e0b" },
@@ -381,12 +388,12 @@ export default function PartnershipPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "72px 40px" }}>
+      <div style={{ maxWidth: 1140, margin: "0 auto", padding: isMobile ? "36px 16px" : "72px 40px" }}>
 
         {/* Why */}
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <p style={{ color: "#f97316", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>WHY US</p>
-          <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
+          <h2 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 900, letterSpacing: -0.8, color: "#1c0d2e", marginBottom: 14 }}>
             {lang === "ko" ? "왜 이 프로그램인가요?" : lang === "en" ? "Why this program?" : lang === "ja" ? "なぜこのプログラムですか？" : lang === "zh" ? "为什么选择这个项目？" : lang === "vi" ? "Tại sao chọn chương trình này?" : "¿Por qué este programa?"}
           </h2>
           <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8 }}>
@@ -394,7 +401,7 @@ export default function PartnershipPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18, marginBottom: 72 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 18, marginBottom: 72 }}>
           {whyItems.map((item) => (
             <div key={item.title} style={{
               background: "#fdf8ff", borderRadius: 20, padding: "26px 24px",
@@ -421,7 +428,7 @@ export default function PartnershipPage() {
               {lang === "ko" ? "이런 기관에 적합합니다" : lang === "en" ? "Suitable for these institutions" : lang === "ja" ? "このような機関に適しています" : lang === "zh" ? "适合这些机构" : lang === "vi" ? "Phù hợp với những tổ chức này" : "Adecuado para estas instituciones"}
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 14 }}>
             {TARGETS.map((t) => (
               <div key={t.name} style={{
                 background: "#fdf8ff", borderRadius: 16, padding: "20px 22px",
@@ -446,7 +453,7 @@ export default function PartnershipPage() {
               {lang === "ko" ? "도입 절차" : lang === "en" ? "How It Works" : lang === "ja" ? "導入手順" : lang === "zh" ? "引入流程" : lang === "vi" ? "Quy trình triển khai" : "Cómo Funciona"}
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 16 }}>
             {STEPS.map((s, i) => (
               <div key={s.step} style={{ position: "relative" }}>
                 <div style={{
@@ -512,7 +519,7 @@ export default function PartnershipPage() {
             <h2 style={{ fontSize:32, fontWeight:900, letterSpacing:-0.8, color:"#1c0d2e", marginBottom:14 }}>공공기관 담당자분께</h2>
             <p style={{ color:"#64748b", fontSize:14, lineHeight:1.8 }}>공문, 예산 없이 도입 가능하도록 모든 절차를 간소화했습니다.</p>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:24 }}>
+          <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:20, marginBottom:24 }}>
             {/* 공문 안내 */}
             <div style={{ background:"#f8fafc", border:"2px solid #e2e8f0", borderRadius:20, padding:"28px 26px" }}>
               <div style={{ fontSize:32, marginBottom:14 }}>📋</div>
@@ -544,7 +551,7 @@ export default function PartnershipPage() {
           {/* 법적 근거 */}
           <div style={{ background:"#1c0d2e", borderRadius:20, padding:"28px 32px" }}>
             <p style={{ color:"#f97316", fontSize:12, fontWeight:800, letterSpacing:2, marginBottom:16 }}>⚖️ 법적 근거 — 범죄예방 교육의 의무성</p>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
+            <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap:14 }}>
               {[
                 { law:"형사소송법 제197조의3", desc:"경찰의 범죄예방 활동 의무 명시", icon:"🚔" },
                 { law:"청소년 보호법 제35조", desc:"학교·지자체의 청소년 범죄예방 교육 실시 권고", icon:"🎓" },
@@ -576,7 +583,7 @@ export default function PartnershipPage() {
               {lang === "ko" ? "을 적용합니다." : lang === "en" ? "." : lang === "ja" ? "。" : lang === "zh" ? "。" : lang === "vi" ? "." : "."}
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 20 }}>
             {PACKAGES.map((pkg) => (
               <div key={pkg.name} style={{
                 background: "#fdf8ff", borderRadius: 22, padding: "32px 28px",
@@ -636,7 +643,7 @@ export default function PartnershipPage() {
         }}>
           {/* 황금 상단 강조 라인 */}
           <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:"linear-gradient(90deg, #9161b2, #7c3aed, #c58dc6)", borderRadius:"24px 24px 0 0" }} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 56, alignItems: "start" }}>
 
             {/* Left: Info */}
             <div>
