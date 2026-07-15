@@ -676,7 +676,7 @@ export default function HomePage() {
       {/* ── 팝업 1: 피해 신고 안내 ── */}
       {popup1Open && (
         <div style={{
-          position: "fixed", inset: 0, zIndex: 1000,
+          position: "fixed", inset: 0, zIndex: 9998,
           background: "rgba(15,23,42,0.6)", backdropFilter: "blur(6px)",
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: "20px",
@@ -700,7 +700,7 @@ export default function HomePage() {
                 🛡️
               </div>
               <div>
-                <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: 18 }}>{t("popup1_title", lang)}</p>
+                <p style={{ color: "#1c0d2e", fontWeight: 900, fontSize: isMobile ? 14 : 18 }}>{t("popup1_title", lang)}</p>
                 <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 600 }}>{t("popup1_sub", lang)}</p>
               </div>
             </div>
@@ -745,7 +745,7 @@ export default function HomePage() {
       {/* ── 팝업 2: 이용 가이드 ── */}
       {popup2Open && (
         <div style={{
-          position: "fixed", inset: 0, zIndex: 1000,
+          position: "fixed", inset: 0, zIndex: 9998,
           background: "rgba(15,23,42,0.6)", backdropFilter: "blur(6px)",
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: "20px",
@@ -1126,6 +1126,21 @@ export default function HomePage() {
                 }}>1</div>
                 <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>최초 홍보 영상</p>
                 <span style={{ color: "#6b7280", fontSize: 11, background: "#2a1a3a", border: "1px solid #6b7280", borderRadius: 20, padding: "2px 10px" }}>2024</span>
+                <a
+                  href="https://www.youtube.com/shorts/qVwroKzwmyw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    marginLeft: "auto",
+                    display: "flex", alignItems: "center", gap: 5,
+                    background: "#ff0000", color: "#fff",
+                    borderRadius: 20, padding: "4px 12px",
+                    fontSize: 11, fontWeight: 800, textDecoration: "none",
+                    flexShrink: 0,
+                  }}
+                >
+                  ▶ Shorts 보기
+                </a>
               </div>
               <div style={{
                 position: "relative", width: "100%", paddingTop: "56.25%",
@@ -1432,7 +1447,7 @@ export default function HomePage() {
 
               {/* 1990년대 카드들 */}
             <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { name: "복권 당첨 사기", nameTr: lang === "ja" ? "宝くじ当選詐欺" : lang === "zh" ? "彩票中奖诈骗" : lang === "ko" ? null : "Lottery Winning Scam", tag: "FAX SCAM", desc: "「당신이 당첨됐습니다」 팩스 1장으로 수수료 편취. 스팸 팩스가 유일한 사기 수단이던 시절.", descTr: lang === "ja" ? "「あなたが当選しました」というFAXで手数料をだまし取る。スパムFAXが唯一の詐欺手段だった時代。" : lang === "zh" ? "「您中奖了」一张传真骗取手续费。垃圾传真是唯一诈骗手段的年代。" : lang === "ko" ? null : "A single fax saying 'You've won!' to steal fees. Spam faxes were the only scam medium." },
                   { name: "피라미드 다단계", nameTr: lang === "ja" ? "ネズミ講マルチ商法" : lang === "zh" ? "传销金字塔骗局" : lang === "ko" ? null : "Pyramid MLM Scam", tag: "PYRAMID", desc: "원금 보장·고수익 보장. 하위 회원 모집으로만 유지. 전국 수십만 명이 '사업'인 줄 알고 참여.", descTr: lang === "ja" ? "元本保証・高収益保証。下位会員の勧誘だけで維持。全国数十万人が「ビジネス」と信じて参加。" : lang === "zh" ? "保证本金·高收益保证。只靠招募下线维持。全国数十万人以为是做'生意'而参与。" : lang === "ko" ? null : "Guaranteed returns. Sustained only by recruiting new members. Hundreds of thousands believed it was a real business." },
@@ -1540,7 +1555,7 @@ export default function HomePage() {
               </div>
               {/* 2000년대 카드들 */}
             <div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { name: "나이지리아 왕자 이메일", nameTr: lang === "ja" ? "ナイジェリア王子メール" : lang === "zh" ? "尼日利亚王子邮件" : lang === "ko" ? null : "Nigerian Prince Email", icon: "📧", desc: "\"저는 나이지리아 왕자입니다. 재산 이전을 도와주시면 수수료를 드립니다.\" 세계 최초 국제 스팸 사기의 고전.", descTr: lang === "ja" ? "\"私はナイジェリアの王子です。財産移転を手伝ってくれたら手数料を差し上げます。\" 世界初の国際スパム詐欺の古典。" : lang === "zh" ? "\"我是尼日利亚王子。帮我转移财产就给您佣金。\" 世界首个国际垃圾邮件诈骗的经典案例。" : lang === "ko" ? null : "\"I am a Nigerian prince. Help me transfer funds.\" The world's first classic international email scam." },
                   { name: "문화상품권 사기 1세대", nameTr: lang === "ja" ? "文化商品券詐欺第一世代" : lang === "zh" ? "文化礼品券诈骗第一代" : lang === "ko" ? null : "Gift Card Scam — 1st Gen", icon: "🎫", desc: "핀번호 긁어서 보내달라는 최초 형태. 당시엔 상품권이 낯설어 '이게 왜 사기야?' 하던 시절.", descTr: lang === "ja" ? "PINコードを削って送るよう求める最初の形。当時は商品券が珍しく「なぜ詐欺？」と言われた時代。" : lang === "zh" ? "让人刮开礼品卡PIN码发送的最初形式。当时礼品卡很陌生，人们问'这为什么是诈骗？'的年代。" : lang === "ko" ? null : "Scratch the pin and send it. Gift cards were unfamiliar then—people didn't realize it was a scam." },
@@ -1662,7 +1677,7 @@ export default function HomePage() {
                 <span style={{ color: "#34d399", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2010년대 초 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#064e3b", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { sender: "[Web발신]", preview: "무료쿠폰 발급완료 수령▶ http://bit.ly/xK3m", name: "스미싱 1세대", nameTr: lang === "ja" ? "スミッシング第一世代" : lang === "zh" ? "短信钓鱼第一代" : lang === "ko" ? null : "Smishing — 1st Gen", desc: "클릭 즉시 소액결제 자동 청구. '무료쿠폰'에 의심 없이 눌렀던 시절. 당시엔 스미싱이란 단어조차 없었음.", descTr: lang === "ja" ? "クリックで少額決済が自動請求。「無料クーポン」に疑いなく押した時代。当時はスミッシングという言葉もなかった。" : lang === "zh" ? "点击后立即扣取小额费用。毫无疑心点击'免费优惠券'的年代。当时连短信钓鱼这词都不存在。" : lang === "ko" ? null : "One click = instant micro-payment. People clicked 'free coupon' without suspicion. 'Smishing' wasn't even a word yet." },
                   { sender: "민지", preview: "나야 급해ㅠㅠ 50만원만 잠깐 빌려줄수있어? 오늘저녁에갚을게", name: "오카카 해킹 초기형", nameTr: lang === "ja" ? "カカオハッキング初期型" : lang === "zh" ? "KakaoTalk账号被盗初期型" : lang === "ko" ? null : "KakaoTalk Hacking — Early Form", desc: "계정 해킹 후 지인에게 문자형 사기. 오카카가 생소하던 시절, '이게 진짜 카톡이야?' 하며 속음.", descTr: lang === "ja" ? "アカウントハッキング後に知人へのメッセージ型詐欺。「これ本物のカカオトークなの？」と騙された時代。" : lang === "zh" ? "账号被黑客入侵后向熟人发送骗钱信息。KakaoTalk还很陌生，人们被骗时问'这真的是KakaoTalk吗？'。" : lang === "ko" ? null : "After hacking an account, scammers text the victim's contacts. 'Is this really KakaoTalk?' — people were fooled." },
@@ -1776,7 +1791,7 @@ export default function HomePage() {
                 <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>── 2015~2018년 ──</span>
                 <div style={{ height: 1, flex: 1, background: "#4c1d95", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { platform: "Facebook", dot: "#1877f2", name: "SNS 지인 사칭", nameTr: lang === "ja" ? "SNS知人なりすまし" : lang === "zh" ? "SNS熟人冒充诈骗" : lang === "ko" ? null : "SNS Acquaintance Impersonation", post: "이거 실화냐 ㅋㅋ 나 어제 이거 당했는데... 갑자기 지인 계정에서 DM 와서 돈 빌려달라고 해서 보냈더니 해킹당한 계정이었음", like: "좋아요 247개", desc: "페이스북·인스타 클론 계정. AI 없던 시대의 수작업 사기. 지인 관계망을 가장 잘 활용한 형태.", descTr: lang === "ja" ? "Facebook・Instagramクローンアカウント。AIがない時代の手作業詐欺。知人の関係網を巧みに利用した形態。" : lang === "zh" ? "Facebook·Instagram克隆账号。没有AI的时代的手工诈骗。最善于利用熟人关系网的形式。" : lang === "ko" ? null : "Cloned Facebook/Instagram accounts. Manual fraud before AI. Best exploited personal social networks." },
                   { platform: "취업카페", dot: "#ff6b35", name: "가짜 재택 취업 사기", nameTr: lang === "ja" ? "偽テレワーク求人詐欺" : lang === "zh" ? "假冒远程工作诈骗" : lang === "ko" ? null : "Fake Remote Job Scam", post: "★ 급구 ★ 재택근무 월 300만원 보장! 자격증 불필요, 경력 불필요. 교재비 15만원 선납 후 교육 시작. 지금 바로 연락주세요!", like: "조회 8,402", desc: "\"재택근무 월 300만원\" 광고. 교재비·장비비 선납 후 잠적. IMF 세대 이후 청년층 취업난을 노린 수법.", descTr: lang === "ja" ? "\"テレワーク月300万ウォン\"広告。教材費先払い後に逃走。IMF世代以降の若年層の就職難を狙った手口。" : lang === "zh" ? "\"居家办公月薪300万\"广告。先付教材费后消失。针对IMF危机后年轻人就业困难的手法。" : lang === "ko" ? null : "Work-from-home ads. Pay for materials upfront, then vanish. Targeted youth unemployment after IMF crisis." },
@@ -1902,7 +1917,7 @@ export default function HomePage() {
                 <span style={{ color: "#22d3ee", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2019~2021년 (우환폐렴 시대) ──" : lang === "ja" ? "── 2019~2021 (コロナ時代) ──" : lang === "zh" ? "── 2019~2021 (新冠疫情时代) ──" : "── 2019~2021 (COVID Era) ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#67e8f9", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { breaking: "BREAKING", headline: "마스크 대란 틈타 사기 급증", headlineTr: lang === "ja" ? "マスク不足に乗じた詐欺が急増" : lang === "zh" ? "趁口罩短缺诈骗激增" : lang === "ko" ? null : "Scams Surge During Mask Shortage", sub: "\"마스크 재고 있어요\" 선입금 요구 후 잠적 — 전국 피해 1만 건 이상", subTr: lang === "ja" ? "\"マスク在庫あります\"先払い要求後に逃走 — 全国被害1万件以上" : lang === "zh" ? "\"口罩有货\"要求先付款后消失 — 全国受害超1万件" : lang === "ko" ? null : "'Masks in stock' — demand prepayment, then vanish. 10,000+ victims nationwide.", name: "우환폐렴 마스크 사기", nameTr: lang === "ja" ? "コロナウイルスマスク詐欺" : lang === "zh" ? "新冠病毒口罩诈骗" : lang === "ko" ? null : "COVID Mask Scam", desc: "위기 상황이 사기꾼의 최적 환경임을 증명. 우환폐렴(코로나) 확산으로 마스크라면 뭐든 믿던 시절.", descTr: lang === "ja" ? "危機状況が詐欺師の最適環境であることを証明。コロナウイルス拡散でマスクなら何でも信じた時代。" : lang === "zh" ? "证明了危机情况是诈骗者的最佳环境。新冠病毒蔓延导致人们对口罩相关内容深信不疑。" : lang === "ko" ? null : "Proof that crises are ideal for scammers. During COVID, people trusted anything related to masks." },
                   { breaking: lang === "ko" ? "속보" : "ALERT", headline: "재난지원금 사칭 스미싱 수백만 건", headlineTr: lang === "ja" ? "災害支援金なりすましスミッシング数百万件" : lang === "zh" ? "冒充灾难补贴短信钓鱼数百万条" : lang === "ko" ? null : "Millions of Relief Fund Phishing Texts", sub: "정부 공식 링크인 척 개인정보 탈취 — '신청하세요'가 함정", subTr: lang === "ja" ? "政府公式リンクのふりをして個人情報窃取 — '申請してください'が罠" : lang === "zh" ? "假冒政府官方链接盗取个人信息 — '请申请'就是陷阱" : lang === "ko" ? null : "Fake official govt links steal personal data — 'Apply here' is the trap.", name: "재난지원금 피싱", nameTr: lang === "ja" ? "災害支援金フィッシング" : lang === "zh" ? "灾难补贴钓鱼诈骗" : lang === "ko" ? null : "Relief Fund Phishing", desc: "국가 재난 상황을 악용한 역대 최대 스미싱. '정부니까 믿어야지'라는 심리를 정확히 노림.", descTr: lang === "ja" ? "国家災害状況を悪用した史上最大のスミッシング。「政府だから信じなければ」という心理を正確に狙った。" : lang === "zh" ? "利用国家灾难情况的史上最大短信钓鱼。精准利用了'是政府所以要相信'的心理。" : lang === "ko" ? null : "The largest smishing campaign ever. Precisely targeted the psychology: 'it's the government, I must trust them.'" },
@@ -2013,7 +2028,7 @@ export default function HomePage() {
                 <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2022~2023년 ──" : "── 2022~2023 ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#831843", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { tag: "AI VOICE", glow: "#c58dc6", name: "딥보이스 보이스피싱 등장", nameTr: lang === "ja" ? "ディープボイス詐欺の登場" : lang === "zh" ? "深度伪造语音诈骗兴起" : lang === "ko" ? null : "Deepfake Voice Phishing Emerges", waveform: "▁▃▇█▅▃▁▂▆█▇▄▁", desc: "AI로 자녀 목소리 복제. 3~5초 샘플만으로 완벽 모사. 부모들이 처음으로 목소리조차 믿지 못하게 된 해.", descTr: lang === "ja" ? "AIで子供の声を複製。3〜5秒のサンプルだけで完璧な模倣。親が初めて声さえ信用できなくなった年。" : lang === "zh" ? "AI复制子女声音。仅需3~5秒样本即可完美模仿。父母第一次连声音都无法信任的一年。" : lang === "ko" ? null : "AI replicates a child's voice with just 3-5 seconds of audio. Parents could no longer trust even familiar voices." },
                   { tag: "OPEN CHAT", glow: "#fbbf24", name: "오픈채팅 투자 사기 전성기", nameTr: lang === "ja" ? "オープンチャット投資詐欺の全盛期" : lang === "zh" ? "开放聊天室投资诈骗鼎盛期" : lang === "ko" ? null : "Open Chat Investment Scam Peak", waveform: "📈 +312% 📈 +208% 📈 +441%", desc: "오카카 오픈채팅 '주식 고수' 방. 수익 인증 캡처 도배 → 입금 유도 → 잠적. 동시 피해자 수천 명.", descTr: lang === "ja" ? "カカオオープンチャット「株の達人」部屋。収益証明キャプチャーで埋め尽くし→入金誘導→逃走。同時被害者数千人。" : lang === "zh" ? "KakaoTalk开放聊天室'股票高手'群。收益截图轰炸→诱导入金→消失。同时受害者数千人。" : lang === "ko" ? null : "KakaoTalk 'stock expert' open chat rooms. Profit screenshots → deposit pressure → disappear. Thousands of simultaneous victims." },
@@ -2056,7 +2071,7 @@ export default function HomePage() {
                 <span style={{ color: "#c58dc6", fontSize: 11, fontWeight: 700, letterSpacing: 3, fontFamily: "monospace" }}>{lang === "ko" ? "── 2024년 ~ 현재 ──" : "── 2024 ~ Present ──"}</span>
                 <div style={{ height: 1, flex: 1, background: "#7c3aed", opacity: 0.6 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 12 }}>
                 {[
                   { tag: "DEEPFAKE", glow: "#c58dc6", name: "AI 딥페이크 협박 사기", nameTr: lang === "ja" ? "AIディープフェイク脅迫詐欺" : lang === "zh" ? "AI深度伪造恐吓诈骗" : lang === "ko" ? null : "AI Deepfake Extortion Scam", visual: "👤 → 🤖 → 🎭", desc: "실제 얼굴·목소리를 AI로 합성해 지인인 척 접근하거나, 없는 영상을 만들어 협박. 눈으로 봐도 믿을 수 없는 시대의 시작.", descTr: lang === "ja" ? "実際の顔・声をAIで合成して知人のふりをして近づいたり、存在しない動画を作って脅迫。目で見ても信じられない時代の始まり。" : lang === "zh" ? "用AI合成真实面孔和声音假扮熟人，或制作不存在的视频进行恐吓。眼见也不能为实的时代开始。" : lang === "ko" ? null : "AI synthesizes real faces/voices to impersonate acquaintances, or fabricates videos to extort. The era where seeing is no longer believing." },
                   { tag: "GPT SCAM", glow: "#c58dc6", name: "AI 자동 문자 폭탄", nameTr: lang === "ja" ? "AI自動テキスト爆弾" : lang === "zh" ? "AI自动短信轰炸" : lang === "ko" ? null : "AI Auto-Text Bombing", visual: "🤖 → 📱 × 10,000", desc: "ChatGPT·LLM으로 완벽한 문법의 개인 맞춤 사기 문자 대량 생성. 오타·어색함으로 구별하던 기존 방법이 완전히 무력화.", descTr: lang === "ja" ? "ChatGPT・LLMで完璧な文法の個人맞춤詐欺テキストを大量生成。誤字・不自然さで見分けていた従来の方法が完全に無力化。" : lang === "zh" ? "用ChatGPT·LLM大量生成语法完美的个人定制诈骗短信。通过错字·不自然感辨别的传统方法完全失效。" : lang === "ko" ? null : "ChatGPT/LLMs generate perfectly written personalized scam texts at scale. Typos and awkwardness as telltale signs — now gone." },
@@ -2176,7 +2191,7 @@ export default function HomePage() {
                 그래서 이 프로그램이 필요합니다
               </h3>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 20 }}>
               {[
                 {
                   icon: "🧠",
