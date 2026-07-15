@@ -2122,7 +2122,7 @@ export default function HomePage() {
               background: "linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 100%)",
               border: "1px solid #7c3aed44",
               borderRadius: 20,
-              padding: "32px 40px",
+              padding: isMobile ? "20px 16px" : "32px 40px",
               maxWidth: 720,
               margin: "0 auto",
               boxShadow: "0 0 40px #7c3aed22",
@@ -2146,7 +2146,7 @@ export default function HomePage() {
             background: "linear-gradient(160deg, #1a0a2e 0%, #0f1a2e 50%, #0a1a18 100%)",
             border: "1px solid #7c3aed33",
             borderRadius: 24,
-            padding: "48px 40px",
+            padding: isMobile ? "28px 16px" : "48px 40px",
           }}>
             {/* 손글씨 서약 문구 + 개발자 사진 */}
             <div style={{ textAlign: "center", marginBottom: 36 }}>
@@ -2247,14 +2247,14 @@ export default function HomePage() {
       {/* ── 제작 목적 & 실제 통계 ── */}
       <section id="why" style={{
         background: "#fdf8ff", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
-        padding: "80px 40px",
+        padding: isMobile ? "48px 16px" : "80px 40px",
       }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
 
           {/* 섹션 헤더 */}
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ color: "#dc2626", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>WHY WE BUILT THIS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e", marginBottom: 14 }}>
+            <h2 style={{ fontSize: isMobile ? 24 : 36, fontWeight: 900, letterSpacing: -0.5, color: "#1c0d2e", marginBottom: 14 }}>
               {lang === "ko" ? "왜 이 프로그램이 필요한가" : lang === "en" ? "Why This Program Is Needed" : lang === "ja" ? "なぜこのプログラムが必要か" : lang === "zh" ? "为什么需要这个程序" : lang === "vi" ? "Tại sao cần chương trình này" : lang === "es" ? "Por qué se necesita este programa" : "Why This Program Is Needed"}
             </h2>
             <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8, maxWidth: 600, margin: "0 auto" }}>
@@ -2263,7 +2263,7 @@ export default function HomePage() {
           </div>
 
           {/* 2열: 사기 피해 + 도박 피해 */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 24, marginBottom: 40 }}>
 
             {/* 보이스피싱·사기 통계 */}
             <div style={{
@@ -2479,12 +2479,12 @@ export default function HomePage() {
       {/* ── 이용 방법 ── */}
       <section id="how" className="section-pad" style={{
         background: "#f8fafc", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0",
-        padding: "72px 40px",
+        padding: isMobile ? "48px 16px" : "72px 40px",
       }}>
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>HOW IT WORKS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("how_title", lang)}</h2>
+            <h2 style={{ fontSize: isMobile ? 24 : 36, fontWeight: 900, letterSpacing: -0.5, color: "#1c0d2e" }}>{t("how_title", lang)}</h2>
           </div>
           <div className="how-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {[
@@ -2515,11 +2515,11 @@ export default function HomePage() {
       </section>
 
       {/* ── 시나리오 그리드 ── */}
-      <section id="scenarios" className="section-pad" style={{ maxWidth: 1140, margin: "0 auto", padding: "80px 40px" }}>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 44 }}>
+      <section id="scenarios" className="section-pad" style={{ maxWidth: 1140, margin: "0 auto", padding: isMobile ? "48px 16px" : "80px 40px" }}>
+        <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", gap: isMobile ? 16 : 0, marginBottom: 44 }}>
           <div>
             <p style={{ color: "#9161b2", fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 2 }}>SCENARIOS</p>
-            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: -1, color: "#1c0d2e" }}>{t("sc_section_title", lang)}</h2>
+            <h2 style={{ fontSize: isMobile ? 24 : 36, fontWeight: 900, letterSpacing: -0.5, color: "#1c0d2e" }}>{t("sc_section_title", lang)}</h2>
             <p style={{ color: "#64748b", fontSize: 14, marginTop: 10 }}>{t("sc_section_sub", lang)}</p>
           </div>
           <button
@@ -2530,6 +2530,7 @@ export default function HomePage() {
               background: "#fdf8ff", color: "#9161b2",
               border: "1px solid #dcc5e8", cursor: "pointer", fontSize: 13, fontWeight: 600,
               boxShadow: "0 1px 4px #0000000a",
+              alignSelf: isMobile ? "flex-start" : "auto",
             }}
           >
             {t("sc_all", lang)} <ExternalLink size={13} />

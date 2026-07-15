@@ -69,7 +69,7 @@ export default function ProfileModal({ onComplete }: Props) {
       }}>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 10 }}>🛡️</div>
-          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 20, marginBottom: 6 }}>
+          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 20, marginBottom: 6, wordBreak: "break-word", overflowWrap: "break-word" }}>
             {t("profile_title", lang)}
           </h2>
           <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.6 }}>

@@ -285,9 +285,21 @@ const SITES = [
   { id:"nightclub", display:"🌙 NIGHT CLUB", sub:"BACCARAT · POKER · P2P", code:"6969", bonus:"승급이벤트 최대 2천만원", extra:"P2P · 매충 50% 페이백", glow:"#ff6600", dark:"#1a0800", badge:"🌙 NIGHT", games:["바카라","포커","P2P","사다리"] },
 ];
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 export default function GamblingPortalPage() {
   const router = useRouter();
   const { lang } = useLang();
+  const isMobile = useIsMobile();
   const [showWarning, setShowWarning] = useState(true);
   const [hoveredSite, setHoveredSite] = useState<string|null>(null);
   const [toasts, setToasts] = useState<{id:number;name:string;amount:string;game:string}[]>([]);
@@ -384,25 +396,26 @@ export default function GamblingPortalPage() {
           position:"fixed", top:0, left:0, right:0, zIndex:9999,
           background:"linear-gradient(90deg,#052e16,#064e3b,#052e16)",
           borderBottom:"3px solid #22c55e",
-          padding:"8px 16px",
-          display:"flex", alignItems:"center", justifyContent:"center", gap:12,
+          padding: isMobile ? "6px 10px" : "8px 16px",
+          display:"flex", alignItems:"center", justifyContent:"center", gap: isMobile ? 6 : 12,
+          flexWrap:"wrap",
           boxShadow:"0 2px 16px #22c55e44",
         }}>
           <style>{`
             @keyframes simPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
           `}</style>
-          <span style={{ fontSize:16, animation:"simPulse 1.6s ease-in-out infinite" }}>🛡️</span>
-          <span style={{ color:"#4ade80", fontSize:13, fontWeight:900, letterSpacing:1.5 }}>
+          <span style={{ fontSize: isMobile ? 13 : 16, animation:"simPulse 1.6s ease-in-out infinite" }}>🛡️</span>
+          <span style={{ color:"#4ade80", fontSize: isMobile ? 11 : 13, fontWeight:900, letterSpacing: isMobile ? 0.5 : 1.5 }}>
             【범죄예방 교육 시뮬레이션】
           </span>
-          <span style={{ color:"#22c55e88", fontSize:13 }}>|</span>
-          <span style={{ color:"#86efac", fontSize:12, fontWeight:700 }}>
-            실제 도박 사이트가 아닙니다
+          {!isMobile && <span style={{ color:"#22c55e88", fontSize:13 }}>|</span>}
+          <span style={{ color:"#86efac", fontSize: isMobile ? 10 : 12, fontWeight:700 }}>
+            실제 도박 사이트 아님
           </span>
-          <span style={{ color:"#22c55e88", fontSize:13 }}>|</span>
+          {!isMobile && <><span style={{ color:"#22c55e88", fontSize:13 }}>|</span>
           <span style={{ color:"#6ee7b7", fontSize:11 }}>
             실제 돈 사용 없음 · 교육 목적
-          </span>
+          </span></>}
         </div>
       )}
 
@@ -515,7 +528,7 @@ export default function GamblingPortalPage() {
           <div style={{ marginLeft:"auto", color:"#111", fontSize:9, fontWeight:700 }}>시뮬레이션 체험</div>
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap:16 }}>
           {SITES.map((site,i) => {
             const isHovered = hoveredSite === site.id;
             const isPulsing = pulseIdx === i;
@@ -611,7 +624,7 @@ export default function GamblingPortalPage() {
             <h2 style={{ color:"#e4e4e7", fontWeight:900, fontSize:16 }}>🎮 게임 바로가기</h2>
             <div style={{ color:rainbow4, fontSize:11, fontWeight:700, animation:"blink 1.5s infinite" }}>▶ 지금 바로 플레이!</div>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+          <div style={{ display:"grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,1fr)", gap:12 }}>
             {[
               { icon:"🃏", name:"바카라", sub:"플레이어 vs 뱅커", hue:0, game:"baccarat" },
               { icon:"🐌", name:"달팽이 경주", sub:"6마리 · 5배 당첨", hue:120, game:"snail" },
@@ -659,7 +672,7 @@ export default function GamblingPortalPage() {
 
       {/* ── 통계 바 ── */}
       <div style={{ background:"#060608", borderTop:`1px solid ${rainbow}22`, padding:"16px 20px", maxWidth:1200, margin:"0 auto", position:"relative", zIndex:10 }}>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10 }}>
+        <div style={{ display:"grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,1fr)", gap:10 }}>
           {[
             { label:"현재 접속자", value:liveUsers.toLocaleString()+"명", hue:0, note:"조작된 수치" },
             { label:"오늘 총 환전액", value:"₩2.3억", hue:90, note:"가상 데이터" },
