@@ -36,7 +36,7 @@ const FAQ_LIST = [
   },
   {
     q: "모바일에서도 이용할 수 있나요?",
-    a: "모바일에서는 일부 기능이 정상 작동하지 않을 수 있습니다. PC 웹사이트 이용을 권장하며, 모바일 이용 시 브라우저의 '데스크톱 모드'로 접속하시면 더 원활하게 사용하실 수 있습니다.",
+    a: "네! 스마트폰·태블릿에서도 완전히 이용 가능합니다. 375px(아이폰 SE) 기준으로 전 페이지 반응형 최적화가 완료되어 있습니다. 단, 일부 시나리오의 세밀한 인터랙션은 PC 환경에서 더욱 원활하게 체험하실 수 있습니다.",
     icon: "📱",
     color: "#f472b6",
   },
@@ -383,6 +383,10 @@ const RAINBOW_STYLE = `
   83%  { color: #9333ea; }
   100% { color: #ff4444; }
 }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 `;
 
 // 시나리오별 카테고리 키 맵
@@ -444,6 +448,20 @@ export default function HomePage() {
   const [isHoveringCard, setIsHoveringCard] = useState(false);
   const [mouseDir, setMouseDir] = useState(45);
   const lastHoloPosRef = useRef({ x: 50, y: 50 });
+
+  // 맨 위로 버튼
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  useEffect(() => {
+    const getScrollY = () => window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    const onScroll = () => setShowScrollTop(getScrollY() > 400);
+    // capture: true catches scroll events from any scrolling element
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    const timer = setInterval(() => onScroll(), 500);
+    return () => {
+      window.removeEventListener("scroll", onScroll, { capture: true } as EventListenerOptions);
+      clearInterval(timer);
+    };
+  }, []);
 
   // 통계 카운터
   const statsRef = useRef<HTMLDivElement>(null);
@@ -3581,6 +3599,42 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* 맨 위로 버튼 */}
+      {showScrollTop && (
+        <button
+          onClick={() => {
+            try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
+            try { document.documentElement.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
+            try { document.body.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+          }}
+          style={{
+            position: "fixed",
+            bottom: isMobile ? 80 : 32,
+            right: isMobile ? 16 : 32,
+            width: 44,
+            height: 44,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
+            border: "none",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 4px 20px rgba(124,58,237,0.5)",
+            zIndex: 9000,
+            animation: "fadeInUp 0.25s ease",
+            WebkitTapHighlightColor: "transparent",
+          }}
+          title="맨 위로"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
