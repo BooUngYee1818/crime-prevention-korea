@@ -27,7 +27,8 @@ export default function BgmPlayer() {
   const [volume,   setVolume]   = useState(getBaseVolume(pathname));
   const [open,     setOpen]     = useState(false);
   const [chatMode, setChatMode] = useState(false); // 채팅 중엔 미니 버튼만
-  const startedRef  = useRef(false);
+  const startedRef   = useRef(false);
+  const currentSrcRef = useRef(""); // React prop 대신 ref로 추적 — JSX src prop이 바뀌면 브라우저가 오디오를 리셋해버림
   const pulseRef    = useRef<NodeJS.Timeout | null>(null);
   const pulsePhase  = useRef(0);
   const isSimulation = pathname.startsWith("/crime");
@@ -62,12 +63,15 @@ export default function BgmPlayer() {
     if (pulseRef.current) { clearInterval(pulseRef.current); pulseRef.current = null; }
   }
 
-  // 첫 로드
+  // 첫 로드 — audio.src는 여기서만 설정 (JSX prop X → React가 src를 변경하면 브라우저가 오디오 리셋함)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    const initSrc = getSrc(pathname);
+    audio.src = initSrc;
+    audio.loop = true;
     audio.volume = volume;
-    audio.loop   = true;
+    currentSrcRef.current = initSrc;
 
     const tryPlay = () => {
       audio.play().then(() => {
@@ -94,8 +98,8 @@ export default function BgmPlayer() {
 
     const newSrc  = getSrc(pathname);
     const newBase = getBaseVolume(pathname);
-    if (audio.getAttribute("data-src") === newSrc) return;
-    audio.setAttribute("data-src", newSrc);
+    if (currentSrcRef.current === newSrc) return;
+    currentSrcRef.current = newSrc;
 
     stopPulse();
     setVolume(newBase);
@@ -168,7 +172,7 @@ export default function BgmPlayer() {
   // ── 채팅 플레이 중: 상단 미니 버튼만 표시 ──────────────────────────────
   if (chatMode) return (
     <>
-      <audio ref={audioRef} src={getSrc(pathname)} data-src={getSrc(pathname)} preload="auto" />
+      <audio ref={audioRef} preload="auto" />
       <button
         onClick={toggle}
         style={{
@@ -189,7 +193,7 @@ export default function BgmPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src={getSrc(pathname)} data-src={getSrc(pathname)} preload="auto" />
+      <audio ref={audioRef} preload="auto" />
 
       <div className="bgm-wrap" style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9998, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
 

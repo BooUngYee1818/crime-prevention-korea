@@ -383,17 +383,25 @@ export default function GamblingPortalPage() {
         <div style={{
           position:"fixed", top:0, left:0, right:0, zIndex:9999,
           background:"linear-gradient(90deg,#052e16,#064e3b,#052e16)",
-          borderBottom:"2px solid #22c55e",
-          padding:"6px 16px",
-          display:"flex", alignItems:"center", justifyContent:"center", gap:10,
+          borderBottom:"3px solid #22c55e",
+          padding:"8px 16px",
+          display:"flex", alignItems:"center", justifyContent:"center", gap:12,
+          boxShadow:"0 2px 16px #22c55e44",
         }}>
-          <span style={{ fontSize:14 }}>🛡️</span>
-          <span style={{ color:"#4ade80", fontSize:12, fontWeight:800, letterSpacing:1 }}>
-            범죄예방 교육 시뮬레이션 체험관
+          <style>{`
+            @keyframes simPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+          `}</style>
+          <span style={{ fontSize:16, animation:"simPulse 1.6s ease-in-out infinite" }}>🛡️</span>
+          <span style={{ color:"#4ade80", fontSize:13, fontWeight:900, letterSpacing:1.5 }}>
+            【범죄예방 교육 시뮬레이션】
           </span>
-          <span style={{ color:"#22c55e44", fontSize:12 }}>|</span>
-          <span style={{ color:"#86efac", fontSize:11 }}>
-            실제 도박 사이트가 아닙니다 · 실제 돈은 사용되지 않습니다
+          <span style={{ color:"#22c55e88", fontSize:13 }}>|</span>
+          <span style={{ color:"#86efac", fontSize:12, fontWeight:700 }}>
+            실제 도박 사이트가 아닙니다
+          </span>
+          <span style={{ color:"#22c55e88", fontSize:13 }}>|</span>
+          <span style={{ color:"#6ee7b7", fontSize:11 }}>
+            실제 돈 사용 없음 · 교육 목적
           </span>
         </div>
       )}
