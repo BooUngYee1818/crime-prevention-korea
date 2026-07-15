@@ -100,35 +100,36 @@ export default function BgmPlayer() {
     stopPulse();
     setVolume(newBase);
 
-    // 즉시 전환 (fadeOut 없이 바로 새 트랙 재생)
-    audio.pause();
-    audio.volume = 0;
+    // src만 교체 후 즉시 play() — load() 호출 없이 해야 브라우저 자동재생 정책을 통과
     audio.src = newSrc;
-    audio.load();
-    audio.play().then(() => {
-      setPlaying(true);
-      // 페이드인
-      let fv = 0;
-      const fadeIn = setInterval(() => {
-        fv = Math.min(newBase, fv + 0.025);
-        audio.volume = fv;
-        if (fv >= newBase) {
-          clearInterval(fadeIn);
-          if (pathname.startsWith("/crime/")) startPulse(newBase);
-        }
-      }, 50);
-    }).catch(() => {
-      // 자동재생 실패 시 — 다음 사용자 인터랙션 때 재시도
-      const retry = () => {
-        audio.play().then(() => {
-          setPlaying(true);
-          audio.volume = newBase;
-          if (pathname.startsWith("/crime/")) startPulse(newBase);
-        }).catch(() => {});
-      };
-      document.addEventListener("click",      retry, { once: true });
-      document.addEventListener("touchstart", retry, { once: true });
-    });
+    audio.volume = 0;
+    const doPlay = () => {
+      audio.play().then(() => {
+        setPlaying(true);
+        // 페이드인
+        let fv = 0;
+        const fadeIn = setInterval(() => {
+          fv = Math.min(newBase, fv + 0.025);
+          audio.volume = fv;
+          if (fv >= newBase) {
+            clearInterval(fadeIn);
+            if (pathname.startsWith("/crime/")) startPulse(newBase);
+          }
+        }, 50);
+      }).catch(() => {
+        // 자동재생 실패 시 — 다음 사용자 인터랙션 때 재시도
+        const retry = () => {
+          audio.play().then(() => {
+            setPlaying(true);
+            audio.volume = newBase;
+            if (pathname.startsWith("/crime/")) startPulse(newBase);
+          }).catch(() => {});
+        };
+        document.addEventListener("click",      retry, { once: true });
+        document.addEventListener("touchstart", retry, { once: true });
+      });
+    };
+    doPlay();
   }, [pathname]);
 
   // 볼륨 슬라이더 변경
@@ -266,18 +267,18 @@ export default function BgmPlayer() {
             onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
             title={t("bgm_vol_title", lang)}
             style={{
-              width: 44, height: 44, borderRadius: "50%",
+              height: 44, padding: "0 14px", borderRadius: 22,
               background: open ? "#f97316" : "rgba(255,255,255,0.92)",
               border: `1.5px solid ${open ? "#f97316" : "#e2e8f0"}`,
-              cursor: "pointer", fontSize: 18,
+              cursor: "pointer", fontSize: 13,
               display: "flex", alignItems: "center", justifyContent: "center",
               boxShadow: "0 4px 16px #00000018",
               backdropFilter: "blur(12px)",
               color: open ? "#fff" : "#374151",
-              fontWeight: 900,
+              fontWeight: 700, whiteSpace: "nowrap",
             }}
           >
-            🎚️
+            {t("bgm_vol_title", lang)}
           </button>
 
           {/* 재생/정지 */}

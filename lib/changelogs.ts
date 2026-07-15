@@ -13,7 +13,32 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.12", badge: "최신", badgeColor: "#3b82f6",
+    version: "v1.13", badge: "최신", badgeColor: "#06b6d4",
+    items: {
+      ko: [
+        "🤖 신규 시나리오 — 챗지피시(ChatGPhish) 추가: AI 간접 프롬프트 주입 피싱 체험",
+        "🔗 AI가 요약한 링크를 통한 계정·금융정보 탈취 수법 시뮬레이션",
+        "🛡️ 예방법 안내 — URL 직접 확인, 2FA 설정, 공식 경로 접속 등",
+      ],
+      en: [
+        "🤖 New scenario — ChatGPhish: AI indirect prompt injection phishing simulation",
+        "🔗 Simulates credential theft via AI-generated phishing links",
+        "🛡️ Prevention guide — verify URLs, enable 2FA, use official channels",
+      ],
+      zh: [
+        "🤖 新场景 — ChatGPhish：AI间接提示注入钓鱼体验",
+        "🔗 模拟通过AI生成的钓鱼链接盗取账户及金融信息",
+        "🛡️ 预防指南 — 直接验证URL、开启二步验证、使用官方入口",
+      ],
+      ja: [
+        "🤖 新シナリオ — ChatGPhish：AI間接プロンプトインジェクションフィッシング体験",
+        "🔗 AIが生成したフィッシングリンクによる認証情報窃取シミュレーション",
+        "🛡️ 予防法案内 — URL直接確認、2FA設定、公式ルート経由でのアクセス",
+      ],
+    },
+  },
+  {
+    version: "v1.12", badge: "", badgeColor: "#3b82f6",
     items: {
       ko: [
         "📱 모바일 전면 최적화 — 375px 기준 전 페이지 반응형 레이아웃 완성",
