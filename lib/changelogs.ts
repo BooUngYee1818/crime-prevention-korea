@@ -13,7 +13,36 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.13", badge: "최신", badgeColor: "#06b6d4",
+    version: "v1.14", badge: "최신", badgeColor: "#10b981",
+    items: {
+      ko: [
+        "🎵 페이지 이동 시 음악 끊김 버그 수정 — 시나리오·도박 페이지 이동 후에도 연속 재생",
+        "🎶 시나리오 페이지 배경음악 교체",
+        "🔘 음량 버튼 텍스트화 및 다국어 지원",
+        "📐 하단 플로팅 버튼(언어·음량)에 콘텐츠가 가려지던 문제 수정",
+      ],
+      en: [
+        "🎵 Fixed music cutting out on page navigation — now continuous across scenario & gambling pages",
+        "🎶 Updated background music for scenario pages",
+        "🔘 Volume button now shows text label with multilingual support",
+        "📐 Fixed content being hidden behind floating buttons (language / volume)",
+      ],
+      zh: [
+        "🎵 修复页面跳转时音乐中断的问题 — 场景·赌博页面跳转后连续播放",
+        "🎶 更换场景页面背景音乐",
+        "🔘 音量按钮改为文字显示，支持多语言",
+        "📐 修复浮动按钮（语言·音量）遮挡内容的问题",
+      ],
+      ja: [
+        "🎵 ページ移動時に音楽が途切れるバグを修正 — シナリオ・ギャンブルページでも継続再生",
+        "🎶 シナリオページのBGMを更新",
+        "🔘 音量ボタンをテキスト表示に変更・多言語対応",
+        "📐 下部フローティングボタン（言語・音量）でコンテンツが隠れる問題を修正",
+      ],
+    },
+  },
+  {
+    version: "v1.13", badge: "", badgeColor: "#06b6d4",
     items: {
       ko: [
         "🤖 신규 시나리오 — 챗지피시(ChatGPhish) 추가: AI 간접 프롬프트 주입 피싱 체험",

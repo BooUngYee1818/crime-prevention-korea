@@ -22,6 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap"
+        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css"
@@ -37,7 +43,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <LanguageProvider>
           <AppShell>
-            {children}
+            {/* 하단 플로팅 버튼(언어·음량)에 콘텐츠가 가려지지 않도록 여백 */}
+            <div style={{ paddingBottom: 90 }}>
+              {children}
+            </div>
           </AppShell>
         </LanguageProvider>
         <BgmPlayer />
