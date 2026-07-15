@@ -248,6 +248,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           .stats-pill-icon, .hof-pill-icon { width: 48px; height: 48px; font-size: 20px; }
           .stats-pill.open, .stats-pill:hover { width: 130px; }
           .hof-pill.open, .hof-pill:hover { width: 130px; }
+          /* 모바일에서 히어로 CTA 겹침 방지 — 화면 하단 1/4 지점으로 내림 */
+          .stats-pill { bottom: 22%; }
+          .hof-pill { bottom: calc(22% + 56px); }
         }
       `}</style>
       {isMainPage && (

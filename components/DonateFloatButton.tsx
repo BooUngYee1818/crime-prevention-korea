@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
@@ -8,6 +8,13 @@ const KAKAOPAY_URL = "https://qr.kakaopay.com/Ej8RbqcQf";
 export default function DonateFloatButton() {
   const { lang } = useLang();
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <div style={{ position: "fixed", bottom: 140, left: 24, zIndex: 9997 }}>
@@ -43,7 +50,7 @@ export default function DonateFloatButton() {
         </>
       )}
 
-      {!open && (
+      {!open && !isMobile && (
         <div style={{
           position: "absolute", bottom: "calc(100% + 6px)", left: 0,
           background: "rgba(20,83,45,0.95)", color: "#86efac",

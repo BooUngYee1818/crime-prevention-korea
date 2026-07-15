@@ -201,9 +201,9 @@ export default function CrimeCenterPage() {
             display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0,
           }}>📱</div>
           <div style={{ flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>{t("crime_sms_title", lang)}</span>
-              <span style={{ background: "#a855f7", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>NEW</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
+              <span style={{ color: "#fff", fontWeight: 800, fontSize: isMobile ? 14 : 16 }}>{t("crime_sms_title", lang)}</span>
+              <span style={{ background: "#a855f7", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20, flexShrink: 0 }}>NEW</span>
             </div>
             <p style={{ color: "#dcc5e8", fontSize: 13 }}>{t("crime_sms_sub", lang)}</p>
           </div>
@@ -220,9 +220,11 @@ export default function CrimeCenterPage() {
           <div style={{ fontSize: 32, flexShrink: 0 }}>🧒</div>
           <div>
             <p style={{ color: "#22c55e", fontWeight: 800, fontSize: 14, marginBottom: 6 }}>{t("crime_child_title", lang)}</p>
-            <p style={{ color: "#86efac", fontSize: 13, lineHeight: 1.9 }}
-              dangerouslySetInnerHTML={{ __html: t("crime_child_body", lang).replace(/\n/g, "<br />") }}
-            />
+            <div style={{ color: "#86efac", fontSize: 13, lineHeight: 1.6 }}>
+              {t("crime_child_body", lang).split("\n").map((line, i) => (
+                <p key={i} style={{ marginBottom: i < t("crime_child_body", lang).split("\n").length - 1 ? 6 : 0 }}>{line}</p>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -286,7 +288,7 @@ export default function CrimeCenterPage() {
         </div>
 
         {/* 시나리오 그리드 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: isMobile ? 10 : 14, marginBottom: 40 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)", gap: isMobile ? 10 : 14, marginBottom: 40 }}>
           {CRIME_SCENARIOS.map((scenario) => (
             <button
               key={scenario.id}
