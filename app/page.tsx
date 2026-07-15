@@ -845,7 +845,7 @@ export default function HomePage() {
         padding: "0 40px", height: 62,
         boxShadow: "0 1px 8px #0000000a",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, maxWidth: isMobile ? "calc(100% - 130px)" : undefined }}>
           <div style={{
             width: 32, height: 32, borderRadius: 10,
             background: "linear-gradient(135deg, #9161b2, #7c4da8)",
@@ -855,12 +855,79 @@ export default function HomePage() {
           </div>
           <div>
             <span style={{ fontWeight: 800, fontSize: 15, color: "#2a1a3a", letterSpacing: -0.3 }}>{t("nav_brand", lang)}</span>
-            <span style={{
+            {!isMobile && <span style={{
               marginLeft: 8, fontSize: 10, fontWeight: 600, color: "#9161b2",
               background: "#f5dfee", padding: "2px 7px", borderRadius: 20,
               border: "1px solid #dcc5e8",
-            }}>{t("nav_edu_badge", lang)}</span>
+            }}>{t("nav_edu_badge", lang)}</span>}
           </div>
+          {/* 모바일 전용 changelog 인라인 버튼 */}
+          {isMobile && (
+            <div style={{ position: "relative", zIndex: 1000, marginLeft: 4 }}>
+              <button
+                onClick={() => { if (showChangelog) stopChangelogScroll(); else startChangelogScroll(); }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 4,
+                  padding: "5px 10px", borderRadius: 20,
+                  background: showChangelog ? "#2d1060" : "#1a0a2e", color: "#c58dc6",
+                  border: `1px solid ${showChangelog ? "#7c3aed" : "#3a1a5e"}`, fontSize: 11, fontWeight: 700,
+                  cursor: "pointer", WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <span>📋</span>
+                <span style={{ fontSize: 9, color: "#9161b2" }}>{showChangelog ? "▲" : "▼"}</span>
+              </button>
+              {showChangelog && (
+                <div onClick={stopChangelogScroll} style={{ position: "fixed", inset: 0, zIndex: 998 }} />
+              )}
+              <div style={{
+                position: "fixed", top: 88, left: 16,
+                width: "calc(100vw - 32px)", maxWidth: 360, borderRadius: 20,
+                background: "linear-gradient(160deg, #180830 0%, #0e051a 100%)",
+                border: "1px solid #5b21b660",
+                boxShadow: "0 12px 48px rgba(100,40,200,0.45)",
+                overflow: "hidden",
+                opacity: showChangelog ? 1 : 0,
+                transform: showChangelog ? "translateY(0) scale(1)" : "translateY(-10px) scale(0.97)",
+                pointerEvents: showChangelog ? "auto" : "none",
+                transition: "opacity 0.2s, transform 0.2s",
+                zIndex: 999,
+              }}>
+                <div style={{
+                  padding: "16px 20px 12px", borderBottom: "1px solid #2a1a3a",
+                  background: "linear-gradient(90deg, #2d1060 0%, #1a0535 100%)",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <span style={{ fontSize: 18 }}>📋</span>
+                  <div>
+                    <p style={{ color: "#e9d5ff", fontSize: 15, fontWeight: 800, letterSpacing: 1, margin: 0 }}>{t("nav_changelog", lang)}</p>
+                    <p style={{ color: "#9333ea80", fontSize: 11, margin: "2px 0 0", fontWeight: 600 }}>CHANGELOG</p>
+                  </div>
+                  <div style={{ marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650", borderRadius: 20, padding: "3px 10px" }}>
+                    <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.11 최신</span>
+                  </div>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 60, background: "linear-gradient(to top, #0e051a 0%, transparent 100%)", pointerEvents: "none", zIndex: 2 }} />
+                  <div style={{ maxHeight: 300, overflowY: "scroll", padding: "14px 20px 70px", scrollbarWidth: "none" }}>
+                    {CHANGELOGS.map((log, i) => (
+                      <div key={i} style={{ display: "flex", gap: 14, paddingBottom: 18, alignItems: "flex-start" }}>
+                        <div style={{ flexShrink: 0, minWidth: 64, background: `${log.badgeColor}18`, border: `1px solid ${log.badgeColor}55`, borderRadius: 10, padding: "5px 4px", textAlign: "center" }}>
+                          <span style={{ color: log.badgeColor, fontSize: 13, fontWeight: 800, display: "block" }}>{log.version}</span>
+                          {log.badge && <span style={{ display: "block", color: "#4ade80", fontSize: 10, fontWeight: 700, marginTop: 1 }}>{log.badge}</span>}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          {log.items.map((item, j) => (
+                            <p key={j} style={{ color: i === 0 ? "#e9d5ff" : "#9ca3af", fontSize: 13, lineHeight: 1.75, margin: "0 0 2px" }}>{item}</p>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
@@ -869,8 +936,10 @@ export default function HomePage() {
           <a href="#faq" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>FAQ</a>
           <div
             style={{ position: "relative", zIndex: 1000 }}
+            onMouseEnter={() => { if (!isMobile) startChangelogScroll(); }}
             onMouseLeave={() => {
               if (changelogTimerRef.current) { clearInterval(changelogTimerRef.current); changelogTimerRef.current = null; }
+              if (!isMobile) stopChangelogScroll();
             }}
           >
             <button
@@ -994,6 +1063,7 @@ export default function HomePage() {
             {t("nav_partner", lang)}
           </button>
         </div>
+
       </nav>
 
       {/* ── 히어로 섹션 ── */}
