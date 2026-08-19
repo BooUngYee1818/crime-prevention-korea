@@ -13,7 +13,24 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.14", badge: "최신", badgeColor: "#10b981",
+    version: "v1.15", badge: "최신", badgeColor: "#f472b6",
+    items: {
+      ko: [
+        "🎬 2026 메인 홍보영상 교체 — 새 범죄예방 체험관 홍보영상을 대표 영상으로 적용하고 PC·모바일 표시 영역 확대",
+      ],
+      en: [
+        "🎬 Updated the 2026 main promotional video — featured the new Crime Prevention Experience Center video and enlarged its desktop and mobile display",
+      ],
+      zh: [
+        "🎬 更新2026年主宣传视频 — 将新的犯罪预防体验馆视频设为代表视频，并扩大电脑与移动端显示区域",
+      ],
+      ja: [
+        "🎬 2026年メイン広報動画を更新 — 新しい犯罪予防体験館の動画を代表動画として掲載し、PC・モバイルの表示領域を拡大",
+      ],
+    },
+  },
+  {
+    version: "v1.14", badge: "", badgeColor: "#10b981",
     items: {
       ko: [
         "🎵 페이지 이동 시 음악 끊김 버그 수정 — 시나리오·도박 페이지 이동 후에도 연속 재생",
