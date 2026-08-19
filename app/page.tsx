@@ -1187,7 +1187,7 @@ export default function HomePage() {
         background: "#130c1c", borderTop: "1px solid #2a1a3a",
         padding: isMobile ? "40px 20px" : "64px 40px",
       }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <p style={{ color: "#6b7280", fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
               {t("video_label", lang).toUpperCase()}
@@ -1203,7 +1203,7 @@ export default function HomePage() {
           {/* 영상 목록 */}
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
 
-            {/* 1번 영상 */}
+            {/* 메인 홍보 영상 */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
                 <div style={{
@@ -1211,11 +1211,11 @@ export default function HomePage() {
                   background: "linear-gradient(135deg, #9161b2, #7c4da8)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 13, fontWeight: 900, color: "#fff", flexShrink: 0,
-                }}>1</div>
-                <p style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 15 }}>최초 홍보 영상</p>
-                <span style={{ color: "#6b7280", fontSize: 11, background: "#2a1a3a", border: "1px solid #6b7280", borderRadius: 20, padding: "2px 10px" }}>2024</span>
+                }}>▶</div>
+                <p style={{ color: "#fff", fontWeight: 900, fontSize: isMobile ? 15 : 18 }}>메인 홍보 영상</p>
+                <span style={{ color: "#f0abfc", fontSize: 11, background: "#3b0764", border: "1px solid #a855f7", borderRadius: 20, padding: "3px 11px", fontWeight: 800 }}>2026 NEW</span>
                 <a
-                  href="https://www.youtube.com/shorts/qVwroKzwmyw"
+                  href="https://www.youtube.com/watch?v=0vUzKoVxNjU"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -1227,7 +1227,7 @@ export default function HomePage() {
                     flexShrink: 0,
                   }}
                 >
-                  ▶ Shorts 보기
+                  ▶ YouTube에서 보기
                 </a>
               </div>
               <div style={{
@@ -1237,8 +1237,8 @@ export default function HomePage() {
                 border: "1px solid #2a1a3a",
               }}>
                 <iframe
-                  src="https://www.youtube.com/embed/vCDSs2nMy18"
-                  title="범죄예방 체험관 홍보영상 1"
+                  src="https://www.youtube.com/embed/0vUzKoVxNjU?rel=0"
+                  title="범죄예방 체험관 메인 홍보영상"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
