@@ -491,6 +491,7 @@ export default function HomePage() {
   }, [statsCounted]);
 
   const CHANGELOGS = getChangelogs(lang);
+  const latestChangelogVersion = CHANGELOGS[0]?.version ?? "v1.15";
 
   const startChangelogScroll = () => {
     setShowChangelog(true);
@@ -922,7 +923,7 @@ export default function HomePage() {
                     <p style={{ color: "#9333ea80", fontSize: 11, margin: "2px 0 0", fontWeight: 600 }}>CHANGELOG</p>
                   </div>
                   <div style={{ marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650", borderRadius: 20, padding: "3px 10px" }}>
-                    <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.11 최신</span>
+                    <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>{latestChangelogVersion} 최신</span>
                   </div>
                 </div>
                 <div style={{ position: "relative" }}>
@@ -1023,7 +1024,7 @@ export default function HomePage() {
                   marginLeft: "auto", background: "#f472b620", border: "1px solid #f472b650",
                   borderRadius: 20, padding: "3px 10px",
                 }}>
-                  <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>v1.11 최신</span>
+                  <span style={{ color: "#ef4444", fontSize: 12, fontWeight: 800 }}>{latestChangelogVersion} 최신</span>
                 </div>
               </div>
               {/* 스크롤 영역 */}
