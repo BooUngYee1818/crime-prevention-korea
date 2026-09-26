@@ -13,7 +13,32 @@ function pick(items: Record<string, string[]>, lang: LangCode): string[] {
 
 const RAW: ChangelogEntry[] = [
   {
-    version: "v1.15", badge: "최신", badgeColor: "#f472b6",
+    version: "v1.16", badge: "최신", badgeColor: "#f97316",
+    items: {
+      ko: [
+        "🎬 '이 프로그램을 왜 만들었는가?' 영상 추가 — YouTube 영상과 제작 목적 설명을 메인 페이지에 연결",
+        "💡 '왜 필요한가?' 전용 버튼 추가 — 상세 제작 목적과 피해 통계 구간으로 바로 이동",
+        "👮 경찰 제복 소매·배지가 적용된 전용 손 모양 커서 추가",
+      ],
+      en: [
+        "🎬 Added the 'Why was this program created?' video and purpose statement to the home page",
+        "💡 Added a dedicated 'Why is it needed?' button linking directly to the detailed purpose and statistics",
+        "👮 Added a custom police-uniform pointing-hand cursor",
+      ],
+      zh: [
+        "🎬 新增“为什么制作这个程序？”视频及制作目的说明",
+        "💡 新增“为什么需要？”按钮，可直达详细说明与受害统计",
+        "👮 新增带警服袖口与徽章的专属手形光标",
+      ],
+      ja: [
+        "🎬「なぜこのプログラムを作ったのか？」動画と制作目的の説明を追加",
+        "💡 詳細な制作目的と被害統計へ移動する「なぜ必要？」ボタンを追加",
+        "👮 警察制服の袖とバッジを備えた専用指差しカーソルを追加",
+      ],
+    },
+  },
+  {
+    version: "v1.15", badge: "", badgeColor: "#f472b6",
     items: {
       ko: [
         "🎬 2026 메인 홍보영상 교체 — 새 범죄예방 체험관 홍보영상을 대표 영상으로 적용하고 PC·모바일 표시 영역 확대",
