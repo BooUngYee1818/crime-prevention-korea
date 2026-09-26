@@ -950,6 +950,7 @@ export default function HomePage() {
         </div>
         <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <a href="#scenarios" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_scenarios", lang)}</a>
+          <a href="#why" style={{ color: "#7c3aed", fontSize: 14, textDecoration: "none", fontWeight: 700 }}>{t("nav_why", lang)}</a>
           <a href="#how" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_howto", lang)}</a>
           <a href="#report" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>{t("nav_numbers", lang)}</a>
           <a href="#faq" style={{ color: "#64748b", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>FAQ</a>
@@ -1140,6 +1141,16 @@ export default function HomePage() {
             }}>
               {t("nav_scenarios", lang)}
             </a>
+            <a href="#why" style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "15px 22px", borderRadius: 14,
+              background: "#fff7ed", color: "#c2410c",
+              border: "1px solid #fdba74", cursor: "pointer",
+              fontSize: 15, textDecoration: "none", fontWeight: 700,
+              boxShadow: "0 4px 16px #f9731620",
+            }}>
+              💡 {t("nav_why", lang)}
+            </a>
           </div>
 
           <div style={{ display: "flex", gap: 20, marginTop: 24 }}>
@@ -1203,6 +1214,62 @@ export default function HomePage() {
 
           {/* 영상 목록 */}
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+
+            {/* 이 프로그램을 왜 만들었는가 */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: "linear-gradient(135deg, #f97316, #dc2626)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 15, flexShrink: 0,
+                }}>💡</div>
+                <p style={{ color: "#fff", fontWeight: 900, fontSize: isMobile ? 15 : 18 }}>
+                  {lang === "ko" ? "이 프로그램을 왜 만들었는가?" : lang === "ja" ? "なぜこのプログラムを作ったのか？" : lang === "zh" ? "为什么制作这个程序？" : lang === "vi" ? "Vì sao chương trình này được tạo ra?" : lang === "es" ? "¿Por qué se creó este programa?" : "Why was this program created?"}
+                </p>
+                <span style={{ color: "#fed7aa", fontSize: 11, background: "#7c2d12", border: "1px solid #f97316", borderRadius: 20, padding: "3px 11px", fontWeight: 800 }}>NEW</span>
+                <a
+                  href="https://www.youtube.com/watch?v=Wq8vTNaQgH0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    marginLeft: "auto", display: "flex", alignItems: "center", gap: 5,
+                    background: "#ff0000", color: "#fff", borderRadius: 20,
+                    padding: "4px 12px", fontSize: 11, fontWeight: 800,
+                    textDecoration: "none", flexShrink: 0,
+                  }}
+                >
+                  ▶ YouTube에서 보기
+                </a>
+              </div>
+              <p style={{ color: "#9ca3af", fontSize: 13, lineHeight: 1.7, marginBottom: 14 }}>
+                {lang === "ko" ? "범죄 수법을 직접 겪기 전에 안전하게 체험하고, 위험 신호를 기억하도록 만든 이유를 영상으로 확인해보세요." : "Learn why this safe simulation was created to help people recognize warning signs before facing real harm."}
+              </p>
+              <div style={{
+                position: "relative", width: "100%", paddingTop: "56.25%",
+                borderRadius: 16, overflow: "hidden",
+                boxShadow: "0 16px 48px #00000060", border: "1px solid #7c2d12",
+              }}>
+                <iframe
+                  src="https://www.youtube.com/embed/Wq8vTNaQgH0?rel=0"
+                  title="이 프로그램을 왜 만들었는가"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                />
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
+                <a href="#why" style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  padding: "12px 22px", borderRadius: 999,
+                  background: "linear-gradient(135deg, #f97316, #dc2626)", color: "#fff",
+                  textDecoration: "none", fontSize: 14, fontWeight: 800,
+                  boxShadow: "0 8px 24px #f9731640",
+                }}>
+                  💡 {t("nav_why", lang)} — {lang === "ko" ? "설명 보기" : "Read the explanation"}
+                </a>
+              </div>
+            </div>
 
             {/* 메인 홍보 영상 */}
             <div>
