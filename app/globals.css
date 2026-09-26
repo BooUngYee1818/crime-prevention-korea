@@ -14,6 +14,22 @@
   font-family: 'Spoqa Han Sans Neo', 'Spoqa Han Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* 경찰 제복 소매와 금색 배지가 달린 흰 장갑 손 커서 */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label,
+  summary {
+    cursor: url('/police-hand-cursor.svg') 9 3, pointer;
+  }
+}
+
 html, body {
   height: 100%;
   background: #f0f4ff;
@@ -167,4 +183,3 @@ input[type="number"]::-webkit-outer-spin-button {
   .crime-page-wrap { padding: 56px 40px; }
   .crime-grid-2 { gap: 14px; }
 }
-
